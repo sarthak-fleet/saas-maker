@@ -1,32 +1,140 @@
 {
   "schemaVersion": 1,
   "sites": [
-    { "id": "codevetter", "url": "https://codevetter.com", "probePath": "/" },
-    { "id": "pace", "url": "https://heypace.app", "probePath": "/" },
-    { "id": "high-signal", "url": "https://highsignal.app", "probePath": "/" },
-    { "id": "posttrainllm", "url": "https://posttrainllm.com", "probePath": "/" },
-    { "id": "anime-list", "url": "https://anime.significanthobbies.com", "probePath": "/" },
-    { "id": "app-health", "url": "https://health.sassmaker.com", "probePath": "/" },
-    { "id": "calorie", "url": "https://calorie.significanthobbies.com", "probePath": "/" },
-    { "id": "chess", "url": "https://chess.significanthobbies.com", "probePath": "/" },
-    { "id": "drank", "url": "https://domains.sassmaker.com", "probePath": "/" },
-    { "id": "email-manager", "url": "https://mail.sassmaker.com", "probePath": "/" },
-    { "id": "free-ai", "url": "https://ai-gateway.sassmaker.com", "probePath": "/" },
-    { "id": "karte", "url": "https://karte.cc", "probePath": "/" },
-    { "id": "knowledge-base", "url": "https://knowledgebase.sassmaker.com", "probePath": "/" },
-    { "id": "looptv", "url": "https://tv.significanthobbies.com", "probePath": "/" },
-    { "id": "chatgpt-memory-insights", "url": "https://chatgpt.significanthobbies.com", "probePath": "/" },
-    { "id": "motion", "url": "https://motion.significanthobbies.com", "probePath": "/" },
-    { "id": "psi-swarm", "url": "https://performance.sassmaker.com", "probePath": "/" },
-    { "id": "reader", "url": "https://read.significanthobbies.com", "probePath": "/" },
-    { "id": "research-papers", "url": "https://papers.highsignal.app", "probePath": "/" },
-    { "id": "rolepatch", "url": "https://rolepatch.com", "probePath": "/" },
-    { "id": "saas-maker", "url": "https://sassmaker.com", "probePath": "/" },
-    { "id": "personal-website", "url": "https://sarthakagrawal.dev", "probePath": "/" },
-    { "id": "setline", "url": "https://setline.significanthobbies.com", "probePath": "/" },
-    { "id": "significanthobbies", "url": "https://significanthobbies.com", "probePath": "/" },
-    { "id": "starboard", "url": "https://starboard.codevetter.com", "probePath": "/" },
-    { "id": "swe-interview-prep", "url": "https://learn.significanthobbies.com", "probePath": "/" },
-    { "id": "what-it-takes-to-win", "url": "https://paths.significanthobbies.com", "probePath": "/" }
+    {
+      "id": "codevetter",
+      "url": "https://codevetter.com",
+      "probePath": "/"
+    },
+    {
+      "id": "pace",
+      "url": "https://heypace.app",
+      "probePath": "/"
+    },
+    {
+      "id": "high-signal",
+      "url": "https://highsignal.app",
+      "probePath": "/"
+    },
+    {
+      "id": "posttrainllm",
+      "url": "https://posttrainllm.com",
+      "probePath": "/"
+    },
+    {
+      "id": "anime-list",
+      "url": "https://anime.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "app-health",
+      "url": "https://health.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "calorie",
+      "url": "https://calorie.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "chess",
+      "url": "https://chess.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "drank",
+      "url": "https://domains.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "email-manager",
+      "url": "https://mail.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "free-ai",
+      "url": "https://ai-gateway.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "karte",
+      "url": "https://karte.cc",
+      "probePath": "/"
+    },
+    {
+      "id": "knowledge-base",
+      "url": "https://knowledgebase.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "looptv",
+      "url": "https://tv.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "chatgpt-memory-insights",
+      "url": "https://chatgpt.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "motion",
+      "url": "https://motion.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "psi-swarm",
+      "url": "https://performance.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "reader",
+      "url": "https://read.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "research-papers",
+      "url": "https://papers.highsignal.app",
+      "probePath": "/"
+    },
+    {
+      "id": "rolepatch",
+      "url": "https://rolepatch.com",
+      "probePath": "/"
+    },
+    {
+      "id": "saas-maker",
+      "url": "https://sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "personal-website",
+      "url": "https://sarthakagrawal.dev",
+      "probePath": "/"
+    },
+    {
+      "id": "setline",
+      "url": "https://setline.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "significanthobbies",
+      "url": "https://significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "starboard",
+      "url": "https://starboard.codevetter.com",
+      "probePath": "/"
+    },
+    {
+      "id": "swe-interview-prep",
+      "url": "https://learn.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "url": "https://paths.significanthobbies.com",
+      "probePath": "/"
+    }
   ]
 }
