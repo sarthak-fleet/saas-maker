@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: public-evidence-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -33,6 +33,7 @@ jobs:
             echo "No report change"
           else
             git commit -m "evidence: update public surface audit"
+            git pull --rebase origin main
             git push
           fi
       - name: Preserve audit result

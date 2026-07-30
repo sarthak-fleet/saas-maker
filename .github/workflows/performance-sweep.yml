@@ -16,7 +16,7 @@ on:
           - "5"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: public-evidence-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -45,6 +45,7 @@ jobs:
             echo "No report change"
           else
             git commit -m "evidence: update public performance sweep"
+            git pull --rebase origin main
             git push
           fi
       - name: Preserve audit result
