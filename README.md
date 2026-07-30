@@ -1,0 +1,47 @@
+# Fleet Workflows
+
+Public, credential-free automation shared by the Fleet workspace.
+
+This repository runs only checks whose source and inputs are already public:
+
+- canonical public-site availability and redirect checks;
+- repeated HTTP header and total-response latency measurements;
+- validation of the allowlisted public site manifest.
+
+It is pinned inside the private
+[`sass-maker/fleet-workspace`](https://github.com/sass-maker/fleet-workspace)
+repository as the `foundry/ops/workflows` git submodule. Fleet remains the
+authority for private registries, product source, deployment state, provider
+inventory, credentials, and production operations.
+
+## Billing boundary
+
+Standard GitHub-hosted runners are free for workflows executed by this public
+repository. Merely calling a reusable workflow here from a private repository
+does not move billing: GitHub associates reusable-workflow usage with the
+caller.
+
+This repository never accepts a token capable of reading Fleet Workspace and
+never checks out private Fleet source.
+
+## Commands
+
+```bash
+node scripts/audit.mjs --validate-only
+node --test
+node scripts/audit.mjs --mode availability --runs 1
+node scripts/audit.mjs --mode performance --runs 3
+```
+
+Generated reports contain public URLs, status codes, redirect destinations,
+timings, timestamps, and bounded error categories. Response bodies are never
+stored.
+
+## License
+
+This repository is publicly readable. No project-wide open-source license is
+granted unless a license file is added through a separate owner decision.
+
+## Work queue
+
+Use [GitHub Issues](https://github.com/sass-maker/workflows/issues).
