@@ -1,0 +1,38 @@
+name: Cloudflare Resilience Audit
+
+on:
+  workflow_call:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out fleet control plane
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Run manifest and live-surface audit
+        run: node foundry/ops/scripts/cloudflare-resilience-audit.mjs --manifest-only --json > cloudflare-resilience.json
+
+      - name: Upload redacted audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-resilience-${{ github.run_id }}
+          path: |
+            cloudflare-resilience.json
+            .symphony/cloudflare-resilience/latest.md
+            .symphony/cloudflare-resilience/latest.json
+          if-no-files-found: error
+          retention-days: 30

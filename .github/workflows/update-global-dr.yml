@@ -1,0 +1,42 @@
+name: Update Global DR History
+
+on:
+  workflow_call:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-dr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: foundry/helpers/drank
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Update global DR data
+        run: node scripts/update-global-dr.mjs
+
+      - name: Update Fleet domain DR data
+        run: node scripts/update-global-dr.mjs --sites data/fleet-sites.json --data data/fleet-dr.json --label fleet
+
+      - name: Publish changed history
+        run: |
+          cp data/global-dr.json data/fleet-dr.json public/data/
+          git add data/global-dr.json data/fleet-dr.json public/data/global-dr.json public/data/fleet-dr.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(dr): weekly update global DR history"
+          git push

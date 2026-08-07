@@ -1,0 +1,57 @@
+name: Drank CI
+
+on:
+  workflow_call:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: foundry/helpers/drank
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: foundry/helpers/drank/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run build
+      - run: pnpm run size
+
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: |
+            foundry/helpers/drank/pnpm-lock.yaml
+            foundry/helpers/drank/docs-site/pnpm-lock.yaml
+      - working-directory: foundry/helpers/drank
+        run: python3 scripts/check_docs_links.py
+      - working-directory: foundry/helpers/drank/docs-site
+        run: pnpm install --frozen-lockfile
+      - working-directory: foundry/helpers/drank/docs-site
+        run: pnpm run build

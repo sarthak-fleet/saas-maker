@@ -1,0 +1,43 @@
+name: Reel Pipeline CI
+
+on:
+  workflow_call:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: foundry/marketing/reel-pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install media tools
+        run: sudo apt-get update && sudo apt-get install --yes ffmpeg
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: foundry/marketing/reel-pipeline/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: node --test
+      - run: node scripts/validate-docs.mjs
+
+  rust:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: foundry/marketing/reel-pipeline/reel
+      - working-directory: foundry/marketing/reel-pipeline/reel
+        run: cargo test --quiet
