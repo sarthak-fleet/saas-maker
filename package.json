@@ -1,0 +1,51 @@
+{
+  "name": "@saas-maker/ai-chat-footer",
+  "version": "0.1.0",
+  "description": "Backend-free React footer widget for asking AI assistants about your product.",
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/@saas-maker/ai-chat-footer",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./dist/index.css": "./dist/index.css"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react --external react-dom",
+    "typecheck": "tsc --noEmit",
+    "typecheck:contracts": "tsc -p tsconfig.test.json",
+    "lint": "biome check .",
+    "test": "node --test test/*.test.mjs",
+    "check": "pnpm typecheck && pnpm typecheck:contracts && pnpm lint && pnpm build && pnpm test && pnpm pack --dry-run"
+  },
+  "peerDependencies": {
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.5",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.28.1"
+    }
+  },
+  "packageManager": "pnpm@10.33.2"
+}
