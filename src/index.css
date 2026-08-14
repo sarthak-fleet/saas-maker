@@ -1,0 +1,135 @@
+.portfolio-project-strip {
+  --portfolio-strip-bg: color-mix(in srgb, currentColor 4%, transparent);
+  --portfolio-strip-text: currentColor;
+  --portfolio-strip-muted: color-mix(in srgb, currentColor 72%, transparent);
+  --portfolio-strip-border: color-mix(in srgb, currentColor 14%, transparent);
+  --portfolio-strip-focus: #2563eb;
+  width: 100%;
+  border-block: 1px solid var(--portfolio-strip-border);
+  background: var(--portfolio-strip-bg);
+  color: var(--portfolio-strip-text);
+}
+
+.portfolio-project-strip[data-theme='light'] {
+  --portfolio-strip-bg: #fafaf9;
+  --portfolio-strip-text: #292524;
+  --portfolio-strip-muted: #6f6964;
+  --portfolio-strip-border: #e7e5e4;
+}
+
+.portfolio-project-strip[data-theme='dark'] {
+  --portfolio-strip-bg: #171717;
+  --portfolio-strip-text: #f5f5f4;
+  --portfolio-strip-muted: #a8a29e;
+  --portfolio-strip-border: #30302f;
+}
+
+.portfolio-project-strip__inner {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  gap: 1rem;
+  padding: 0 1.25rem;
+}
+
+.portfolio-project-strip__label {
+  flex: 0 0 auto;
+  color: var(--portfolio-strip-muted);
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.portfolio-project-strip__meta {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.portfolio-project-strip__motion-control {
+  min-height: 2rem;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--portfolio-strip-border);
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--portfolio-strip-muted);
+  font: inherit;
+  font-size: 0.6875rem;
+  cursor: pointer;
+}
+
+.portfolio-project-strip__motion-control:hover { color: var(--portfolio-strip-text); }
+.portfolio-project-strip__motion-control:focus-visible { outline: 2px solid var(--portfolio-strip-focus); outline-offset: 2px; }
+
+.portfolio-project-strip__viewport {
+  min-width: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+}
+
+.portfolio-project-strip__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portfolio-project-strip__track[data-loop='true'] {
+  animation: portfolio-strip-marquee var(--portfolio-strip-speed) linear infinite;
+  will-change: transform;
+}
+
+.portfolio-project-strip__track[data-paused='true'] { animation-play-state: paused; }
+
+.portfolio-project-strip__item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.portfolio-project-strip__link {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  border-radius: 0.2rem;
+  color: var(--portfolio-strip-text);
+  font-size: 0.8125rem;
+  text-decoration: none;
+  transition: color 150ms ease, opacity 150ms ease;
+}
+
+.portfolio-project-strip__link:hover { color: var(--portfolio-strip-muted); }
+.portfolio-project-strip__link:focus-visible { outline: 2px solid var(--portfolio-strip-focus); outline-offset: 4px; }
+
+.portfolio-project-strip__dot {
+  padding: 0 0.8rem;
+  color: var(--portfolio-strip-muted);
+  font-size: 1.1rem;
+}
+
+.portfolio-project-strip__viewport:hover .portfolio-project-strip__track,
+.portfolio-project-strip__viewport:focus-within .portfolio-project-strip__track { animation-play-state: paused; }
+
+@keyframes portfolio-strip-marquee {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-project-strip__track { animation: none; width: max-content; flex-wrap: wrap; }
+  .portfolio-project-strip__viewport { overflow-x: auto; mask-image: none; }
+  .portfolio-project-strip__motion-control { display: none; }
+}
+
+@media (max-width: 560px) {
+  .portfolio-project-strip__inner { align-items: flex-start; flex-direction: column; gap: 0.45rem; padding: 0.85rem 1rem; }
+  .portfolio-project-strip__meta { width: 100%; justify-content: space-between; }
+  .portfolio-project-strip__viewport { width: 100%; }
+}
