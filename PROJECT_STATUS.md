@@ -1,6 +1,6 @@
 # Fleet Workflows — PROJECT STATUS
 
-Last updated: 2026-07-30
+Last updated: 2026-08-14
 
 ## Why / What
 
@@ -30,6 +30,9 @@ provider inventory, private registries, mobile proof, and production changes.
 
 ## Timeline
 
+- 2026-08-14 — Expanded the generated public manifest to include India
+  Standards at its canonical Significant Hobbies domain; validation remains
+  credential-free and no deployment was performed.
 - 2026-07-30 — Public repository created with strict manifest validation,
   bounded surface availability checks, repeated HTTP latency evidence, and
   least-privilege Actions.
@@ -41,7 +44,8 @@ provider inventory, private registries, mobile proof, and production changes.
 
 ## Features (shipped)
 
-- Exact-schema public site manifest validation.
+- Exact-schema public site manifest validation across 28 maintained public
+  surfaces.
 - Bounded redirects, timeouts, concurrency, and sanitized network failures.
 - Availability reports with status and redirect evidence.
 - Repeated header/total-response latency reports with p50 and p90.

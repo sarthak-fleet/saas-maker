@@ -57,6 +57,11 @@
       "probePath": "/"
     },
     {
+      "id": "india-standards",
+      "url": "https://india-standards.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
       "id": "karte",
       "url": "https://karte.cc",
       "probePath": "/"
