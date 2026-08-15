@@ -21,6 +21,7 @@ export interface PortfolioProjectStripProps {
   catalogUrl?: string;
   /** Project to hide when this strip is embedded on one of the projects. */
   currentProjectId?: string;
+  /** Accessible region label; not rendered as visible copy. */
   label?: string;
   theme?: PortfolioTheme;
   className?: string;

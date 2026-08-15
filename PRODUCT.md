@@ -28,7 +28,7 @@ crawlable first render without operating a service or waiting on a request.
 
 The strip is embedded near a product footer. Consumers import the React
 component and its stylesheet, identify the current project, and may override
-its project list, label, theme, speed, or catalog URL.
+its project list, accessible label, theme, speed, or catalog URL.
 
 ## Capabilities and Constraints
 
@@ -39,6 +39,8 @@ its project list, label, theme, speed, or catalog URL.
 - Publishing and product-by-product adoption are separate explicit actions.
 - Links remain semantic and usable when revalidation, animation, or JavaScript
   is unavailable.
+- Outbound links identify the current project through a referral query
+  parameter without mutating canonical catalog data.
 
 ## Evidence on Hand
 
@@ -57,5 +59,6 @@ catalog and public endpoint are both derived from the canonical Fleet registry.
 ## Accessibility & Inclusion
 
 Links must remain keyboard reachable and screen-reader named. Moving content
-must pause for interaction, expose an explicit pause control, and become static
-under `prefers-reduced-motion`.
+must pause for pointer and keyboard interaction and become static under
+`prefers-reduced-motion`; the compact default surface contains no standalone
+motion control.

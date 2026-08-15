@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "portfolio-project-strip",
-  "target": "animated portfolio project footer strip",
+  "target": "simplified portfolio project footer rail with source attribution",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -36,7 +36,7 @@
       "status": "pass"
     },
     "critique": {
-      "score": 34,
+      "score": 35,
       "maximum": 40
     },
     "audit": {
@@ -49,11 +49,15 @@
     },
     "detector": {
       "posture": "advisory",
-      "findings": []
+      "findings": [
+        "Mask stop #000 is intentionally non-rendered",
+        "Separator and tooltip type steps are documented component tokens",
+        "Review-harness copy color does not ship with the component"
+      ]
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "Owner asked the agent to ensure all work is cleaned, merged, pushed, and synchronized."
+    "note": "Owner asked to remove Pause and visible author copy, improve the styling, ensure the catalog is complete, and delegated final design judgment."
   }
 }

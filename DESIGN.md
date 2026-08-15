@@ -12,23 +12,15 @@ colors:
   dark-muted: "#a8a29e"
   dark-border: "#30302f"
 typography:
-  label:
-    fontSize: "0.6875rem"
-    fontWeight: 650
-    lineHeight: 1
-    letterSpacing: "0.12em"
   link:
     fontSize: "0.8125rem"
-rounded:
-  control: "0.25rem"
+  tooltip:
+    fontSize: "0.75rem"
+  separator:
+    fontSize: "1rem"
 spacing:
-  compact: "0.5rem"
-  standard: "1rem"
-components:
-  pause-control:
-    textColor: "{colors.light-muted}"
-    rounded: "{rounded.control}"
-    padding: "0.25rem 0.45rem"
+  edge: "1rem"
+  separator: "0.7rem"
 ---
 
 # Design System: Portfolio Project Strip
@@ -58,14 +50,12 @@ dark, and auto defaults.
 
 ## Typography
 
-Use the host font stack. The label is compact, semibold, uppercase metadata;
-project links remain ordinary readable text rather than adopting a display
-voice.
+Use the host font stack. Project links remain ordinary readable text rather
+than adopting a display voice or metadata treatment.
 
 ## Layout
 
-The component is one horizontal rail at wide and intermediate widths. At 560px
-and below, metadata stacks above a full-width track. The moving sequence uses
+The component is one horizontal rail at every width. The moving sequence uses
 two identical halves with no internal track padding so its loop has no visual
 jump.
 
@@ -76,16 +66,17 @@ floating cards do not belong to the base component.
 
 ## Shapes
 
-Corners are used only for focusable controls and links. The strip itself stays
+Corners are used only for link focus treatment. The strip itself stays
 rectilinear so it can join a footer without looking like an inserted card.
 
 ## Components
 
 ### Portfolio strip
 
-- The label and pause control form one compact metadata group.
-- The project track clips at soft masked edges and pauses on hover, focus, or
-  explicit user request.
+- The visible surface contains only project links and quiet separators.
+- The project track clips at soft masked edges and pauses on hover or focus.
+- Touch-first and reduced-motion environments use a static, horizontally
+  scrollable sequence instead of moving targets.
 - Duplicate links are hidden from assistive technology and removed from the tab
   order.
 - Lists of two or fewer projects are static.
@@ -95,7 +86,8 @@ rectilinear so it can join a footer without looking like an inserted card.
 ### Do:
 
 - **Do** preserve semantic anchors and an explicit accessible name.
-- **Do** expose motion control and a static reduced-motion presentation.
+- **Do** preserve pointer/focus pausing and a static reduced-motion
+  presentation.
 - **Do** keep consumer-facing color and spacing roles overrideable.
 
 ### Don't:

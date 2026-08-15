@@ -29,7 +29,10 @@ description, tier, priority, category, maturity, spotlight, pillarId,
 domains }`. URLs must be absolute HTTP(S) URLs. You can also pass `projects`
 directly for a fully static integration.
 
-The strip pauses on hover and keyboard focus, exposes a Pause/Resume control,
-uses real links, keeps lists of two or fewer projects static, and disables
-motion for visitors who prefer reduced motion. Theme values are `light`,
-`dark`, and `auto`; CSS custom properties can be overridden on the component.
+The strip shows only project links and separators. It pauses on hover and
+keyboard focus, keeps lists of two or fewer projects static, and disables
+motion for visitors who prefer reduced motion. When `currentProjectId` is
+known, every outbound link gets `ref=<currentProjectId>` while the catalog URL
+remains canonical. Theme values are `light`, `dark`, and `auto`; CSS custom
+properties can be overridden on the component. The optional `label` prop names
+the region for assistive technology and is not rendered as visible copy.

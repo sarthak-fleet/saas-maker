@@ -22,29 +22,24 @@
         <h1 id="review-title">Keep exploring the portfolio.</h1>
         <p>
           The shared rail should feel native to this quiet host surface while keeping every
-          project link readable and controllable.
+          project link readable without competing footer controls.
         </p>
       </section>
     </main>
     <div class="baseline" data-before></div>
-    <aside class="portfolio-project-strip" aria-label="More from Sarthak" data-after>
+    <aside class="portfolio-project-strip" aria-label="Other projects by Sarthak" data-after>
       <div class="portfolio-project-strip__inner">
-        <div class="portfolio-project-strip__meta">
-          <span class="portfolio-project-strip__label">More from Sarthak</span>
-          <button class="portfolio-project-strip__motion-control" type="button" aria-pressed="false">
-            Pause
-          </button>
-        </div>
         <div class="portfolio-project-strip__viewport">
-          <ul class="portfolio-project-strip__track" data-loop="true" data-paused="false" style="--portfolio-strip-speed: 42s">
-            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="#codevetter">CodeVetter</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
-            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="#pace">Pace</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
-            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="#posttrain">PostTrainLLM</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
-            <li class="portfolio-project-strip__item" aria-hidden="true"><a class="portfolio-project-strip__link" href="#codevetter-copy" tabindex="-1">CodeVetter</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
-            <li class="portfolio-project-strip__item" aria-hidden="true"><a class="portfolio-project-strip__link" href="#pace-copy" tabindex="-1">Pace</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
-            <li class="portfolio-project-strip__item" aria-hidden="true"><a class="portfolio-project-strip__link" href="#posttrain-copy" tabindex="-1">PostTrainLLM</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+          <ul class="portfolio-project-strip__track" data-loop="true" style="--portfolio-strip-speed: 42s">
+            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="https://codevetter.com/?ref=fleet-workspace">CodeVetter</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="https://heypace.app/?ref=fleet-workspace">HeyPace</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="https://posttrainllm.com/?ref=fleet-workspace">PostTrainLLM</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item portfolio-project-strip__duplicate" aria-hidden="true"><a class="portfolio-project-strip__link" href="https://codevetter.com/?ref=fleet-workspace" tabindex="-1">CodeVetter</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item portfolio-project-strip__duplicate" aria-hidden="true"><a class="portfolio-project-strip__link" href="https://heypace.app/?ref=fleet-workspace" tabindex="-1">HeyPace</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item portfolio-project-strip__duplicate" aria-hidden="true"><a class="portfolio-project-strip__link" href="https://posttrainllm.com/?ref=fleet-workspace" tabindex="-1">PostTrainLLM</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
           </ul>
         </div>
+        <div class="portfolio-project-strip__tooltip" role="tooltip" hidden data-tooltip></div>
       </div>
     </aside>
     <script>
@@ -58,14 +53,47 @@
         document.documentElement.style.color = '#f5f5f4';
         document.body.style.background = '#171717';
       }
-
-      const control = document.querySelector('.portfolio-project-strip__motion-control');
+      const tooltip = document.querySelector('[data-tooltip]');
+      const viewport = document.querySelector('.portfolio-project-strip__viewport');
       const track = document.querySelector('.portfolio-project-strip__track');
-      control?.addEventListener('click', () => {
-        const paused = track.dataset.paused !== 'true';
-        track.dataset.paused = String(paused);
-        control.setAttribute('aria-pressed', String(paused));
-        control.textContent = paused ? 'Resume' : 'Pause';
+      const keepFocusedLinkVisible = (link) => {
+        const transform = getComputedStyle(track).transform;
+        const values = transform === 'none'
+          ? []
+          : transform.slice(transform.indexOf('(') + 1, -1).split(',').map(Number);
+        const currentOffset = transform.startsWith('matrix3d') ? values[12] : (values[4] || 0);
+        const viewportRect = viewport.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
+        let correction = 0;
+        if (linkRect.left < viewportRect.left + 16) correction = viewportRect.left + 16 - linkRect.left;
+        else if (linkRect.right > viewportRect.right - 16) correction = viewportRect.right - 16 - linkRect.right;
+        track.style.animation = 'none';
+        track.style.transform = `translateX(${currentOffset + correction}px)`;
+      };
+      document.querySelectorAll('.portfolio-project-strip__link').forEach((link) => {
+        const descriptions = {
+          CodeVetter: 'AI-powered pull request reviews that focus on meaningful engineering risk.',
+          HeyPace: 'A focused planning companion for keeping work moving at a sustainable pace.',
+          PostTrainLLM: 'Practical tools and research for improving language models after pretraining.'
+        };
+        const show = () => {
+          tooltip.textContent = descriptions[link.textContent];
+          tooltip.hidden = false;
+        };
+        const hide = () => { tooltip.hidden = true; };
+        link.addEventListener('pointerenter', show);
+        link.addEventListener('pointerleave', hide);
+        link.addEventListener('focus', () => {
+          show();
+          keepFocusedLinkVisible(link);
+        });
+        link.addEventListener('blur', (event) => {
+          hide();
+          if (!viewport.contains(event.relatedTarget)) {
+            track.style.removeProperty('animation');
+            track.style.removeProperty('transform');
+          }
+        });
       });
     </script>
   </body>

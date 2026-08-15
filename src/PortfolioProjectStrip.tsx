@@ -1,4 +1,4 @@
-import { type CSSProperties, useEffect, useMemo, useState } from 'react';
+import { type CSSProperties, useEffect, useId, useMemo, useState } from 'react';
 import { DEFAULT_PROJECTS } from './catalog';
 import type { PortfolioProject, PortfolioProjectStripProps } from './types';
 import './index.css';
@@ -43,11 +43,58 @@ async function fetchCatalog(url: string, signal: AbortSignal): Promise<Portfolio
   return normalizeProjects(await response.json());
 }
 
+export function withReferralSource(url: string, currentProjectId?: string): string {
+  if (!currentProjectId) return url;
+  try {
+    const destination = new URL(url);
+    destination.searchParams.set('ref', currentProjectId);
+    return destination.toString();
+  } catch {
+    return url;
+  }
+}
+
+function transformOffsetX(transform: string): number {
+  if (transform === 'none') return 0;
+  const values = transform
+    .slice(transform.indexOf('(') + 1, -1)
+    .split(',')
+    .map(Number);
+  const offset = transform.startsWith('matrix3d') ? values[12] : values[4];
+  return Number.isFinite(offset) ? offset : 0;
+}
+
+function keepFocusedLinkVisible(link: HTMLAnchorElement): void {
+  const viewport = link.closest<HTMLElement>('.portfolio-project-strip__viewport');
+  const track = link.closest<HTMLElement>('.portfolio-project-strip__track');
+  if (!viewport || !track) return;
+  const viewportRect = viewport.getBoundingClientRect();
+  const linkRect = link.getBoundingClientRect();
+  const currentOffset = transformOffsetX(window.getComputedStyle(track).transform);
+  const safeInset = 16;
+  let correction = 0;
+  if (linkRect.left < viewportRect.left + safeInset) {
+    correction = viewportRect.left + safeInset - linkRect.left;
+  } else if (linkRect.right > viewportRect.right - safeInset) {
+    correction = viewportRect.right - safeInset - linkRect.right;
+  }
+  track.style.animation = 'none';
+  track.style.transform = `translateX(${currentOffset + correction}px)`;
+}
+
+function resumeTrackAfterFocus(link: HTMLAnchorElement, nextTarget: EventTarget | null): void {
+  const viewport = link.closest<HTMLElement>('.portfolio-project-strip__viewport');
+  if (nextTarget instanceof Node && viewport?.contains(nextTarget)) return;
+  const track = link.closest<HTMLElement>('.portfolio-project-strip__track');
+  track?.style.removeProperty('animation');
+  track?.style.removeProperty('transform');
+}
+
 export function PortfolioProjectStrip({
   projects,
   catalogUrl = DEFAULT_CATALOG_URL,
   currentProjectId,
-  label = 'More from Sarthak',
+  label = 'Other projects by Sarthak',
   theme = 'auto',
   className = '',
   speed = 42,
@@ -57,7 +104,8 @@ export function PortfolioProjectStrip({
     [projects]
   );
   const [catalog, setCatalog] = useState(initialProjects);
-  const [isPaused, setIsPaused] = useState(false);
+  const [activeDescription, setActiveDescription] = useState<string | null>(null);
+  const tooltipId = useId();
 
   useEffect(() => setCatalog(initialProjects), [initialProjects]);
 
@@ -91,24 +139,10 @@ export function PortfolioProjectStrip({
       aria-label={label}
     >
       <div className="portfolio-project-strip__inner">
-        <div className="portfolio-project-strip__meta">
-          <span className="portfolio-project-strip__label">{label}</span>
-          {shouldLoop ? (
-            <button
-              className="portfolio-project-strip__motion-control"
-              type="button"
-              aria-pressed={isPaused}
-              onClick={() => setIsPaused((paused) => !paused)}
-            >
-              {isPaused ? 'Resume' : 'Pause'}
-            </button>
-          ) : null}
-        </div>
         <div className="portfolio-project-strip__viewport">
           <ul
             className="portfolio-project-strip__track"
             data-loop={shouldLoop}
-            data-paused={isPaused}
             style={{ '--portfolio-strip-speed': `${duration}s` } as CSSProperties}
           >
             {items.map((project, index) => {
@@ -117,18 +151,27 @@ export function PortfolioProjectStrip({
               return (
                 <li
                   key={`${project.id}-${duplicate ? 'duplicate' : 'primary'}`}
-                  className="portfolio-project-strip__item"
+                  className={`portfolio-project-strip__item${duplicate ? ' portfolio-project-strip__duplicate' : ''}`}
                   aria-hidden={duplicate}
                 >
                   <a
-                    href={project.url}
+                    href={withReferralSource(project.url, currentProjectId)}
                     className="portfolio-project-strip__link"
                     tabIndex={duplicate ? -1 : undefined}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={
-                      project.description ? `${project.name}: ${project.description}` : project.name
-                    }
+                    aria-describedby={project.description ? tooltipId : undefined}
+                    aria-label={`${project.name} (opens in a new tab)`}
+                    onPointerEnter={() => setActiveDescription(project.description ?? null)}
+                    onPointerLeave={() => setActiveDescription(null)}
+                    onFocus={(event) => {
+                      setActiveDescription(project.description ?? null);
+                      keepFocusedLinkVisible(event.currentTarget);
+                    }}
+                    onBlur={(event) => {
+                      setActiveDescription(null);
+                      resumeTrackAfterFocus(event.currentTarget, event.relatedTarget);
+                    }}
                   >
                     {project.name}
                   </a>
@@ -141,6 +184,14 @@ export function PortfolioProjectStrip({
               );
             })}
           </ul>
+        </div>
+        <div
+          id={tooltipId}
+          className="portfolio-project-strip__tooltip"
+          role="tooltip"
+          hidden={!activeDescription}
+        >
+          {activeDescription}
         </div>
       </div>
     </aside>
