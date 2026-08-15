@@ -4,7 +4,7 @@ export interface PortfolioProject {
   url: string;
   description?: string;
   tier?: 'focus' | 'active' | 'secondary' | 'parked';
-  priority?: 'P1' | 'P2' | 'P3';
+  priority?: 'P1' | 'P2' | 'P4';
   category?: string;
   maturity?: string;
   spotlight?: boolean;

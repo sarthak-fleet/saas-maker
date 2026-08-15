@@ -18,7 +18,7 @@ const projects = source.projects
     url: `https://${project.domains[0]}`,
     description: project.public?.description,
     tier: project.tier,
-    priority: project.priority,
+    priority: project.portfolio?.priority,
     category: project.public?.category,
     maturity: project.public?.maturity,
     spotlight: project.public?.spotlight,
