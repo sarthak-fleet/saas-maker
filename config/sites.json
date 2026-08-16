@@ -62,6 +62,11 @@
       "probePath": "/"
     },
     {
+      "id": "indulge",
+      "url": "https://indulge.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
       "id": "karte",
       "url": "https://karte.cc",
       "probePath": "/"
@@ -69,6 +74,11 @@
     {
       "id": "knowledge-base",
       "url": "https://knowledgebase.sassmaker.com",
+      "probePath": "/"
+    },
+    {
+      "id": "local-ai-video-studio",
+      "url": "https://local-ai-video-studio.sassmaker.com",
       "probePath": "/"
     },
     {
@@ -84,6 +94,11 @@
     {
       "id": "motion",
       "url": "https://motion.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
+      "id": "agent-office",
+      "url": "https://office-os.sassmaker.com",
       "probePath": "/"
     },
     {
