@@ -231,21 +231,6 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     ]
   },
   {
-    id: 'chess',
-    name: 'Chess Coach',
-    url: 'https://chess.significanthobbies.com',
-    description: 'Browser chess against Stockfish with optional AI move coaching.',
-    tier: 'secondary',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
-      "chess.significanthobbies.com"
-    ]
-  },
-  {
     id: 'looptv',
     name: 'LoopTV',
     url: 'https://tv.significanthobbies.com',
@@ -309,7 +294,7 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     id: 'setline',
     name: 'Setline',
     url: 'https://setline.significanthobbies.com',
-    description: 'An iOS-native workout execution tracker for following user-authored plans, recording sets, and timing rest offline.',
+    description: 'An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.',
     tier: 'secondary',
     priority: 'P2',
     category: 'personal',
@@ -318,6 +303,21 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "pillarId": 'learn',
     domains: [
       "setline.significanthobbies.com"
+    ]
+  },
+  {
+    id: 'kith',
+    name: 'Kith',
+    url: 'https://kith.significanthobbies.com',
+    description: 'A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.',
+    tier: 'secondary',
+    priority: 'P2',
+    category: 'personal',
+    maturity: 'in-progress',
+    spotlight: false,
+    "pillarId": 'learn',
+    domains: [
+      "kith.significanthobbies.com"
     ]
   },
   {
@@ -424,6 +424,51 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "pillarId": 'personal',
     domains: [
       "sarthakagrawal.dev"
+    ]
+  },
+  {
+    id: 'agent-office',
+    name: 'Office OS',
+    url: 'https://office-os.sassmaker.com',
+    description: 'A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.',
+    tier: 'active',
+    priority: 'P1',
+    category: 'product',
+    maturity: 'maintained',
+    spotlight: false,
+    "pillarId": 'build',
+    domains: [
+      "office-os.sassmaker.com"
+    ]
+  },
+  {
+    id: 'indulge',
+    name: 'Indulge',
+    url: 'https://indulge.significanthobbies.com',
+    description: 'A private iPhone and iPad app for keeping the pleasures you choose and trading away the time you do not.',
+    tier: 'active',
+    priority: 'P2',
+    category: 'personal',
+    maturity: 'maintained',
+    spotlight: false,
+    "pillarId": 'learn',
+    domains: [
+      "indulge.significanthobbies.com"
+    ]
+  },
+  {
+    id: 'local-ai-video-studio',
+    name: 'Local AI Video Studio',
+    url: 'https://local-ai-video-studio.sassmaker.com',
+    description: 'A local-first Mac studio for comparing reproducible video-effect variants before export.',
+    tier: 'active',
+    priority: 'P2',
+    category: 'product',
+    maturity: 'maintained',
+    spotlight: false,
+    "pillarId": 'build',
+    domains: [
+      "local-ai-video-studio.sassmaker.com"
     ]
   },
 ];
