@@ -23,7 +23,7 @@
     "catalog:check-public": "node scripts/sync-fleet-public-products.mjs --check",
     "catalog:validate-public": "node scripts/sync-fleet-public-products.mjs --validate",
     "check:docs": "node scripts/check-docs.mjs",
-    "test": "vitest run tests/api/*.test.ts",
+    "test": "vitest run tests",
     "lint": "biome check .",
     "typecheck": "turbo run typecheck",
     "smoke": "node scripts/smoke-prod.mjs",
