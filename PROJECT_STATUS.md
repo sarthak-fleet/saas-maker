@@ -1,6 +1,6 @@
 # Fleet Workflows — PROJECT STATUS
 
-Last updated: 2026-08-20
+Last updated: 2026-08-21
 
 ## Why / What
 
@@ -30,6 +30,9 @@ provider inventory, private registries, mobile proof, and production changes.
 
 ## Timeline
 
+- 2026-08-21 — Moved the maintained personal habit surface from the Indulge
+  compatibility domain to the canonical Habits domain without changing the
+  credential-free probe contract or the 31-site scope.
 - 2026-08-20 — Repointed the reusable Fleet contract workflow from the retired
   nested public-directory lockfile to Fleet Ops' own quality-tool lockfile after
   SaaS Maker became a standalone repository. No deployment behavior changed.
