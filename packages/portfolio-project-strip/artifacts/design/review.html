@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio project strip review</title>
+    <link rel="stylesheet" href="../../src/index.css" />
+    <style>
+      :root { color: #292524; font-family: ui-sans-serif, system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; background: #fafaf9; }
+      main { display: grid; min-height: calc(100vh - 46px); place-items: center; padding: 2rem; }
+      .host { width: min(44rem, 100%); }
+      .host p { max-width: 56ch; color: #78716c; line-height: 1.65; }
+      .baseline { min-height: 46px; border-block: 1px solid #e7e5e4; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="host" aria-labelledby="review-title">
+        <p>End of product content</p>
+        <h1 id="review-title">Keep exploring the portfolio.</h1>
+        <p>
+          The shared rail should feel native to this quiet host surface while keeping every
+          project link readable without competing footer controls.
+        </p>
+      </section>
+    </main>
+    <div class="baseline" data-before></div>
+    <aside class="portfolio-project-strip" aria-label="Other projects by Sarthak" data-after>
+      <div class="portfolio-project-strip__inner">
+        <div class="portfolio-project-strip__viewport">
+          <ul class="portfolio-project-strip__track" data-loop="true" style="--portfolio-strip-speed: 42s">
+            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="https://codevetter.com/?ref=fleet-workspace">CodeVetter</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="https://heypace.app/?ref=fleet-workspace">HeyPace</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item"><a class="portfolio-project-strip__link" href="https://posttrainllm.com/?ref=fleet-workspace">PostTrainLLM</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item portfolio-project-strip__duplicate" aria-hidden="true"><a class="portfolio-project-strip__link" href="https://codevetter.com/?ref=fleet-workspace" tabindex="-1">CodeVetter</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item portfolio-project-strip__duplicate" aria-hidden="true"><a class="portfolio-project-strip__link" href="https://heypace.app/?ref=fleet-workspace" tabindex="-1">HeyPace</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+            <li class="portfolio-project-strip__item portfolio-project-strip__duplicate" aria-hidden="true"><a class="portfolio-project-strip__link" href="https://posttrainllm.com/?ref=fleet-workspace" tabindex="-1">PostTrainLLM</a><span class="portfolio-project-strip__dot" aria-hidden="true">·</span></li>
+          </ul>
+        </div>
+        <div class="portfolio-project-strip__tooltip" role="tooltip" hidden data-tooltip></div>
+      </div>
+    </aside>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const before = document.querySelector('[data-before]');
+      const after = document.querySelector('[data-after]');
+      if (params.has('before')) after.remove();
+      else before.remove();
+      if (params.get('theme') === 'dark' && after) {
+        after.dataset.theme = 'dark';
+        document.documentElement.style.color = '#f5f5f4';
+        document.body.style.background = '#171717';
+      }
+      const tooltip = document.querySelector('[data-tooltip]');
+      const viewport = document.querySelector('.portfolio-project-strip__viewport');
+      const track = document.querySelector('.portfolio-project-strip__track');
+      const keepFocusedLinkVisible = (link) => {
+        const transform = getComputedStyle(track).transform;
+        const values = transform === 'none'
+          ? []
+          : transform.slice(transform.indexOf('(') + 1, -1).split(',').map(Number);
+        const currentOffset = transform.startsWith('matrix3d') ? values[12] : (values[4] || 0);
+        const viewportRect = viewport.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
+        let correction = 0;
+        if (linkRect.left < viewportRect.left + 16) correction = viewportRect.left + 16 - linkRect.left;
+        else if (linkRect.right > viewportRect.right - 16) correction = viewportRect.right - 16 - linkRect.right;
+        track.style.animation = 'none';
+        track.style.transform = `translateX(${currentOffset + correction}px)`;
+      };
+      document.querySelectorAll('.portfolio-project-strip__link').forEach((link) => {
+        const descriptions = {
+          CodeVetter: 'AI-powered pull request reviews that focus on meaningful engineering risk.',
+          HeyPace: 'A focused planning companion for keeping work moving at a sustainable pace.',
+          PostTrainLLM: 'Practical tools and research for improving language models after pretraining.'
+        };
+        const show = () => {
+          tooltip.textContent = descriptions[link.textContent];
+          tooltip.hidden = false;
+        };
+        const hide = () => { tooltip.hidden = true; };
+        link.addEventListener('pointerenter', show);
+        link.addEventListener('pointerleave', hide);
+        link.addEventListener('focus', () => {
+          show();
+          keepFocusedLinkVisible(link);
+        });
+        link.addEventListener('blur', (event) => {
+          hide();
+          if (!viewport.contains(event.relatedTarget)) {
+            track.style.removeProperty('animation');
+            track.style.removeProperty('transform');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
