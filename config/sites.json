@@ -67,6 +67,11 @@
       "probePath": "/"
     },
     {
+      "id": "kith",
+      "url": "https://kith.significanthobbies.com",
+      "probePath": "/"
+    },
+    {
       "id": "knowledge-base",
       "url": "https://knowledgebase.sassmaker.com",
       "probePath": "/"
@@ -124,6 +129,11 @@
     {
       "id": "sarthakagrawal-personal",
       "url": "https://sarthakagrawal.dev",
+      "probePath": "/"
+    },
+    {
+      "id": "setline",
+      "url": "https://setline.significanthobbies.com",
       "probePath": "/"
     },
     {
