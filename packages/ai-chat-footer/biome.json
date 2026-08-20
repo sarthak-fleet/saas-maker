@@ -1,5 +1,6 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
+  "root": false,
   "files": {
     "ignoreUnknown": true,
     "includes": ["**", "!dist", "!node_modules", "!pnpm-lock.yaml", "!**/*.css"]

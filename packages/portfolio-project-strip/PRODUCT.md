@@ -32,7 +32,8 @@ its project list, accessible label, theme, speed, or catalog URL.
 
 ## Capabilities and Constraints
 
-- `foundry/ops/config/projects.json` remains the canonical project record.
+- Fleet's private project catalog remains canonical; SaaS Maker consumes only
+  its checked-in `catalog/generated/public.json` projection.
 - The package contains no credentials, analytics, storage, default backend, or
   Fleet-hosted runtime.
 - The public catalog exposes only the documented safe project projection.
@@ -44,10 +45,10 @@ its project list, accessible label, theme, speed, or catalog URL.
 
 ## Evidence on Hand
 
-The OpenSpec change in
-`foundry/openspec/changes/add-portfolio-project-strip/` defines the product
-requirements, loading contract, and accessibility scenarios. The generated
-catalog and public endpoint are both derived from the canonical Fleet registry.
+The retained component history defines the product requirements, loading
+contract, and accessibility scenarios. The generated package catalog and
+public endpoint now consume the same checked-in SaaS Maker projection derived
+from the canonical Fleet registry.
 
 ## Product Principles
 

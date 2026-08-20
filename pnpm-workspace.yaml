@@ -1,5 +1,7 @@
 packages:
   - 'packages/widgets/feedback-widget'
+  - 'packages/ai-chat-footer'
+  - 'packages/portfolio-project-strip'
   - 'packages/ui'
   - 'apps/cockpit'
   - 'apps/docs-blume'
@@ -19,3 +21,4 @@ allowBuilds:
 # release-age policy.
 overrides:
   rollup: 4.60.2
+  esbuild: 0.28.1

@@ -3,9 +3,10 @@
 A small, backend-free React footer strip that quietly connects a product to an
 author's other current projects.
 
-The canonical project source for both internal and external project truth is
-Fleet's `foundry/ops/config/projects.json`; the endpoint and package catalog
-are generated safe projections, never hand-maintained copies.
+Fleet's private catalog remains the canonical project source. SaaS Maker checks
+in its allowlisted projection at `catalog/generated/public.json`; both the site
+endpoint and this package catalog are generated from that same safe JSON rather
+than maintaining another project list.
 It includes a generated Fleet catalog for instant first paint. By default it
 revalidates against the cached `https://sassmaker.com/projects.json` endpoint
 after mount with an 800ms timeout and keeps the bundled list if the request

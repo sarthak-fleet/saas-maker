@@ -2,9 +2,11 @@
 
 ## Why / What
 
-SaaS Maker is the public product directory and the small shared feedback layer
-used by selected products. It exists to make the portfolio discoverable and to
-provide one consistent way to collect and review customer feedback.
+SaaS Maker is the public product directory, the small shared feedback layer
+used by selected products, and the home of backend-free SaaS Maker UI packages.
+It exists to make the portfolio discoverable, provide one consistent way to
+collect and review customer feedback, and package reusable public-facing
+components without pulling product code into Foundry.
 
 It is not the Fleet control plane. Fleet Workspace is the single source of truth
 for internal project metadata, marketing automation, schedules, skills, Drank,
@@ -19,9 +21,16 @@ CodeVetter and App Health remain independent.
 - better-auth for the private inbox.
 - Blume for package documentation.
 - React as the peer runtime for @saas-maker/feedback.
+- React as the peer runtime for the AI Chat Footer and Portfolio Project Strip.
 
 ## Timeline
 
+- **2026-08-21 — Shared UI packages moved out of Foundry:** Imported
+  `@saas-maker/ai-chat-footer` and `@saas-maker/portfolio-project-strip` with
+  their component histories, added them to the SaaS Maker workspace and CI,
+  and changed Portfolio Project Strip generation to consume SaaS Maker's
+  checked-in 31-product public catalog projection. No npm publication or
+  deployment ran.
 - **2026-08-20 — Standalone ownership restored:** Restored SaaS Maker as the
   canonical public-directory and Feedback repository, synchronized the current
   directory and package sources from Fleet, and narrowed Feedback to public
@@ -66,10 +75,12 @@ CodeVetter and App Health remain independent.
 | api.sassmaker.com | Feedback and project-key API |
 | app.sassmaker.com | Private feedback inbox |
 | @saas-maker/feedback | Maintained public runtime package |
+| @saas-maker/ai-chat-footer | Backend-free AI assistant footer package |
+| @saas-maker/portfolio-project-strip | Backend-free portfolio discovery strip package |
 
 ## Features (shipped)
 
-- Deterministic 19-product public projection consumed without private Fleet
+- Deterministic 31-product public projection consumed without private Fleet
   runtime access.
 - Feedback submission for bug, feature, and general feedback.
 - Optional screenshots and page-element anchoring.
@@ -77,6 +88,9 @@ CodeVetter and App Health remain independent.
 - Machine-readable OpenAPI contract for submission, inbox, detail, and status updates.
 - Project-key creation and management.
 - Blume package docs plus agent/search surfaces.
+- Backend-free AI assistant links with provider-specific prompt handoff.
+- Accessible portfolio discovery with bundled first paint and optional cached
+  revalidation from sassmaker.com.
 
 ## Work queue
 

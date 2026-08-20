@@ -7,6 +7,8 @@ SaaS Maker owns only:
 - the public product directory;
 - Blume package documentation;
 - @saas-maker/feedback;
+- @saas-maker/ai-chat-footer;
+- @saas-maker/portfolio-project-strip;
 - the feedback API, image upload, project keys, narrow auth, and private inbox.
 
 Fleet Workspace owns shared schedules, skills, host automation, registries,
@@ -23,6 +25,7 @@ Droid, or fleet-control features here.
 pnpm test
 pnpm typecheck
 pnpm build:widget
+pnpm check:shared-packages
 pnpm build:showcase
 pnpm build:docs
 pnpm build:cockpit

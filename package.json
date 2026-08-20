@@ -12,6 +12,7 @@
     "build:api": "pnpm -F @saas-maker/api typecheck",
     "build:cockpit": "turbo run build --filter=@saas-maker/dashboard...",
     "build:widget": "pnpm -F @saas-maker/feedback build",
+    "check:shared-packages": "pnpm --filter @saas-maker/ai-chat-footer --filter @saas-maker/portfolio-project-strip run check",
     "build:showcase": "pnpm -F @saas-maker/landing-page build",
     "build:docs": "pnpm -F @saas-maker/docs-blume build",
     "deploy:guard": "bash ../foundry/ops/scripts/fleet-deploy-guard.sh saas-maker",

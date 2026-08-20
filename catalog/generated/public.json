@@ -155,6 +155,18 @@
       "pillarId": "build"
     },
     {
+      "id": "indulge",
+      "name": "Habits",
+      "description": "A private habit practice for noticing patterns, making intentional trades, and building better defaults.",
+      "url": "https://habits.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "in-progress",
+      "pillarId": "learn"
+    },
+    {
       "id": "india-standards",
       "name": "India Standards",
       "description": "A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.",
@@ -167,18 +179,6 @@
       "changelogUrl": "https://india-standards.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/india-standards",
       "roadmapUrl": "https://github.com/Significant-Hobbies/india-standards/issues",
-      "pillarId": "learn"
-    },
-    {
-      "id": "indulge",
-      "name": "Indulge",
-      "description": "A private iPhone and iPad app for keeping the pleasures you choose and trading away the time you do not.",
-      "url": "https://indulge.significanthobbies.com",
-      "tier": "active",
-      "category": "personal",
-      "priority": "P2",
-      "spotlight": false,
-      "maturity": "maintained",
       "pillarId": "learn"
     },
     {
@@ -403,7 +403,7 @@
     {
       "id": "significanthobbies",
       "name": "Significant Hobbies",
-      "description": "Plan meaningful hobbies, side quests, rituals, and life journeys.",
+      "description": "A simple directory for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor.",
       "url": "https://significanthobbies.com",
       "tier": "secondary",
       "category": "personal",

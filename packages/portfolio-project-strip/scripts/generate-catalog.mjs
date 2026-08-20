@@ -2,28 +2,23 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const packageRoot = resolve(new URL('..', import.meta.url).pathname);
-const sourcePath = resolve(packageRoot, '../../ops/config/projects.json');
+const sourcePath = resolve(packageRoot, '../../catalog/generated/public.json');
 const outputPath = resolve(packageRoot, 'src/catalog.ts');
 const source = JSON.parse(await readFile(sourcePath, 'utf8'));
-const projects = source.projects
-  .filter(
-    (project) =>
-      project.lifecycle === 'maintained' &&
-      project.public?.listing === 'maintained' &&
-      project.domains?.[0]
-  )
+const projects = source.products
+  .filter((project) => project.url)
   .map((project) => ({
     id: project.id,
-    name: project.public?.name ?? project.name,
-    url: `https://${project.domains[0]}`,
-    description: project.public?.description,
-    tier: project.tier,
-    priority: project.portfolio?.priority,
-    category: project.public?.category,
-    maturity: project.public?.maturity,
-    spotlight: project.public?.spotlight,
-    pillarId: project.public?.pillarId,
-    domains: project.domains,
+    name: project.name,
+    url: project.url,
+    description: project.description,
+    tier: project.tier === 'core' ? 'focus' : project.tier,
+    priority: project.priority,
+    category: project.category,
+    maturity: project.maturity,
+    spotlight: project.spotlight,
+    pillarId: project.pillarId,
+    domains: [new URL(project.url).hostname],
   }));
 
 const serialized = JSON.stringify(projects, null, 2)

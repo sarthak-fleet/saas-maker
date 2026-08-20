@@ -4,6 +4,12 @@
   "description": "A fast, accessible animated footer strip for linking an author's current projects.",
   "license": "MIT",
   "homepage": "https://www.npmjs.com/package/@saas-maker/portfolio-project-strip",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sass-maker/saas-maker.git",
+    "directory": "packages/portfolio-project-strip"
+  },
+  "bugs": "https://github.com/sass-maker/saas-maker/issues",
   "publishConfig": {
     "access": "public"
   },
@@ -42,11 +48,6 @@
     "react-dom": "19.2.5",
     "tsup": "8.5.1",
     "typescript": "6.0.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "esbuild": "0.28.1"
-    }
   },
   "packageManager": "pnpm@10.33.2"
 }

@@ -1,27 +1,39 @@
-# SaaS Maker (archived)
+# SaaS Maker
 
-> [!IMPORTANT]
-> This standalone repository is deprecated and preserved only for history and
-> attribution. It is not the source of the current website or package, and it
-> should not be cloned for active Fleet development.
+SaaS Maker owns the public product directory and a small set of reusable,
+backend-free product packages. It also provides the focused Feedback service,
+image upload, project keys, and private feedback inbox.
 
-SaaS Maker now has a deliberately small public role:
+Fleet Workspace remains the private source of project identity and portfolio
+operations. SaaS Maker consumes only its checked-in, privacy-filtered public
+catalog and never reads private Fleet state at runtime.
 
-- [sassmaker.com](https://sassmaker.com) is the maintained static directory for
-  Sarthak Agrawal's products.
-- [`@saas-maker/feedback`](https://www.npmjs.com/package/@saas-maker/feedback)
-  is the maintained backend-free feedback package.
+## Products
 
-Both are maintained from the private Fleet Workspace monorepo. Fleet owns the
-product registry, privacy-checked public projection, static directory source,
-and package source. The old API, feedback inbox, package documentation site,
-task queue, and operational control-plane code in this repository are retired.
+- [sassmaker.com](https://sassmaker.com) — public product directory.
+- `@saas-maker/feedback` — React feedback widget backed by the optional hosted
+  submission service.
+- `@saas-maker/ai-chat-footer` — backend-free links for asking AI assistants
+  about a product.
+- `@saas-maker/portfolio-project-strip` — accessible project-discovery footer
+  backed by the same safe catalog as sassmaker.com.
+- `api.sassmaker.com` — Feedback and project-key API.
+- `app.sassmaker.com` — private Feedback inbox.
+- `saas-maker-packages.pages.dev` — package documentation.
 
-## Historical contents
+## Development
 
-This repository records the former standalone SaaS Maker implementation,
-including its showcase, package documentation, feedback inbox, API Worker,
-shared UI, and internal contracts. Those paths are retained as historical
-context only and may no longer build, deploy, or describe current production.
+```bash
+pnpm install --frozen-lockfile
+pnpm test
+pnpm typecheck
+pnpm check:shared-packages
+pnpm build:widget
+pnpm build:showcase
+pnpm build:docs
+pnpm build:cockpit
+```
 
-For current public product information, use [sassmaker.com](https://sassmaker.com).
+Production deployment and npm publication remain separate manual actions.
+See [`PROJECT_STATUS.md`](PROJECT_STATUS.md) for durable product status and
+[GitHub Issues](https://github.com/sass-maker/saas-maker/issues) for work.
