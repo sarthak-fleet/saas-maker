@@ -22,8 +22,8 @@ jobs:
         with:
           node-version: "22"
           cache: pnpm
-          cache-dependency-path: foundry/apps/public/public-directory/pnpm-lock.yaml
-      - working-directory: foundry/apps/public/public-directory
+          cache-dependency-path: foundry/ops/pnpm-lock.yaml
+      - working-directory: foundry/ops
         run: pnpm install --frozen-lockfile
       - run: pnpm run test:fleet
       - run: pnpm run check:registry

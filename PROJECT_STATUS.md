@@ -1,6 +1,6 @@
 # Fleet Workflows — PROJECT STATUS
 
-Last updated: 2026-08-16
+Last updated: 2026-08-20
 
 ## Why / What
 
@@ -30,6 +30,9 @@ provider inventory, private registries, mobile proof, and production changes.
 
 ## Timeline
 
+- 2026-08-20 — Repointed the reusable Fleet contract workflow from the retired
+  nested public-directory lockfile to Fleet Ops' own quality-tool lockfile after
+  SaaS Maker became a standalone repository. No deployment behavior changed.
 - 2026-08-16 — Expanded the generated public manifest to cover the approved
   informational surfaces for Office OS and Local AI Video Studio plus the
   Indulge product and trust site, bringing credential-free monitoring to 31
