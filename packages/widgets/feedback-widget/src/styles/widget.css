@@ -1,11 +1,11 @@
 /* ==========================================================================
    SaaS-Maker Feedback Widget Styles
-   All selectors scoped under [data-saasmaker-widget] to prevent leaking.
+   All selectors scoped under [data-feedback-widget] to prevent leaking.
    ========================================================================== */
 
 /* ---------- Theme Variables ---------- */
 
-[data-saasmaker-widget].smw--light {
+[data-feedback-widget].smw--light {
   --smw-bg: #ffffff;
   --smw-bg-secondary: #f8f9fa;
   --smw-bg-hover: #f1f3f5;
@@ -21,7 +21,7 @@
   --smw-skeleton-shine: #f3f4f6;
 }
 
-[data-saasmaker-widget].smw--dark {
+[data-feedback-widget].smw--dark {
   --smw-bg: #1e1e2e;
   --smw-bg-secondary: #262637;
   --smw-bg-hover: #2e2e42;
@@ -37,7 +37,7 @@
   --smw-skeleton-shine: #404055;
 }
 
-[data-saasmaker-widget].smw--auto {
+[data-feedback-widget].smw--auto {
   --smw-bg: #ffffff;
   --smw-bg-secondary: #f8f9fa;
   --smw-bg-hover: #f1f3f5;
@@ -54,7 +54,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  [data-saasmaker-widget].smw--auto {
+  [data-feedback-widget].smw--auto {
     --smw-bg: #1e1e2e;
     --smw-bg-secondary: #262637;
     --smw-bg-hover: #2e2e42;
@@ -73,7 +73,7 @@
 
 /* ---------- Badge Colors ---------- */
 
-[data-saasmaker-widget] {
+[data-feedback-widget] {
   --smw-bug: #ef4444;
   --smw-feature: #8b5cf6;
   --smw-feedback: #3b82f6;
@@ -81,7 +81,7 @@
 
 /* ---------- Root Reset ---------- */
 
-[data-saasmaker-widget].smw-root {
+[data-feedback-widget].smw-root {
   all: initial;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
@@ -93,9 +93,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-[data-saasmaker-widget] *,
-[data-saasmaker-widget] *::before,
-[data-saasmaker-widget] *::after {
+[data-feedback-widget] *,
+[data-feedback-widget] *::before,
+[data-feedback-widget] *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -103,7 +103,7 @@
 
 /* ---------- Trigger Button ---------- */
 
-[data-saasmaker-widget] .smw-trigger {
+[data-feedback-widget] .smw-trigger {
   position: fixed;
   z-index: 2147483646;
   display: inline-flex;
@@ -125,32 +125,32 @@
   line-height: 1;
 }
 
-[data-saasmaker-widget] .smw-trigger:hover {
+[data-feedback-widget] .smw-trigger:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
-[data-saasmaker-widget] .smw-trigger:active {
+[data-feedback-widget] .smw-trigger:active {
   transform: scale(0.98);
 }
 
-[data-saasmaker-widget] .smw-trigger--bottom-right {
+[data-feedback-widget] .smw-trigger--bottom-right {
   bottom: 20px;
   right: 20px;
 }
 
-[data-saasmaker-widget] .smw-trigger--bottom-left {
+[data-feedback-widget] .smw-trigger--bottom-left {
   bottom: 20px;
   left: 20px;
 }
 
-[data-saasmaker-widget] .smw-trigger__text {
+[data-feedback-widget] .smw-trigger__text {
   white-space: nowrap;
 }
 
 /* ---------- Overlay ---------- */
 
-[data-saasmaker-widget] .smw-overlay {
+[data-feedback-widget] .smw-overlay {
   position: fixed;
   z-index: 2147483647;
   inset: 0;
@@ -172,7 +172,7 @@
 
 /* ---------- Modal ---------- */
 
-[data-saasmaker-widget] .smw-modal {
+[data-feedback-widget] .smw-modal {
   position: relative;
   width: 100%;
   max-width: 480px;
@@ -197,21 +197,21 @@
   }
 }
 
-[data-saasmaker-widget] .smw-modal__header {
+[data-feedback-widget] .smw-modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 18px 20px 0;
 }
 
-[data-saasmaker-widget] .smw-modal__title {
+[data-feedback-widget] .smw-modal__title {
   font-size: 18px;
   font-weight: 700;
   color: var(--smw-text);
   line-height: 1.3;
 }
 
-[data-saasmaker-widget] .smw-modal__close {
+[data-feedback-widget] .smw-modal__close {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -227,12 +227,12 @@
     color 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-modal__close:hover {
+[data-feedback-widget] .smw-modal__close:hover {
   background: var(--smw-bg-hover);
   color: var(--smw-text);
 }
 
-[data-saasmaker-widget] .smw-modal__body {
+[data-feedback-widget] .smw-modal__body {
   flex: 1;
   overflow-y: auto;
   padding: 16px 20px 20px;
@@ -240,14 +240,14 @@
 
 /* ---------- Tabs ---------- */
 
-[data-saasmaker-widget] .smw-tabs {
+[data-feedback-widget] .smw-tabs {
   display: flex;
   gap: 0;
   padding: 12px 20px 0;
   border-bottom: 1px solid var(--smw-border);
 }
 
-[data-saasmaker-widget] .smw-tab {
+[data-feedback-widget] .smw-tab {
   flex: 1;
   padding: 10px 0;
   border: none;
@@ -263,41 +263,41 @@
     border-color 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-tab:hover {
+[data-feedback-widget] .smw-tab:hover {
   color: var(--smw-text);
 }
 
-[data-saasmaker-widget] .smw-tab--active {
+[data-feedback-widget] .smw-tab--active {
   color: var(--smw-accent);
   border-bottom-color: var(--smw-accent);
 }
 
 /* ---------- Submit Form ---------- */
 
-[data-saasmaker-widget] .smw-submit-form {
+[data-feedback-widget] .smw-submit-form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-[data-saasmaker-widget] .smw-field {
+[data-feedback-widget] .smw-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-[data-saasmaker-widget] .smw-label {
+[data-feedback-widget] .smw-label {
   font-size: 13px;
   font-weight: 600;
   color: var(--smw-text);
 }
 
-[data-saasmaker-widget] .smw-required {
+[data-feedback-widget] .smw-required {
   color: #ef4444;
 }
 
-[data-saasmaker-widget] .smw-input,
-[data-saasmaker-widget] .smw-textarea {
+[data-feedback-widget] .smw-input,
+[data-feedback-widget] .smw-textarea {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--smw-input-border);
@@ -313,36 +313,36 @@
     box-shadow 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-input:focus,
-[data-saasmaker-widget] .smw-textarea:focus {
+[data-feedback-widget] .smw-input:focus,
+[data-feedback-widget] .smw-textarea:focus {
   border-color: var(--smw-accent);
   box-shadow: 0 0 0 3px rgba(20, 100, 255, 0.12);
 }
 
-[data-saasmaker-widget] .smw-input::placeholder,
-[data-saasmaker-widget] .smw-textarea::placeholder {
+[data-feedback-widget] .smw-input::placeholder,
+[data-feedback-widget] .smw-textarea::placeholder {
   color: var(--smw-text-muted);
 }
 
-[data-saasmaker-widget] .smw-input--disabled {
+[data-feedback-widget] .smw-input--disabled {
   opacity: 0.6;
   cursor: not-allowed;
   background: var(--smw-bg-secondary);
 }
 
-[data-saasmaker-widget] .smw-textarea {
+[data-feedback-widget] .smw-textarea {
   resize: vertical;
   min-height: 80px;
 }
 
 /* ---------- Type Selector ---------- */
 
-[data-saasmaker-widget] .smw-type-selector {
+[data-feedback-widget] .smw-type-selector {
   display: flex;
   gap: 8px;
 }
 
-[data-saasmaker-widget] .smw-type-btn {
+[data-feedback-widget] .smw-type-btn {
   flex: 1;
   display: flex;
   align-items: center;
@@ -360,37 +360,37 @@
   transition: all 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-type-btn:hover {
+[data-feedback-widget] .smw-type-btn:hover {
   background: var(--smw-bg-hover);
   color: var(--smw-text);
 }
 
-[data-saasmaker-widget] .smw-type-btn--active.smw-type-btn--bug {
+[data-feedback-widget] .smw-type-btn--active.smw-type-btn--bug {
   border-color: var(--smw-bug);
   background: rgba(239, 68, 68, 0.08);
   color: var(--smw-bug);
 }
 
-[data-saasmaker-widget] .smw-type-btn--active.smw-type-btn--feature {
+[data-feedback-widget] .smw-type-btn--active.smw-type-btn--feature {
   border-color: var(--smw-feature);
   background: rgba(139, 92, 246, 0.08);
   color: var(--smw-feature);
 }
 
-[data-saasmaker-widget] .smw-type-btn--active.smw-type-btn--feedback {
+[data-feedback-widget] .smw-type-btn--active.smw-type-btn--feedback {
   border-color: var(--smw-feedback);
   background: rgba(59, 130, 246, 0.08);
   color: var(--smw-feedback);
 }
 
-[data-saasmaker-widget] .smw-type-btn__emoji {
+[data-feedback-widget] .smw-type-btn__emoji {
   font-size: 15px;
   line-height: 1;
 }
 
 /* ---------- Buttons ---------- */
 
-[data-saasmaker-widget] .smw-btn {
+[data-feedback-widget] .smw-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -405,39 +405,39 @@
   line-height: 1.4;
 }
 
-[data-saasmaker-widget] .smw-btn--primary {
+[data-feedback-widget] .smw-btn--primary {
   background: var(--smw-accent);
   color: #ffffff;
 }
 
-[data-saasmaker-widget] .smw-btn--primary:hover:not(:disabled) {
+[data-feedback-widget] .smw-btn--primary:hover:not(:disabled) {
   filter: brightness(1.1);
 }
 
-[data-saasmaker-widget] .smw-btn--primary:active:not(:disabled) {
+[data-feedback-widget] .smw-btn--primary:active:not(:disabled) {
   filter: brightness(0.95);
 }
 
-[data-saasmaker-widget] .smw-btn--primary:disabled {
+[data-feedback-widget] .smw-btn--primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-[data-saasmaker-widget] .smw-btn--secondary {
+[data-feedback-widget] .smw-btn--secondary {
   background: var(--smw-bg-secondary);
   color: var(--smw-text);
   border: 1px solid var(--smw-border);
 }
 
-[data-saasmaker-widget] .smw-btn--secondary:hover {
+[data-feedback-widget] .smw-btn--secondary:hover {
   background: var(--smw-bg-hover);
 }
 
-[data-saasmaker-widget] .smw-btn--full {
+[data-feedback-widget] .smw-btn--full {
   width: 100%;
 }
 
-[data-saasmaker-widget] .smw-btn__loading {
+[data-feedback-widget] .smw-btn__loading {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -445,7 +445,7 @@
 
 /* ---------- Spinner ---------- */
 
-[data-saasmaker-widget] .smw-spinner {
+[data-feedback-widget] .smw-spinner {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -463,7 +463,7 @@
 
 /* ---------- Error ---------- */
 
-[data-saasmaker-widget] .smw-error {
+[data-feedback-widget] .smw-error {
   padding: 10px 12px;
   border-radius: 8px;
   background: rgba(239, 68, 68, 0.08);
@@ -473,7 +473,7 @@
 
 /* ---------- Success ---------- */
 
-[data-saasmaker-widget] .smw-submit-success {
+[data-feedback-widget] .smw-submit-success {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -483,38 +483,38 @@
   text-align: center;
 }
 
-[data-saasmaker-widget] .smw-submit-success__icon {
+[data-feedback-widget] .smw-submit-success__icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-[data-saasmaker-widget] .smw-submit-success__title {
+[data-feedback-widget] .smw-submit-success__title {
   font-size: 20px;
   font-weight: 700;
   color: var(--smw-text);
 }
 
-[data-saasmaker-widget] .smw-submit-success__message {
+[data-feedback-widget] .smw-submit-success__message {
   font-size: 14px;
   color: var(--smw-text-secondary);
 }
 
 /* ---------- Browse List ---------- */
 
-[data-saasmaker-widget] .smw-browse {
+[data-feedback-widget] .smw-browse {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-[data-saasmaker-widget] .smw-browse__filters {
+[data-feedback-widget] .smw-browse__filters {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
 }
 
-[data-saasmaker-widget] .smw-filter-pill {
+[data-feedback-widget] .smw-filter-pill {
   padding: 5px 14px;
   border: 1px solid var(--smw-border);
   border-radius: 50px;
@@ -527,23 +527,23 @@
   transition: all 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-filter-pill:hover {
+[data-feedback-widget] .smw-filter-pill:hover {
   background: var(--smw-bg-hover);
   color: var(--smw-text);
 }
 
-[data-saasmaker-widget] .smw-filter-pill--active {
+[data-feedback-widget] .smw-filter-pill--active {
   background: var(--smw-accent);
   color: #ffffff;
   border-color: var(--smw-accent);
 }
 
-[data-saasmaker-widget] .smw-filter-pill--active:hover {
+[data-feedback-widget] .smw-filter-pill--active:hover {
   background: var(--smw-accent);
   color: #ffffff;
 }
 
-[data-saasmaker-widget] .smw-browse__list {
+[data-feedback-widget] .smw-browse__list {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -551,7 +551,7 @@
   overflow-y: auto;
 }
 
-[data-saasmaker-widget] .smw-browse__empty {
+[data-feedback-widget] .smw-browse__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -564,7 +564,7 @@
 
 /* ---------- Browse Item ---------- */
 
-[data-saasmaker-widget] .smw-browse-item {
+[data-feedback-widget] .smw-browse-item {
   display: flex;
   gap: 12px;
   padding: 12px;
@@ -574,11 +574,11 @@
   transition: border-color 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-browse-item:hover {
+[data-feedback-widget] .smw-browse-item:hover {
   border-color: var(--smw-text-muted);
 }
 
-[data-saasmaker-widget] .smw-browse-item__upvote {
+[data-feedback-widget] .smw-browse-item__upvote {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -597,23 +597,23 @@
   transition: all 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-browse-item__upvote:hover:not(:disabled) {
+[data-feedback-widget] .smw-browse-item__upvote:hover:not(:disabled) {
   border-color: var(--smw-accent);
   color: var(--smw-accent);
   background: rgba(20, 100, 255, 0.06);
 }
 
-[data-saasmaker-widget] .smw-browse-item__upvote:disabled {
+[data-feedback-widget] .smw-browse-item__upvote:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-[data-saasmaker-widget] .smw-browse-item__count {
+[data-feedback-widget] .smw-browse-item__count {
   font-size: 13px;
   line-height: 1;
 }
 
-[data-saasmaker-widget] .smw-browse-item__content {
+[data-feedback-widget] .smw-browse-item__content {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -621,14 +621,14 @@
   gap: 4px;
 }
 
-[data-saasmaker-widget] .smw-browse-item__title {
+[data-feedback-widget] .smw-browse-item__title {
   font-size: 14px;
   font-weight: 600;
   color: var(--smw-text);
   line-height: 1.3;
 }
 
-[data-saasmaker-widget] .smw-browse-item__desc {
+[data-feedback-widget] .smw-browse-item__desc {
   font-size: 13px;
   color: var(--smw-text-secondary);
   line-height: 1.4;
@@ -641,7 +641,7 @@
 
 /* ---------- Badges ---------- */
 
-[data-saasmaker-widget] .smw-badge {
+[data-feedback-widget] .smw-badge {
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
@@ -653,24 +653,24 @@
   width: fit-content;
 }
 
-[data-saasmaker-widget] .smw-badge--bug {
+[data-feedback-widget] .smw-badge--bug {
   background: rgba(239, 68, 68, 0.1);
   color: var(--smw-bug);
 }
 
-[data-saasmaker-widget] .smw-badge--feature {
+[data-feedback-widget] .smw-badge--feature {
   background: rgba(139, 92, 246, 0.1);
   color: var(--smw-feature);
 }
 
-[data-saasmaker-widget] .smw-badge--feedback {
+[data-feedback-widget] .smw-badge--feedback {
   background: rgba(59, 130, 246, 0.1);
   color: var(--smw-feedback);
 }
 
 /* ---------- Image Upload ---------- */
 
-[data-saasmaker-widget] .smw-image-upload__dropzone {
+[data-feedback-widget] .smw-image-upload__dropzone {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -686,28 +686,28 @@
   min-height: 80px;
 }
 
-[data-saasmaker-widget] .smw-image-upload__dropzone:hover,
-[data-saasmaker-widget] .smw-image-upload__dropzone--active {
+[data-feedback-widget] .smw-image-upload__dropzone:hover,
+[data-feedback-widget] .smw-image-upload__dropzone--active {
   border-color: var(--smw-accent);
   background: rgba(20, 100, 255, 0.04);
   color: var(--smw-text-secondary);
 }
 
-[data-saasmaker-widget] .smw-image-upload__input {
+[data-feedback-widget] .smw-image-upload__input {
   display: none;
 }
 
-[data-saasmaker-widget] .smw-image-upload__label {
+[data-feedback-widget] .smw-image-upload__label {
   font-size: 13px;
   font-weight: 500;
 }
 
-[data-saasmaker-widget] .smw-image-upload__hint {
+[data-feedback-widget] .smw-image-upload__hint {
   font-size: 11px;
   color: var(--smw-text-muted);
 }
 
-[data-saasmaker-widget] .smw-image-upload__progress {
+[data-feedback-widget] .smw-image-upload__progress {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -715,7 +715,7 @@
   gap: 6px;
 }
 
-[data-saasmaker-widget] .smw-image-upload__progress-bar {
+[data-feedback-widget] .smw-image-upload__progress-bar {
   width: 100%;
   height: 4px;
   border-radius: 2px;
@@ -723,12 +723,12 @@
   transition: width 0.2s ease;
 }
 
-[data-saasmaker-widget] .smw-image-upload__progress-text {
+[data-feedback-widget] .smw-image-upload__progress-text {
   font-size: 12px;
   color: var(--smw-text-secondary);
 }
 
-[data-saasmaker-widget] .smw-image-upload__preview {
+[data-feedback-widget] .smw-image-upload__preview {
   position: relative;
   display: inline-block;
   border-radius: 8px;
@@ -736,7 +736,7 @@
   border: 1px solid var(--smw-border);
 }
 
-[data-saasmaker-widget] .smw-image-upload__img {
+[data-feedback-widget] .smw-image-upload__img {
   display: block;
   max-width: 100%;
   max-height: 120px;
@@ -744,7 +744,7 @@
   border-radius: 8px;
 }
 
-[data-saasmaker-widget] .smw-image-upload__remove {
+[data-feedback-widget] .smw-image-upload__remove {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -761,11 +761,11 @@
   transition: background 0.15s ease;
 }
 
-[data-saasmaker-widget] .smw-image-upload__remove:hover {
+[data-feedback-widget] .smw-image-upload__remove:hover {
   background: rgba(0, 0, 0, 0.8);
 }
 
-[data-saasmaker-widget] .smw-image-upload__error {
+[data-feedback-widget] .smw-image-upload__error {
   margin-top: 4px;
   font-size: 12px;
   color: #ef4444;
@@ -773,39 +773,39 @@
 
 /* ---------- Skeleton Loading ---------- */
 
-[data-saasmaker-widget] .smw-browse-item--skeleton {
+[data-feedback-widget] .smw-browse-item--skeleton {
   pointer-events: none;
 }
 
-[data-saasmaker-widget] .smw-skeleton {
+[data-feedback-widget] .smw-skeleton {
   background: var(--smw-skeleton-bg);
   border-radius: 4px;
   animation: smw-shimmer 1.5s ease-in-out infinite;
 }
 
-[data-saasmaker-widget] .smw-skeleton--circle {
+[data-feedback-widget] .smw-skeleton--circle {
   width: 20px;
   height: 14px;
   border-radius: 3px;
 }
 
-[data-saasmaker-widget] .smw-skeleton--xs {
+[data-feedback-widget] .smw-skeleton--xs {
   width: 16px;
   height: 12px;
 }
 
-[data-saasmaker-widget] .smw-skeleton--badge {
+[data-feedback-widget] .smw-skeleton--badge {
   width: 48px;
   height: 18px;
   border-radius: 50px;
 }
 
-[data-saasmaker-widget] .smw-skeleton--line {
+[data-feedback-widget] .smw-skeleton--line {
   width: 100%;
   height: 14px;
 }
 
-[data-saasmaker-widget] .smw-skeleton--short {
+[data-feedback-widget] .smw-skeleton--short {
   width: 65%;
 }
 
@@ -824,7 +824,7 @@
 /* ---------- Mobile ---------- */
 
 @media (max-width: 520px) {
-  [data-saasmaker-widget] .smw-modal {
+  [data-feedback-widget] .smw-modal {
     max-width: 100%;
     max-height: 100%;
     height: 100%;
@@ -843,50 +843,50 @@
     }
   }
 
-  [data-saasmaker-widget] .smw-overlay {
+  [data-feedback-widget] .smw-overlay {
     align-items: flex-end;
   }
 }
 
 /* ---------- Scrollbar ---------- */
 
-[data-saasmaker-widget] .smw-modal__body::-webkit-scrollbar,
-[data-saasmaker-widget] .smw-browse__list::-webkit-scrollbar {
+[data-feedback-widget] .smw-modal__body::-webkit-scrollbar,
+[data-feedback-widget] .smw-browse__list::-webkit-scrollbar {
   width: 6px;
 }
 
-[data-saasmaker-widget] .smw-modal__body::-webkit-scrollbar-track,
-[data-saasmaker-widget] .smw-browse__list::-webkit-scrollbar-track {
+[data-feedback-widget] .smw-modal__body::-webkit-scrollbar-track,
+[data-feedback-widget] .smw-browse__list::-webkit-scrollbar-track {
   background: transparent;
 }
 
-[data-saasmaker-widget] .smw-modal__body::-webkit-scrollbar-thumb,
-[data-saasmaker-widget] .smw-browse__list::-webkit-scrollbar-thumb {
+[data-feedback-widget] .smw-modal__body::-webkit-scrollbar-thumb,
+[data-feedback-widget] .smw-browse__list::-webkit-scrollbar-thumb {
   background: var(--smw-border);
   border-radius: 3px;
 }
 
-[data-saasmaker-widget] .smw-modal__body::-webkit-scrollbar-thumb:hover,
-[data-saasmaker-widget] .smw-browse__list::-webkit-scrollbar-thumb:hover {
+[data-feedback-widget] .smw-modal__body::-webkit-scrollbar-thumb:hover,
+[data-feedback-widget] .smw-browse__list::-webkit-scrollbar-thumb:hover {
   background: var(--smw-text-muted);
 }
 
 /* ---------- Ghost button (used by the pinpoint control) ---------- */
 
-[data-saasmaker-widget] .smw-btn--ghost {
+[data-feedback-widget] .smw-btn--ghost {
   background: var(--smw-bg-secondary);
   color: var(--smw-text);
   border: 1px solid var(--smw-border);
 }
 
-[data-saasmaker-widget] .smw-btn--ghost:hover {
+[data-feedback-widget] .smw-btn--ghost:hover {
   background: var(--smw-bg-hover);
   border-color: var(--smw-accent);
 }
 
 /* ---------- Pinpointed-element chip ---------- */
 
-[data-saasmaker-widget] .smw-anchor {
+[data-feedback-widget] .smw-anchor {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -897,11 +897,11 @@
   font-size: 13px;
 }
 
-[data-saasmaker-widget] .smw-anchor__icon {
+[data-feedback-widget] .smw-anchor__icon {
   flex: none;
 }
 
-[data-saasmaker-widget] .smw-anchor__label {
+[data-feedback-widget] .smw-anchor__label {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -911,7 +911,7 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-[data-saasmaker-widget] .smw-anchor__clear {
+[data-feedback-widget] .smw-anchor__clear {
   flex: none;
   background: transparent;
   border: none;
@@ -922,21 +922,21 @@
   border-radius: 4px;
 }
 
-[data-saasmaker-widget] .smw-anchor__clear:hover {
+[data-feedback-widget] .smw-anchor__clear:hover {
   color: var(--smw-text);
   background: var(--smw-bg-hover);
 }
 
 /* ---------- Element picker overlay (page-level; events pass through) ---------- */
 
-[data-saasmaker-widget] .smw-picker {
+[data-feedback-widget] .smw-picker {
   position: fixed;
   inset: 0;
   z-index: 2147483647;
   pointer-events: none;
 }
 
-[data-saasmaker-widget] .smw-picker__box {
+[data-feedback-widget] .smw-picker__box {
   position: fixed;
   background: color-mix(in srgb, var(--smw-accent) 18%, transparent);
   border: 2px solid var(--smw-accent);
@@ -949,7 +949,7 @@
     height 60ms ease;
 }
 
-[data-saasmaker-widget] .smw-picker__hint {
+[data-feedback-widget] .smw-picker__hint {
   position: fixed;
   bottom: 20px;
   left: 50%;
@@ -965,7 +965,7 @@
   white-space: nowrap;
 }
 
-[data-saasmaker-widget] .smw-picker__hint kbd {
+[data-feedback-widget] .smw-picker__hint kbd {
   background: var(--smw-bg-secondary);
   color: var(--smw-text);
   padding: 1px 6px;

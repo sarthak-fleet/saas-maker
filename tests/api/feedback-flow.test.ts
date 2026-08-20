@@ -17,6 +17,17 @@ describe('Health check', () => {
   });
 });
 
+describe('Agent contract', () => {
+  it('GET /openapi.json describes submission and private inbox routes', async () => {
+    const res = await request('/openapi.json');
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.openapi).toBe('3.1.0');
+    expect(body.paths['/v1/feedback'].post).toBeDefined();
+    expect(body.paths['/v1/feedback/inbox'].get).toBeDefined();
+  });
+});
+
 describe('Feedback submission validation', () => {
   it('POST /v1/feedback without X-Project-Key returns 401', async () => {
     const res = await request('/v1/feedback', {
@@ -32,45 +43,6 @@ describe('Feedback submission validation', () => {
     expect(res.status).toBe(401);
     const body = await res.json();
     expect(body.error).toMatch(/X-Project-Key/i);
-  });
-});
-
-describe('Feedback list validation', () => {
-  it('GET /v1/feedback without X-Project-Key returns 401', async () => {
-    const res = await request('/v1/feedback');
-    expect(res.status).toBe(401);
-    const body = await res.json();
-    expect(body.error).toMatch(/X-Project-Key/i);
-  });
-});
-
-describe('Upvote requires auth', () => {
-  it('POST /v1/feedback/123/upvote without Bearer token returns 401', async () => {
-    const res = await request('/v1/feedback/123/upvote', { method: 'POST' });
-    expect(res.status).toBe(401);
-    const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
-  });
-
-  it('DELETE /v1/feedback/123/upvote without Bearer token returns 401', async () => {
-    const res = await request('/v1/feedback/123/upvote', { method: 'DELETE' });
-    expect(res.status).toBe(401);
-    const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
-  });
-
-  it('POST /v1/feedback/123/downvote without Bearer token returns 401', async () => {
-    const res = await request('/v1/feedback/123/downvote', { method: 'POST' });
-    expect(res.status).toBe(401);
-    const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
-  });
-
-  it('DELETE /v1/feedback/123/downvote without Bearer token returns 401', async () => {
-    const res = await request('/v1/feedback/123/downvote', { method: 'DELETE' });
-    expect(res.status).toBe(401);
-    const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
   });
 });
 
@@ -131,8 +103,8 @@ describe('Dashboard feedback routes require auth', () => {
     expect(body.error).toBe('Unauthorized');
   });
 
-  it('DELETE /v1/feedback/123 without auth returns 401', async () => {
-    const res = await request('/v1/feedback/123', { method: 'DELETE' });
+  it('GET /v1/feedback/123 without auth returns 401', async () => {
+    const res = await request('/v1/feedback/123');
     expect(res.status).toBe(401);
     const body = await res.json();
     expect(body.error).toBe('Unauthorized');

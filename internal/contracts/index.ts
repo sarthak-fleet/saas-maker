@@ -41,7 +41,7 @@ export interface FeedbackRecord {
   title: string;
   description: string;
   image_url: string | null;
-  submitter_email: string;
+  submitter_email?: string;
   submitter_name: string | null;
   upvote_count: number;
   downvote_count: number;

@@ -9,8 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { ArrowDownUp } from 'lucide-react';
 
 export function FilterBar() {
   const router = useRouter();
@@ -18,7 +16,6 @@ export function FilterBar() {
 
   const type = searchParams.get('type') ?? 'all';
   const status = searchParams.get('status') ?? 'all';
-  const sort = searchParams.get('sort') ?? 'newest';
 
   const updateParam = useCallback(
     (key: string, value: string) => {
@@ -32,10 +29,6 @@ export function FilterBar() {
     },
     [router, searchParams]
   );
-
-  const toggleSort = useCallback(() => {
-    updateParam('sort', sort === 'newest' ? 'upvotes' : 'newest');
-  }, [sort, updateParam]);
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -58,15 +51,15 @@ export function FilterBar() {
         <SelectContent>
           <SelectItem value="all">All Statuses</SelectItem>
           <SelectItem value="new">New</SelectItem>
+          <SelectItem value="acknowledged">Acknowledged</SelectItem>
+          <SelectItem value="investigating">Investigating</SelectItem>
+          <SelectItem value="planned">Planned</SelectItem>
+          <SelectItem value="in_progress">In progress</SelectItem>
+          <SelectItem value="resolved">Resolved</SelectItem>
           <SelectItem value="dismissed">Dismissed</SelectItem>
           <SelectItem value="on_roadmap">On Roadmap</SelectItem>
         </SelectContent>
       </Select>
-
-      <Button variant="outline" size="sm" onClick={toggleSort} className="gap-2">
-        <ArrowDownUp className="h-4 w-4" />
-        {sort === 'newest' ? 'Newest' : 'Most Upvoted'}
-      </Button>
     </div>
   );
 }

@@ -1,26 +1,17 @@
 ---
-import { PACKAGE_DOCS_URL } from '../data/links';
+import { GITHUB_ORG_URL } from '../data/links';
 
-const GITHUB_URL = 'https://github.com/sass-maker/saas-maker';
-const DASHBOARD_URL = 'https://app.sassmaker.com';
+const isLearnings = Astro.url.pathname.startsWith('/learnings');
 ---
-<nav class="nav">
+<nav class="nav" aria-label="Primary navigation">
   <a href="/" class="brand">
-    <span class="brand-mark">
-      <span class="brand-mark-glyph">S</span>
-    </span>
-    <span class="brand-stack">
-      <span class="brand-name">SaaS Maker</span>
-      <span class="brand-meta">Est. <em>MMXXIV</em> · sarthak</span>
-    </span>
+    <span class="brand-mark" aria-hidden="true">S</span>
+    <span class="brand-name">SaaS Maker</span>
   </a>
   <div class="nav-links">
-    <a href="#fleet">Products</a>
-    <a href="#spec">Feedback</a>
-    <a href={PACKAGE_DOCS_URL} target="_blank" rel="noopener noreferrer">Packages</a>
-    <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">Source</a>
-  </div>
-  <div class="nav-actions">
-    <a href={DASHBOARD_URL} class="btn btn-primary">Feedback inbox →</a>
+    <a href="/#products">Products</a>
+    <a href="/learnings" aria-current={isLearnings ? 'page' : undefined}>Learnings</a>
+    <a href="/#package">Package</a>
+    <a class="nav-source" href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">Public source index ↗</a>
   </div>
 </nav>

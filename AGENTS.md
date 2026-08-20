@@ -1,7 +1,5 @@
 # SaaS Maker agent instructions
 
-Also follow ../AGENTS.md.
-
 ## Boundary
 
 SaaS Maker owns only:
@@ -11,9 +9,9 @@ SaaS Maker owns only:
 - @saas-maker/feedback;
 - the feedback API, image upload, project keys, narrow auth, and private inbox.
 
-Fleet Workspace owns all shared marketing, schedules, skills, host automation,
-registries, Drank, Reel Pipeline, PSI Swarm, and Mobile Dev Cockpit. CodeVetter
-and App Health remain independent repositories.
+Fleet Workspace owns shared schedules, skills, host automation, registries,
+and portfolio operations. Drank, PSI Swarm, Reel Pipeline, CodeVetter, App
+Health, and Mobile Dev Cockpit remain independent products or repositories.
 
 Do not add tasks, workflows, jobs, marketing queues, analytics dashboards,
 observability, App Health, AI gateways, changelogs, testimonials, waitlists,

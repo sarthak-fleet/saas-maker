@@ -1,50 +1,60 @@
+import type { ElementAnchor } from './elementAnchor';
+
 export type FeedbackType = 'bug' | 'feature' | 'feedback';
-export type FeedbackStatus = 'new' | 'in_progress' | 'done' | 'dismissed';
-export type AnyFeedbackStatus = FeedbackStatus | string;
-export type FeedbackVote = 'up' | 'down' | null;
 
-export interface FeedbackRecord {
-  id: string;
-  project_id: string;
-  type: FeedbackType;
-  status: AnyFeedbackStatus;
+export interface FeedbackPageContext {
+  url: string;
   title: string;
-  description: string;
-  image_url: string | null;
-  submitter_email: string;
-  submitter_name: string | null;
-  upvote_count: number;
-  downvote_count: number;
-  viewer_vote?: FeedbackVote;
-  created_at: string;
 }
 
-export interface SubmitFeedbackRequest {
+export interface FeedbackSubmission {
   type: FeedbackType;
   title: string;
   description: string;
-  image_url?: string;
-  submitter_email: string;
-  submitter_name?: string;
+  email?: string;
+  name?: string;
+  anchor?: ElementAnchor;
+  /** The original browser File. Upload or persist it before the callback resolves. */
+  screenshot?: File;
+  page: FeedbackPageContext;
 }
 
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-}
-
-export interface FeedbackWidgetProps {
-  projectId: string;
-  apiBaseUrl?: string;
+export interface FeedbackWidgetCommonProps {
   userEmail?: string;
   userName?: string;
+  requireEmail?: boolean;
   types?: FeedbackType[];
   position?: 'bottom-right' | 'bottom-left';
   theme?: 'light' | 'dark' | 'auto';
   accentColor?: string;
   triggerText?: string;
-  /** Allow pointing at a page element to anchor feedback to it (selector + source). Default true. */
+  /** Allow pointing at a page element to capture selector, text, source, and URL. */
   enablePointing?: boolean;
 }
+
+export interface FeedbackCallbackDestination {
+  onSubmit: (feedback: FeedbackSubmission) => void | Promise<void>;
+  ingestionUrl?: never;
+  projectKey?: never;
+  apiBaseUrl?: never;
+}
+
+export interface FeedbackUrlDestination {
+  /** Relative or absolute HTTP(S) endpoint that accepts the documented multipart contract. */
+  ingestionUrl: string;
+  onSubmit?: never;
+  projectKey?: never;
+  apiBaseUrl?: never;
+}
+
+export interface FeedbackHostedDestination {
+  /** Public submission key created in the SaaS Maker feedback inbox. */
+  projectKey: string;
+  /** Override only for a self-hosted or local SaaS Maker API. */
+  apiBaseUrl?: string;
+  onSubmit?: never;
+  ingestionUrl?: never;
+}
+
+export type FeedbackWidgetProps = FeedbackWidgetCommonProps &
+  (FeedbackCallbackDestination | FeedbackUrlDestination | FeedbackHostedDestination);

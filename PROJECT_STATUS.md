@@ -13,7 +13,7 @@ CodeVetter and App Health remain independent.
 
 ## Dependencies
 
-- Fleet Workspace's allowlisted fleet-ops/public/products.json, synchronized
+- Fleet Workspace's allowlisted `foundry/ops/public/products.json`, synchronized
   into catalog/generated/public.json before a directory release.
 - Cloudflare Workers, D1, and R2 for the feedback API and image uploads.
 - better-auth for the private inbox.
@@ -21,6 +21,11 @@ CodeVetter and App Health remain independent.
 - React as the peer runtime for @saas-maker/feedback.
 
 ## Timeline
+
+- **2026-08-20 — Standalone ownership restored:** Restored SaaS Maker as the
+  canonical public-directory and Feedback repository, synchronized the current
+  directory and package sources from Fleet, and narrowed Feedback to public
+  submission plus an authenticated private inbox and JSON agent contract.
 
 - **2026-07-22 — Feedback package 0.3.0 prepared:** Versioned the current
   page-element anchoring release, restored React 18 and 19 peer compatibility,
@@ -68,32 +73,11 @@ CodeVetter and App Health remain independent.
   runtime access.
 - Feedback submission for bug, feature, and general feedback.
 - Optional screenshots and page-element anchoring.
-- Public feedback boards and authenticated voting.
-- Private cross-product feedback inbox with status and deletion controls.
+- Private cross-product feedback inbox with type/status filters and status controls.
+- Machine-readable OpenAPI contract for submission, inbox, detail, and status updates.
 - Project-key creation and management.
 - Blume package docs plus agent/search surfaces.
 
-## Todo / Planned / Deferred / Blocked
+## Work queue
 
-### Planned
-
-- Keep the API, Cockpit, directory, and package docs green through the shared
-  post-deploy smoke gate.
-- Publish `@saas-maker/feedback@0.3.0` after the manual npm release is approved.
-- Decide separately whether historical npm packages should be deprecated; this
-  cleanup does not change npm registry state.
-
-### Deferred
-
-- Dropping retired D1 tables. Source cleanup intentionally avoids a data
-  migration.
-- Archiving standalone rollback repositories until Fleet Workspace is verified
-  on its designated host.
-
-### Blocked
-
-- A zone-level cache policy on `sassmaker.com` still overrides the tracked
-  revalidation headers with a 24-hour edge TTL and seven-day stale window.
-  Purge the existing homepage object and remove/adjust that override in the
-  authenticated Cloudflare dashboard; source-level HTML caching is already
-  corrected.
+Open work is tracked only in [GitHub Issues](https://github.com/sass-maker/saas-maker/issues).

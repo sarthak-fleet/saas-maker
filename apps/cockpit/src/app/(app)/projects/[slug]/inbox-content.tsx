@@ -5,28 +5,17 @@ import { useSearchParams } from 'next/navigation';
 import { FilterBar } from '@/components/filter-bar';
 import { FeedbackTable } from '@/components/feedback-table';
 import type { FeedbackRecord, AnyFeedbackStatus } from '@saas-maker/contracts';
-import { apiFetch } from '@/lib/api';
-// apiFetch still used for auth'd writes (status change, delete)
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.sassmaker.com';
+import { apiFetchClient, getClientToken } from '@/lib/api-client';
 
 interface InboxContentProps {
-  slug: string;
+  projectId: string;
 }
 
-async function getToken(): Promise<string> {
-  const res = await fetch('/api/token');
-  if (!res.ok) throw new Error('Failed to get auth token');
-  const data = await res.json();
-  return data.token;
-}
-
-export function InboxContent({ slug }: InboxContentProps) {
+export function InboxContent({ projectId }: InboxContentProps) {
   const searchParams = useSearchParams();
 
   const typeFilter = searchParams.get('type') ?? 'all';
   const statusFilter = searchParams.get('status') ?? 'all';
-  const sort = searchParams.get('sort') ?? 'newest';
 
   const [feedback, setFeedback] = useState<FeedbackRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,38 +28,31 @@ export function InboxContent({ slug }: InboxContentProps) {
       const params = new URLSearchParams();
       if (typeFilter !== 'all') params.set('type', typeFilter);
       if (statusFilter !== 'all') params.set('status', statusFilter);
-      params.set('sort', sort === 'upvotes' ? 'upvotes' : 'newest');
-
       const qs = params.toString();
-      const res = await fetch(`${API_BASE}/v1/feedback/by-project/${slug}${qs ? `?${qs}` : ''}`);
-      if (!res.ok) throw new Error('Failed to load feedback');
-      const data = await res.json();
+      const token = await getClientToken();
+      const data = await apiFetchClient<{ data: FeedbackRecord[] }>(
+        `/v1/feedback/inbox/${projectId}${qs ? `?${qs}` : ''}`,
+        token
+      );
       setFeedback(data.data ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load feedback');
     } finally {
       setLoading(false);
     }
-  }, [slug, typeFilter, statusFilter, sort]);
+  }, [projectId, typeFilter, statusFilter]);
 
   useEffect(() => {
     fetchFeedback();
   }, [fetchFeedback]);
 
   async function handleStatusChange(item: FeedbackRecord, status: AnyFeedbackStatus) {
-    const token = await getToken();
-    const updated: FeedbackRecord = await apiFetch(
-      `/v1/feedback/${item.id}`,
-      { method: 'PATCH', body: JSON.stringify({ status }) },
-      token
-    );
+    const token = await getClientToken();
+    const updated = await apiFetchClient<FeedbackRecord>(`/v1/feedback/${item.id}`, token, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
     setFeedback((prev) => prev.map((f) => (f.id === item.id ? { ...f, ...updated } : f)));
-  }
-
-  async function handleDelete(id: string) {
-    const token = await getToken();
-    await apiFetch(`/v1/feedback/${id}`, { method: 'DELETE' }, token);
-    setFeedback((prev) => prev.filter((f) => f.id !== id));
   }
 
   if (loading) {
@@ -104,11 +86,7 @@ export function InboxContent({ slug }: InboxContentProps) {
   return (
     <div className="space-y-4">
       <FilterBar />
-      <FeedbackTable
-        feedback={feedback}
-        onStatusChange={handleStatusChange}
-        onDelete={handleDelete}
-      />
+      <FeedbackTable feedback={feedback} onStatusChange={handleStatusChange} />
     </div>
   );
 }

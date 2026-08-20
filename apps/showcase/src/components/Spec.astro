@@ -1,69 +1,23 @@
 ---
-import { PACKAGE_DOCS_HOST } from '../data/links';
+import { PACKAGE_HOST } from '../data/links';
 
-const PACKAGE_SPEC: Array<[string, string]> = [
-  ['Package', '@saas-maker/feedback'],
-  ['Runtime', 'React 19'],
-  ['Inputs', 'Project key · optional user context'],
-  ['Feedback', 'Bug · feature request · general'],
-  ['Attachments', 'JPEG · PNG · GIF · WebP'],
-  ['Inbox', 'app.sassmaker.com'],
-  ['Docs', PACKAGE_DOCS_HOST],
-];
-
-const TERMINAL = `$ pnpm add @saas-maker/feedback
-
-import { FeedbackWidget } from '@saas-maker/feedback'
-
-export function App() {
-  return <FeedbackWidget projectId="pk_your_project_key" />
-}`;
+const INSTALL = 'pnpm add @saas-maker/feedback';
 ---
-<section class="section" id="spec">
-  <div class="section-head">
-    <div class="section-marker">
-      <span class="section-num">§ 02</span>
-      <span class="section-rule"></span>
-      <span class="section-kw">The Package</span>
-    </div>
-    <h2 class="section-title">
-      One focused way
-      <br />
-      to collect <em class="italic">feedback</em>.
-    </h2>
-    <p class="section-lede">
-      SaaS Maker publishes a small React widget for bugs, feature requests,
-      screenshots, and page-specific feedback. Product operations stay in
-      their own repositories; the feedback inbox does one job.
+<section class="studio-package" id="package" aria-labelledby="package-title">
+  <div class="package-copy">
+    <p class="studio-kicker">Open-source package</p>
+    <h2 id="package-title">@saas-maker/feedback</h2>
+    <p>
+      A small React widget for bugs, feature requests, screenshots, and
+      page-specific feedback. Use the hosted SaaS Maker service or keep
+      submission and storage inside your application.
     </p>
   </div>
-
-  <div class="spec-layout">
-    <dl class="spec-sheet">
-      <div class="spec-head">
-        <span class="spec-stamp">PACKAGE NOTES</span>
-        <span class="spec-rule"></span>
-      </div>
-      {PACKAGE_SPEC.map(([key, value]) => (
-        <div class="spec-row">
-          <dt>{key}</dt>
-          <dd>{value}</dd>
-        </div>
-      ))}
-      <div class="spec-foot">
-        <span class="spec-rule"></span>
-        <span class="spec-stamp">END · FOLIO 01</span>
-      </div>
-    </dl>
-
-    <div class="terminal">
-      <div class="terminal-head">
-        <span class="t-dot t-r"></span>
-        <span class="t-dot t-y"></span>
-        <span class="t-dot t-g"></span>
-        <span class="terminal-title">feedback-widget.tsx</span>
-      </div>
-      <pre class="terminal-body">{TERMINAL}</pre>
-    </div>
+  <div class="package-action">
+    <p>Install it in one line</p>
+    <code>{INSTALL}</code>
+    <a href={`https://${PACKAGE_HOST}`} target="_blank" rel="noopener noreferrer">
+      Read the package docs ↗
+    </a>
   </div>
 </section>

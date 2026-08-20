@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import type { FeedbackType } from '../types';
-import type { ApiClient } from '../api';
+import type React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import type { ElementAnchor } from '../elementAnchor';
+import type { FeedbackSubmission, FeedbackType } from '../types';
 import { SubmitForm } from './SubmitForm';
 
 interface ModalProps {
@@ -9,9 +9,10 @@ interface ModalProps {
   /** Kept mounted but visually hidden (e.g. during element picking) so form state survives. */
   hidden?: boolean;
   onClose: () => void;
-  api: ApiClient;
+  onSubmit: (feedback: FeedbackSubmission) => void | Promise<void>;
   userEmail?: string;
   userName?: string;
+  requireEmail?: boolean;
   types: FeedbackType[];
   accentColor: string;
   enablePointing?: boolean;
@@ -40,9 +41,10 @@ export const Modal: React.FC<ModalProps> = ({
   isOpen,
   hidden = false,
   onClose,
-  api,
+  onSubmit,
   userEmail,
   userName,
+  requireEmail,
   types,
   accentColor,
   enablePointing,
@@ -100,9 +102,10 @@ export const Modal: React.FC<ModalProps> = ({
         {/* Body */}
         <div className="smw-modal__body">
           <SubmitForm
-            api={api}
+            onSubmit={onSubmit}
             userEmail={userEmail}
             userName={userName}
+            requireEmail={requireEmail}
             types={types}
             accentColor={accentColor}
             enablePointing={enablePointing}

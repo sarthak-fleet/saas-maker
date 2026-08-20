@@ -38,6 +38,13 @@ function apiKeyHeaders(extra: Record<string, string> = {}) {
 beforeEach(() => {
   Object.values(mockDb).forEach((fn) => fn.mockReset());
   mockDb.getProjectByApiKey.mockResolvedValue(PROJECT);
+  mockDb.createFeedback.mockImplementation(async (input) => ({
+    ...input,
+    submitter_name: input.submitter_name ?? null,
+    upvote_count: 0,
+    downvote_count: 0,
+    created_at: '2026-08-20T00:00:00Z',
+  }));
 });
 
 describe('Feedback route validation with a mocked DB', () => {
@@ -57,7 +64,7 @@ describe('Feedback route validation with a mocked DB', () => {
     expect(mockDb.createFeedback).not.toHaveBeenCalled();
   });
 
-  it('POST /v1/feedback with key but missing email returns 400', async () => {
+  it('POST /v1/feedback accepts an anonymous submission', async () => {
     const res = await request('/v1/feedback', {
       method: 'POST',
       headers: apiKeyHeaders(),
@@ -68,9 +75,10 @@ describe('Feedback route validation with a mocked DB', () => {
       }),
     });
 
-    expect(res.status).toBe(400);
-    expect((await res.json()).error).toMatch(/Email is required/i);
-    expect(mockDb.createFeedback).not.toHaveBeenCalled();
+    expect(res.status).toBe(201);
+    expect(mockDb.createFeedback).toHaveBeenCalledWith(
+      expect.objectContaining({ submitter_email: '' })
+    );
   });
 
   it('POST /v1/feedback with key but invalid type returns 400', async () => {
@@ -88,15 +96,5 @@ describe('Feedback route validation with a mocked DB', () => {
     expect(res.status).toBe(400);
     expect((await res.json()).error).toMatch(/Invalid type/i);
     expect(mockDb.createFeedback).not.toHaveBeenCalled();
-  });
-
-  it('GET /v1/feedback?type=invalid returns 400', async () => {
-    const res = await request('/v1/feedback?type=invalid', {
-      headers: apiKeyHeaders(),
-    });
-
-    expect(res.status).toBe(400);
-    expect((await res.json()).error).toMatch(/Invalid type filter/i);
-    expect(mockDb.listFeedback).not.toHaveBeenCalled();
   });
 });

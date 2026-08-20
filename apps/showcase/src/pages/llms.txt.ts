@@ -1,24 +1,36 @@
 import publicCatalog from '../../../../catalog/generated/public.json';
-import { PACKAGE_DOCS_URL } from '../data/links';
+import { PACKAGE_URL } from '../data/links';
+import { LEARNINGS } from '../data/learnings';
 export const prerender = true;
 export function GET() {
   const products = publicCatalog.products.map(
     (product) => `- [${product.name}](${product.url}): ${product.description}`
   );
+  const pastProjects = publicCatalog.pastProjects.map(
+    (project) => `- [${project.name}](${project.repositoryUrl}): ${project.description}`
+  );
   const body = [
     '# SaaS Maker',
     '',
-    "> Public directory for Sarthak Agrawal's maintained products and home of the @saas-maker/feedback package.",
+    "> Software as a specialized service: Sarthak Agrawal's living studio of focused, maintained products.",
     '',
     '## Core surfaces',
     '',
     '- [Directory](https://sassmaker.com)',
-    `- [Package docs](${PACKAGE_DOCS_URL})`,
-    '- [Feedback inbox](https://app.sassmaker.com): authenticated owner surface',
+    '- [Learnings](https://sassmaker.com/learnings): first-party notes from building products and agent workflows',
+    ...LEARNINGS.map(
+      (learning) =>
+        `- [${learning.title}](https://sassmaker.com${learning.href}): ${learning.description}`
+    ),
+    `- [Feedback package](${PACKAGE_URL}): callback-only React package`,
     '',
     '## Maintained products',
     '',
     ...products,
+    '',
+    '## Past public repositories',
+    '',
+    ...pastProjects,
     '',
     '## Machine surfaces',
     '',

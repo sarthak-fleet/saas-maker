@@ -1,9 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "generatedFrom": [
-    "fleet-ops/config/projects.json",
-    "fleet-ops/config/marketing-program.json",
-    "fleet-ops/config/public-products.json"
+    "foundry/ops/config/projects.json"
   ],
   "products": [
     {
@@ -16,9 +14,9 @@
       "priority": "P1",
       "spotlight": true,
       "maturity": "public-ready",
+      "changelogUrl": "https://codevetter.com/changelog",
       "repositoryUrl": "https://github.com/Codevetter/codevetter",
-      "changelogUrl": "https://github.com/Codevetter/codevetter/commits/main",
-      "roadmapUrl": "https://github.com/Codevetter/codevetter/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/Codevetter/codevetter/issues",
       "pillarId": "build"
     },
     {
@@ -31,9 +29,9 @@
       "priority": "P1",
       "spotlight": true,
       "maturity": "public-ready",
+      "changelogUrl": "https://heypace.app/changelog",
       "repositoryUrl": "https://github.com/HeyPace/pace",
-      "changelogUrl": "https://github.com/HeyPace/pace/commits/main",
-      "roadmapUrl": "https://github.com/HeyPace/pace/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/HeyPace/pace/issues",
       "pillarId": "build"
     },
     {
@@ -43,12 +41,12 @@
       "url": "https://highsignal.app",
       "tier": "active",
       "category": "product",
-      "priority": "P1",
+      "priority": "P2",
       "spotlight": true,
       "maturity": "public-ready",
+      "changelogUrl": "https://highsignal.app/changelog",
       "repositoryUrl": "https://github.com/High-Signal-App/high-signal",
-      "changelogUrl": "https://github.com/High-Signal-App/high-signal/commits/main",
-      "roadmapUrl": "https://github.com/High-Signal-App/high-signal/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/High-Signal-App/high-signal/issues",
       "pillarId": "learn"
     },
     {
@@ -61,25 +59,10 @@
       "priority": "P1",
       "spotlight": true,
       "maturity": "public-ready",
+      "changelogUrl": "https://posttrainllm.com/changelog",
       "repositoryUrl": "https://github.com/PostTrainLLM/posttrainllm",
-      "changelogUrl": "https://github.com/PostTrainLLM/posttrainllm/commits/main",
-      "roadmapUrl": "https://github.com/PostTrainLLM/posttrainllm/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/PostTrainLLM/posttrainllm/issues",
       "pillarId": "build"
-    },
-    {
-      "id": "saas-maker",
-      "name": "SaaS Maker",
-      "description": "Public product directory, maintained package catalogue, and shared feedback layer.",
-      "url": "https://sassmaker.com",
-      "tier": "active",
-      "category": "product",
-      "priority": "P1",
-      "spotlight": true,
-      "maturity": "maintained",
-      "repositoryUrl": "https://github.com/sass-maker/saas-maker",
-      "changelogUrl": "https://github.com/sass-maker/saas-maker/commits/main",
-      "roadmapUrl": "https://github.com/sass-maker/saas-maker/blob/main/PROJECT_STATUS.md",
-      "pillarId": "market"
     },
     {
       "id": "anime-list",
@@ -88,26 +71,42 @@
       "url": "https://anime.significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P4",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://anime.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/anime-list",
-      "changelogUrl": "https://github.com/Significant-Hobbies/anime-list/commits/main",
-      "roadmapUrl": "https://github.com/Significant-Hobbies/anime-list/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/anime-list/issues",
       "pillarId": "learn"
     },
     {
-      "id": "chess",
-      "name": "Chess Coach",
-      "description": "Browser chess against Stockfish with optional AI move coaching.",
-      "url": "https://chess.significanthobbies.com",
+      "id": "app-health",
+      "name": "App Health",
+      "description": "Privacy-first endpoint health for Node, Go, and OpenTelemetry services.",
+      "url": "https://health.sassmaker.com",
+      "tier": "active",
+      "category": "product",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "public-ready",
+      "changelogUrl": "https://health.sassmaker.com/changelog",
+      "repositoryUrl": "https://github.com/sass-maker/app-health",
+      "roadmapUrl": "https://github.com/sass-maker/app-health/issues",
+      "pillarId": "visibility"
+    },
+    {
+      "id": "calorie",
+      "name": "Calorie",
+      "description": "A private, local-first food, water, and weight journal with transparent timing guidance.",
+      "url": "https://calorie.significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
-      "repositoryUrl": "https://github.com/Significant-Hobbies/chess",
-      "changelogUrl": "https://github.com/Significant-Hobbies/chess/commits/main",
+      "changelogUrl": "https://calorie.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/calorie",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/calorie/issues",
       "pillarId": "learn"
     },
     {
@@ -117,10 +116,28 @@
       "url": "https://domains.sassmaker.com",
       "tier": "active",
       "category": "helper",
-      "priority": "P2",
+      "priority": "P4",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://domains.sassmaker.com/changelog",
+      "repositoryUrl": "https://github.com/sass-maker/drank",
+      "roadmapUrl": "https://github.com/sass-maker/drank/issues",
       "pillarId": "market"
+    },
+    {
+      "id": "email-manager",
+      "name": "Email Manager",
+      "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
+      "url": "https://mail.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://mail.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/email-manager",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
+      "pillarId": "learn"
     },
     {
       "id": "free-ai",
@@ -128,13 +145,41 @@
       "description": "OpenAI-compatible gateway across free-tier model providers.",
       "url": "https://ai-gateway.sassmaker.com",
       "tier": "active",
-      "category": "helper",
+      "category": "product",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://ai-gateway.sassmaker.com/changelog",
+      "repositoryUrl": "https://github.com/sass-maker/free-ai",
+      "roadmapUrl": "https://github.com/sass-maker/free-ai/issues",
+      "pillarId": "build"
+    },
+    {
+      "id": "india-standards",
+      "name": "India Standards",
+      "description": "A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.",
+      "url": "https://india-standards.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://india-standards.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/india-standards",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/india-standards/issues",
+      "pillarId": "learn"
+    },
+    {
+      "id": "indulge",
+      "name": "Indulge",
+      "description": "A private iPhone and iPad app for keeping the pleasures you choose and trading away the time you do not.",
+      "url": "https://indulge.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
       "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
-      "repositoryUrl": "https://github.com/sass-maker/free-ai",
-      "changelogUrl": "https://github.com/sass-maker/free-ai/commits/main",
-      "pillarId": "build"
+      "pillarId": "learn"
     },
     {
       "id": "karte",
@@ -143,11 +188,54 @@
       "url": "https://karte.cc",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "public-ready",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/karte",
-      "changelogUrl": "https://github.com/sarthakagrawal927/karte/commits/main",
+      "changelogUrl": "https://karte.cc/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/karte",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/karte/issues",
+      "pillarId": "build"
+    },
+    {
+      "id": "kith",
+      "name": "Kith",
+      "description": "A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.",
+      "url": "https://kith.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "in-progress",
+      "changelogUrl": "https://kith.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/kith",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/kith/issues",
+      "pillarId": "learn"
+    },
+    {
+      "id": "knowledge-base",
+      "name": "Knowledge Base",
+      "description": "Private agent search over specialized corpora with ranked citations, provenance, and schema-aware retrieval.",
+      "url": "https://knowledgebase.sassmaker.com",
+      "tier": "active",
+      "category": "product",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://knowledgebase.sassmaker.com/changelog",
+      "repositoryUrl": "https://github.com/sass-maker/knowledge-base",
+      "roadmapUrl": "https://github.com/sass-maker/knowledge-base/issues",
+      "pillarId": "build"
+    },
+    {
+      "id": "local-ai-video-studio",
+      "name": "Local AI Video Studio",
+      "description": "A local-first Mac studio for comparing reproducible video-effect variants before export.",
+      "url": "https://local-ai-video-studio.sassmaker.com",
+      "tier": "active",
+      "category": "product",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "maintained",
       "pillarId": "build"
     },
     {
@@ -157,12 +245,55 @@
       "url": "https://tv.significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P4",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://tv.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/looptv",
-      "changelogUrl": "https://github.com/Significant-Hobbies/looptv/commits/main",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/looptv/issues",
       "pillarId": "learn"
+    },
+    {
+      "id": "chatgpt-memory-insights",
+      "name": "Memory Map",
+      "description": "Turn a ChatGPT export into a private, browser-computed map of recurring themes, facts, and conversations.",
+      "url": "https://chatgpt.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://chatgpt.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights/issues",
+      "pillarId": "learn"
+    },
+    {
+      "id": "motion",
+      "name": "Motion",
+      "description": "Use your body as the controller for an iPhone-hosted game that can mirror to a larger screen.",
+      "url": "https://motion.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://motion.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/motion",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/motion/issues",
+      "pillarId": "build"
+    },
+    {
+      "id": "agent-office",
+      "name": "Office OS",
+      "description": "A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.",
+      "url": "https://office-os.sassmaker.com",
+      "tier": "active",
+      "category": "product",
+      "priority": "P1",
+      "spotlight": false,
+      "maturity": "maintained",
+      "pillarId": "build"
     },
     {
       "id": "psi-swarm",
@@ -171,9 +302,12 @@
       "url": "https://performance.sassmaker.com",
       "tier": "active",
       "category": "helper",
-      "priority": "P2",
+      "priority": "P4",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://performance.sassmaker.com/changelog",
+      "repositoryUrl": "https://github.com/sass-maker/psi-swarm",
+      "roadmapUrl": "https://github.com/sass-maker/psi-swarm/issues",
       "pillarId": "visibility"
     },
     {
@@ -183,12 +317,12 @@
       "url": "https://read.significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://read.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/reader",
-      "changelogUrl": "https://github.com/Significant-Hobbies/reader/commits/main",
-      "roadmapUrl": "https://github.com/Significant-Hobbies/reader/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/reader/issues",
       "pillarId": "learn"
     },
     {
@@ -201,9 +335,9 @@
       "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://papers.highsignal.app/changelog",
       "repositoryUrl": "https://github.com/High-Signal-App/research-papers",
-      "changelogUrl": "https://github.com/High-Signal-App/research-papers/commits/main",
-      "roadmapUrl": "https://github.com/High-Signal-App/research-papers/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/High-Signal-App/research-papers/issues",
       "pillarId": "learn"
     },
     {
@@ -213,28 +347,58 @@
       "url": "https://rolepatch.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/rolepatch",
-      "changelogUrl": "https://github.com/sarthakagrawal927/rolepatch/commits/main",
-      "roadmapUrl": "https://github.com/sarthakagrawal927/rolepatch/blob/main/PROJECT_STATUS.md",
+      "changelogUrl": "https://rolepatch.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/rolepatch",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/rolepatch/issues",
       "pillarId": "build"
     },
     {
-      "id": "personal-website",
-      "name": "Sarthak Agrawal",
-      "description": "Personal portfolio and the concise front door to active work.",
-      "url": "https://sarthakagrawal.dev",
-      "tier": "non-product",
-      "category": "personal",
-      "priority": "P1",
+      "id": "saas-maker",
+      "name": "SaaS Maker",
+      "description": "Software as a specialized service: a living studio of focused products built for particular problems and maintained in public.",
+      "url": "https://sassmaker.com",
+      "tier": "active",
+      "category": "product",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "public-ready",
+      "changelogUrl": "https://sassmaker.com/changelog",
+      "repositoryUrl": "https://github.com/sass-maker/saas-maker",
+      "roadmapUrl": "https://github.com/sass-maker/saas-maker/issues",
+      "pillarId": "build"
+    },
+    {
+      "id": "sarthakagrawal-personal",
+      "name": "Sarthak Agrawal",
+      "description": "Personal portfolio of Sarthak Agrawal — AI infrastructure and product engineer.",
+      "url": "https://sarthakagrawal.dev",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://sarthakagrawal.dev/changelog",
       "repositoryUrl": "https://github.com/sarthakagrawal927/portfolio",
-      "changelogUrl": "https://github.com/sarthakagrawal927/portfolio/commits/main",
-      "roadmapUrl": "https://github.com/sarthakagrawal927/portfolio/blob/main/PROJECT_STATUS.md",
-      "pillarId": "market"
+      "roadmapUrl": "https://github.com/sarthakagrawal927/portfolio/issues",
+      "pillarId": "personal"
+    },
+    {
+      "id": "setline",
+      "name": "Setline",
+      "description": "An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.",
+      "url": "https://setline.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://setline.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/setline",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/setline/issues",
+      "pillarId": "learn"
     },
     {
       "id": "significanthobbies",
@@ -243,11 +407,12 @@
       "url": "https://significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "public-ready",
+      "changelogUrl": "https://significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/significanthobbies",
-      "changelogUrl": "https://github.com/Significant-Hobbies/significanthobbies/commits/main",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/significanthobbies/issues",
       "pillarId": "learn"
     },
     {
@@ -260,9 +425,9 @@
       "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://starboard.codevetter.com/changelog",
       "repositoryUrl": "https://github.com/Codevetter/starboard",
-      "changelogUrl": "https://github.com/Codevetter/starboard/commits/main",
-      "roadmapUrl": "https://github.com/Codevetter/starboard/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/Codevetter/starboard/issues",
       "pillarId": "learn"
     },
     {
@@ -272,13 +437,107 @@
       "url": "https://learn.significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
-      "priority": "P3",
+      "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
+      "changelogUrl": "https://learn.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/swe-interview-prep",
-      "changelogUrl": "https://github.com/Significant-Hobbies/swe-interview-prep/commits/main",
-      "roadmapUrl": "https://github.com/Significant-Hobbies/swe-interview-prep/blob/main/PROJECT_STATUS.md",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/swe-interview-prep/issues",
       "pillarId": "learn"
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "name": "What It Takes to Win",
+      "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
+      "url": "https://paths.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://paths.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win/issues",
+      "pillarId": "learn"
+    }
+  ],
+  "pastProjects": [
+    {
+      "id": "aliveville",
+      "name": "AliveVille",
+      "description": "Persistent AI world and multi-agent simulation experiments.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/aliveville"
+    },
+    {
+      "id": "chess",
+      "name": "Chess Coach",
+      "description": "Browser chess against Stockfish with optional AI move coaching.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/chess"
+    },
+    {
+      "id": "companion-robot",
+      "name": "Companion Robot",
+      "description": "Earlier companion robotics and embodied-agent exploration.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/HeyPace/companion-robot"
+    },
+    {
+      "id": "everythingrated",
+      "name": "EverythingRated",
+      "description": "A general-purpose rating and comparison experiment.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/High-Signal-App/everythingrated"
+    },
+    {
+      "id": "forecast-lab",
+      "name": "Forecast Lab",
+      "description": "Forecasting experiments and evaluation tooling.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/forecast-lab"
+    },
+    {
+      "id": "materia",
+      "name": "Materia",
+      "description": "Evidence-graded remedy reference organized by body system.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/materia"
+    },
+    {
+      "id": "open-historia",
+      "name": "Open Historia",
+      "description": "Interactive historical storytelling and world simulation.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/open-historia"
+    },
+    {
+      "id": "protein-index",
+      "name": "Protein Index",
+      "description": "Searchable protein and nutrition reference.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/protein-index-resilience"
+    },
+    {
+      "id": "today-little-log",
+      "name": "Today Little Log",
+      "description": "A small daily logging experiment later folded into other work.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/today-little-log"
+    },
+    {
+      "id": "truehire",
+      "name": "TrueHire",
+      "description": "Earlier resume and hiring workflow superseded by RolePatch.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/truehire"
+    },
+    {
+      "id": "web-playables",
+      "name": "Web Playables",
+      "description": "Small browser-playable game experiments.",
+      "lifecycle": "past",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/web-playables"
     }
   ]
 }

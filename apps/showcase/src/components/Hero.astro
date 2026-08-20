@@ -1,69 +1,42 @@
 ---
-import { PROJECT_COUNT } from '../data/projects';
-import { PACKAGE_DOCS_URL } from '../data/links';
+import { CORE, PROJECT_COUNT } from '../data/projects';
 
-// Build-time year. The original Next.js page used `new Date().getFullYear()`
-// on every render; for a static site we freeze it at build. The whole
-// landing redeploys frequently enough that this won't drift meaningfully.
-const YEAR = new Date().getFullYear();
+const PANE_TONES = ['cobalt', 'seeded', 'amber', 'oxblood'];
 ---
-<header class="hero">
-  <div class="hero-grid" aria-hidden="true"></div>
-  <div class="hero-meta hero-anim" style="--delay: 0ms">
-    <span class="status-dot"></span>
-    <span>product directory</span>
-    <span class="hero-meta-sep">/</span>
-    <span class="hero-meta-issue">Vol. 01</span>
-    <span class="hero-meta-sep">/</span>
-    <span>{YEAR}</span>
-  </div>
 
-  <h1 class="hero-title">
-    <span class="hero-line hero-anim" style="--delay: 80ms">
-      A clear,
-    </span>
-    <span class="hero-line hero-anim" style="--delay: 160ms">
-      <em class="italic">living</em> directory of
-    </span>
-    <span class="hero-line hero-anim" style="--delay: 240ms">
-      {PROJECT_COUNT} <em class="italic">curious</em> projects,
-    </span>
-    <span class="hero-line hero-anim" style="--delay: 320ms">
-      forged by <span class="copper">one builder</span>.
-    </span>
-  </h1>
+<header class="studio-hero" aria-labelledby="studio-title">
+  <div class="studio-hero-scene" aria-hidden="true"></div>
 
-  <p class="hero-sub hero-anim" style="--delay: 440ms">
-    A public map of the products I maintain: what each one does, where it
-    lives, what changed, and what comes next.
-  </p>
-
-  <div class="hero-actions hero-anim" style="--delay: 520ms">
-    <a href="#fleet" class="btn btn-primary btn-lg">Open the catalog</a>
-    <a href={PACKAGE_DOCS_URL} target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg">
-      <span>Browse packages</span>
-      <span class="btn-arrow">↗</span>
+  <div class="studio-hero-copy glass-pane">
+    <p class="studio-kicker">Software as a specialized service</p>
+    <h1 id="studio-title">A living index of things I build.</h1>
+    <p class="studio-intro">
+      {PROJECT_COUNT} maintained products, with their real domains, roadmaps,
+      release history, and someone accountable for every one.
+    </p>
+    <a href="#products" class="studio-action">
+      Explore the work
+      <span aria-hidden="true">↓</span>
     </a>
+    <p class="studio-status">
+      <span aria-hidden="true"></span>
+      Built in public. Kept current.
+    </p>
   </div>
 
-  <dl class="hero-numerals hero-anim" style="--delay: 640ms">
-    <div>
-      <dt>Projects</dt>
-      <dd><span class="numeral">{PROJECT_COUNT}</span></dd>
-    </div>
-    <div>
-      <dt>Spotlight</dt>
-      <dd>
-        <span class="numeral">4</span>
-      </dd>
-    </div>
-    <div>
-      <dt>Origin</dt>
-      <dd><span class="numeral">MMXXIV</span></dd>
-    </div>
-    <div>
-      <dt>Directory</dt>
-      <dd><span class="numeral">PUBLIC</span></dd>
-    </div>
-  </dl>
+  <ol class="featured-panes" aria-label="Products in focus">
+    {CORE.map((project, index) => (
+      <li class={`featured-pane featured-pane--${PANE_TONES[index]}`}>
+        <a href={project.href}>
+          <span class="featured-count">{String(index + 1).padStart(2, '0')}</span>
+          <strong>{project.name}</strong>
+          <span class="featured-description">{project.desc}</span>
+          <span class="featured-foot">
+            <span>{project.tag}</span>
+            <span aria-hidden="true">→</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ol>
 </header>

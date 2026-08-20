@@ -1,27 +1,20 @@
 ---
-import { PACKAGE_DOCS_URL } from '../data/links';
-
-const GITHUB_URL = 'https://github.com/sass-maker/saas-maker';
+import { GITHUB_ORG_URL, PACKAGE_URL } from '../data/links';
 const OWNER_URL = 'https://sarthakagrawal.dev';
+const isChangelog = Astro.url.pathname.startsWith('/changelog');
 ---
 <footer class="footer">
   <div class="footer-brand">
-    <span class="brand-mark sm">
-      <span class="brand-mark-glyph">S</span>
-    </span>
-    <span>SaaS Maker · a product directory by <a href={OWNER_URL} target="_blank" rel="noopener noreferrer">Sarthak Agrawal</a></span>
+    <span class="brand-mark sm" aria-hidden="true">S</span>
+    <span>Built and maintained by <a href={OWNER_URL} target="_blank" rel="noopener noreferrer">Sarthak Agrawal</a></span>
   </div>
   <div class="footer-links">
+    <a href="/changelog" aria-current={isChangelog ? 'page' : undefined}>Changelog</a>
+    <a href="/learnings">Learnings</a>
     <a href="/privacy">Privacy</a>
     <a href="/terms">Terms</a>
-    <a href={PACKAGE_DOCS_URL} target="_blank" rel="noopener noreferrer">Packages</a>
-    <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">Source</a>
+    <a href={PACKAGE_URL} target="_blank" rel="noopener noreferrer">Package</a>
+    <a href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">Public source index</a>
   </div>
-  <p class="footer-tagline">
-    Products keep their own domains, repositories, and release boundaries.
-  </p>
-  <span class="footer-copy">
-    <span class="footer-sigil">S</span>
-    MMXXIV-present · MIT
-  </span>
+  <p class="footer-tagline">Curious products. Real domains. Work that keeps moving.</p>
 </footer>

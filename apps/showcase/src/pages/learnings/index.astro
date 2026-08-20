@@ -1,0 +1,39 @@
+---
+import Footer from '../../components/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import { LEARNINGS } from '../../data/learnings';
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Learnings | SaaS Maker"
+  description="Notes from building products, agent workflows, and the systems around them."
+>
+  <Nav />
+  <main class="learnings-index" id="main-content">
+    <header class="learnings-header">
+      <p class="eyebrow">Builder notes</p>
+      <h1>Learnings from the work.</h1>
+      <p>
+        Ideas that survived contact with an actual product, written down while
+        the details are still fresh.
+      </p>
+    </header>
+
+    <ol class="learning-list">
+      {LEARNINGS.map((learning) => (
+        <li>
+          <a href={learning.href}>
+            <time datetime={learning.publishedAt}>{learning.publishedLabel}</time>
+            <span class="learning-list-copy">
+              <strong>{learning.title}</strong>
+              <span>{learning.description}</span>
+            </span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </main>
+  <Footer />
+</Layout>

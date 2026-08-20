@@ -15,7 +15,7 @@ export default async function ProjectStatusPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <PageHeader title={project.name} description={`Feedback for ${project.slug}`} />
-      <InboxContent slug={project.slug} />
+      <InboxContent projectId={project.id} />
     </div>
   );
 }

@@ -1,0 +1,116 @@
+---
+import tokenWorld from '../data/tokenWorld.json';
+
+const number = new Intl.NumberFormat('en-US');
+const snapshotLabel = new Intl.DateTimeFormat('en', {
+  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'
+}).format(new Date(`${tokenWorld.snapshotDate}T00:00:00Z`));
+const updatedLabel = new Intl.DateTimeFormat('en', {
+  day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  timeZone: 'UTC', timeZoneName: 'short', hour12: false,
+}).format(new Date(tokenWorld.lastUpdatedAt));
+---
+
+<section
+  class="token-world"
+  id="token-world"
+  aria-labelledby="token-world-title"
+  data-token-world
+  data-current={tokenWorld.lifetimeTokens}
+  data-pulses={JSON.stringify(tokenWorld.pulses)}
+  data-has-geography={tokenWorld.countriesServed > 0 ? 'true' : 'false'}
+>
+  <header class="token-world-head">
+    <p class="studio-kicker">A cumulative studio measure</p>
+    <h2 id="token-world-title">TOKENS SPENT <br />FOR THE WORLD</h2>
+    <p class="token-world-summary">
+      Model tokens used while building and serving SaaS Maker products—counted
+      from verified product records, never estimated.
+    </p>
+    <p class="token-world-definition">
+      A transparent computation ledger, not a proxy for people reached or social impact.
+    </p>
+  </header>
+
+  <div class="token-world-stage">
+    <div class="token-world-fallback" aria-hidden="true"></div>
+    <canvas class="token-world-canvas" aria-hidden="true"></canvas>
+    <div class="token-world-counter" aria-live="off">
+      <strong data-token-counter>{number.format(tokenWorld.lifetimeTokens)}</strong>
+      <span>tokens spent for the world</span>
+    </div>
+  </div>
+
+  <p class="token-world-orbit-label">
+    <span>VERIFIED SNAPSHOT · {snapshotLabel.toUpperCase()}</span>
+    <span>LAST UPDATED AT · {updatedLabel.toUpperCase()}</span>
+  </p>
+
+  <dl class="token-world-measures" aria-label="Verified token impact measures">
+    <div>
+      <dt>Latest day</dt>
+      <dd>{number.format(tokenWorld.todayTokens)}</dd>
+      <small>{snapshotLabel}</small>
+    </div>
+    <div>
+      <dt>Projects used</dt>
+      <dd>Worldwide</dd>
+      <small>Across borders and time zones</small>
+    </div>
+    <div>
+      <dt>Projects contributing</dt>
+      <dd>{number.format(tokenWorld.projectsContributing)}</dd>
+      <small>CodeVetter starts the count</small>
+    </div>
+  </dl>
+
+  <div class="token-world-foot">
+    <p>{tokenWorld.coverage}</p>
+    {tokenWorld.pulses.length > 0 ? (
+      <ul class="token-world-pulses" aria-label="Latest verified regional activity">
+        {tokenWorld.pulses.map((pulse) => (
+          <li>
+            <button type="button" data-pulse-country={pulse.country} aria-pressed="false">
+              <strong>{pulse.project}</strong>
+              <span>{pulse.locality ?? pulse.country} · {number.format(pulse.tokens)} tokens</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="token-world-empty">Projects used worldwide.</p>
+    )}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-token-world]').forEach((section) => {
+    if (section.dataset.sceneLoader === 'observing' || section.dataset.sceneLoader === 'loaded') return;
+    section.dataset.sceneLoader = 'observing';
+
+    const loadScene = async () => {
+      if (section.dataset.sceneLoader === 'loaded') return;
+      section.dataset.sceneLoader = 'loaded';
+      try {
+        const { initTokenWorldScene } = await import('./TokenWorldScene');
+        initTokenWorldScene(section);
+      } catch {
+        section.dataset.webgl = 'unavailable';
+      }
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      void loadScene();
+      return;
+    }
+
+    const loader = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      loader.disconnect();
+      void loadScene();
+    }, { rootMargin: '420px 0px', threshold: 0 });
+
+    loader.observe(section);
+    document.addEventListener('astro:before-swap', () => loader.disconnect(), { once: true });
+  });
+</script>

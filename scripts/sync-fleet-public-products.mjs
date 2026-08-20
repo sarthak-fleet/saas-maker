@@ -5,7 +5,8 @@ import path from 'node:path';
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const fleetProjection = path.resolve(
-  process.env.FLEET_PUBLIC_PRODUCTS_PATH ?? path.join(repoRoot, '../fleet-ops/public/products.json')
+  process.env.FLEET_PUBLIC_PRODUCTS_PATH ??
+    path.join(repoRoot, '../foundry/ops/public/products.json')
 );
 const destination = path.join(repoRoot, 'catalog/generated/public.json');
 
@@ -48,7 +49,7 @@ function assertNoPrivateData(value, trail = 'projection') {
 }
 
 function validateProjection(parsed, sourcePath) {
-  if (parsed.schemaVersion !== 1 || !Array.isArray(parsed.products)) {
+  if (![1, 2].includes(parsed.schemaVersion) || !Array.isArray(parsed.products)) {
     throw new Error(`Unsupported Fleet public projection: ${sourcePath}`);
   }
 

@@ -14,7 +14,7 @@
     "build:widget": "pnpm -F @saas-maker/feedback build",
     "build:showcase": "pnpm -F @saas-maker/landing-page build",
     "build:docs": "pnpm -F @saas-maker/docs-blume build",
-    "deploy:guard": "bash ../fleet-ops/scripts/fleet-deploy-guard.sh saas-maker",
+    "deploy:guard": "bash ../foundry/ops/scripts/fleet-deploy-guard.sh saas-maker",
     "deploy:directory": "pnpm deploy:guard && pnpm -F @saas-maker/landing-page run deploy",
     "deploy:docs": "pnpm deploy:guard && pnpm -F @saas-maker/docs-blume run deploy",
     "deploy:api": "pnpm deploy:guard && pnpm -F @saas-maker/api run deploy",

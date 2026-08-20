@@ -6,10 +6,10 @@ import Footer from '../components/Footer.astro';
 
 <Layout title="Terms — SaaS Maker" description="Terms of use for the SaaS Maker product directory.">
   <Nav />
-  <main class="legal-page">
+  <main class="legal-page" id="main-content">
     <a href="/" class="legal-back">← SaaS Maker</a>
     <h1>Terms of Use</h1>
-    <p class="legal-meta">Last updated: June 10, 2026</p>
+    <p class="legal-meta">Last updated: July 24, 2026</p>
 
     <h2>Use of this site</h2>
     <p>
@@ -32,17 +32,3 @@ import Footer from '../components/Footer.astro';
   </main>
   <Footer />
 </Layout>
-
-<style>
-  .legal-page {
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: 6rem 1.5rem 4rem;
-    line-height: 1.7;
-  }
-  .legal-back { font-size: 0.75rem; color: var(--muted, #888); }
-  .legal-meta { font-size: 0.75rem; color: var(--muted, #888); margin-top: 0.5rem; }
-  h1 { font-size: 2rem; font-weight: 700; margin-top: 1rem; }
-  h2 { font-size: 1rem; font-weight: 600; margin-top: 2rem; }
-  a { color: var(--accent, #22d3ee); }
-</style>

@@ -1,26 +1,33 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import BackgroundFX from '../components/BackgroundFX.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
-import Ticker from '../components/Ticker.astro';
+import TokenWorld from '../components/TokenWorld.astro';
 import Fleet from '../components/Fleet.astro';
 import Spec from '../components/Spec.astro';
-import CTA from '../components/CTA.astro';
-import FAQ from '../components/FAQ.astro';
+import Commission from '../components/Commission.astro';
 import Footer from '../components/Footer.astro';
 
 // Public product directory plus the one published SaaS Maker package.
 ---
 
 <Layout>
-  <BackgroundFX />
-  <Nav />
-  <Hero />
-  <Ticker />
-  <Fleet />
-  <Spec />
-  <CTA />
-  <FAQ />
-  <Footer />
+  <!--
+  THESIS: A maintained portfolio should feel like a workshop wall, not a startup card grid.
+  OWN-WORLD: Limestone daylight, matte-black steel mullions, clear and seeded glass, with cobalt, amber, and oxblood panes.
+  STORY: Meet the maker, see four serious products immediately, inspect the full maintained catalog, then read or propose a build.
+  FIRST VIEWPORT: One large clear hero bay shares a full-height wall with four saturated product panes and a visible explore action.
+  FORM: Monumental glass-wall elevation; selected probe A, delegated by the owner; direction seed 38815b6a.
+  -->
+  <div class="workshop-world">
+    <Nav />
+    <main id="main-content">
+      <Hero />
+      <TokenWorld />
+      <Fleet />
+      <Spec />
+      <Commission />
+    </main>
+    <Footer />
+  </div>
 </Layout>

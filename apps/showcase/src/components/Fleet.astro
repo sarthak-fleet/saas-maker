@@ -1,136 +1,80 @@
 ---
-import { CORE, ACTIVE, PROJECT_COUNT } from '../data/projects';
-import { REGISTRY_PRODUCTS } from '../data/registry';
+import { ACTIVE_GROUPS, PAST_PROJECTS, PROJECT_COUNT } from '../data/projects';
+import { LEARNINGS } from '../data/learnings';
 
-const publicProducts = REGISTRY_PRODUCTS;
-const spotlightIds = new Set(CORE.map((project) => project.href.replace('/p/', '')));
-const spotlightProducts = publicProducts.filter((product) => spotlightIds.has(product.id));
+const latestLearning = LEARNINGS[0];
 ---
-<section class="section" id="fleet">
-  <div class="section-head">
-    <div class="section-marker">
-      <span class="section-num">§ 01</span>
-      <span class="section-rule"></span>
-      <span class="section-kw">The Product</span>
+<section class="studio-index" id="products" aria-labelledby="catalog-title">
+  <header class="studio-index-head">
+    <p class="studio-kicker">The maintained catalog</p>
+    <h2 id="catalog-title">{PROJECT_COUNT} products.<br />One accountable maker.</h2>
+    <div class="studio-index-context">
+      <p>
+        Each product keeps its own domain, roadmap, changelog, and release
+        boundary. Nothing here is a concept render.
+      </p>
+      <a href="#latest-learning">Skip to latest learning <span aria-hidden="true">↓</span></a>
     </div>
-    <h2 class="section-title">
-      {PROJECT_COUNT} <em class="italic">maintained</em> products,
-      <br />
-      one precise <em class="italic">public directory</em>.
-    </h2>
-    <p class="section-lede">
-      The four spotlight products are the public front door. The full catalog
-      preserves the canonical product, source, changelog, and roadmap links
-      without pretending the projects share one runtime or release boundary.
-    </p>
-  </div>
+  </header>
 
-  <div class="product-directory" style="margin-bottom: 2.5rem">
-    <div class="active-head" style="margin-bottom: 1rem">
-      <span class="section-num">§ 01.00</span>
-      <span class="section-rule short"></span>
-      <span class="section-kw small">Spotlight products</span>
-      <span class="active-count">{spotlightProducts.length} public anchors</span>
-    </div>
-    <p class="section-lede" style="margin-bottom: 1.25rem; max-width: 40rem">
-      The concise product story: CodeVetter, Post-train LLM, HeyPace, and
-      HiSignal. SaaS Maker is the directory for everything around them.
-    </p>
-    <ul class="product-directory-grid">
-      {spotlightProducts.map((p) => (
-        <li>
-          <a href={`/p/${p.id}`} class="product-link" rel="noopener">
-            <span class="product-link-name">{p.name}</span>
-            <span class="product-link-host">{p.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
-            <span class="product-link-desc">{p.summary}</span>
-            <span class="product-link-hub">View product page →</span>
-          </a>
-        </li>
+  <div class="catalog-wall">
+    <div class="catalog-groups">
+      {ACTIVE_GROUPS.map((group) => (
+        <section class="catalog-group" aria-labelledby={`group-${group.id}`}>
+          <h3 id={`group-${group.id}`}>{group.label}</h3>
+          <ul>
+            {group.products.map((project) => (
+              <li>
+                <a href={project.href} class="catalog-row">
+                  <strong>{project.name}</strong>
+                  <span>{project.desc}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       ))}
-    </ul>
-  </div>
-
-  <!-- Crawlable dofollow product roots — hub link equity for the fleet. -->
-  <div class="product-directory" id="products">
-    <div class="active-head" style="margin-bottom: 1rem">
-      <span class="section-num">§ 01.01</span>
-      <span class="section-rule short"></span>
-      <span class="section-kw small">Public product sites</span>
-      <span class="active-count">{publicProducts.length} maintained</span>
     </div>
-    <p class="section-lede" style="margin-bottom: 1.25rem; max-width: 40rem">
-      Every maintained product in the public directory, with its canonical
-      product or source URL, changelog, and roadmap.
-    </p>
-    <ul class="product-directory-grid">
-      {publicProducts.map((p) => (
-        <li>
-          <a href={`/p/${p.id}`} class="product-link" rel="noopener">
-            <span class="product-link-name">{p.name}</span>
-            <span class="product-link-host">{p.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
-            {p.summary ? <span class="product-link-desc">{p.summary}</span> : null}
-            <span class="product-link-hub">View product page →</span>
-          </a>
-        </li>
-      ))}
-    </ul>
   </div>
 
-  <div class="bento">
-    {CORE.map((p, i) => (
-      <a
-        href={p.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        class={`card card-${p.size}`}
-        style={`--accent: ${p.color}; --delay: ${i * 70}ms`}
-      >
-        <div class="card-cover">
-          <span class="card-cover-glow"></span>
-          <span class="card-cover-grid"></span>
-          <span class="card-monogram">{p.initials}</span>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="card-num">№ {p.n}</span>
-            <span class="card-tag">{p.tag}</span>
-          </div>
-          <h3 class="card-title">{p.name}</h3>
-          <p class="card-desc">{p.desc}</p>
-          <span class="card-cta">
-            <span>View repository</span>
-            <span class="card-arrow">→</span>
-          </span>
-        </div>
+  <article class="learning-ledger" id="latest-learning" aria-labelledby="learning-title">
+    <header class="learning-ledger-meta">
+      <p class="studio-kicker">Latest learning</p>
+      <div>
+        <time datetime={latestLearning.publishedAt}>{latestLearning.publishedLabel}</time>
+        <span>{latestLearning.readingTime}</span>
+      </div>
+    </header>
+    <div class="learning-ledger-story">
+      <h3 id="learning-title">{latestLearning.title}</h3>
+      <p>{latestLearning.description}</p>
+      <a href={latestLearning.href}>
+        Read the learning
+        <span aria-hidden="true">→</span>
       </a>
-    ))}
-  </div>
-
-  <div class="active">
-    <div class="active-head">
-      <span class="section-num">§ 01.02</span>
-      <span class="section-rule short"></span>
-      <span class="section-kw small">Supporting repositories</span>
-      <span class="active-count">{ACTIVE.length} support</span>
     </div>
-    <ul class="active-grid">
-      {ACTIVE.map((p) => (
+  </article>
+
+  <section class="archive-wall" id="past-projects" aria-labelledby="archive-title">
+    <header>
+      <p class="studio-kicker">Public repository history</p>
+      <h2 id="archive-title">Past work, kept legible.</h2>
+      <p>
+        {PAST_PROJECTS.length} public repositories preserved for source and
+        attribution, without pretending they are still maintained.
+      </p>
+    </header>
+    <ul>
+      {PAST_PROJECTS.map((project) => (
         <li>
-          <a
-            href={p.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mini"
-            style={`--accent: ${p.color}`}
-          >
-            <span class="mini-dot"></span>
-            <span class="mini-name">{p.name}</span>
-            <span class="mini-desc">{p.desc}</span>
-            <span class="mini-arrow">↗</span>
+          <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+            <strong>{project.name}</strong>
+            <span>{project.desc}</span>
+            <span aria-hidden="true">↗</span>
           </a>
         </li>
       ))}
     </ul>
-  </div>
-
+  </section>
 </section>

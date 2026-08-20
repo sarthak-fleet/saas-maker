@@ -1,7 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { Bindings, Variables } from './types';
-import { configurePostHog, capture, flushPostHog } from './lib/telemetry';
 import { auth } from './routes/auth';
 import { projects } from './routes/projects';
 import { feedback } from './routes/feedback';
@@ -12,19 +11,6 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.onError((err, c) => {
   console.error(`[${c.get('requestId') || 'unknown'}] Unhandled error:`, err.message, err.stack);
-  const userId = c.get('userId');
-  capture({
-    distinctId: userId ?? 'anonymous',
-    event: '$exception',
-    properties: {
-      $exception_message: err.message,
-      $exception_type: err.name,
-      $exception_stack_trace_raw: err.stack,
-      request_path: c.req.path,
-      request_method: c.req.method,
-      request_id: c.get('requestId'),
-    },
-  });
   return c.json({ error: 'Internal server error' }, 500);
 });
 
@@ -65,21 +51,53 @@ app.use('*', async (c, next) => {
   await next();
 });
 
-let posthogConfigured = false;
-app.use('*', async (c, next) => {
-  if (!posthogConfigured && c.env.POSTHOG_API_KEY) {
-    configurePostHog(c.env.POSTHOG_API_KEY, 'https://us.i.posthog.com');
-    posthogConfigured = true;
-  }
-  await next();
-  // Keep CF Worker alive until PostHog batch flush completes.
-  // Skip on /health to avoid unnecessary overhead on liveness probes.
-  if (c.env.POSTHOG_API_KEY && c.req.path !== '/health') {
-    c.executionCtx.waitUntil(flushPostHog());
-  }
-});
-
 app.get('/health', (c) => c.json({ status: 'ok' }));
+
+app.get('/openapi.json', (c) =>
+  c.json({
+    openapi: '3.1.0',
+    info: {
+      title: 'SaaS Maker Feedback API',
+      version: '1.0.0',
+      description: 'Submit feedback publicly and review it through an authenticated private inbox.',
+    },
+    servers: [{ url: 'https://api.sassmaker.com' }],
+    paths: {
+      '/v1/feedback': {
+        post: {
+          summary: 'Submit feedback',
+          security: [{ projectKey: [] }],
+          responses: { '201': { description: 'Feedback created' } },
+        },
+      },
+      '/v1/feedback/inbox': {
+        get: {
+          summary: 'List feedback across owned projects',
+          security: [{ bearerSession: [] }],
+          responses: { '200': { description: 'Newest-first feedback page' } },
+        },
+      },
+      '/v1/feedback/{id}': {
+        get: {
+          summary: 'Read one feedback item',
+          security: [{ bearerSession: [] }],
+          responses: { '200': { description: 'Feedback record' } },
+        },
+        patch: {
+          summary: 'Update feedback status',
+          security: [{ bearerSession: [] }],
+          responses: { '200': { description: 'Updated feedback record' } },
+        },
+      },
+    },
+    components: {
+      securitySchemes: {
+        projectKey: { type: 'apiKey', in: 'header', name: 'X-Project-Key' },
+        bearerSession: { type: 'http', scheme: 'bearer' },
+      },
+    },
+  })
+);
 
 app.use('/v1/*', rateLimit({ limit: 100, period: 60 }));
 

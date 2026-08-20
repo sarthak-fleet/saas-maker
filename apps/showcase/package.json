@@ -16,13 +16,11 @@
     "typecheck": "astro sync && tsc --noEmit"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
-    "astro": "6.1.9",
-    "sharp": "0.34.5",
-    "typescript": "6.0.3"
+    "astro": "5.12.0",
+    "three": "0.185.1",
+    "typescript": "5.8.3"
   },
   "devDependencies": {
-    "lightningcss": "1.32.0",
     "wrangler": "4.85.0"
   }
 }

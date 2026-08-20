@@ -1,3 +1,4 @@
-// The live Pages origin is canonical while SaaS Maker has a single package.
-export const PACKAGE_DOCS_URL = 'https://saas-maker-packages.pages.dev';
-export const PACKAGE_DOCS_HOST = 'saas-maker-packages.pages.dev';
+export const PACKAGE_URL = 'https://www.npmjs.com/package/@saas-maker/feedback';
+export const PACKAGE_HOST = 'npmjs.com/package/@saas-maker/feedback';
+export const GITHUB_PROFILE_URL = 'https://github.com/sarthakagrawal927';
+export const GITHUB_ORG_URL = 'https://github.com/sass-maker';

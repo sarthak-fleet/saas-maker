@@ -1,0 +1,241 @@
+import publicCatalog from '../../../../catalog/generated/public.json';
+import tokenWorld from './tokenWorld.json';
+import { CHANGELOG } from './changelog';
+import { LEARNINGS } from './learnings';
+import { PAGED_PRODUCTS, type RegistryProduct } from './registry';
+
+export type PublicRoute = {
+  id: string;
+  path: string;
+  description: string;
+  kind: 'article' | 'collection' | 'profile' | 'static';
+  markdown: string;
+};
+
+const SITE_URL = 'https://sassmaker.com';
+
+function productMarkdown(product: RegistryProduct): string {
+  const lines = [
+    `# ${product.name}`,
+    '',
+    product.summary,
+    '',
+    '## Canonical product',
+    '',
+    product.url,
+    '',
+  ];
+  const links = product.productLinks ?? [];
+
+  if (links.length > 0) {
+    lines.push(
+      '## Public evidence',
+      '',
+      ...links.map((link) => {
+        const description = link.description ? ` — ${link.description}` : '';
+        return `- [${link.title}](${link.url})${description}`;
+      }),
+      ''
+    );
+  }
+
+  lines.push(
+    '## Directory boundary',
+    '',
+    `This SaaS Maker directory page points to ${product.name}'s canonical home. Product behavior and release evidence remain owned by the linked product and repository.`,
+    ''
+  );
+  return lines.join('\n');
+}
+
+function homeMarkdown(): string {
+  const products = publicCatalog.products
+    .filter((product) => product.id !== 'saas-maker')
+    .flatMap((product) => {
+      const links = product as typeof product & {
+        changelogUrl?: string;
+        roadmapUrl?: string;
+        repositoryUrl?: string;
+      };
+      const lines = [
+        `## ${product.name}`,
+        '',
+        product.description,
+        '',
+        `- Product: ${product.url}`,
+      ];
+      if (links.changelogUrl) lines.push(`- Changelog: ${links.changelogUrl}`);
+      if (links.roadmapUrl) lines.push(`- Roadmap: ${links.roadmapUrl}`);
+      if (links.repositoryUrl) lines.push(`- Source: ${links.repositoryUrl}`);
+      lines.push('');
+      return lines;
+    });
+  const pastProjects = publicCatalog.pastProjects.flatMap((project) => [
+    `## ${project.name}`,
+    '',
+    project.description,
+    '',
+    `- Source: ${project.repositoryUrl}`,
+    '- Lifecycle: past project',
+    '',
+  ]);
+
+  return [
+    '# SaaS Maker',
+    '',
+    'Software as a specialized service: a living studio of focused products, generated from Fleet’s privacy-checked public projection.',
+    '',
+    '# Tokens Spent for the World',
+    '',
+    `${tokenWorld.lifetimeTokens.toLocaleString('en-US')} verified model tokens across ${tokenWorld.projectsContributing} contributing project as of ${tokenWorld.snapshotDate}.`,
+    '',
+    `- Latest seeded day: ${tokenWorld.todayTokens.toLocaleString('en-US')} tokens`,
+    `- Last updated at: ${tokenWorld.lastUpdatedAt}`,
+    '- Projects used: Worldwide',
+    `- Projects contributing: ${tokenWorld.projectsContributing}`,
+    `- Coverage: ${tokenWorld.coverage}`,
+    '',
+    '# Learnings',
+    '',
+    ...LEARNINGS.flatMap((learning) => [
+      `## ${learning.title}`,
+      '',
+      learning.description,
+      '',
+      `- Article: ${SITE_URL}${learning.href}`,
+      `- Published: ${learning.publishedAt}`,
+      `- Author: ${learning.author}`,
+      '',
+    ]),
+    ...products,
+    '# Past projects',
+    '',
+    ...pastProjects,
+  ].join('\n');
+}
+
+const fixedRoutes: PublicRoute[] = [
+  {
+    id: 'directory',
+    path: '/',
+    description: 'Software as a specialized service: a living studio of focused products',
+    kind: 'collection',
+    markdown: homeMarkdown(),
+  },
+  {
+    id: 'privacy',
+    path: '/privacy',
+    description: 'Privacy policy for the SaaS Maker product directory',
+    kind: 'static',
+    markdown: `# SaaS Maker privacy policy
+
+Last updated: July 24, 2026
+
+## What this site is
+
+sassmaker.com is a static directory for maintained products. It does not require an account and does not collect form submissions on this domain.
+
+## What we may collect
+
+- Cloudflare may log standard request metadata such as IP address, user agent, and path at the edge.
+- Individual products and package documentation have their own policies.
+
+## Contact
+
+- Email: sarthakagrawal927@gmail.com
+- Website: https://sarthakagrawal.dev
+`,
+  },
+  {
+    id: 'terms',
+    path: '/terms',
+    description: 'Terms of use for the SaaS Maker product directory',
+    kind: 'static',
+    markdown: `# SaaS Maker terms of use
+
+Last updated: July 24, 2026
+
+## Use of this site
+
+sassmaker.com describes open-source and personal projects maintained by Sarthak Agrawal. Content is provided as-is for informational purposes. Linked products may have separate terms.
+
+## No warranty
+
+Software and documentation are provided without warranty. You use linked products and repositories at your own risk.
+
+## Contact
+
+- Email: sarthakagrawal927@gmail.com
+- Website: https://sarthakagrawal.dev
+`,
+  },
+  {
+    id: 'changelog',
+    path: '/changelog',
+    description: 'Product-owned history of meaningful changes shipped by SaaS Maker',
+    kind: 'collection',
+    markdown: [
+      '# SaaS Maker changelog',
+      '',
+      'A product-owned history of meaningful changes shipped by SaaS Maker.',
+      '',
+      ...CHANGELOG.flatMap((entry) => [
+        `## ${entry.label} — ${entry.title}`,
+        '',
+        entry.summary,
+        '',
+        ...entry.changes.map((change) => `- ${change}`),
+        '',
+      ]),
+    ].join('\n'),
+  },
+  {
+    id: 'learnings',
+    path: '/learnings',
+    description: 'First-party builder notes and agent-tooling learnings',
+    kind: 'collection',
+    markdown: [
+      '# SaaS Maker learnings',
+      '',
+      'First-party notes from building products, agent workflows, and the systems around them.',
+      '',
+      ...LEARNINGS.flatMap((learning) => [
+        `## ${learning.title}`,
+        '',
+        learning.description,
+        '',
+        `- Published: ${learning.publishedAt}`,
+        `- Read: ${SITE_URL}${learning.href}`,
+        `- Markdown: ${SITE_URL}${learning.href}.md`,
+        '',
+      ]),
+    ].join('\n'),
+  },
+];
+
+const learningRoutes: PublicRoute[] = LEARNINGS.map((learning) => ({
+  id: `learning-${learning.href.split('/').filter(Boolean).at(-1)}`,
+  path: learning.href,
+  description: learning.description,
+  kind: 'article',
+  markdown: learning.markdown,
+}));
+
+const productRoutes: PublicRoute[] = PAGED_PRODUCTS.map((product) => ({
+  id: `product-${product.id}`,
+  path: `/p/${product.id}`,
+  description: product.summary,
+  kind: 'profile',
+  markdown: productMarkdown(product),
+}));
+
+export const PUBLIC_ROUTES = [...fixedRoutes, ...learningRoutes, ...productRoutes];
+
+export function publicRouteUrl(route: PublicRoute): string {
+  return new URL(route.path, SITE_URL).toString();
+}
+
+export function markdownPath(route: PublicRoute): string {
+  if (route.path === '/') return 'index';
+  return route.path.replace(/^\//, '');
+}

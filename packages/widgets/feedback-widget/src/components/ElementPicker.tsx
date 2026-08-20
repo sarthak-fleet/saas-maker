@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { describeElement, type ElementAnchor } from '../elementAnchor';
 
 interface ElementPickerProps {
@@ -16,7 +17,7 @@ interface Box {
 
 /** Is this node part of the widget's own chrome (so we never let it be picked)? */
 function isWidgetChrome(el: Element | null): boolean {
-  return !!el?.closest?.('[data-saasmaker-widget], .smw-picker');
+  return !!el?.closest?.('[data-feedback-widget], .smw-picker');
 }
 
 /**

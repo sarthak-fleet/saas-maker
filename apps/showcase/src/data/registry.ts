@@ -37,10 +37,16 @@ function adapt(product: CatalogProduct): RegistryProduct {
   const links: ProductLink[] = [
     { title: 'Product', url: product.url, description: 'Canonical product surface' },
     ...(product.changelogUrl
-      ? [{ title: 'Changelog', url: product.changelogUrl, description: 'Changes shipped on main' }]
+      ? [
+          {
+            title: 'Changelog',
+            url: product.changelogUrl,
+            description: 'Product-owned release history',
+          },
+        ]
       : []),
     ...(product.roadmapUrl
-      ? [{ title: 'Roadmap', url: product.roadmapUrl, description: 'Planned and deferred work' }]
+      ? [{ title: 'Roadmap', url: product.roadmapUrl, description: 'Open work in GitHub Issues' }]
       : []),
     ...(product.repositoryUrl
       ? [
@@ -68,11 +74,16 @@ function adapt(product: CatalogProduct): RegistryProduct {
   };
 }
 
-export const REGISTRY_PRODUCTS = (publicCatalog.products as CatalogProduct[]).map(adapt);
+export const REGISTRY_PRODUCTS = (publicCatalog.products as CatalogProduct[])
+  .filter((product) => product.id !== 'personal-website')
+  .map(adapt);
 export const REGISTRY_BY_ID = Object.fromEntries(
   REGISTRY_PRODUCTS.map((product) => [product.id, product])
 );
-export const PAGED_PRODUCTS = REGISTRY_PRODUCTS;
+// SaaS Maker is the directory itself. Giving it a second indexable profile at
+// `/p/saas-maker` splits exact-brand signals and makes the homepage compete
+// with its own catalog entry.
+export const PAGED_PRODUCTS = REGISTRY_PRODUCTS.filter((product) => product.id !== 'saas-maker');
 
 export function llmsTxtUrl(product: RegistryProduct): string {
   return `${product.url.replace(/\/$/, '')}/llms.txt`;

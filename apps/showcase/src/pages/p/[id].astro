@@ -2,16 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import {
-  PAGED_PRODUCTS,
-  llmsTxtUrl,
-  apiAiUrl,
-  indexMdUrl,
-  type RegistryProduct,
-} from '../../data/registry';
+import { PAGED_PRODUCTS, type RegistryProduct } from '../../data/registry';
 
-// Generate one static page per product in the agent-surfaces-registry.
-// The hub entry (saas-maker-showcase) is excluded — it IS the hub.
 export function getStaticPaths() {
   return PAGED_PRODUCTS.map((product) => ({
     params: { id: product.id },
@@ -24,14 +16,9 @@ interface Props {
 }
 
 const { product } = Astro.props as Props;
-
-const llms = llmsTxtUrl(product);
-const apiAi = apiAiUrl(product);
-const indexMd = indexMdUrl(product);
-const githubUrl = product.sameAs?.[0] ?? null;
 const links = product.productLinks ?? [];
-
-// JSON-LD for this product — uses the registry's schemaType and offers.
+const progressLinks = links.filter((link) => ['Changelog', 'Roadmap', 'Source'].includes(link.title));
+const host = product.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const productJsonLd = {
   '@context': 'https://schema.org',
   '@type': product.schemaType ?? 'SoftwareApplication',
@@ -40,263 +27,372 @@ const productJsonLd = {
   description: product.summary,
   ...(product.sameAs ? { sameAs: product.sameAs } : {}),
   ...(product.applicationCategory ? { applicationCategory: product.applicationCategory } : {}),
-  ...(product.offers ? { offers: product.offers } : {}),
 };
-
-const pageTitle = `${product.name} — SaaS Maker directory`;
-const pageDescription = product.summary;
-
-// Minimal markdown-to-HTML for the indexMd field (headings, lists, paragraphs, links).
-// Avoids adding a markdown dependency for this small, controlled input.
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-function inlineMd(text: string): string {
-  let t = escapeHtml(text);
-  t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-  t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
-  t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  return t;
-}
-
-function renderMarkdown(md: string): string {
-  const lines = md.split('\n');
-  let html = '';
-  let inList = false;
-  let inParagraph: string[] = [];
-
-  const flushParagraph = () => {
-    if (inParagraph.length > 0) {
-      html += `<p>${inParagraph.join(' ')}</p>`;
-      inParagraph = [];
-    }
-  };
-  const closeList = () => {
-    if (inList) {
-      html += '</ul>';
-      inList = false;
-    }
-  };
-
-  for (const raw of lines) {
-    const line = raw.trimEnd();
-    if (line.startsWith('# ')) {
-      flushParagraph(); closeList();
-      html += `<h3>${escapeHtml(line.slice(2))}</h3>`;
-    } else if (line.startsWith('## ')) {
-      flushParagraph(); closeList();
-      html += `<h4>${escapeHtml(line.slice(3))}</h4>`;
-    } else if (line.startsWith('### ')) {
-      flushParagraph(); closeList();
-      html += `<h5>${escapeHtml(line.slice(4))}</h5>`;
-    } else if (line.startsWith('- ')) {
-      flushParagraph();
-      if (!inList) { html += '<ul>'; inList = true; }
-      html += `<li>${inlineMd(line.slice(2))}</li>`;
-    } else if (line === '') {
-      flushParagraph(); closeList();
-    } else {
-      inParagraph.push(inlineMd(line));
-    }
-  }
-  flushParagraph(); closeList();
-  return html;
-}
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={`${product.name} — SaaS Maker directory`} description={product.summary}>
   <script type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
-  <Nav />
+  <!--
+  THESIS: A product detail should feel like stepping closer to the workshop wall, not leaving it for a generic dark profile.
+  OWN-WORLD: Limestone daylight, black steel mullions, clear and seeded panes, with one cobalt action pane and one amber evidence pane.
+  STORY: Identify the product, open its canonical home, inspect maintained public evidence, then return to the full catalog.
+  FIRST VIEWPORT: A slim directory rail sits above one large identity pane and one saturated canonical-product action.
+  FORM: Product specimen elevation, owner-delegated extension of the established monumental-wall direction.
+  -->
+  <div class="workshop-world">
+    <Nav />
 
-  <main class="product-page">
-    <div class="pp-grid" aria-hidden="true"></div>
+    <main class="project" id="main-content">
+      <div class="project-wall">
+        <div class="project-back">
+          <a href="/#products">← All products</a>
+          <span>{product.stack ?? 'product'} · maintained</span>
+        </div>
 
-    <div class="pp-back">
-      <a href="/#products">← back to the fleet directory</a>
-    </div>
-
-    <header class="pp-hero">
-      <p class="pp-kicker">
-        <span class="pp-led"></span> FLEET PRODUCT · {product.stack ?? 'web'}
-      </p>
-      <h1>{product.name}</h1>
-      <p class="pp-summary">{product.summary}</p>
-      <div class="pp-actions">
-        <a href={product.url} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
-          Visit {product.name} →
-        </a>
-        {githubUrl && (
-          <a href={githubUrl} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
-            Source ↗
+        <header class="project-hero">
+          <div class="project-identity">
+            <p class="project-folio">SaaS Maker directory</p>
+            <h1>{product.name}</h1>
+            <p class="project-summary">{product.summary}</p>
+          </div>
+          <a class="project-primary" href={product.url} target="_blank" rel="noopener noreferrer">
+            <span>Open product</span>
+            <strong>{host}</strong>
+            <span class="project-primary-arrow" aria-hidden="true">↗</span>
           </a>
-        )}
+        </header>
+
+        <section class="project-progress" aria-labelledby="progress-title">
+          <div class="project-section-head">
+            <p class="project-folio">Maintained evidence</p>
+            <h2 id="progress-title">Follow the work.</h2>
+            <p>Public evidence, directly from the product’s canonical repository.</p>
+          </div>
+
+          <div class="project-evidence">
+            {progressLinks.length > 0 ? (
+              <ul>
+                {progressLinks.map((link) => (
+                  <li>
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      <span>{link.title}</span>
+                      <p>{link.description}</p>
+                      <strong>Open ↗</strong>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="project-empty">
+                This product has a public home, but no separate repository links are published here.
+              </p>
+            )}
+          </div>
+        </section>
+
+        <section class="project-boundary">
+          <p>
+            This directory page points to {product.name}’s canonical home. Public
+            changelog, roadmap, and source links come from the product’s maintained
+            metadata when they are available.
+          </p>
+        </section>
       </div>
-    </header>
 
-    <section class="pp-section">
-      <h2 class="pp-section-title">Product links</h2>
-      {links.length > 0 ? (
-        <ul class="pp-links">
-          {links.map((link) => (
-            <li>
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                <span class="pp-link-title">{link.title}</span>
-                {link.description && <span class="pp-link-desc">{link.description}</span>}
-                <span class="pp-link-url">{link.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="pp-empty">No structured product links in registry.</p>
-      )}
-    </section>
-
-    <section class="pp-section">
-      <h2 class="pp-section-title">Agent entrypoints</h2>
-      <p class="pp-section-lede">
-        Machine-readable surfaces for AI agents and crawlers. Every public fleet
-        origin exposes these per the agent-indexing standard.
-      </p>
-      <ul class="pp-agent">
-        <li>
-          <a href={llms} target="_blank" rel="noopener noreferrer">
-            <span class="pp-agent-label">llms.txt</span>
-            <span class="pp-agent-url">{llms}</span>
-            <span class="pp-agent-note">Agent index — what the product is and how to use it</span>
-          </a>
-        </li>
-        <li>
-          <a href={apiAi} target="_blank" rel="noopener noreferrer">
-            <span class="pp-agent-label">/api/ai</span>
-            <span class="pp-agent-url">{apiAi}</span>
-            <span class="pp-agent-note">Structured JSON endpoint for agent consumption</span>
-          </a>
-        </li>
-        <li>
-          <a href={indexMd} target="_blank" rel="noopener noreferrer">
-            <span class="pp-agent-label">index.md</span>
-            <span class="pp-agent-url">{indexMd}</span>
-            <span class="pp-agent-note">Markdown brief — product summary in plain text</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-
-    {product.indexMd && (
-      <section class="pp-section">
-        <h2 class="pp-section-title">Product brief</h2>
-        <div class="pp-brief" set:html={renderMarkdown(product.indexMd)} />
-      </section>
-    )}
-
-    <Footer />
-  </main>
+      <Footer />
+    </main>
+  </div>
 </Layout>
 
 <style>
-  .product-page {
-    position: relative;
-    min-height: 100vh;
+  .project {
+    width: min(92rem, calc(100% - 2rem));
+    margin: 0 auto;
+    padding-bottom: 2rem;
+  }
+
+  .project-wall {
     overflow: hidden;
-    padding: 0 6vw 6rem;
-    background: radial-gradient(120% 80% at 50% -10%, #0b1426 0%, #05070d 55%, #03040a 100%);
-    color: #dbeafe;
-  }
-  .pp-grid {
-    position: absolute; inset: 0; pointer-events: none; opacity: .25;
-    background-image: linear-gradient(#1e3a5f22 1px, transparent 1px), linear-gradient(90deg, #1e3a5f22 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: radial-gradient(80% 60% at 50% 30%, #000 30%, transparent 85%);
+    border: 0.375rem solid var(--workshop-steel);
+    border-top: 0;
+    background: var(--workshop-steel);
   }
 
-  .pp-back { position: relative; padding-top: 5rem; }
-  .pp-back a {
-    color: #67e8f9; text-decoration: none;
-    font: 600 .85rem ui-monospace, monospace; letter-spacing: .04em;
+  .project-back {
+    min-height: 3.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 0.375rem solid var(--workshop-steel);
+    background: var(--workshop-seeded);
+    color: var(--workshop-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
   }
-  .pp-back a:hover { text-decoration: underline; }
 
-  .pp-hero { position: relative; text-align: center; padding: 2.5rem 0 2rem; }
-  .pp-kicker {
-    display: inline-flex; align-items: center; gap: .5rem;
-    font: 600 .72rem/1 ui-monospace, monospace; letter-spacing: .28em;
-    color: #67e8f9; text-transform: uppercase;
+  .project-back a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    color: var(--workshop-oxblood);
   }
-  .pp-led {
-    width: 8px; height: 8px; border-radius: 50%; background: #34d399;
-    box-shadow: 0 0 10px #34d399; animation: blink 1.6s ease-in-out infinite;
-  }
-  @keyframes blink { 50% { opacity: .35; } }
-  .pp-hero h1 {
-    font: 800 clamp(2.4rem, 6vw, 4.5rem)/1 'Manrope', system-ui, sans-serif;
-    margin: .8rem 0 1rem;
-    background: linear-gradient(180deg, #fff, #7dd3fc 70%, #38bdf8);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    text-shadow: 0 0 60px #0ea5e955;
-  }
-  .pp-summary {
-    max-width: 56ch; margin: 0 auto; color: #93b4d8; line-height: 1.6; font-size: 1.05rem;
-  }
-  .pp-actions { display: flex; gap: .8rem; justify-content: center; margin-top: 1.8rem; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; padding: .7rem 1.4rem; border-radius: 8px;
-    font: 600 .9rem 'Manrope', sans-serif; text-decoration: none; transition: all .2s;
-  }
-  .btn-primary { background: #0ea5e9; color: #03040a; }
-  .btn-primary:hover { background: #38bdf8; transform: translateY(-1px); }
-  .btn-ghost { border: 1px solid #1e3a5f; color: #93b4d8; background: #0a132480; }
-  .btn-ghost:hover { border-color: #38bdf8; color: #7dd3fc; }
 
-  .pp-section { position: relative; max-width: 760px; margin: 2.8rem auto 0; }
-  .pp-section-title {
-    font: 700 .72rem/1 ui-monospace, monospace; letter-spacing: .22em;
-    text-transform: uppercase; color: #5eead4; margin-bottom: 1rem;
-    padding-bottom: .6rem; border-bottom: 1px solid #1e3a5f;
+  .project-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.65fr);
+    gap: 0.375rem;
+    min-height: min(40rem, calc(100svh - 8.5rem));
+    border-bottom: 0.375rem solid var(--workshop-steel);
+    background: var(--workshop-steel);
   }
-  .pp-section-lede { color: #6b88aa; font-size: .88rem; margin-bottom: 1.2rem; }
 
-  .pp-links { list-style: none; padding: 0; display: grid; gap: .7rem; }
-  .pp-links a {
-    display: flex; flex-direction: column; gap: .2rem;
-    padding: 1rem 1.2rem; border-radius: 10px; border: 1px solid #173050;
-    background: linear-gradient(180deg, #0b1a2bf2, #081019f2);
-    text-decoration: none; transition: all .2s;
+  .project-identity {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(3rem, 7vw, 7rem);
+    background:
+      linear-gradient(rgba(250, 247, 239, 0.92), rgba(250, 247, 239, 0.92)),
+      url('/images/glazier-atelier-hero.webp') center / cover no-repeat;
+    color: var(--workshop-ink);
   }
-  .pp-links a:hover { border-color: #2dd4bf55; transform: translateY(-2px); box-shadow: 0 12px 30px #00131f77; }
-  .pp-link-title { font: 700 1rem 'Manrope', sans-serif; color: #f1f5f9; }
-  .pp-link-desc { font-size: .82rem; color: #8fa9c6; }
-  .pp-link-url { font: 500 .72rem ui-monospace, monospace; color: #5eead4; }
 
-  .pp-agent { list-style: none; padding: 0; display: grid; gap: .7rem; }
-  .pp-agent a {
-    display: flex; flex-direction: column; gap: .15rem;
-    padding: 1rem 1.2rem; border-radius: 10px; border: 1px solid #173050;
-    background: #0a132470; text-decoration: none; transition: all .2s;
+  .project-folio {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
-  .pp-agent a:hover { border-color: #22d3ee55; }
-  .pp-agent-label {
-    font: 700 .82rem ui-monospace, monospace; color: #67e8f9; letter-spacing: .04em;
+
+  h1 {
+    max-width: 10ch;
+    margin-top: clamp(2rem, 5vh, 4rem);
+    overflow-wrap: anywhere;
+    font-size: clamp(3.5rem, 7.2vw, 6rem);
+    font-weight: 600;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
-  .pp-agent-url { font: 500 .72rem ui-monospace, monospace; color: #6b88aa; word-break: break-all; }
-  .pp-agent-note { font-size: .78rem; color: #8fa9c6; }
 
-  .pp-brief {
-    padding: 1.4rem 1.6rem; border-radius: 12px; border: 1px solid #1e3a5f;
-    background: #0a132460; line-height: 1.65;
+  .project-summary {
+    max-width: 58ch;
+    margin-top: clamp(1.75rem, 4vh, 3rem);
+    color: var(--workshop-muted);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    text-wrap: pretty;
   }
-  .pp-brief h3 { font: 800 1.3rem 'Manrope', sans-serif; color: #f1f5f9; margin: 0 0 .6rem; }
-  .pp-brief h4 { font: 700 1.05rem 'Manrope', sans-serif; color: #cfe0f3; margin: 1.2rem 0 .4rem; }
-  .pp-brief h5 { font: 700 .92rem 'Manrope', sans-serif; color: #cfe0f3; margin: 1rem 0 .3rem; }
-  .pp-brief p { color: #9fb6d2; margin: .4rem 0; font-size: .92rem; }
-  .pp-brief ul { padding-left: 1.2rem; margin: .4rem 0; }
-  .pp-brief li { color: #9fb6d2; font-size: .92rem; margin: .25rem 0; }
-  .pp-brief a { color: #67e8f9; }
-  .pp-brief code { font: 500 .85rem ui-monospace, monospace; color: #5eead4; background: #0a2230; padding: .1rem .3rem; border-radius: 4px; }
-  .pp-brief strong { color: #e0f2fe; }
 
-  .pp-empty { color: #6b88aa; font-size: .88rem; }
+  .project-primary {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(2rem, 4vw, 4rem);
+    background: var(--workshop-cobalt);
+    color: #fff;
+    transition:
+      filter 180ms ease,
+      box-shadow 180ms ease;
+  }
 
-  @media (prefers-reduced-motion: reduce) { .pp-led { animation: none; } }
+  .project-primary span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .project-primary strong {
+    max-width: 18ch;
+    margin-top: auto;
+    overflow-wrap: anywhere;
+    font-size: clamp(1.5rem, 3vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .project-primary-arrow {
+    align-self: flex-end;
+    margin-top: 2rem;
+    font-size: 1.5rem !important;
+  }
+
+  .project-primary:hover,
+  .project-primary:focus-visible {
+    filter: brightness(1.1) saturate(1.04);
+    box-shadow: inset 0 0 0 0.25rem rgba(255, 255, 255, 0.48);
+  }
+
+  .project-progress {
+    display: grid;
+    grid-template-columns: minmax(20rem, 0.65fr) minmax(0, 1.35fr);
+    gap: 0.375rem;
+    background: var(--workshop-steel);
+  }
+
+  .project-section-head {
+    min-height: 25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    background: var(--workshop-amber);
+    color: var(--workshop-ink);
+  }
+
+  .project-section-head h2 {
+    max-width: 9ch;
+    margin-top: 1.25rem;
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .project-section-head > p:last-child {
+    max-width: 36ch;
+    margin-top: 1.5rem;
+    color: #463513;
+  }
+
+  .project-evidence {
+    min-width: 0;
+    background: #f8f4ea;
+  }
+
+  .project-progress ul {
+    list-style: none;
+  }
+
+  .project-progress li + li {
+    border-top: 1px solid rgba(20, 21, 17, 0.2);
+  }
+
+  .project-progress li a {
+    min-height: 8.25rem;
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.45fr) minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    color: var(--workshop-ink);
+    transition:
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  .project-progress li a > span {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .project-progress li p {
+    color: var(--workshop-muted);
+  }
+
+  .project-progress li strong {
+    font-size: 0.75rem;
+  }
+
+  .project-progress li a:hover,
+  .project-progress li a:focus-visible {
+    background: var(--workshop-oxblood);
+    color: #fff;
+  }
+
+  .project-progress li a:hover p,
+  .project-progress li a:focus-visible p {
+    color: #f1d9d4;
+  }
+
+  .project-empty {
+    min-height: 25rem;
+    display: grid;
+    place-items: center;
+    padding: 3rem;
+    color: var(--workshop-muted);
+  }
+
+  .project-boundary {
+    min-height: 11rem;
+    display: flex;
+    align-items: center;
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border-top: 0.375rem solid var(--workshop-steel);
+    background:
+      linear-gradient(rgba(217, 210, 196, 0.88), rgba(217, 210, 196, 0.88)),
+      url('/images/glazier-atelier-hero.webp') 70% 55% / cover no-repeat;
+    color: var(--workshop-muted);
+    font-size: 1rem;
+  }
+
+  .project-boundary p {
+    max-width: 68ch;
+  }
+
+  @media (max-width: 900px) {
+    .project-hero,
+    .project-progress {
+      grid-template-columns: 1fr;
+    }
+
+    .project-primary {
+      min-height: 18rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .project {
+      width: min(100% - 1rem, 92rem);
+    }
+
+    .project-back {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .project-identity {
+      min-height: min(36rem, calc(100svh - 8rem));
+      padding: 2.5rem 1.5rem;
+    }
+
+    h1 {
+      max-width: none;
+      margin-top: 2rem;
+      font-size: clamp(2.8rem, 13vw, 5rem);
+    }
+
+    .project-primary {
+      min-height: 15rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .project-section-head {
+      min-height: 23rem;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .project-progress li a {
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem 1rem;
+      padding: 1.5rem;
+    }
+
+    .project-progress li p {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .project-boundary {
+      padding: 2.5rem 1.5rem;
+    }
+  }
 </style>

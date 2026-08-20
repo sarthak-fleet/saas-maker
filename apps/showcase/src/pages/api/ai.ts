@@ -1,5 +1,8 @@
 import publicCatalog from '../../../../../catalog/generated/public.json';
-import { PACKAGE_DOCS_URL } from '../../data/links';
+import tokenWorld from '../../data/tokenWorld.json';
+import { PACKAGE_URL } from '../../data/links';
+import { LEARNINGS } from '../../data/learnings';
+import { markdownPath, PUBLIC_ROUTES, publicRouteUrl } from '../../data/publicRoutes';
 export const prerender = true;
 export function GET() {
   return new Response(
@@ -11,35 +14,37 @@ export function GET() {
         url: 'https://sassmaker.com',
         llms: 'https://sassmaker.com/llms.txt',
         llmsFull: 'https://sassmaker.com/llms-full.txt',
-        sitemap: 'https://sassmaker.com/sitemap-index.xml',
+        sitemap: 'https://sassmaker.com/sitemap.xml',
         markdown: { suffix: '.md', negotiation: false },
         canonical: 'https://sassmaker.com',
-        sourceOfTruth: 'sass-maker/fleet-workspace: fleet-ops/public/products.json',
-        surfaces: [
+        sourceOfTruth: 'SaaS Maker privacy-checked public product catalog',
+        surfaces: PUBLIC_ROUTES.map((route) => ({
+          id: route.id,
+          url: publicRouteUrl(route),
+          md: `https://sassmaker.com/${markdownPath(route)}.md`,
+          kind: route.kind,
+          description: route.description,
+        })),
+        externalResources: [
           {
-            id: 'directory',
-            url: 'https://sassmaker.com/',
-            md: 'https://sassmaker.com/index.md',
-            kind: 'collection',
-            description: 'Public product directory',
-          },
-          {
-            id: 'packages',
-            url: `${PACKAGE_DOCS_URL}/`,
-            md: `${PACKAGE_DOCS_URL}/index.md`,
-            kind: 'collection',
-            description: 'Public package documentation',
-          },
-          {
-            id: 'feedback',
-            url: `${PACKAGE_DOCS_URL}/widgets/feedback/`,
-            md: `${PACKAGE_DOCS_URL}/widgets/feedback.md`,
+            id: 'feedback-package',
+            url: PACKAGE_URL,
             kind: 'documentation',
-            description: 'Published feedback package documentation',
+            description: 'Published feedback package and hosted submission service',
           },
         ],
-        auth: { public: true, notes: 'Private cockpit routes are intentionally excluded.' },
+        auth: { public: true, notes: 'Private Fleet controls are intentionally excluded.' },
+        tokenImpact: {
+          name: 'Tokens Spent for the World',
+          metric: 'Verified provider-reported model tokens from contributing products',
+          ...tokenWorld,
+        },
         products: publicCatalog.products,
+        pastProjects: publicCatalog.pastProjects,
+        learnings: LEARNINGS.map((learning) => ({
+          ...learning,
+          url: `https://sassmaker.com${learning.href}`,
+        })),
       },
       null,
       2

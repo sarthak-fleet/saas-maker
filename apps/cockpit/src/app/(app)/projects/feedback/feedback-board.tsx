@@ -1,9 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import type { FeedbackRecord } from '@saas-maker/contracts';
-import { Badge } from '@/components/ui/badge';
+import type { AnyFeedbackStatus, FeedbackRecord, FeedbackType } from '@saas-maker/contracts';
+import { useCallback, useEffect, useState } from 'react';
+import { FeedbackTable } from '@/components/feedback-table';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -12,467 +11,125 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Sheet,
-  SheetBody,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
-import { ArrowDownUp, ChevronDown, ChevronUp, LayoutGrid, MessageSquare } from 'lucide-react';
-import { getClientToken, apiFetchClient } from '@/lib/api-client';
+import { apiFetchClient, getClientToken } from '@/lib/api-client';
 
-type BoardStatus = 'new' | 'dismissed' | 'on_roadmap';
-
-type BoardFeedbackRecord = FeedbackRecord & {
-  project_name: string;
-  project_slug: string;
-};
-
-const STATUS_COLUMNS: Array<{
-  value: BoardStatus;
-  label: string;
-  variant: 'default' | 'secondary' | 'destructive' | 'outline';
-}> = [
-  { value: 'new', label: 'New', variant: 'default' },
-  { value: 'on_roadmap', label: 'On Roadmap', variant: 'secondary' },
-  { value: 'dismissed', label: 'Dismissed', variant: 'destructive' },
-];
-
-const STATUS_STYLE_MAP = Object.fromEntries(
-  STATUS_COLUMNS.map((column) => [column.value, column])
-) as Record<BoardStatus, (typeof STATUS_COLUMNS)[number]>;
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.sassmaker.com';
-
-function withVote(item: BoardFeedbackRecord, vote: 'up' | 'down' | null): BoardFeedbackRecord {
-  const prev = item.viewer_vote ?? null;
-  let up = item.upvote_count;
-  let down = item.downvote_count;
-
-  if (prev === 'up') up = Math.max(up - 1, 0);
-  if (prev === 'down') down = Math.max(down - 1, 0);
-  if (vote === 'up') up += 1;
-  if (vote === 'down') down += 1;
-
-  return {
-    ...item,
-    upvote_count: up,
-    downvote_count: down,
-    viewer_vote: vote,
-  };
-}
+type InboxRecord = FeedbackRecord & { project_name: string; project_slug: string };
 
 export function FeedbackBoard() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const statusFilter = searchParams.get('status') ?? 'all';
-  const sort = searchParams.get('sort') ?? 'upvotes';
-
-  const [feedback, setFeedback] = useState<BoardFeedbackRecord[]>([]);
+  const [feedback, setFeedback] = useState<InboxRecord[]>([]);
+  const [type, setType] = useState<FeedbackType | 'all'>('all');
+  const [status, setStatus] = useState<AnyFeedbackStatus | 'all'>('all');
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [actionError, setActionError] = useState<string | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [votePendingId, setVotePendingId] = useState<string | null>(null);
-  const [statusPendingId, setStatusPendingId] = useState<string | null>(null);
 
-  const selected = feedback.find((item) => item.id === selectedId) ?? null;
-
-  const updateParam = useCallback(
-    (key: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (value === 'all') params.delete(key);
-      else params.set(key, value);
-      router.push(`?${params.toString()}`);
-    },
-    [router, searchParams]
-  );
-
-  const fetchFeedback = useCallback(
+  const load = useCallback(
     async (activeToken: string) => {
       setLoading(true);
       setError(null);
       try {
-        const params = new URLSearchParams();
-        if (statusFilter !== 'all') params.set('status', statusFilter);
-        params.set('sort', sort === 'newest' ? 'newest' : 'upvotes');
-
-        const data = await apiFetchClient<{ data: BoardFeedbackRecord[]; total: number }>(
-          `/v1/feedback/board?${params.toString()}`,
+        const query = new URLSearchParams();
+        if (type !== 'all') query.set('type', type);
+        if (status !== 'all') query.set('status', status);
+        const result = await apiFetchClient<{ data: InboxRecord[] }>(
+          `/v1/feedback/inbox?${query.toString()}`,
           activeToken
         );
-        setFeedback(data.data ?? []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load feature requests');
+        setFeedback(result.data ?? []);
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : 'Failed to load feedback');
       } finally {
         setLoading(false);
       }
     },
-    [statusFilter, sort]
+    [status, type]
   );
 
   useEffect(() => {
     let cancelled = false;
-
-    async function bootstrap() {
-      try {
-        const nextToken = await getClientToken();
+    getClientToken()
+      .then((activeToken) => {
         if (cancelled) return;
-        setToken(nextToken);
-        await fetchFeedback(nextToken);
-      } catch {
+        setToken(activeToken);
+        return load(activeToken);
+      })
+      .catch(() => {
         if (!cancelled) {
-          setError('Failed to authenticate. Please sign in.');
+          setError('Failed to authenticate. Please sign in again.');
           setLoading(false);
         }
-      }
-    }
-
-    bootstrap();
-
+      });
     return () => {
       cancelled = true;
     };
-  }, [fetchFeedback]);
+  }, [load]);
 
-  const grouped = useMemo(() => {
-    const buckets: Record<BoardStatus, BoardFeedbackRecord[]> = {
-      new: [],
-      on_roadmap: [],
-      dismissed: [],
-    };
-
-    for (const item of feedback) {
-      const normalized =
-        item.status === 'new' || item.status === 'dismissed' || item.status === 'on_roadmap'
-          ? item.status
-          : 'new';
-      buckets[normalized].push(item);
-    }
-
-    return buckets;
-  }, [feedback]);
-
-  const handleVote = useCallback(
-    async (item: BoardFeedbackRecord, target: 'up' | 'down') => {
-      setActionError(null);
-      if (!token) {
-        setActionError('Sign in to vote on feature requests.');
-        return;
-      }
-
-      const currentVote = item.viewer_vote ?? null;
-      const nextVote = currentVote === target ? null : target;
-
-      const endpoint =
-        target === 'up' ? `/v1/feedback/${item.id}/upvote` : `/v1/feedback/${item.id}/downvote`;
-      const method = nextVote === null ? 'DELETE' : 'POST';
-
-      setVotePendingId(item.id);
-      try {
-        const res = await fetch(`${API_BASE}${endpoint}`, {
-          method,
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          throw new Error(body.error || 'Voting failed');
-        }
-
-        setFeedback((prev) =>
-          prev.map((candidate) =>
-            candidate.id === item.id ? withVote(candidate, nextVote) : candidate
-          )
-        );
-      } catch (err) {
-        setActionError(err instanceof Error ? err.message : 'Voting failed');
-      } finally {
-        setVotePendingId(null);
-      }
-    },
-    [token]
-  );
-
-  const handleStatusChange = useCallback(
-    async (item: BoardFeedbackRecord, nextStatus: BoardStatus) => {
-      if (!token || item.status === nextStatus) return;
-      setActionError(null);
-      setStatusPendingId(item.id);
-
-      try {
-        const res = await fetch(`${API_BASE}/v1/feedback/${item.id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ status: nextStatus }),
-        });
-
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          throw new Error(body.error || 'Failed to update status');
-        }
-
-        setFeedback((prev) =>
-          prev.map((candidate) =>
-            candidate.id === item.id ? { ...candidate, status: nextStatus } : candidate
-          )
-        );
-      } catch (err) {
-        setActionError(err instanceof Error ? err.message : 'Failed to update status');
-      } finally {
-        setStatusPendingId(null);
-      }
-    },
-    [token]
-  );
+  async function updateStatus(item: FeedbackRecord, nextStatus: AnyFeedbackStatus) {
+    if (!token) return;
+    const updated = await apiFetchClient<FeedbackRecord>(`/v1/feedback/${item.id}`, token, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: nextStatus }),
+    });
+    setFeedback((items) =>
+      items.map((candidate) =>
+        candidate.id === updated.id ? { ...candidate, status: updated.status } : candidate
+      )
+    );
+  }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <Select value={statusFilter} onValueChange={(v) => updateParam('status', v)}>
+        <Select value={type} onValueChange={(value) => setType(value as FeedbackType | 'all')}>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All types</SelectItem>
+            <SelectItem value="bug">Bugs</SelectItem>
+            <SelectItem value="feature">Features</SelectItem>
+            <SelectItem value="feedback">Feedback</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select
+          value={status}
+          onValueChange={(value) => setStatus(value as AnyFeedbackStatus | 'all')}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Columns</SelectItem>
-            {STATUS_COLUMNS.map((column) => (
-              <SelectItem key={column.value} value={column.value}>
-                {column.label}
-              </SelectItem>
-            ))}
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="new">New</SelectItem>
+            <SelectItem value="acknowledged">Acknowledged</SelectItem>
+            <SelectItem value="investigating">Investigating</SelectItem>
+            <SelectItem value="planned">Planned</SelectItem>
+            <SelectItem value="in_progress">In progress</SelectItem>
+            <SelectItem value="resolved">Resolved</SelectItem>
+            <SelectItem value="dismissed">Dismissed</SelectItem>
           </SelectContent>
         </Select>
-
         <Button
           variant="outline"
           size="sm"
-          onClick={() => updateParam('sort', sort === 'newest' ? 'upvotes' : 'newest')}
-          className="gap-2"
+          disabled={!token || loading}
+          onClick={() => token && load(token)}
         >
-          <ArrowDownUp className="h-4 w-4" />
-          {sort === 'newest' ? 'Newest' : 'Most Voted'}
+          Refresh
         </Button>
-
-        <Badge variant="outline" className="gap-2">
-          <LayoutGrid className="h-3.5 w-3.5" />
-          All Projects
-        </Badge>
       </div>
 
-      <p className="text-sm text-muted-foreground">
-        Owner mode enabled. You can update request status directly from each card.
-      </p>
-
-      {actionError && <p className="text-sm text-destructive">{actionError}</p>}
-
-      {loading ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {STATUS_COLUMNS.map((column) => (
-            <div key={column.value} className="rounded-md border p-3 space-y-3">
-              <div className="h-5 w-28 animate-pulse rounded bg-muted" />
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-md border p-3 space-y-2">
-                  <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
-                  <div className="h-3 w-full animate-pulse rounded bg-muted" />
-                  <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ) : error ? (
-        <div className="text-destructive text-center py-8">{error}</div>
-      ) : feedback.length === 0 ? (
-        <div className="rounded-md border py-12 text-center text-muted-foreground">
-          <MessageSquare className="mx-auto h-8 w-8 mb-2" />
-          No feature requests yet.
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {STATUS_COLUMNS.map((column) => {
-            if (statusFilter !== 'all' && statusFilter !== column.value) {
-              return null;
-            }
-
-            const cards = grouped[column.value];
-            return (
-              <div key={column.value} className="rounded-md border bg-card">
-                <div className="flex items-center justify-between border-b px-3 py-2">
-                  <Badge variant={column.variant}>{column.label}</Badge>
-                  <span className="text-xs text-muted-foreground">{cards.length}</span>
-                </div>
-
-                <div className="space-y-3 p-3">
-                  {cards.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No requests</p>
-                  ) : (
-                    cards.map((item) => (
-                      <div
-                        key={item.id}
-                        className="rounded-md border p-3 space-y-3 cursor-pointer hover:bg-muted/30"
-                        onClick={() => setSelectedId(item.id)}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <h3 className="text-sm font-medium leading-snug">{item.title}</h3>
-                            <Badge variant="outline" className="mt-1 text-[10px] px-1.5 py-0">
-                              {item.project_name}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center gap-1 shrink-0">
-                            <Button
-                              type="button"
-                              variant={item.viewer_vote === 'up' ? 'default' : 'outline'}
-                              size="icon"
-                              className="h-7 w-7"
-                              disabled={votePendingId === item.id}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(item, 'up');
-                              }}
-                              title="Upvote"
-                            >
-                              <ChevronUp className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              type="button"
-                              variant={item.viewer_vote === 'down' ? 'destructive' : 'outline'}
-                              size="icon"
-                              className="h-7 w-7"
-                              disabled={votePendingId === item.id}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(item, 'down');
-                              }}
-                              title="Downvote"
-                            >
-                              <ChevronDown className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {item.description}
-                        </p>
-
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>&#9650; {item.upvote_count}</span>
-                          <span>&#9660; {item.downvote_count}</span>
-                          <span>Score {item.upvote_count - item.downvote_count}</span>
-                        </div>
-
-                        <div onClick={(e) => e.stopPropagation()}>
-                          <Select
-                            value={
-                              item.status === 'new' ||
-                              item.status === 'dismissed' ||
-                              item.status === 'on_roadmap'
-                                ? item.status
-                                : 'new'
-                            }
-                            onValueChange={(value) =>
-                              handleStatusChange(item, value as BoardStatus)
-                            }
-                            disabled={statusPendingId === item.id}
-                          >
-                            <SelectTrigger className="h-8 text-xs">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {STATUS_COLUMNS.map((statusOption) => (
-                                <SelectItem key={statusOption.value} value={statusOption.value}>
-                                  {statusOption.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      {error && (
+        <p className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+          {error}
+        </p>
       )}
-
-      <Sheet open={selectedId !== null} onOpenChange={(open) => !open && setSelectedId(null)}>
-        <SheetContent className="w-full sm:max-w-lg">
-          {selected && (
-            <>
-              <SheetHeader>
-                <div className="flex items-center gap-2">
-                  <Badge variant="default">Feature</Badge>
-                  <Badge
-                    variant={
-                      STATUS_STYLE_MAP[
-                        (selected.status === 'new' ||
-                        selected.status === 'dismissed' ||
-                        selected.status === 'on_roadmap'
-                          ? selected.status
-                          : 'new') as BoardStatus
-                      ].variant
-                    }
-                  >
-                    {
-                      STATUS_STYLE_MAP[
-                        (selected.status === 'new' ||
-                        selected.status === 'dismissed' ||
-                        selected.status === 'on_roadmap'
-                          ? selected.status
-                          : 'new') as BoardStatus
-                      ].label
-                    }
-                  </Badge>
-                  <Badge variant="outline">{selected.project_name}</Badge>
-                </div>
-                <SheetTitle className="text-left">{selected.title}</SheetTitle>
-                <SheetDescription className="text-left">
-                  Submitted{' '}
-                  {new Date(selected.created_at).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </SheetDescription>
-              </SheetHeader>
-
-              <SheetBody className="space-y-6">
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-muted-foreground">Description</h4>
-                  <p className="text-sm leading-relaxed">
-                    {selected.description || 'No description provided.'}
-                  </p>
-                </div>
-
-                {selected.image_url && (
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-muted-foreground">Attachment</h4>
-                    <img
-                      src={selected.image_url}
-                      alt="Feedback attachment"
-                      className="rounded-md border max-h-64 object-contain"
-                    />
-                  </div>
-                )}
-
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>&#9650; {selected.upvote_count}</span>
-                  <span>&#9660; {selected.downvote_count}</span>
-                  <span>Score {selected.upvote_count - selected.downvote_count}</span>
-                </div>
-              </SheetBody>
-            </>
-          )}
-        </SheetContent>
-      </Sheet>
+      {loading ? (
+        <p className="py-12 text-center text-sm text-muted-foreground">Loading feedback…</p>
+      ) : (
+        <FeedbackTable feedback={feedback} onStatusChange={updateStatus} />
+      )}
     </div>
   );
 }

@@ -34,10 +34,9 @@ const STATUS_STYLES: Record<
 interface FeedbackTableProps {
   feedback: FeedbackRecord[];
   onStatusChange?: (item: FeedbackRecord, status: AnyFeedbackStatus) => Promise<void>;
-  onDelete?: (id: string) => Promise<void>;
 }
 
-export function FeedbackTable({ feedback, onStatusChange, onDelete }: FeedbackTableProps) {
+export function FeedbackTable({ feedback, onStatusChange }: FeedbackTableProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = feedback.find((f) => f.id === selectedId) ?? null;
 
@@ -50,7 +49,6 @@ export function FeedbackTable({ feedback, onStatusChange, onDelete }: FeedbackTa
               <TableHead className="w-[100px]">Type</TableHead>
               <TableHead>Title</TableHead>
               <TableHead className="hidden sm:table-cell">Submitter</TableHead>
-              <TableHead className="w-[150px] text-center">Votes</TableHead>
               <TableHead className="w-[120px]">Status</TableHead>
               <TableHead className="hidden md:table-cell w-[120px]">Date</TableHead>
             </TableRow>
@@ -58,7 +56,7 @@ export function FeedbackTable({ feedback, onStatusChange, onDelete }: FeedbackTa
           <TableBody>
             {feedback.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                   No feedback items found.
                 </TableCell>
               </TableRow>
@@ -84,10 +82,7 @@ export function FeedbackTable({ feedback, onStatusChange, onDelete }: FeedbackTa
                     </TableCell>
                     <TableCell className="font-medium">{item.title}</TableCell>
                     <TableCell className="hidden sm:table-cell text-muted-foreground">
-                      {item.submitter_email}
-                    </TableCell>
-                    <TableCell className="text-center text-xs text-muted-foreground">
-                      ▲ {item.upvote_count} / ▼ {item.downvote_count}
+                      {item.submitter_name || item.submitter_email || 'Anonymous'}
                     </TableCell>
                     <TableCell>
                       <Badge variant={statusStyle.variant}>{statusStyle.label}</Badge>
@@ -111,10 +106,6 @@ export function FeedbackTable({ feedback, onStatusChange, onDelete }: FeedbackTa
         open={selectedId !== null}
         onClose={() => setSelectedId(null)}
         onStatusChange={onStatusChange}
-        onDelete={async (id) => {
-          if (onDelete) await onDelete(id);
-          setSelectedId(null);
-        }}
       />
     </>
   );

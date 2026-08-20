@@ -6,7 +6,6 @@ export type Bindings = {
   DB: D1Database;
   FEEDBACK_IMAGES: R2Bucket;
   RATE_LIMITER?: { limit: (input: { key: string }) => Promise<{ success: boolean }> };
-  POSTHOG_API_KEY?: string;
   LOCAL_AUTH_BYPASS?: string;
   SAASMAKER_LOCAL_SESSION_TOKEN?: string;
 };

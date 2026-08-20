@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import type { FeedbackType, SubmitFeedbackRequest } from '../types';
-import type { ApiClient } from '../api';
-import { anchorLabel, formatAnchor, type ElementAnchor } from '../elementAnchor';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import { anchorLabel, type ElementAnchor } from '../elementAnchor';
+import type { FeedbackSubmission, FeedbackType } from '../types';
 import { ImageUpload } from './ImageUpload';
 
 interface SubmitFormProps {
-  api: ApiClient;
+  onSubmit: (feedback: FeedbackSubmission) => void | Promise<void>;
   userEmail?: string;
   userName?: string;
+  requireEmail?: boolean;
   types: FeedbackType[];
   accentColor: string;
   enablePointing?: boolean;
@@ -39,9 +40,10 @@ const CheckIcon: React.FC = () => (
 );
 
 export const SubmitForm: React.FC<SubmitFormProps> = ({
-  api,
+  onSubmit,
   userEmail,
   userName,
+  requireEmail = false,
   types,
   accentColor,
   enablePointing = false,
@@ -52,7 +54,7 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
   const [selectedType, setSelectedType] = useState<FeedbackType>(types[0] || 'feedback');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [screenshot, setScreenshot] = useState<File | null>(null);
   const [email, setEmail] = useState(userEmail || '');
   const [name, setName] = useState(userName || '');
   const [submitting, setSubmitting] = useState(false);
@@ -63,7 +65,7 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
     setSelectedType(types[0] || 'feedback');
     setTitle('');
     setDescription('');
-    setImageUrl(null);
+    setScreenshot(null);
     if (!userEmail) setEmail('');
     if (!userName) setName('');
     setError(null);
@@ -75,7 +77,7 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
       setError(null);
 
       const resolvedEmail = userEmail || email;
-      if (!resolvedEmail.trim()) {
+      if (requireEmail && !resolvedEmail.trim()) {
         setError('Email is required.');
         return;
       }
@@ -90,22 +92,22 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
 
       setSubmitting(true);
       try {
-        // The API has no structured anchor field, so the pointed-at element rides
-        // in the description as a markdown block the team (and an agent) can act on.
-        const fullDescription = anchor
-          ? `${description.trim()}\n${formatAnchor(anchor)}`
-          : description.trim();
-        const payload: SubmitFeedbackRequest = {
+        const payload: FeedbackSubmission = {
           type: selectedType,
           title: title.trim(),
-          description: fullDescription,
-          submitter_email: resolvedEmail.trim(),
+          description: description.trim(),
+          page: {
+            url: typeof window === 'undefined' ? '' : window.location.href,
+            title: typeof document === 'undefined' ? '' : document.title,
+          },
         };
-        if (imageUrl) payload.image_url = imageUrl;
+        if (resolvedEmail.trim()) payload.email = resolvedEmail.trim();
         const resolvedName = userName || name;
-        if (resolvedName.trim()) payload.submitter_name = resolvedName.trim();
+        if (resolvedName.trim()) payload.name = resolvedName.trim();
+        if (anchor) payload.anchor = anchor;
+        if (screenshot) payload.screenshot = screenshot;
 
-        await api.submitFeedback(payload);
+        await onSubmit(payload);
         setSubmitted(true);
         resetForm();
         onClearAnchor?.();
@@ -116,15 +118,16 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
       }
     },
     [
-      api,
+      onSubmit,
       selectedType,
       title,
       description,
-      imageUrl,
+      screenshot,
       email,
       name,
       userEmail,
       userName,
+      requireEmail,
       anchor,
       resetForm,
       onClearAnchor,
@@ -243,13 +246,13 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
       {/* Image upload */}
       <div className="smw-field">
         <label className="smw-label">Screenshot (optional)</label>
-        <ImageUpload api={api} imageUrl={imageUrl} onImageUrl={setImageUrl} />
+        <ImageUpload file={screenshot} onFile={setScreenshot} />
       </div>
 
       {/* Email */}
       <div className="smw-field">
         <label className="smw-label" htmlFor="smw-email">
-          Email <span className="smw-required">*</span>
+          Email {requireEmail && <span className="smw-required">*</span>}
         </label>
         {userEmail ? (
           <input
@@ -267,7 +270,7 @@ export const SubmitForm: React.FC<SubmitFormProps> = ({
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            required={requireEmail}
           />
         )}
       </div>
