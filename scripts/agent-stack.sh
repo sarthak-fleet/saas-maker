@@ -12,6 +12,7 @@ EXPOSED_FLEET_SKILLS=(
   design-workflow
   fleet-deploy-parity
   fleet-ops
+  ian-xiaohei-illustrations
   code-cleanup
   local-ports-cleanup
   mobile-task-control

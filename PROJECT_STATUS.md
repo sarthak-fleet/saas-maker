@@ -33,6 +33,9 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-08-21 — Added an English-language adaptation of Ian's MIT-licensed
+  Xiaohei editorial-illustration skill, preserved upstream attribution, and
+  exposed it through the Fleet skill installer.
 - 2026-08-21 — Physically isolated preserved Console, analytics, catalog, Site
   Health, and extracted-product workflow sources under
   `preserved/legacy-fleet-tooling/`. Removed the retired Console from active
@@ -78,8 +81,8 @@ owned by individual products.
 - Availability reports with status and redirect evidence.
 - Repeated header/total-response latency reports with p50 and p90.
 - Read-only pull-request validation and default-branch scheduled evidence.
-- Forty-four preserved agent skills with validated provider-neutral execution
-  profiles.
+- Forty-five agent skills with validated provider-neutral execution profiles,
+  including the attributed English Xiaohei illustration adaptation.
 - Nine standalone operator entrypoints exposed through the capability catalog,
   with retired product/control-plane sources physically isolated as
   noncanonical history and still covered by shell and Node syntax validation.
