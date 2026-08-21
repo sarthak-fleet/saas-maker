@@ -5,27 +5,28 @@
 # Backs the fleet-init skill.
 #
 # Usage:
-#   bash foundry/ops/scripts/fleet-init.sh <name> --category <cat> --desc <desc> --stack <stack> [--private]
-#   bash foundry/ops/scripts/fleet-init.sh my-project --category data --desc "evidence tracker" --stack "Astro + CF Workers"
+#   bash scripts/fleet-init.sh <name> --owner <org> --category <cat> --desc <desc> --stack <stack> [--private]
+#   bash scripts/fleet-init.sh my-project --owner sass-maker --category data --desc "evidence tracker" --stack "Astro + CF Workers"
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 NAME=""
 CATEGORY=""
 DESC=""
 STACK=""
 VISIBILITY="--public"
-GITHUB_OWNER="${FLEET_GITHUB_OWNER:-sarthakagrawal927}"
+GITHUB_OWNER="${FLEET_GITHUB_OWNER:-}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --owner) GITHUB_OWNER="$2"; shift 2 ;;
     --category) CATEGORY="$2"; shift 2 ;;
     --desc) DESC="$2"; shift 2 ;;
     --stack) STACK="$2"; shift 2 ;;
     --private) VISIBILITY="--private"; shift ;;
     -h|--help)
-      echo "Usage: fleet-init.sh <name> --category <cat> --desc <desc> --stack <stack> [--private]"
+      echo "Usage: fleet-init.sh <name> --owner <org> --category <cat> --desc <desc> --stack <stack> [--private]"
       echo "Categories: support, personal, saas, data, research"
       exit 0
       ;;
@@ -40,9 +41,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$NAME" || -z "$CATEGORY" || -z "$DESC" ]]; then
-  echo "Usage: fleet-init.sh <name> --category <cat> --desc <desc> --stack <stack> [--private]" >&2
-  echo "Missing required args. Name, category, and desc are required." >&2
+if [[ -z "$NAME" || -z "$GITHUB_OWNER" || -z "$CATEGORY" || -z "$DESC" ]]; then
+  echo "Usage: fleet-init.sh <name> --owner <org> --category <cat> --desc <desc> --stack <stack> [--private]" >&2
+  echo "Missing required args. Name, owner, category, and desc are required." >&2
   exit 1
 fi
 
@@ -201,7 +202,7 @@ git push origin main 2>/dev/null || true
 
 # Keep Fleet and approved external skills available locally without committing
 # machine-specific symlinks into the new repository.
-"$ROOT/foundry/ops/scripts/link-project-agent-assets.sh" --skills-only "$NAME"
+"$ROOT/workflows-and-skills/scripts/link-project-agent-assets.sh" --skills-only "$NAME"
 
 echo ""
 echo "2. Scaffold files committed and pushed."

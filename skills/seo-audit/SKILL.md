@@ -157,7 +157,7 @@ Common patterns:
 
 To audit a fleet product, read the production URL from the project's
 `PROJECT_STATUS.md` (Products section) or from the canonical
-`foundry/ops/config/projects.json` manifest.
+`site-health/apps/backend/config/projects.json` manifest.
 
 To audit all fleet products' main pages:
 

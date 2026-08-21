@@ -20,26 +20,16 @@ one you need, not all of them.
 
 ## Combined mode — "full health check"
 
-For "audit everything", "full health check", "fleet health scorecard", one
-product or `--all`:
-
-```bash
-node scripts/site-health-scorecard.mjs --all       # whole registry
-node scripts/site-health-scorecard.mjs --id pace   # one product
-```
-
-This live-probes GEO surfaces (agent-index-audit), reads the latest
-geo-observatory trend classes from the ledger, and folds in the most recent
-seo/content/perf artifacts when present (it does not re-run those heavier audits —
-invoke their subskills for fresh data). Output:
-`docs/site-health-latest.md` — one row per product with a
-worst-problem note. Report the Problems section to the user, not the raw
-table dump.
+For "audit everything", "full health check", or "fleet health scorecard",
+run the relevant subskills above and reconcile their evidence in the private
+Site Health product. There is no active portfolio scorecard script in this
+repository; its former implementation is retained only under
+`preserved/legacy-fleet-tooling/`.
 
 ## Conventions (all subskills)
 
 - Targets resolve via `scripts/lib/registry.mjs`.
-  `projects.json` is the canonical product list; the agent-surfaces registry
-  only supplies per-product indexing metadata and must match it exactly.
+  `../site-health/apps/backend/config/projects.json` is the canonical product
+  list. Optional agent-surface metadata may enrich it but does not replace it.
 - Reports land at `docs/<skill>-latest.md`.
 - Evidence over vibes: cite URLs/numbers for every failing grade.

@@ -6,7 +6,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_FLEET_ROOT = resolve(SCRIPT_DIR, '../../../../..');
+const DEFAULT_FLEET_ROOT = resolve(SCRIPT_DIR, '../../../..');
 const CONFIG_PATTERN = /(^|\/)wrangler\.(toml|json|jsonc)$/;
 const PACKAGE_PATTERN = /(^|\/)package\.json$/;
 const SAFE_ENV_EXAMPLE_PATTERN = /(^|\/)(?:\.env(?:\.[^/]+)?\.example|\.dev\.vars\.example)$/;
@@ -354,7 +354,10 @@ function mergeSurfaces(configs, declared, additional = []) {
 
 export function scanFleetCostSurfaces({ fleetRoot = DEFAULT_FLEET_ROOT, projectId = null } = {}) {
   const root = resolve(fleetRoot);
-  const manifestPath = join(root, 'foundry/ops/config/projects.json');
+  const manifestPath = join(
+    root,
+    'site-health/apps/backend/config/projects.json',
+  );
   if (!existsSync(manifestPath)) {
     throw new Error(`Fleet project registry not found: ${manifestPath}`);
   }

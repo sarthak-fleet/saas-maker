@@ -22,7 +22,7 @@ that) and not a full audit (use `fleet-audit` for that).
 
 ## What it checks
 
-For each live project in `foundry/ops/config/projects.json` with
+For each live project in `site-health/apps/backend/config/projects.json` with
 `deployKind` of `pages` or `worker`:
 
 1. **Pages** — the latest production deployment's source commit matches
@@ -47,16 +47,16 @@ Run the Fleet-owned deploy health script from the Fleet root:
 
 ```bash
 cd ~/Desktop/fleet
-./scripts/deploy-health.sh
+./workflows-and-skills/scripts/deploy-health.sh
 ```
 
 Flags (all optional):
 
 ```bash
-./scripts/deploy-health.sh --no-github      # skip Actions parity
-./scripts/deploy-health.sh --no-cloudflare  # skip Cloudflare parity
-./scripts/deploy-health.sh --no-standards   # skip deploy-entrypoint checks
-./scripts/deploy-health.sh --targets path.json
+./workflows-and-skills/scripts/deploy-health.sh --no-github      # skip Actions parity
+./workflows-and-skills/scripts/deploy-health.sh --no-cloudflare  # skip Cloudflare parity
+./workflows-and-skills/scripts/deploy-health.sh --no-standards   # skip deploy-entrypoint checks
+./workflows-and-skills/scripts/deploy-health.sh --targets path.json
 ```
 
 The script exits non-zero if any `FAIL` is recorded. Requires `gh` (authed),

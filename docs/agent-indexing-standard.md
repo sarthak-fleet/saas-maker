@@ -132,7 +132,7 @@ Do not advertise a site-search action for products that do not provide one.
 |---|---|---|
 | **Text injection** | Astro layouts, HTML files | `--jsonld` inserts marked block before `</head>` |
 | **JSX snippet** | Next.js layouts (.tsx) | `--jsonld-emit` generates snippet; insert by hand |
-| **Manual** | Starlight, no-src sites | Copy JSON from `foundry/ops/out/jsonld/<id>.json` |
+| **Manual** | Starlight, no-src sites | Generate the JSON in the owning product and copy the reviewed artifact. |
 
 ```bash
 # Dry-run (print JSON + would-be action, no writes)

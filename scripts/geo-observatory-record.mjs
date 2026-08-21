@@ -3,16 +3,16 @@
  * GEO Observatory — ledger recorder + report generator.
  *
  * Usage:
- *   node foundry/ops/scripts/geo-observatory-record.mjs <observations.json>
- *   node foundry/ops/scripts/geo-observatory-record.mjs --root-search <observations.json>
- *   node foundry/ops/scripts/geo-observatory-record.mjs --report-only
+ *   node scripts/geo-observatory-record.mjs <observations.json>
+ *   node scripts/geo-observatory-record.mjs --root-search <observations.json>
+ *   node scripts/geo-observatory-record.mjs --report-only
  *
  * observations.json: array of entries:
  *   { "date": "YYYY-MM-DD", "product": "<registry id>", "qid": "<config qid>",
  *     "query": "<exact configured query>", "source": "web-search",
  *     "class": "A"|"B"|"C", "top": ["url", ...], "notes": "..." }
  *
- * Validates against foundry/ops/config/geo-observatory.json, appends to the
+ * Validates against Site Health's GEO configuration, appends to the
  * JSONL ledger (all-or-nothing), regenerates the latest-report doc.
  */
 
@@ -20,21 +20,22 @@ import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { validateRootBrandContract } from '../lib/root-brand-contract.mjs';
+import { validateRootBrandContract } from '../../site-health/apps/backend/lib/root-brand-contract.mjs';
 import {
   activeObservatoryQueries,
   mergeRootSearchQueriesIntoObservatory,
   validateRootSearchQueryContract,
-} from '../lib/root-search-query-contract.mjs';
+} from '../../site-health/apps/backend/lib/root-search-query-contract.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const FLEET_ROOT = resolve(__dirname, '../../..');
-const CONFIG_PATH = join(FLEET_ROOT, 'foundry/ops/config/geo-observatory.json');
-const ROOT_BRANDS_PATH = join(FLEET_ROOT, 'foundry/ops/config/root-brands.json');
-const ROOT_QUERIES_PATH = join(FLEET_ROOT, 'foundry/ops/config/root-search-queries.json');
-const PROJECTS_PATH = join(FLEET_ROOT, 'foundry/ops/config/projects.json');
-const LEDGER_PATH = join(FLEET_ROOT, 'foundry/ops/data/geo-observatory/ledger.jsonl');
-const REPORT_PATH = join(FLEET_ROOT, 'foundry/ops/docs/geo-observatory-latest.md');
+const FLEET_ROOT = resolve(__dirname, '../..');
+const SITE_HEALTH_BACKEND = join(FLEET_ROOT, 'site-health/apps/backend');
+const CONFIG_PATH = join(SITE_HEALTH_BACKEND, 'config/geo-observatory.json');
+const ROOT_BRANDS_PATH = join(SITE_HEALTH_BACKEND, 'config/root-brands.json');
+const ROOT_QUERIES_PATH = join(SITE_HEALTH_BACKEND, 'config/root-search-queries.json');
+const PROJECTS_PATH = join(SITE_HEALTH_BACKEND, 'config/projects.json');
+const LEDGER_PATH = join(SITE_HEALTH_BACKEND, 'data/geo-observatory/ledger.jsonl');
+const REPORT_PATH = join(SITE_HEALTH_BACKEND, 'docs/geo-observatory-latest.md');
 
 const CLASSES = new Set(['A', 'B', 'C']);
 
@@ -205,7 +206,7 @@ export function generateReport(ledger, cfg) {
   const lines = [];
   lines.push('# GEO Observatory — latest report');
   lines.push('');
-  lines.push(`Generated from \`foundry/ops/data/geo-observatory/ledger.jsonl\` ` +
+  lines.push(`Generated from \`apps/backend/data/geo-observatory/ledger.jsonl\` ` +
     `(${ledger.length} observations, ${dates.length} run(s): ${dates.join(', ')}).`);
   lines.push('Rubric: A = own domain top-3 · B = partial page-one visibility · C = absent.');
   lines.push('Do not edit — regenerate via `geo-observatory-record.mjs`.');

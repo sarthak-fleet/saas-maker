@@ -10,9 +10,10 @@ import {
   validateInstalledImpeccable,
 } from '../lib/design-workflow.mjs';
 
-const fleetRoot = path.resolve(import.meta.dirname, '../../..');
-const policyPath = path.join(fleetRoot, 'foundry/ops/config/design-workflow.json');
-const templatePath = path.join(fleetRoot, 'foundry/ops/templates/design-review.json');
+const repositoryRoot = path.resolve(import.meta.dirname, '..');
+const fleetRoot = path.resolve(repositoryRoot, '..');
+const policyPath = path.join(repositoryRoot, 'config/design-workflow.json');
+const templatePath = path.join(repositoryRoot, 'templates/design-review.json');
 const command = process.argv[2] ?? 'self-check';
 const args = parseArgs(process.argv.slice(3));
 

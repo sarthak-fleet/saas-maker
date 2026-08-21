@@ -22,14 +22,16 @@ entrypoint becomes active accidentally.
 
 ## Preserved, noncanonical scripts
 
-Other files below `scripts/` and their supporting `lib/` modules are retained
-because the owner explicitly chose not to delete scripts or skills during the
-workspace split. They include historical Founder Control, growth, marketing,
-analytics, distribution, catalog, and host-automation implementations.
+Historical product and control-plane entrypoints are physically isolated under
+`preserved/legacy-fleet-tooling/` because the owner explicitly chose not to
+delete scripts or skills during the workspace split. The retained tree includes
+former Founder Control, Console, analytics, catalog, and Site Health
+implementations, plus reusable workflows for extracted products.
 
-These files are not advertised as active capabilities and must not be treated
-as current product ownership. In particular, the following retained
-entrypoints have canonical implementations in Site Health:
+These files are not advertised as active capabilities or registered as GitHub
+Actions workflows. They are source-history evidence, not runnable compatibility
+contracts. In particular, the following retained entrypoints have canonical
+implementations in Site Health:
 
 - `ai-visibility-canary.mjs`;
 - `ai-visibility-provider-observations.mjs`;
@@ -37,7 +39,7 @@ entrypoints have canonical implementations in Site Health:
 - `search-console-collect.mjs`.
 
 Site Health owns their live implementation, private catalog, evidence config,
-and data. A future compatibility wrapper may delegate to Site Health, but the
-preserved copies here must not be edited as an alternative source of truth.
+and data. The preserved copies must not be edited as an alternative source of
+truth.
 
 SaaS Maker and Reel Pipeline cleanup is intentionally outside this boundary.

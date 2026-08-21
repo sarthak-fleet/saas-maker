@@ -19,10 +19,10 @@ classify coarsely, record honestly.
 
 1. **Load config**: choose the scope named by the caller.
    - **Scheduled weekly scope**: load only the active queries in
-     `foundry/ops/config/root-search-queries.json`. This is the canonical ten
+     `site-health/apps/backend/config/root-search-queries.json`. This is the canonical ten
      roots × four intents contract; do not add the legacy all-project queries.
    - **Explicit broad/manual scope**: load
-     `foundry/ops/config/geo-observatory.json` plus the root contract.
+     `site-health/apps/backend/config/geo-observatory.json` plus the root contract.
    Never rephrase an existing query (`qid` history breaks); to track something
    new, ADD a query with a new qid and retain the old one as historical.
 2. **Probe**: for each query in the selected scope, run live web search (WebSearch
@@ -56,7 +56,7 @@ classify coarsely, record honestly.
    historical, rewritten, or mixed-date entries. A valid batch regenerates
    `docs/geo-observatory-latest.md`.
 5. **Commit + push** the ledger + report from the fleet root:
-   `git add foundry/ops/data/geo-observatory docs/geo-observatory-latest.md`
+   Commit the changed ledger and report in the `site-health` repository.
    with message `geo-observatory: <date> run (<n> observations)`.
 6. **Report to the user** (or the scheduled-run summary): the Movers section
    verbatim, plus anything that needs a decision (e.g. a collision worsened,

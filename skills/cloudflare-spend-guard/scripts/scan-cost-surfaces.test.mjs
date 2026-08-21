@@ -10,9 +10,9 @@ import { scanFleetCostSurfaces } from './scan-cost-surfaces.mjs';
 test('maps tracked Wrangler bindings as configuration-only exposure', () => {
   const root = mkdtempSync(join(tmpdir(), 'cloudflare-spend-guard-'));
   try {
-    mkdirSync(join(root, 'foundry/ops/config'), { recursive: true });
+    mkdirSync(join(root, 'site-health/apps/backend/config'), { recursive: true });
     mkdirSync(join(root, 'app'), { recursive: true });
-    writeFileSync(join(root, 'foundry/ops/config/projects.json'), JSON.stringify({
+    writeFileSync(join(root, 'site-health/apps/backend/config/projects.json'), JSON.stringify({
       projects: [{
         id: 'example',
         family: 'example',
@@ -56,7 +56,7 @@ test('maps tracked Wrangler bindings as configuration-only exposure', () => {
     execFileSync('git', ['init', '-q'], { cwd: root });
     execFileSync('git', [
       'add',
-      'foundry/ops/config/projects.json',
+      'site-health/apps/backend/config/projects.json',
       'app/.env.example',
       'app/package.json',
       'app/wrangler.jsonc',
@@ -108,8 +108,8 @@ test('maps tracked Wrangler bindings as configuration-only exposure', () => {
 test('rejects an unknown project filter', () => {
   const root = mkdtempSync(join(tmpdir(), 'cloudflare-spend-guard-'));
   try {
-    mkdirSync(join(root, 'foundry/ops/config'), { recursive: true });
-    writeFileSync(join(root, 'foundry/ops/config/projects.json'), '{"projects":[]}');
+    mkdirSync(join(root, 'site-health/apps/backend/config'), { recursive: true });
+    writeFileSync(join(root, 'site-health/apps/backend/config/projects.json'), '{"projects":[]}');
     assert.throws(
       () => scanFleetCostSurfaces({ fleetRoot: root, projectId: 'missing' }),
       /Unknown Fleet project/,
@@ -122,8 +122,8 @@ test('rejects an unknown project filter', () => {
 test('rejects invalid database resource states', () => {
   const root = mkdtempSync(join(tmpdir(), 'cloudflare-spend-guard-'));
   try {
-    mkdirSync(join(root, 'foundry/ops/config'), { recursive: true });
-    writeFileSync(join(root, 'foundry/ops/config/projects.json'), JSON.stringify({
+    mkdirSync(join(root, 'site-health/apps/backend/config'), { recursive: true });
+    writeFileSync(join(root, 'site-health/apps/backend/config/projects.json'), JSON.stringify({
       projects: [{
         id: 'invalid',
         databaseResources: [{ provider: 'turso', name: 'example-db', state: 'retired' }],

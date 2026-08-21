@@ -100,10 +100,10 @@ project_workspace() {
 
   case "$project" in
     fleet-ops)
-      printf '%s\n' "$FLEET_ROOT/foundry/ops"
+      printf '%s\n' "$FLEET_ROOT/workflows-and-skills"
       ;;
     research)
-      printf '%s\n' "$FLEET_ROOT/foundry/ops/agents/research"
+      printf '%s\n' "$FLEET_ROOT/workflows-and-skills/skills/evidence-research"
       ;;
     reel-pipeline)
       printf '%s\n' "$FLEET_ROOT/reel-pipeline"

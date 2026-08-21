@@ -33,6 +33,11 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-08-21 — Physically isolated preserved Console, analytics, catalog, Site
+  Health, and extracted-product workflow sources under
+  `preserved/legacy-fleet-tooling/`. Removed the retired Console from active
+  agent-stack commands, corrected standalone Fleet-root resolution, and kept
+  every historical script and all 44 skills tracked.
 - 2026-08-21 — Completed the standalone capability-catalog boundary: removed
   the retired teammate skill root, made catalog paths repository-relative,
   added execution profiles for all 44 cataloged skills, and added focused
@@ -76,8 +81,8 @@ owned by individual products.
 - Forty-four preserved agent skills with validated provider-neutral execution
   profiles.
 - Nine standalone operator entrypoints exposed through the capability catalog,
-  with the remaining preserved scripts retained as explicitly noncanonical
-  history and still covered by shell and Node syntax validation.
+  with retired product/control-plane sources physically isolated as
+  noncanonical history and still covered by shell and Node syntax validation.
 
 ## Work queue
 

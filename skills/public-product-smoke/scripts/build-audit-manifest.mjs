@@ -5,8 +5,11 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const FLEET_ROOT = resolve(SCRIPT_DIR, '../../../../..');
-const DEFAULT_REGISTRY = resolve(FLEET_ROOT, 'foundry/ops/config/projects.json');
+const FLEET_ROOT = resolve(SCRIPT_DIR, '../../../..');
+const DEFAULT_REGISTRY = resolve(
+  FLEET_ROOT,
+  'site-health/apps/backend/config/projects.json',
+);
 const DEFAULT_POLICY = resolve(FLEET_ROOT, 'AGENTS.md');
 const RETIRED_PATTERN = /\b(retired|dropped|reactivation is required)\b/i;
 export const AUTH_MODELS = new Set([
@@ -96,7 +99,7 @@ export function buildManifest({
 
   return {
     generatedAt: new Date().toISOString(),
-    source: 'foundry/ops/config/projects.json',
+    source: 'site-health/apps/backend/config/projects.json',
     filters: {
       only: [...only],
       excluded: [...explicitExclusions],

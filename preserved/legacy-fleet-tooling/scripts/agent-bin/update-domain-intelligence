@@ -31,4 +31,4 @@ jq -r '.[]' "$DRANK_ROOT/data/fleet-sites.json" | while IFS= read -r domain; do
     --no-suggest --no-crux --no-ahrefs --no-diagnose --no-insight
 done
 
-node "$FLEET_ROOT/foundry/ops/scripts/agent-bin/public-heartbeat.mjs" >/dev/null
+node "$FLEET_ROOT/workflows-and-skills/scripts/agent-bin/public-heartbeat.mjs" >/dev/null

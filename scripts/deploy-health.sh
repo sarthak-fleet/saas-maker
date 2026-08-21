@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(pwd)"
-TARGETS_FILE="foundry/ops/config/projects.json"
+TARGETS_FILE="site-health/apps/backend/config/projects.json"
 CHECK_GITHUB=true
 CHECK_CLOUDFLARE=true
 CHECK_STANDARDS=true
@@ -589,7 +589,7 @@ check_worker_target() {
 check_cloudflare_targets() {
   echo "== Cloudflare Deployments =="
 
-  local automation_registry="$ROOT/foundry/ops/config/automation-registry.json"
+  local automation_registry="$ROOT/workflows-and-skills/config/automation-registry.json"
   local ignored_projects_json="[]"
 
   if ! require_command jq; then

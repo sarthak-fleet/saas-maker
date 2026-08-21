@@ -12,15 +12,15 @@ import { fileURLToPath } from 'node:url';
 import { visibilityProjects } from '../../lib/visibility-projects.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// lib → scripts → ops → foundry → fleet root
+// lib → scripts → workflows-and-skills → fleet root
 const FLEET_ROOT = resolve(__dirname, '../../../..');
 export const REGISTRY_PATH = join(
   FLEET_ROOT,
-  'foundry/ops/config/agent-surfaces-registry.json'
+  'site-health/apps/backend/config/agent-surfaces-registry.json'
 );
 export const PROJECTS_PATH = join(
   FLEET_ROOT,
-  'foundry/ops/config/projects.json'
+  'site-health/apps/backend/config/projects.json'
 );
 
 /**
@@ -37,23 +37,19 @@ export function loadRegistry(
   registryPath = REGISTRY_PATH,
   projectsPath = PROJECTS_PATH
 ) {
-  if (!existsSync(registryPath)) {
-    throw new Error(`Missing agent-surfaces registry at ${registryPath}`);
-  }
   if (!existsSync(projectsPath)) {
     throw new Error(`Missing canonical project catalog at ${projectsPath}`);
   }
 
-  const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
+  const registry = existsSync(registryPath)
+    ? JSON.parse(readFileSync(registryPath, 'utf8'))
+    : { version: 1, products: [] };
   const catalog = JSON.parse(readFileSync(projectsPath, 'utf8'));
   const maintained = visibilityProjects(catalog);
   const metadataById = new Map(
     (registry.products || []).map((product) => [product.id, product])
   );
   const canonicalIds = new Set(maintained.map((project) => project.id));
-  const missing = maintained
-    .filter((project) => !metadataById.has(project.id))
-    .map((project) => project.id);
   const extra = [...metadataById.keys()].filter((id) => !canonicalIds.has(id));
   const duplicateIds = (registry.products || [])
     .map((product) => product.id)
@@ -70,7 +66,6 @@ export function loadRegistry(
   });
 
   const errors = [
-    missing.length ? `missing: ${missing.join(', ')}` : null,
     extra.length ? `extra: ${extra.join(', ')}` : null,
     duplicateIds.length ? `duplicates: ${[...new Set(duplicateIds)].join(', ')}` : null,
     mismatchedUrls.length ? `URL mismatch: ${mismatchedUrls.join(', ')}` : null,
@@ -82,7 +77,7 @@ export function loadRegistry(
   return {
     ...registry,
     products: maintained.map((project) => ({
-      ...metadataById.get(project.id),
+      ...(metadataById.get(project.id) ?? {}),
       id: project.id,
       name:
         metadataById.get(project.id)?.name ??

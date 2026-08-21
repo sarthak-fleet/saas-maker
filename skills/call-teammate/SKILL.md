@@ -36,10 +36,11 @@ Regardless of which teammate you call:
 - **Record the run and sanitized output** through `fleet-skill-run`; the
   scorecard remains the concise routing verdict rather than the raw log store.
 - **Devin is optional/proprietary** — use only when the user explicitly asks for it or confirms the spend/lock-in tradeoff.
-- **Fail over down the chain** if a teammate hits usage/rate limits — see `foundry/ops/teammates/ROSTER.md` for the chain order. Log the switch in `foundry/ops/teammates/SCORECARD.md`.
+- **Fail over intentionally** if a teammate hits usage or rate limits. Record
+  the selected provider and outcome through `fleet-skill-run`.
 - **Don't retry an exhausted teammate** or silently drop the task.
 
-## Roster and outcomes
+## Outcomes
 
-- **Routing:** `foundry/ops/teammates/ROSTER.md` — who is strong at what.
-- **Outcomes:** `foundry/ops/teammates/SCORECARD.md` — append one line per delegation; skim before delegating similar work.
+Use the routing table above and the retained `fleet-skill-run` history. Do not
+create a second operational scorecard in this public repository.

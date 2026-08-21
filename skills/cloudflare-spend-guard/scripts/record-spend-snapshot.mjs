@@ -13,10 +13,10 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
-const fleetRoot = resolve(moduleDir, '../../../../..');
+const fleetRoot = resolve(moduleDir, '../../../..');
 const defaultStateDir = resolve(
   fleetRoot,
-  'foundry/ops/automation/codex-cron/state/spend-guard',
+  '.fleet-local/spend-guard',
 );
 
 const PROVIDERS = new Set(['cloudflare', 'turso']);

@@ -49,5 +49,5 @@ const handler = createAgentSurfaceHandler({ manifest });
 ## Audit
 
 ```bash
-node foundry/ops/skills/agent-ready/scripts/agent-index-audit.mjs --all
+node skills/agent-ready/scripts/agent-index-audit.mjs --all
 ```

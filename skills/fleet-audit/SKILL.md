@@ -15,7 +15,7 @@ Three modes, one skill. The user's question determines which mode to run.
 
 Updates safe repositories, then checks git state, CI signal, and branch status
 across the fleet workspace plus active projects listed in
-`~/Desktop/fleet/README.md`.
+the immediate child repositories under `~/Desktop/fleet`.
 
 ```bash
 bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-health.sh
@@ -23,9 +23,9 @@ bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-health.sh --no-fetch    
 bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-health.sh --only saas-maker,aliveville
 ```
 
-The script reads the project list from the fleet README, so it stays in sync
-automatically, and includes the fleet workspace repository itself. By default
-it fetches each repository and fast-forward-pulls a behind branch only when the
+The script discovers immediate child Git repositories. The Fleet container is
+not itself a repository. By default it fetches each repository and
+fast-forward-pulls a behind branch only when the
 worktree is clean, the branch has an upstream, and there are no local-only
 commits. Dirty, detached, ahead, and diverged repositories are left untouched
 and reported. For each repository it then checks:
@@ -60,7 +60,7 @@ Reads each project's `PROJECT_STATUS.md` for durable current/shipped truth and
 GitHub Issues/pull requests for operational state. `STATUS.md` is legacy and
 must not be treated as a second queue.
 
-Start with `npm run check:projects`. The canonical catalog must include every
+Start by reading `site-health/apps/backend/config/projects.json`. The canonical catalog must include every
 active and inactive checkout, a complete per-project P1/P2/P4/kind/status/deployed/
 ready-to-share classification with dated readiness reasons, and one
 infrastructure row per project. Treat P2 as an issue-driven active pool and
@@ -77,12 +77,13 @@ gh issue list --state open
 gh pr list --state open
 ```
 
-Canonical product domains live in `foundry/ops/config/projects.json` under each
+Canonical product domains live in
+`site-health/apps/backend/config/projects.json` under each
 project's `domains` array — do NOT infer domains from status file prose. Load
 them once and join by project id when reporting live URLs:
 
 ```bash
-python3 -c "import json; d=json.load(open('foundry/ops/config/projects.json')); \
+python3 -c "import json; d=json.load(open('site-health/apps/backend/config/projects.json')); \
 print({p['id']: p.get('domains', []) for p in d['projects']})"
 ```
 
@@ -123,27 +124,18 @@ files.
 
 **Trigger:** "Audit the fleet", "run the fleet audit", "prepare a fleet report", "triage fleet regressions"
 
-Runs the Fleet-owned audit stack from the Fleet root:
+Runs the Git/CI audit from the Fleet root, then routes product-specific site
+evidence through Site Health:
 
 ```bash
 cd ~/Desktop/fleet
-./scripts/git-health.sh --all --no-fetch
-./scripts/deploy-health.sh
-node scripts/cloudflare-resilience-audit.mjs
-npm run check:projects
+bash workflows-and-skills/scripts/fleet-health.sh --no-fetch
+cd site-health && pnpm run check
 ```
 
-Writes to:
-- `.symphony/cloudflare-resilience/latest.md`
-- `.symphony/cloudflare-resilience/latest.json`
-
-Variations:
-
-```bash
-node scripts/cloudflare-resilience-audit.mjs --no-live
-node scripts/site-health-scorecard.mjs --all
-bash scripts/fleet-perf-weekly.sh --runs 3 --concurrency 2
-```
+Use the `site-health` parent skill for fresh SEO, GEO, performance, and public
+journey evidence. Do not revive preserved Console or portfolio scripts from
+Workflows & Skills.
 
 ### How to interpret
 
@@ -180,8 +172,8 @@ failed step before assigning severity.
 ### Workflow
 
 1. Run the Fleet-owned audit stack unless the user asks for a quick pass.
-2. Read `.symphony/cloudflare-resilience/latest.md`.
-3. Summarize: open PRs, failed workflows, failed smoke checks, local failures, perf issues, dirty repos.
+2. Run only the Site Health subskills relevant to the request.
+3. Summarize open PRs, failed workflows, failed checks, performance issues, and dirty repositories.
 4. Record real regressions in the owning repository's GitHub Issues.
 5. Do not auto-merge, deploy, delete Cloudflare projects, rotate secrets, or clean worktrees unless explicitly asked.
 

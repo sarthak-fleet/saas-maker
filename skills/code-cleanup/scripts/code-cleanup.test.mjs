@@ -202,17 +202,17 @@ test('strict CLI exits non-zero after emitting a complete JSON report', (t) => {
 test('Fleet scan uses active registry tiers and deduplicates git roots', (t) => {
   const fleetRoot = mkdtempSync(path.join(tmpdir(), 'dependency-fleet-'));
   t.after(() => rmSync(fleetRoot, { recursive: true, force: true }));
-  const foundry = path.join(fleetRoot, 'foundry');
+  const drank = path.join(fleetRoot, 'drank');
 
   write(
-    path.join(foundry, 'ops/config/projects.json'),
+    path.join(fleetRoot, 'site-health/apps/backend/config/projects.json'),
     JSON.stringify({
       projects: [
         {
-          id: 'fleet-workspace',
+          id: 'drank-docs',
           lifecycle: 'maintained',
           tier: 'active',
-          repo: 'foundry/ops',
+          repo: 'drank',
         },
         {
           id: 'drank',
@@ -241,19 +241,18 @@ test('Fleet scan uses active registry tiers and deduplicates git roots', (t) => 
       ],
     }),
   );
-  write(path.join(foundry, 'package.json'), '{"name":"foundry"}\n');
-  mkdirSync(path.join(foundry, 'helpers/drank'), { recursive: true });
-  runGit(foundry, ['init', '-q']);
-  runGit(foundry, ['config', 'user.email', 'guard@example.test']);
-  runGit(foundry, ['config', 'user.name', 'Dependency Guard']);
-  runGit(foundry, ['add', '.']);
-  runGit(foundry, ['commit', '-qm', 'fixture']);
+  write(path.join(drank, 'package.json'), '{"name":"drank"}\n');
+  runGit(drank, ['init', '-q']);
+  runGit(drank, ['config', 'user.email', 'guard@example.test']);
+  runGit(drank, ['config', 'user.name', 'Dependency Guard']);
+  runGit(drank, ['add', '.']);
+  runGit(drank, ['commit', '-qm', 'fixture']);
 
   const report = checkFleet({ fleetRoot });
   assert.equal(report.summary.repositories, 1);
   assert.deepEqual(report.repositories[0].projectIds, [
     'drank',
-    'fleet-workspace',
+    'drank-docs',
   ]);
   assert.deepEqual(report.skipped.map((item) => item.projectId), [
     'missing-active',
@@ -841,14 +840,18 @@ test('parses repeatable Bundlephobia candidates', () => {
 });
 
 test('Fleet exposes the code cleanup skill and requires it before dependency edits', () => {
-  const fleetRoot = path.resolve(import.meta.dirname, '../../../../..');
+  const fleetRoot = path.resolve(import.meta.dirname, '../../../..');
+  const toolingRoot = path.join(fleetRoot, 'workflows-and-skills');
   const agentStack = readFileSync(
-    path.join(fleetRoot, 'foundry/ops/scripts/agent-stack.sh'),
+    path.join(toolingRoot, 'scripts/agent-stack.sh'),
     'utf8',
   );
-  const rootAgents = readFileSync(path.join(fleetRoot, 'AGENTS.md'), 'utf8');
-  const standards = readFileSync(
-    path.join(fleetRoot, 'foundry/ops/docs/fleet-agent-standards.md'),
+  const toolingAgents = readFileSync(
+    path.join(toolingRoot, 'AGENTS.md'),
+    'utf8',
+  );
+  const skill = readFileSync(
+    path.join(toolingRoot, 'skills/code-cleanup/SKILL.md'),
     'utf8',
   );
 
@@ -856,10 +859,7 @@ test('Fleet exposes the code cleanup skill and requires it before dependency edi
     agentStack,
     /EXPOSED_FLEET_SKILLS=\([\s\S]*code-cleanup/,
   );
-  assert.match(rootAgents, /Use `\$code-cleanup` before dependency manifest/);
-  assert.match(
-    standards,
-    /Bundlephobia only as\s+advisory browser-package evidence/,
-  );
-  assert.match(standards, /Upgrade mode must\s+preview by default/);
+  assert.match(toolingAgents, /Keep each skill self-contained/);
+  assert.match(skill, /Treat it as advisory/);
+  assert.match(skill, /upgrade.*preview until `--apply`/s);
 });

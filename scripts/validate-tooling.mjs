@@ -8,6 +8,12 @@ import { fileURLToPath } from 'node:url';
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillsRoot = join(repositoryRoot, 'skills');
 const scriptsRoot = join(repositoryRoot, 'scripts');
+const preservedScriptsRoot = join(
+  repositoryRoot,
+  'preserved',
+  'legacy-fleet-tooling',
+  'scripts',
+);
 const allowedFrontmatterKeys = new Set([
   'allowed-tools',
   'description',
@@ -85,7 +91,10 @@ function validateSkills() {
 }
 
 function validateScripts() {
-  const files = walk(scriptsRoot);
+  const files = [
+    ...walk(scriptsRoot),
+    ...(existsSync(preservedScriptsRoot) ? walk(preservedScriptsRoot) : []),
+  ];
   const shellScripts = files.filter((file) => file.endsWith('.sh') || readFileSync(file, 'utf8').startsWith('#!/usr/bin/env bash'));
   const nodeScripts = files.filter((file) => file.endsWith('.mjs'));
 

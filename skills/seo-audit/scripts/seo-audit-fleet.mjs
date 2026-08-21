@@ -15,10 +15,10 @@ import { promisify } from 'node:util';
 import { visibilityProjects } from '../../../lib/visibility-projects.mjs';
 
 const execFileAsync = promisify(execFile);
-const fleetRoot = resolve(import.meta.dirname, '../../../../..');
+const fleetRoot = resolve(import.meta.dirname, '../../../..');
 const defaultArtifact = join(
   fleetRoot,
-  'foundry/ops/data/seo-audit/latest.json',
+  'site-health/apps/backend/data/seo-audit/latest.json',
 );
 const auditScript = join(import.meta.dirname, 'seo-audit.sh');
 
@@ -93,7 +93,10 @@ async function main() {
   }
 
   const catalog = JSON.parse(
-    readFileSync(join(fleetRoot, 'foundry/ops/config/projects.json'), 'utf8'),
+    readFileSync(
+      join(fleetRoot, 'site-health/apps/backend/config/projects.json'),
+      'utf8',
+    ),
   );
   const eligible = visibilityProjects(catalog);
   const selected = onlyId

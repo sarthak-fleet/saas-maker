@@ -84,7 +84,7 @@ unredacted invoices.
 
 1. Prefer exact provider resource IDs or names.
 2. Map Workers/Pages names and domains through
-   `foundry/ops/config/projects.json`.
+   `site-health/apps/backend/config/projects.json`.
 3. Map bindings through tracked Wrangler configuration.
 4. Keep shared subscription fees at account level unless the user requests an
    explicit management allocation.

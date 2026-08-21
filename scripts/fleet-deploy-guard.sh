@@ -4,11 +4,11 @@
 # allowing the deploy command to run. Backs the fleet-deploy-guard skill.
 #
 # Usage:
-#   bash foundry/ops/scripts/fleet-deploy-guard.sh <project>
+#   bash scripts/fleet-deploy-guard.sh <project>
 
 set -euo pipefail
 
-ROOT="${FLEET_ROOT_OVERRIDE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)}"
+ROOT="${FLEET_ROOT_OVERRIDE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 FORCE=false
 
 if [[ $# -lt 1 ]]; then
@@ -30,7 +30,7 @@ DIR="$ROOT/$PROJECT"
 PROJECT_DIR="$DIR"
 
 if [[ ! -d "$DIR/.git" ]]; then
-  registry="$ROOT/foundry/ops/config/projects.json"
+  registry="$ROOT/site-health/apps/backend/config/projects.json"
   repo_path=""
   if [[ -d "$ROOT/.git" && -f "$registry" ]] && command -v jq >/dev/null 2>&1; then
     repo_path="$(
@@ -205,7 +205,7 @@ if [[ -z "$cf_target" && "$(command -v node || true)" ]]; then
   done < <(find "$PROJECT_DIR" -maxdepth 2 -name package.json -not -path "$PROJECT_DIR/package.json" -not -path '*/node_modules/*' -print0 2>/dev/null)
 fi
 
-if [[ -z "$cf_target" && -f "$ROOT/foundry/ops/config/projects.json" ]] &&
+if [[ -z "$cf_target" && -f "$ROOT/site-health/apps/backend/config/projects.json" ]] &&
   command -v jq >/dev/null 2>&1; then
   cf_target="$(
     jq -r --arg project "$PROJECT" '
@@ -216,7 +216,7 @@ if [[ -z "$cf_target" && -f "$ROOT/foundry/ops/config/projects.json" ]] &&
         else
           .cfProject // ""
         end
-    ' "$ROOT/foundry/ops/config/projects.json" 2>/dev/null || true
+  ' "$ROOT/site-health/apps/backend/config/projects.json" 2>/dev/null || true
   )"
   [[ -n "$cf_target" ]] && cf_target="$cf_target (registry)"
 fi

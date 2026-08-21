@@ -15,7 +15,7 @@ usage() {
   cat <<'EOF'
 usage: run-codex-cron <job-id> [--dry-run]
 
-Runs one versioned Codex cron job from foundry/ops/automation/codex-cron.
+Runs one versioned Codex cron job from Workflows & Skills automation.
 EOF
 }
 

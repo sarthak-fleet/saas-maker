@@ -29,16 +29,12 @@ Commands:
   install-skills  Link Fleet Ops skills into local agent runtimes.
   install-agents  Register Fleet support projects as OpenClaw agents.
   mobile          Show or configure mobile control surfaces.
-  install-cron    Install Fleet Ops Codex cron jobs.
-  remove-cron     Remove Fleet Ops Codex cron jobs.
-  cron-ui         Render the local Codex cron dashboard.
   notify          Send or inspect a durable Fleet notification.
-  console         Start the Fleet Ops public console.
   check           Validate local OpenClaw, optional Hermes, Telegram, and security state.
-  start           Start OpenClaw, console, notifications, and scheduled work.
-  pause           Stop OpenClaw, console, notifications, and scheduled work.
-  resume          Start OpenClaw, console, notifications, and scheduled work.
-  restart         Restart OpenClaw, the console, notifications, and scheduled work.
+  start           Start OpenClaw and notifications.
+  pause           Stop OpenClaw and notifications.
+  resume          Start OpenClaw and notifications.
+  restart         Restart OpenClaw and notifications.
   status          Show gateway, cron, mobile, and paired-device status.
 EOF
 }
@@ -197,11 +193,7 @@ case "${1:-}" in
   install-skills) install_skills ;;
   install-agents) "$FLEET_OPS_DIR/scripts/agent-bin/setup-openclaw-support-agents" "${@:2}" ;;
   mobile) "$FLEET_OPS_DIR/scripts/agent-bin/mobile-control" "${@:2}" ;;
-  install-cron) "$FLEET_OPS_DIR/scripts/agent-bin/install-codex-cron" ;;
-  remove-cron) "$FLEET_OPS_DIR/scripts/agent-bin/install-codex-cron" --remove ;;
-  cron-ui) "$FLEET_OPS_DIR/scripts/agent-bin/render-codex-cron-ui" ;;
   notify) "$FLEET_OPS_DIR/scripts/agent-bin/fleet-notify" "${@:2}" ;;
-  console) "$FLEET_OPS_DIR/scripts/agent-bin/ops-console" start ;;
   check)
     openclaw config validate
     openclaw plugins doctor
@@ -217,21 +209,15 @@ case "${1:-}" in
     "$FLEET_OPS_DIR/scripts/agent-stack.sh" install-skills
     openclaw plugins enable telegram >/dev/null 2>&1 || true
     openclaw gateway start
-    "$FLEET_OPS_DIR/scripts/agent-bin/ops-console" start
     "$FLEET_OPS_DIR/scripts/agent-bin/fleet-notification-service" start
-    "$FLEET_OPS_DIR/scripts/agent-bin/install-codex-cron"
     ;;
   pause)
     openclaw gateway stop
-    "$FLEET_OPS_DIR/scripts/agent-bin/ops-console" stop
     "$FLEET_OPS_DIR/scripts/agent-bin/fleet-notification-service" stop
-    "$FLEET_OPS_DIR/scripts/agent-bin/install-codex-cron" --remove
     ;;
   restart)
     openclaw gateway restart
-    "$FLEET_OPS_DIR/scripts/agent-bin/ops-console" restart
     "$FLEET_OPS_DIR/scripts/agent-bin/fleet-notification-service" restart
-    "$FLEET_OPS_DIR/scripts/agent-bin/install-codex-cron"
     ;;
   status)
     openclaw status --all
@@ -240,9 +226,7 @@ case "${1:-}" in
       hermes gateway status || true
       hermes status | sed -n '1,120p' || true
     fi
-    openclaw cron status
     openclaw nodes status
-    "$FLEET_OPS_DIR/scripts/agent-bin/ops-console" status
     "$FLEET_OPS_DIR/scripts/agent-bin/fleet-notification-service" status
     "$FLEET_OPS_DIR/scripts/agent-bin/fleet-notify" status
     "$FLEET_OPS_DIR/scripts/agent-bin/mobile-control" status

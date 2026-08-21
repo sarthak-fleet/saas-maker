@@ -2,7 +2,7 @@
 /**
  * Local fleet agent-index auditor (GEO / LLM indexing).
  *
- * Spec: foundry/ops/docs/agent-indexing-standard.md
+ * Spec: docs/agent-indexing-standard.md
  *
  * Usage:
  *   node agent-index-audit.mjs https://rolepatch.com
@@ -37,9 +37,12 @@ import {
 } from '../../../lib/agent-probe-retry.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// scripts → agent-ready → skills → ops → foundry → fleet root
-const FLEET_ROOT = resolve(__dirname, '../../../../..');
-const INDEXNOW_CONFIG_PATH = join(FLEET_ROOT, 'foundry/ops/config/indexnow.json');
+// scripts → agent-ready → skills → workflows-and-skills → fleet root
+const FLEET_ROOT = resolve(__dirname, '../../../..');
+const INDEXNOW_CONFIG_PATH = join(
+  FLEET_ROOT,
+  'site-health/apps/backend/config/indexnow.json',
+);
 
 const UA = 'fleet-agent-index-audit/2.0 (+https://sassmaker.com)';
 const TIMEOUT_MS = 15_000;
@@ -155,7 +158,7 @@ function printHelp() {
   agent-index-audit.mjs --project <registry-id>
   agent-index-audit.mjs --all [--json | --summary-json | --metric-json]
 
-Targets: metric-eligible visibility projects from foundry/ops/config/projects.json
+Targets: metric-eligible projects from site-health/apps/backend/config/projects.json
 `);
 }
 

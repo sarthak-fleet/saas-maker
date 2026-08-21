@@ -5,7 +5,7 @@ LABEL="com.assistant.fleet-domain-intelligence"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 RUNTIME_DIR="$HOME/Library/Application Support/Fleet Ops/domain-intelligence"
 RUNNER="$RUNTIME_DIR/update-domain-intelligence"
-SOURCE="/Users/assistant/Desktop/fleet/foundry/ops/scripts/agent-bin/update-domain-intelligence"
+SOURCE="$FLEET_ROOT/workflows-and-skills/scripts/agent-bin/update-domain-intelligence"
 LOG_DIR="$HOME/Library/Logs/Fleet Ops"
 DOMAIN="gui/$(id -u)"
 

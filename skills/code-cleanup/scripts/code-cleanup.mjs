@@ -305,7 +305,7 @@ export function checkRepository(options = {}) {
 }
 
 function defaultFleetRoot() {
-  return path.resolve(import.meta.dirname, '../../../../..');
+  return path.resolve(import.meta.dirname, '../../../..');
 }
 
 function addRepositoryCandidate(candidates, candidatePath, projectId, skipped) {
@@ -339,7 +339,7 @@ export function discoverFleetRepositories(fleetRoot = defaultFleetRoot()) {
   const resolvedFleetRoot = path.resolve(fleetRoot);
   const registryPath = path.join(
     resolvedFleetRoot,
-    'foundry/ops/config/projects.json',
+    'site-health/apps/backend/config/projects.json',
   );
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
   if (!Array.isArray(registry.projects)) {
@@ -349,13 +349,6 @@ export function discoverFleetRepositories(fleetRoot = defaultFleetRoot()) {
   const candidates = new Map();
   const skipped = [];
   const excluded = [];
-  addRepositoryCandidate(
-    candidates,
-    path.join(resolvedFleetRoot, 'foundry'),
-    'fleet-workspace',
-    skipped,
-  );
-
   for (const project of registry.projects) {
     if (
       project.lifecycle !== 'maintained'

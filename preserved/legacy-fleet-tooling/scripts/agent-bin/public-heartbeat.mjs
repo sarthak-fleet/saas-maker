@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFile
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const defaultOutput = `${process.env.HOME}/Library/Application Support/Fleet Ops/ops-console/runtime.json`;
+const defaultOutput = `${process.env.HOME}/Library/Application Support/Fleet Ops/heartbeat/runtime.json`;
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const fleetOpsRoot = resolve(scriptDir, "../..");
 const fleetRoot = resolve(fleetOpsRoot, "../..");

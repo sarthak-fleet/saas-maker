@@ -67,7 +67,7 @@ WORKSPACE_ROOT="$(cd "$WORKSPACE_ROOT" 2>/dev/null && pwd)" || {
   echo "workspace root is not a directory: $WORKSPACE_ROOT" >&2
   exit 1
 }
-SYSTEM_RUNNER="$WORKSPACE_ROOT/foundry/ops/scripts/agent-bin/run-system-cron"
+SYSTEM_RUNNER="$WORKSPACE_ROOT/workflows-and-skills/scripts/agent-bin/run-system-cron"
 
 run_crontab() {
   local timeout_seconds="${FLEET_CRONTAB_TIMEOUT_SECONDS:-20}"

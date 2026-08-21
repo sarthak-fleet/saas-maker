@@ -12,15 +12,18 @@ This repository is the canonical home for:
 
 Product-specific scripts remain with their products. Private project catalogs,
 provider inventories, credentials, production configuration, and retained
-operational evidence remain outside this public repository.
+operational evidence remain outside this public repository. Historical source
+that the owner chose to retain is isolated under
+`preserved/legacy-fleet-tooling/` and is not executable product ownership.
 
 Only standalone entrypoints are advertised by the capability catalog. Scripts
 preserved for historical reference remain tracked but noncanonical; see
 [`docs/preserved-tooling.md`](docs/preserved-tooling.md).
 
 The scripts and skills were preserved when Site Health was narrowed to its five
-owner views. Products call reusable workflows here directly. Agent runtimes
-link the relevant skills from this checkout with `scripts/agent-stack.sh`.
+owner views. Products call the current reusable workflows here directly. Agent
+runtimes link the relevant skills from this checkout with
+`scripts/agent-stack.sh`.
 
 Capability discovery is repository-relative and does not require the former
 `foundry/ops` checkout layout:

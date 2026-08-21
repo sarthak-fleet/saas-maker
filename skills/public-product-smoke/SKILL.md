@@ -21,7 +21,7 @@ node skills/public-product-smoke/scripts/build-audit-manifest.mjs \
   --only pace,starboard --format table
 ```
 
-The helper reads `foundry/ops/config/projects.json` plus the root `AGENTS.md`
+The helper reads `site-health/apps/backend/config/projects.json` plus the root `AGENTS.md`
 Out Of Fleet section. Do not silently add projects that the manifest excludes.
 Apply any explicit user exclusions as `--exclude`.
 

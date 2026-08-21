@@ -8,7 +8,7 @@ detect material change, not to reproduce a billing dashboard.
 The recorder defaults to:
 
 ```text
-foundry/ops/automation/codex-cron/state/spend-guard/
+.fleet-local/spend-guard/
   ledger.jsonl
   latest.json
   latest.md

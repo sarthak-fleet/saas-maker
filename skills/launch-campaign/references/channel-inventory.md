@@ -13,7 +13,7 @@ context. It is discovery input, not an executable plan.
 ## Accreditation state
 
 Every channel in the output is annotated from
-`foundry/ops/config/directory-submissions/accreditation-state.json` with
+`.fleet-local/directory-submissions/accreditation-state.json` with
 `currentState`, `verifiedAt`, `stale`, and `blocker`. That file is the durable
 record across campaigns, so verification work is never repeated without reason.
 

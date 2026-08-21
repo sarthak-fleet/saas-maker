@@ -70,7 +70,7 @@ For Fleet-wide work, read:
 
 1. `/Users/sarthak/Desktop/fleet/AGENTS.md`
 2. `/Users/sarthak/Desktop/fleet/PROJECT_STATUS.md`
-3. `foundry/ops/config/projects.json`
+3. `site-health/apps/backend/config/projects.json`
 4. the scoped project's `PROJECT_STATUS.md`
 
 Run the configuration scanner:

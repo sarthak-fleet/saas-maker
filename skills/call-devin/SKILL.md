@@ -54,7 +54,7 @@ DEVIN_ALLOW_SPEND=yes ./scripts/agent-bin/devin-session.mjs create \
 - Treat Devin output as a draft: inspect the diff and rerun checks locally.
 - Route every new CLI delegation through `fleet-skill-run` so sanitized output,
   timing, status, and project scope are retained in the private local history.
-- Log outcomes in `foundry/ops/teammates/SCORECARD.md`.
+- Record outcomes through `fleet-skill-run`; do not maintain a second scorecard.
 
 ## Brief
 

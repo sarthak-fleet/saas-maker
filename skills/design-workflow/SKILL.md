@@ -88,7 +88,7 @@ Before completion:
    command.
 
 The minimum floors come from
-`foundry/ops/config/design-workflow.json`: critique 32/40, audit 16/20, and zero
+`config/design-workflow.json`: critique 32/40, audit 16/20, and zero
 unresolved P0/P1. Scores are floors, not proof of taste.
 
 Detector findings are advisory. Record them, but never rewrite an intentional
