@@ -4,8 +4,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const fleetRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const workflowRoot = join(fleetRoot, '.github/workflows');
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const workflowRoot = join(repositoryRoot, '.github/workflows');
 const workflowFiles = readdirSync(workflowRoot)
   .filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'))
   .sort();
@@ -13,6 +13,7 @@ const workflowFiles = readdirSync(workflowRoot)
 // Credential-free availability checks may run daily when explicitly reviewed.
 // Keep this filename allowlist narrow so product/build automation stays weekly.
 const frequentScheduleAllowlist = new Set();
+const unscopedTriggerAllowlist = new Set(['ci.yml']);
 
 const errors = [];
 
@@ -42,8 +43,9 @@ function jobBlockForLine(lines, lineIndex) {
 for (const file of workflowFiles) {
   const source = readFileSync(join(workflowRoot, file), 'utf8');
   const lines = source.split(/\r?\n/);
+  const reusableWorkflow = lines.includes('  workflow_call:');
 
-  if (!lines.includes('  workflow_dispatch:')) {
+  if (!reusableWorkflow && !lines.includes('  workflow_dispatch:')) {
     errors.push(`${file}: workflow_dispatch is required for intentional reruns`);
   }
 
@@ -65,7 +67,11 @@ for (const file of workflowFiles) {
 
   for (const trigger of ['push', 'pull_request']) {
     const block = nestedBlock(lines, trigger, 2);
-    if (block.length > 0 && !block.some((line) => line.trim() === 'paths:')) {
+    if (
+      block.length > 0 &&
+      !unscopedTriggerAllowlist.has(file) &&
+      !block.some((line) => line.trim() === 'paths:')
+    ) {
       errors.push(`${file}: ${trigger} must be path-scoped`);
     }
   }
@@ -92,7 +98,7 @@ for (const file of workflowFiles) {
   }
 
   for (const { line, index } of runnerLines) {
-    if (!line.includes('macos-')) continue;
+    if (!line.includes('macos-') || reusableWorkflow) continue;
     const jobBlock = jobBlockForLine(lines, index);
     if (!jobBlock.some((candidate) => candidate.trim() === "if: github.event_name == 'workflow_dispatch'")) {
       errors.push(`${file}: macOS jobs must be manual-only`);

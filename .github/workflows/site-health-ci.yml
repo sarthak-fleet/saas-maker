@@ -1,4 +1,4 @@
-name: Dashboard CI
+name: Site Health CI
 
 on:
   workflow_call:
@@ -21,12 +21,12 @@ jobs:
           node-version: "22"
           cache: pnpm
           cache-dependency-path: |
-            foundry/apps/dashboard/web/pnpm-lock.yaml
-            foundry/apps/dashboard/backend/packages/ai-visibility/pnpm-lock.yaml
-      - name: Install Dashboard web dependencies
-        working-directory: foundry/apps/dashboard/web
+            apps/web/pnpm-lock.yaml
+            apps/backend/packages/ai-visibility/pnpm-lock.yaml
+      - name: Install Site Health web dependencies
+        working-directory: apps/web
         run: pnpm install --frozen-lockfile
       - name: Install AI Awareness package dependencies
-        working-directory: foundry/apps/dashboard/backend/packages/ai-visibility
+        working-directory: apps/backend/packages/ai-visibility
         run: pnpm install --frozen-lockfile
       - run: pnpm run check
