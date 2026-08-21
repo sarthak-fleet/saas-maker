@@ -2,8 +2,8 @@
 
 ## Scope
 
-This repository owns public, credential-free Fleet automation. It is also
-mounted as the `foundry/ops/workflows` submodule in the private Fleet workspace.
+This repository owns public, credential-free reusable automation. Product
+repositories call it directly; it is not mounted as a submodule.
 
 **One documented exception:** `update-global-dr.yml` accepts an optional
 `AHREFS_API_KEY` secret (passed by the caller via `secrets: inherit`), because
@@ -14,7 +14,8 @@ the workflow remains functional without it before that date.
 ## Hard boundaries
 
 - Never add a credential that can read a private repository.
-- Never check out `sass-maker/fleet-workspace` from a workflow here.
+- Never explicitly clone or fetch another private repository; reusable CI may
+  use the standard caller checkout supplied by GitHub Actions.
 - Keep the manifest schema allowlisted; reject unknown fields.
 - Persist no response bodies, headers, cookies, environment values, or private
   provider data.

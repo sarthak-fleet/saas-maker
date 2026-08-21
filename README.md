@@ -1,6 +1,6 @@
-# Fleet Workflows
+# Shared Workflows
 
-Public, credential-free automation shared by the Fleet workspace.
+Public, credential-free automation shared by the projects under SaaS Maker.
 
 This repository runs only checks whose source and inputs are already public:
 
@@ -8,21 +8,16 @@ This repository runs only checks whose source and inputs are already public:
 - repeated HTTP header and total-response latency measurements;
 - validation of the allowlisted public site manifest.
 
-It is pinned inside the private
-[`sass-maker/fleet-workspace`](https://github.com/sass-maker/fleet-workspace)
-repository as the `foundry/ops/workflows` git submodule. Fleet remains the
-authority for private registries, product source, deployment state, provider
-inventory, credentials, and production operations.
+Products call reusable workflows here directly. This repository does not own
+their source, deployment state, provider inventory, credentials, or production
+operations.
 
 ## Billing boundary
 
-Standard GitHub-hosted runners are free for workflows executed by this public
-repository. Merely calling a reusable workflow here from a private repository
-does not move billing: GitHub associates reusable-workflow usage with the
-caller.
+GitHub associates reusable-workflow usage with the caller repository.
 
-This repository never accepts a token capable of reading Fleet Workspace and
-never checks out private Fleet source.
+This repository never accepts caller secrets or persists checked-out product
+source.
 
 ## Commands
 
