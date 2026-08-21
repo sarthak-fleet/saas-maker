@@ -11,9 +11,10 @@ SaaS Maker owns only:
 - @saas-maker/portfolio-project-strip;
 - the feedback API, image upload, project keys, narrow auth, and private inbox.
 
-Fleet Workspace owns shared schedules, skills, host automation, registries,
-and portfolio operations. Drank, PSI Swarm, Reel Pipeline, CodeVetter, App
-Health, and Mobile Dev Cockpit remain independent products or repositories.
+Workflows and Skills owns shared schedules, skills, and host automation. Site
+Health owns the private project catalog and portfolio operations. Drank, PSI
+Swarm, Reel Pipeline, CodeVetter, App Health, and Mobile Dev Cockpit remain
+independent products or repositories.
 
 Do not add tasks, workflows, jobs, marketing queues, analytics dashboards,
 observability, App Health, AI gateways, changelogs, testimonials, waitlists,
@@ -33,10 +34,10 @@ pnpm catalog:check-public
 pnpm check:docs
 ~~~
 
-Use PROJECT_STATUS.md for durable status. Public catalogue data is generated in
-Fleet Workspace and consumed here through the checked-in
-catalog/generated/public.json; SaaS Maker never reads private Fleet state at
-runtime.
+Use PROJECT_STATUS.md for durable status. Public catalogue data is projected
+from Site Health's canonical private `projects.json` and consumed here through
+the checked-in `catalog/generated/public.json`; SaaS Maker never reads private
+Fleet state at runtime.
 
 Do not deploy, migrate, publish/deprecate npm packages, change DNS, or archive
 repositories without explicit approval.

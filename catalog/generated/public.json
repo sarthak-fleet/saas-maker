@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedFrom": [
-    "foundry/ops/config/projects.json"
+    "site-health/apps/backend/config/projects.json"
   ],
   "products": [
     {

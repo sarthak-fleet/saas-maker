@@ -15,7 +15,7 @@
     "check:shared-packages": "pnpm --filter @saas-maker/ai-chat-footer --filter @saas-maker/portfolio-project-strip run check",
     "build:showcase": "pnpm -F @saas-maker/landing-page build",
     "build:docs": "pnpm -F @saas-maker/docs-blume build",
-    "deploy:guard": "bash ../foundry/ops/scripts/fleet-deploy-guard.sh saas-maker",
+    "deploy:guard": "bash ../workflows-and-skills/scripts/fleet-deploy-guard.sh saas-maker",
     "deploy:directory": "pnpm deploy:guard && pnpm -F @saas-maker/landing-page run deploy",
     "deploy:docs": "pnpm deploy:guard && pnpm -F @saas-maker/docs-blume run deploy",
     "deploy:api": "pnpm deploy:guard && pnpm -F @saas-maker/api run deploy",

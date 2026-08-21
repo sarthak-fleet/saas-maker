@@ -4,9 +4,9 @@ SaaS Maker owns the public product directory and a small set of reusable,
 backend-free product packages. It also provides the focused Feedback service,
 image upload, project keys, and private feedback inbox.
 
-Fleet Workspace remains the private source of project identity and portfolio
-operations. SaaS Maker consumes only its checked-in, privacy-filtered public
-catalog and never reads private Fleet state at runtime.
+Site Health owns private project identity and portfolio operations. SaaS Maker
+consumes only its checked-in, privacy-filtered public catalog and never reads
+private Fleet state at runtime. Workflows and Skills owns reusable automation.
 
 ## Products
 

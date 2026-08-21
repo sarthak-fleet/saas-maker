@@ -3,10 +3,12 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import { buildPublicProducts } from './public-products.mjs';
+
 const repoRoot = path.resolve(import.meta.dirname, '..');
-const fleetProjection = path.resolve(
+const fleetCatalog = path.resolve(
   process.env.FLEET_PUBLIC_PRODUCTS_PATH ??
-    path.join(repoRoot, '../foundry/ops/public/products.json')
+    path.join(repoRoot, '../site-health/apps/backend/config/projects.json')
 );
 const destination = path.join(repoRoot, 'catalog/generated/public.json');
 
@@ -79,19 +81,22 @@ if (process.argv.includes('--validate')) {
   process.exit(0);
 }
 
-const source = await readFile(fleetProjection, 'utf8');
-const parsed = JSON.parse(source);
-validateProjection(parsed, fleetProjection);
+const catalog = JSON.parse(await readFile(fleetCatalog, 'utf8'));
+const projection = buildPublicProducts(catalog);
+validateProjection(projection, fleetCatalog);
+const rendered = `${JSON.stringify(projection, null, 2)}\n`;
 
 if (process.argv.includes('--check')) {
   const current = await readFile(destination, 'utf8').catch(() => '');
-  if (current !== source) {
+  if (current !== rendered) {
     console.error('SaaS Maker public catalog is stale; run pnpm catalog:sync-public');
     process.exitCode = 1;
   } else {
-    console.log(`SaaS Maker public catalog matches Fleet (${parsed.products.length} products)`);
+    console.log(
+      `SaaS Maker public catalog matches Site Health (${projection.products.length} products)`
+    );
   }
 } else {
-  await writeFile(destination, source);
-  console.log(`Synced ${parsed.products.length} public products from Fleet`);
+  await writeFile(destination, rendered);
+  console.log(`Synced ${projection.products.length} public products from Site Health`);
 }

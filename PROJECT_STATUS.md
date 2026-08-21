@@ -8,15 +8,15 @@ It exists to make the portfolio discoverable, provide one consistent way to
 collect and review customer feedback, and package reusable public-facing
 components without pulling product code into Foundry.
 
-It is not the Fleet control plane. Fleet Workspace is the single source of truth
-for internal project metadata, marketing automation, schedules, skills, Drank,
-Reel Pipeline, PSI Swarm, Mobile Dev Cockpit, and common infrastructure.
-CodeVetter and App Health remain independent.
+It is not the Fleet control plane. Site Health is the source of truth for the
+private project catalog and portfolio health. Workflows and Skills owns shared
+automation and agent skills. Drank, Reel Pipeline, PSI Swarm, Mobile Dev
+Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Dependencies
 
-- Fleet Workspace's allowlisted `foundry/ops/public/products.json`, synchronized
-  into catalog/generated/public.json before a directory release.
+- Site Health's canonical `apps/backend/config/projects.json`, projected into
+  `catalog/generated/public.json` before a directory release.
 - Cloudflare Workers, D1, and R2 for the feedback API and image uploads.
 - better-auth for the private inbox.
 - Blume for package documentation.
@@ -25,6 +25,11 @@ CodeVetter and App Health remain independent.
 
 ## Timeline
 
+- **2026-08-22 — Standalone catalog boundary repaired:** Repointed public
+  catalog synchronization to Site Health's canonical `projects.json`, retained
+  the checked-in privacy-filtered projection for runtime use, and repointed the
+  deploy guard to Workflows and Skills. No deployment or package publication
+  ran.
 - **2026-08-21 — Shared UI packages moved out of Foundry:** Imported
   `@saas-maker/ai-chat-footer` and `@saas-maker/portfolio-project-strip` with
   their component histories, added them to the SaaS Maker workspace and CI,

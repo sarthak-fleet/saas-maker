@@ -11,5 +11,5 @@ or delete a request. The retained statuses support existing data:
 new, acknowledged, investigating, planned, in_progress, resolved, dismissed,
 and on_roadmap.
 
-SaaS Maker does not turn feedback into tasks or marketing work. Fleet Workspace
-or the product repository decides what to do after review.
+SaaS Maker does not turn feedback into tasks or marketing work. The owning
+product repository decides what to do after review.
