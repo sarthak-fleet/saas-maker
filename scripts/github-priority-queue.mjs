@@ -150,7 +150,10 @@ export function planQueueSync(discoveredUrls, projectUrls) {
 }
 
 function runGh(run, args) {
-  const result = run('gh', args, { encoding: 'utf8' });
+  const result = run('gh', args, {
+    encoding: 'utf8',
+    maxBuffer: 16 * 1024 * 1024,
+  });
   if (result.error) throw result.error;
   return {
     ok: result.status === 0,
