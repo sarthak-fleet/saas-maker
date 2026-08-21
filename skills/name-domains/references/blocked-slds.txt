@@ -1,0 +1,23 @@
+# Ultra-generic — skip unless compound suffix present
+app
+web
+get
+try
+my
+the
+go
+hub
+shop
+data
+cloud
+ai
+api
+dev
+mail
+blog
+news
+store
+pay
+bank
+home
+game

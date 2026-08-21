@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "balanced", "reasoning": "medium" },
+  "minimum": { "intelligence": "economy", "reasoning": "low" },
+  "degradation": "allow",
+  "rationale": "This parent routes a request to one health specialist and does not perform the audit itself."
+}

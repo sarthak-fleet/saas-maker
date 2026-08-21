@@ -1,0 +1,30 @@
+# Allow major AI crawlers on public content (agent-indexing standard).
+# Keep private/auth paths Disallow'd below.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Example private blocks (uncomment / adapt per product):
+# User-agent: *
+# Disallow: /dashboard
+# Disallow: /api/
+# Disallow: /login
+
+# Sitemap: https://example.com/sitemap.xml

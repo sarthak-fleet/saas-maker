@@ -1,0 +1,424 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+FLEET_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+RUNTIME_DIR="$HOME/Library/Application Support/Fleet Ops/mobile-control"
+TMATE_SOCKET="$RUNTIME_DIR/tmate.sock"
+TAILSCALE_DIR="$RUNTIME_DIR/tailscale"
+TAILSCALE_SOCKET="$TAILSCALE_DIR/tailscaled.sock"
+TAILSCALE_LABEL="com.assistant.fleet-tailscaled-userspace"
+TAILSCALE_PLIST="$HOME/Library/LaunchAgents/$TAILSCALE_LABEL.plist"
+
+usage() {
+  cat <<'EOF'
+usage: mobile-control <command>
+
+Commands:
+  needs               Print user-provided configuration still required.
+  status              Show Telegram, agent, and private-access state.
+  configure-telegram  Configure OpenClaw Telegram and optional Hermes Telegram.
+  ping                Send a mobile ping through OpenClaw Telegram.
+  start-tailscale     Start Tailscale with SSH enabled; may print a login URL/QR.
+  stop-tailscale      Stop the machine-local userspace Tailscale service.
+  tailscale-status    Show the private tailnet connection state.
+  serve-dashboard     Expose the local dashboard inside the tailnet with Tailscale Serve.
+  emergency-tmate     Start deprecated tmate only for temporary emergency access.
+  stop-tmate          Stop an emergency tmate session.
+
+Telegram configure env:
+  OPENCLAW_TELEGRAM_BOT_TOKEN   BotFather token for the OpenClaw bot.
+  HERMES_TELEGRAM_BOT_TOKEN     Optional BotFather token for the Hermes bot.
+  TELEGRAM_ALLOWED_USERS        Comma-separated numeric Telegram user IDs.
+  TELEGRAM_HOME_CHANNEL         Optional chat/group ID for notification delivery.
+  TELEGRAM_GROUP_ALLOWED_CHATS  Optional comma-separated Telegram group IDs.
+
+If Hermes is enabled, use two different bot tokens. Telegram long polling allows
+one active gateway per bot token; sharing a token between OpenClaw and Hermes
+will flap.
+EOF
+}
+
+has() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+tailscale_cli() {
+  if [ -S "$TAILSCALE_SOCKET" ]; then
+    tailscale --socket "$TAILSCALE_SOCKET" "$@"
+  else
+    tailscale "$@"
+  fi
+}
+
+first_csv() {
+  printf '%s' "$1" | awk -F, '{ gsub(/^ +| +$/, "", $1); print $1 }'
+}
+
+require_env() {
+  local missing=0
+  for name in "$@"; do
+    if [ -z "${!name:-}" ]; then
+      echo "missing: $name"
+      missing=1
+    fi
+  done
+  return "$missing"
+}
+
+set_env_value() {
+  local path="$1"
+  local key="$2"
+  local value="$3"
+  mkdir -p "$(dirname "$path")"
+  touch "$path"
+  chmod 600 "$path"
+  python3 - "$path" "$key" "$value" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+key = sys.argv[2]
+value = sys.argv[3]
+lines = path.read_text(errors="ignore").splitlines() if path.exists() else []
+prefix = f"{key}="
+updated = False
+out = []
+for line in lines:
+    if line.startswith(prefix):
+        out.append(f"{key}={value}")
+        updated = True
+    else:
+        out.append(line)
+if not updated:
+    out.append(f"{key}={value}")
+path.write_text("\n".join(out).rstrip() + "\n")
+PY
+}
+
+env_has_name() {
+  local path="$1"
+  local key="$2"
+  [ -f "$path" ] && grep -q "^$key=" "$path"
+}
+
+print_needs() {
+  cat <<'EOF'
+Needed from you:
+1. Create one Telegram bot in @BotFather for OpenClaw.
+2. Send me or export your numeric Telegram user ID:
+   - get it from @userinfobot, @getidsbot, or by DMing the bot and reading logs.
+3. Optional but recommended: create a private Telegram group/topic for Fleet Ops:
+   - add the OpenClaw bot;
+   - disable BotFather privacy mode or make the bots admins;
+   - provide the negative group chat ID, e.g. -1001234567890.
+4. Log this Mac and your phone into the same Tailscale tailnet.
+5. In Tailscale admin, allow Tailscale SSH from your user to this Mac.
+6. Install a mobile SSH client if you want terminal control:
+   - Termius, Blink Shell, Prompt, iSH, or any SSH client works with Tailscale SSH.
+7. Optional Devin API teammate:
+   - create a least-privilege Devin service user;
+   - export DEVIN_API_KEY and DEVIN_ORG_ID only when using the adapter;
+   - set DEVIN_ALLOW_SPEND=yes only for an explicitly approved session.
+
+Then run, without pasting secrets into git:
+
+  export OPENCLAW_TELEGRAM_BOT_TOKEN='...'
+  export TELEGRAM_ALLOWED_USERS='123456789'
+  export TELEGRAM_HOME_CHANNEL='123456789'
+  # optional: export HERMES_TELEGRAM_BOT_TOKEN='...'
+  # optional: export TELEGRAM_GROUP_ALLOWED_CHATS='-1001234567890'
+  ./foundry/ops/scripts/agent-bin/mobile-control configure-telegram
+
+EOF
+}
+
+configure_telegram() {
+  require_env OPENCLAW_TELEGRAM_BOT_TOKEN TELEGRAM_ALLOWED_USERS || {
+    print_needs
+    exit 2
+  }
+
+  if [ -n "${HERMES_TELEGRAM_BOT_TOKEN:-}" ] && [ "$OPENCLAW_TELEGRAM_BOT_TOKEN" = "$HERMES_TELEGRAM_BOT_TOKEN" ]; then
+    echo "Refusing to use the same Telegram bot token for both OpenClaw and Hermes."
+    echo "Create two bots in @BotFather so both gateways can run without polling conflicts."
+    exit 2
+  fi
+
+  local owner
+  owner="$(first_csv "$TELEGRAM_ALLOWED_USERS")"
+
+  if has openclaw; then
+    openclaw plugins enable telegram >/dev/null 2>&1 || true
+    openclaw exec-policy preset yolo >/dev/null
+    openclaw config unset channels.telegram.tokenFile >/dev/null 2>&1 || true
+    openclaw channels add --channel telegram --token "$OPENCLAW_TELEGRAM_BOT_TOKEN"
+    python3 - "$TELEGRAM_ALLOWED_USERS" "$owner" "${TELEGRAM_GROUP_ALLOWED_CHATS:-}" <<'PY' | openclaw config patch --stdin
+import json
+import sys
+
+users = [item.strip() for item in sys.argv[1].split(",") if item.strip()]
+owner = sys.argv[2]
+groups = [item.strip() for item in sys.argv[3].split(",") if item.strip()] if len(sys.argv) > 3 else []
+telegram = {
+    "enabled": True,
+    "dmPolicy": "allowlist",
+    "allowFrom": users,
+    "groupPolicy": "allowlist",
+}
+if groups:
+    telegram["groups"] = {group: {"requireMention": True} for group in groups}
+patch = {
+    "channels": {"telegram": telegram},
+    "commands": {"ownerAllowFrom": [f"telegram:{owner}"]},
+}
+print(json.dumps(patch))
+PY
+    openclaw gateway restart || openclaw gateway start || true
+    openclaw agents bind --agent fleet-ops --bind telegram:default >/dev/null 2>&1 || true
+  fi
+
+  if has hermes && [ -n "${HERMES_TELEGRAM_BOT_TOKEN:-}" ]; then
+    local hermes_env
+    hermes_env="$(hermes config env-path)"
+    set_env_value "$hermes_env" TELEGRAM_BOT_TOKEN "$HERMES_TELEGRAM_BOT_TOKEN"
+    set_env_value "$hermes_env" TELEGRAM_ALLOWED_USERS "$TELEGRAM_ALLOWED_USERS"
+    if [ -n "${TELEGRAM_HOME_CHANNEL:-}" ]; then
+      set_env_value "$hermes_env" TELEGRAM_HOME_CHANNEL "$TELEGRAM_HOME_CHANNEL"
+    fi
+    if [ -n "${TELEGRAM_GROUP_ALLOWED_CHATS:-}" ]; then
+      set_env_value "$hermes_env" TELEGRAM_GROUP_ALLOWED_CHATS "$TELEGRAM_GROUP_ALLOWED_CHATS"
+    fi
+    hermes gateway install --start-now --start-on-login || hermes gateway start || true
+    hermes gateway restart || true
+  fi
+
+  local notification_env="$HOME/Library/Application Support/Fleet Ops/notifications/env"
+  local notification_target="${TELEGRAM_HOME_CHANNEL:-$owner}"
+  set_env_value "$notification_env" OPENCLAW_TELEGRAM_TARGET "$notification_target"
+  if [ -n "${HERMES_TELEGRAM_BOT_TOKEN:-}" ]; then
+    set_env_value "$notification_env" HERMES_TELEGRAM_TARGET "telegram:$notification_target"
+  fi
+
+  echo "Telegram config applied. DM the OpenClaw bot, then run:"
+  echo "  openclaw pairing list telegram"
+  echo "  openclaw pairing approve telegram <CODE>"
+  if [ -n "${HERMES_TELEGRAM_BOT_TOKEN:-}" ]; then
+    echo "If using Hermes, also DM the Hermes bot, then run:"
+    echo "  hermes pairing list"
+    echo "  hermes pairing approve <CODE>"
+  fi
+}
+
+status() {
+  echo "OpenClaw"
+  if has openclaw; then
+    openclaw status | sed -n '1,28p' || true
+    openclaw channels list --all | sed -n '/Telegram/p' || true
+  else
+    echo "  not installed"
+  fi
+
+  echo
+  echo "Hermes"
+  if has hermes; then
+    hermes gateway status || true
+    hermes status | sed -n '/Messaging Platforms/,$p' | sed -n '1,34p' || true
+  else
+    echo "  not installed"
+  fi
+
+  echo
+  echo "Telegram secrets"
+  env_has_name "$HOME/.hermes/.env" TELEGRAM_BOT_TOKEN && echo "  Hermes token: present (optional)" || echo "  Hermes token: not configured (optional)"
+  env_has_name "$HOME/.hermes/.env" TELEGRAM_ALLOWED_USERS && echo "  Hermes allowlist: present (optional)" || echo "  Hermes allowlist: not configured (optional)"
+  openclaw channels list --all 2>/dev/null | sed -n '/Telegram/p' || true
+
+  echo
+  echo "Teammates"
+  if has grok; then
+    grok --version 2>&1 | sed 's/^/  grok: /' | sed -n '1,1p'
+    local grok_models
+    grok_models="$(grok models 2>&1 || true)"
+    if printf '%s' "$grok_models" | grep -qi "not authenticated"; then
+      echo "  grok auth: missing"
+    else
+      echo "  grok auth: ok"
+    fi
+  else
+    echo "  grok: missing"
+  fi
+  if has devin; then
+    devin --version 2>&1 | sed 's/^/  devin: /' | sed -n '1,1p'
+  elif has devin-cli; then
+    devin-cli --version 2>&1 | sed 's/^/  devin-cli: /' | sed -n '1,1p'
+  elif [ -x "$SCRIPT_DIR/devin-session.mjs" ]; then
+    "$SCRIPT_DIR/devin-session.mjs" status 2>&1 | sed 's/^/  devin /'
+  else
+    echo "  devin: missing local CLI"
+  fi
+
+  echo
+  echo "Tailscale"
+  if has tailscale; then
+    tailscale_cli status 2>&1 | sed -n '1,24p' || true
+  else
+    echo "  not installed"
+  fi
+
+  echo
+  echo "Emergency access"
+  "$0" tmate-status || true
+}
+
+ping_mobile() {
+  local message="${*:-Fleet ping: machine is online, dashboard refreshes every minute, and mobile control status is available.}"
+  "$SCRIPT_DIR/fleet-notify" emit \
+    --severity info \
+    --source mobile-control \
+    --title "Fleet ping" \
+    --body "$message" \
+    --channel openclaw-telegram
+}
+
+start_tmate() {
+  if [ "${1:-}" != "--i-understand" ]; then
+    echo "tmate is deprecated and its session links act as credentials."
+    echo "Use Tailscale SSH for normal access. For a temporary emergency session:"
+    echo "  mobile-control emergency-tmate --i-understand"
+    exit 2
+  fi
+  if ! has tmate; then
+    echo "tmate is not installed. Install with: brew install tmate"
+    exit 1
+  fi
+  mkdir -p "$RUNTIME_DIR"
+  if tmate -S "$TMATE_SOCKET" has-session -t fleet >/dev/null 2>&1; then
+    "$0" tmate-status
+    return
+  fi
+  tmate -S "$TMATE_SOCKET" new-session -d -s fleet -c "$FLEET_ROOT"
+  tmate -S "$TMATE_SOCKET" wait tmate-ready
+  "$0" tmate-status
+}
+
+stop_tmate() {
+  if has tmate && [ -S "$TMATE_SOCKET" ]; then
+    tmate -S "$TMATE_SOCKET" kill-session -t fleet >/dev/null 2>&1 || true
+  fi
+}
+
+tmate_status() {
+  if ! has tmate; then
+    echo "  not installed"
+    return 0
+  fi
+  if [ ! -S "$TMATE_SOCKET" ] || ! tmate -S "$TMATE_SOCKET" has-session -t fleet >/dev/null 2>&1; then
+    echo "  inactive"
+    return 0
+  fi
+  echo "  active (deprecated emergency fallback; links intentionally hidden from status)"
+}
+
+print_tmate_links() {
+  tmate_status | grep -q "active" || return 1
+  echo "Temporary credential links:"
+  echo "  ssh: $(tmate -S "$TMATE_SOCKET" display-message -p '#{tmate_ssh}' 2>/dev/null || true)"
+  echo "  web: $(tmate -S "$TMATE_SOCKET" display-message -p '#{tmate_web}' 2>/dev/null || true)"
+  echo "Revoke them with: mobile-control stop-tmate"
+}
+
+start_tailscale() {
+  if ! has tailscale; then
+    echo "Tailscale CLI is not installed."
+    exit 1
+  fi
+  mkdir -p "$TAILSCALE_DIR"
+  if [ -S "$TAILSCALE_SOCKET" ] && ! tailscale --socket "$TAILSCALE_SOCKET" status >/dev/null 2>&1; then
+    rm -f "$TAILSCALE_SOCKET"
+  fi
+  if [ ! -S "$TAILSCALE_SOCKET" ]; then
+    mkdir -p "$HOME/Library/LaunchAgents" "$TAILSCALE_DIR/state"
+    cat > "$TAILSCALE_PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>$TAILSCALE_LABEL</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/tailscaled</string>
+    <string>--tun=userspace-networking</string>
+    <string>--socket</string>
+    <string>$TAILSCALE_SOCKET</string>
+    <string>--statedir</string>
+    <string>$TAILSCALE_DIR/state</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>$TAILSCALE_DIR/tailscaled.log</string>
+  <key>StandardErrorPath</key>
+  <string>$TAILSCALE_DIR/tailscaled.log</string>
+</dict>
+</plist>
+EOF
+    launchctl bootout "gui/$(id -u)" "$TAILSCALE_PLIST" >/dev/null 2>&1 || true
+    launchctl bootstrap "gui/$(id -u)" "$TAILSCALE_PLIST"
+    launchctl enable "gui/$(id -u)/$TAILSCALE_LABEL" >/dev/null 2>&1 || true
+    launchctl kickstart -k "gui/$(id -u)/$TAILSCALE_LABEL"
+    for _ in {1..20}; do
+      [ -S "$TAILSCALE_SOCKET" ] && break
+      sleep 0.25
+    done
+  fi
+  tailscale --socket "$TAILSCALE_SOCKET" up --ssh --hostname fleet-mac --qr --timeout 60s
+}
+
+stop_tailscale() {
+  launchctl bootout "gui/$(id -u)" "$TAILSCALE_PLIST" >/dev/null 2>&1 || true
+}
+
+tailscale_status() {
+  if ! has tailscale; then
+    echo "not installed"
+    return 1
+  fi
+  tailscale_cli status
+}
+
+serve_dashboard() {
+  if ! has tailscale; then
+    echo "Tailscale CLI is not installed."
+    exit 1
+  fi
+  tailscale_cli serve --bg --yes 4329
+  tailscale_cli serve status
+}
+
+case "${1:-}" in
+  needs|"") print_needs ;;
+  status) status ;;
+  configure-telegram) configure_telegram ;;
+  ping) shift; ping_mobile "$@" ;;
+  emergency-tmate) shift; start_tmate "${1:-}"; print_tmate_links ;;
+  start-tmate) shift; start_tmate "${1:-}"; print_tmate_links ;;
+  stop-tmate) stop_tmate ;;
+  tmate-status) tmate_status ;;
+  start-tailscale) start_tailscale ;;
+  stop-tailscale) stop_tailscale ;;
+  tailscale-status) tailscale_status ;;
+  serve-dashboard) serve_dashboard ;;
+  -h|--help|help) usage ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

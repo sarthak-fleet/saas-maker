@@ -1,0 +1,459 @@
+#!/usr/bin/env node
+
+import { createHash, randomUUID } from "node:crypto";
+import { spawnSync } from "node:child_process";
+import {
+  appendFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  rmSync,
+  statSync,
+  writeFileSync
+} from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const fleetOpsDir = resolve(scriptDir, "../..");
+const configPath = process.env.FLEET_NOTIFY_CONFIG || resolve(fleetOpsDir, "automation/notifications/config.json");
+const stateDir = process.env.FLEET_NOTIFY_STATE_DIR || `${process.env.HOME}/Library/Application Support/Fleet Ops/notifications`;
+const dirs = Object.fromEntries(["pending", "sent", "dead"].map((name) => [name, resolve(stateDir, name)]));
+const receiptsPath = resolve(stateDir, "receipts.ndjson");
+const lockPath = resolve(stateDir, ".drain.lock");
+const emitLockPath = resolve(stateDir, ".emit.lock");
+const severities = new Set(["info", "success", "warning", "critical"]);
+const knownChannels = new Set(["hermes-telegram", "openclaw-telegram", "ntfy"]);
+
+function usage(exitCode = 0) {
+  const output = exitCode ? console.error : console.log;
+  output(`usage: fleet-notify <command> [options]
+
+Commands:
+  emit       Queue an event and attempt immediate delivery.
+  drain      Deliver due events from the durable outbox.
+  status     Show queue and adapter health.
+  list       List recent events without message bodies.
+  test       Queue a warning test notification.
+
+Emit options:
+  --severity <info|success|warning|critical>
+  --source <name> --project <name> --title <text> --body <text>
+  --url <https-url> --dedupe-key <key> --ttl-minutes <minutes>
+  --channel <hermes-telegram|openclaw-telegram|ntfy> (repeatable)
+  --no-drain --json`);
+  process.exit(exitCode);
+}
+
+function ensureState() {
+  mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+  Object.values(dirs).forEach((path) => mkdirSync(path, { recursive: true, mode: 0o700 }));
+}
+
+function loadEnvFile() {
+  const path = resolve(stateDir, "env");
+  if (!existsSync(path)) return;
+  for (const rawLine of readFileSync(path, "utf8").split("\n")) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+    const separator = line.indexOf("=");
+    if (separator < 1) continue;
+    const key = line.slice(0, separator).trim();
+    let value = line.slice(separator + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    if (!(key in process.env)) process.env[key] = value;
+  }
+}
+
+function loadConfig() {
+  const config = JSON.parse(readFileSync(configPath, "utf8"));
+  if (config.schemaVersion !== 1) throw new Error(`unsupported config schema: ${config.schemaVersion}`);
+  return config;
+}
+
+function parseOptions(args) {
+  const options = { channel: [], url: [] };
+  for (let index = 0; index < args.length; index += 1) {
+    const token = args[index];
+    if (token === "--no-drain" || token === "--json") {
+      options[token.slice(2)] = true;
+      continue;
+    }
+    if (!token.startsWith("--") || index + 1 >= args.length) usage(2);
+    const key = token.slice(2);
+    const value = args[++index];
+    if (key === "channel" || key === "url") options[key].push(value);
+    else options[key] = value;
+  }
+  return options;
+}
+
+function atomicWrite(path, value) {
+  const temporary = `${path}.${process.pid}.tmp`;
+  writeFileSync(temporary, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 });
+  renameSync(temporary, path);
+}
+
+function readEvents(dir) {
+  return readdirSync(dir)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => {
+      const path = resolve(dir, name);
+      try {
+        return { path, event: JSON.parse(readFileSync(path, "utf8")) };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean);
+}
+
+function fingerprint(event) {
+  return createHash("sha256")
+    .update(event.dedupeKey || [event.source, event.project, event.severity, event.title].join("|"))
+    .digest("hex");
+}
+
+function isDuplicate(candidate, config) {
+  const cutoff = Date.now() - config.dedupeWindowMinutes * 60_000;
+  return [...readEvents(dirs.pending), ...readEvents(dirs.sent)].some(({ event }) =>
+    event.fingerprint === candidate.fingerprint && Date.parse(event.occurredAt) >= cutoff
+  );
+}
+
+function minutesInTimezone(date, timezone) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return Number(values.hour) * 60 + Number(values.minute);
+}
+
+function quietHoursActive(config, date = new Date()) {
+  const toMinutes = (value) => {
+    const [hour, minute] = value.split(":").map(Number);
+    return hour * 60 + minute;
+  };
+  const now = minutesInTimezone(date, config.timezone);
+  const start = toMinutes(config.quietHours.start);
+  const end = toMinutes(config.quietHours.end);
+  return start < end ? now >= start && now < end : now >= start || now < end;
+}
+
+function nextQuietEnd(config, now = new Date()) {
+  let candidate = new Date(now.getTime() + 60_000);
+  for (let count = 0; count < 24 * 60 + 5 && quietHoursActive(config, candidate); count += 1) {
+    candidate = new Date(candidate.getTime() + 60_000);
+  }
+  return candidate.toISOString();
+}
+
+function formatMessage(event) {
+  const symbol = { info: "INFO", success: "OK", warning: "WARNING", critical: "CRITICAL" }[event.severity];
+  const context = [event.project, event.source].filter(Boolean).join(" / ");
+  return [`[${symbol}] ${event.title}`, context, event.body, ...event.urls].filter(Boolean).join("\n");
+}
+
+function adapterStatus(channel) {
+  if (channel === "hermes-telegram") {
+    const found = spawnSync("/bin/zsh", ["-lc", "command -v hermes"], { stdio: "ignore" }).status === 0;
+    if (!found) return { ready: false, reason: "Hermes CLI is missing" };
+    const configured = spawnSync("hermes", ["send", "--list", "telegram"], { stdio: "ignore", timeout: 5000 }).status === 0;
+    return configured ? { ready: true } : { ready: false, reason: "Hermes Telegram is not configured" };
+  }
+  if (channel === "openclaw-telegram") {
+    return process.env.OPENCLAW_TELEGRAM_TARGET
+      ? { ready: true }
+      : { ready: false, reason: "OPENCLAW_TELEGRAM_TARGET is missing" };
+  }
+  if (channel === "ntfy") {
+    return process.env.FLEET_NTFY_URL
+      ? { ready: true }
+      : { ready: false, reason: "FLEET_NTFY_URL is missing" };
+  }
+  return { ready: false, reason: `unknown channel: ${channel}` };
+}
+
+async function deliver(channel, event) {
+  const status = adapterStatus(channel);
+  if (!status.ready) return { ok: false, blocked: true, error: status.reason };
+  const message = formatMessage(event);
+  if (channel === "hermes-telegram") {
+    const result = spawnSync("hermes", ["send", "--to", process.env.HERMES_TELEGRAM_TARGET || "telegram", "--json", message], {
+      encoding: "utf8",
+      timeout: 30_000
+    });
+    return result.status === 0
+      ? { ok: true, response: (result.stdout || "").trim().slice(0, 500) }
+      : { ok: false, error: (result.stderr || result.stdout || `exit ${result.status}`).trim().slice(0, 500) };
+  }
+  if (channel === "openclaw-telegram") {
+    const result = spawnSync("openclaw", ["message", "send", "--channel", "telegram", "--target", process.env.OPENCLAW_TELEGRAM_TARGET, "--message", message, "--json"], {
+      encoding: "utf8",
+      timeout: 30_000
+    });
+    return result.status === 0
+      ? { ok: true, response: (result.stdout || "").trim().slice(0, 500) }
+      : { ok: false, error: (result.stderr || result.stdout || `exit ${result.status}`).trim().slice(0, 500) };
+  }
+  const headers = {
+    "content-type": "text/plain; charset=utf-8",
+    "x-title": event.title,
+    "x-priority": event.severity === "critical" ? "urgent" : "high",
+    "x-tags": event.severity === "critical" ? "rotating_light" : "warning"
+  };
+  if (process.env.FLEET_NTFY_TOKEN) headers.authorization = `Bearer ${process.env.FLEET_NTFY_TOKEN}`;
+  const response = await fetch(process.env.FLEET_NTFY_URL, { method: "POST", headers, body: message, signal: AbortSignal.timeout(30_000) });
+  return response.ok ? { ok: true, response: `HTTP ${response.status}` } : { ok: false, error: `HTTP ${response.status}` };
+}
+
+function receipt(event, channel, state, detail = {}) {
+  const record = {
+    schemaVersion: 1,
+    eventId: event.id,
+    channel,
+    state,
+    at: new Date().toISOString(),
+    ...detail
+  };
+  appendFileSync(receiptsPath, `${JSON.stringify(record)}\n`, { mode: 0o600 });
+  return record;
+}
+
+function retryDelayMinutes(attempt) {
+  return Math.min(360, 2 ** Math.min(attempt, 8));
+}
+
+function moveEvent(fromPath, targetDir, event) {
+  const target = resolve(targetDir, `${event.id}.json`);
+  atomicWrite(target, event);
+  rmSync(fromPath, { force: true });
+}
+
+async function acquireLock(path, waitMs = 0) {
+  const deadline = Date.now() + waitMs;
+  while (true) {
+    try {
+      mkdirSync(path);
+      writeFileSync(resolve(path, "owner"), `${process.pid}\n`, { mode: 0o600 });
+      return true;
+    } catch {
+      try {
+        if (Date.now() - statSync(path).mtimeMs > 10 * 60_000) {
+          rmSync(path, { recursive: true, force: true });
+          continue;
+        }
+      } catch {}
+      if (Date.now() >= deadline) return false;
+      await new Promise((resolvePromise) => setTimeout(resolvePromise, 50));
+    }
+  }
+}
+
+function prune(config) {
+  const cutoff = Date.now() - config.retentionDays * 86_400_000;
+  for (const dir of [dirs.sent, dirs.dead]) {
+    for (const { path } of readEvents(dir)) {
+      if (statSync(path).mtimeMs < cutoff) rmSync(path, { force: true });
+    }
+  }
+}
+
+async function drain(config, { json = false } = {}) {
+  if (!await acquireLock(lockPath)) {
+    if (!json) console.log("notification drain already running");
+    return { processed: 0, delivered: 0, pending: readEvents(dirs.pending).length, locked: true };
+  }
+  const summary = { processed: 0, delivered: 0, pending: 0, dead: 0, blocked: 0 };
+  try {
+    for (const item of readEvents(dirs.pending).sort((a, b) => a.event.occurredAt.localeCompare(b.event.occurredAt))) {
+      const event = item.event;
+      if (event.nextAttemptAt && Date.parse(event.nextAttemptAt) > Date.now()) continue;
+      if (event.expiresAt && Date.parse(event.expiresAt) <= Date.now()) {
+        event.state = "expired";
+        event.completedAt = new Date().toISOString();
+        receipt(event, "queue", "expired");
+        moveEvent(item.path, dirs.dead, event);
+        summary.dead += 1;
+        continue;
+      }
+      if (event.severity !== "critical" && event.channels.length && quietHoursActive(config)) {
+        event.nextAttemptAt = nextQuietEnd(config);
+        event.state = "quiet-hours";
+        atomicWrite(item.path, event);
+        continue;
+      }
+      summary.processed += 1;
+      for (const channel of event.channels.filter((name) => !event.deliveries[name]?.deliveredAt)) {
+        const previous = event.deliveries[channel] || { attempts: 0 };
+        let result;
+        try {
+          result = await deliver(channel, event);
+        } catch (error) {
+          result = { ok: false, error: error instanceof Error ? error.message : String(error) };
+        }
+        if (result.ok) {
+          event.deliveries[channel] = { ...previous, attempts: previous.attempts + 1, deliveredAt: new Date().toISOString() };
+          receipt(event, channel, "delivered", { response: result.response });
+          summary.delivered += 1;
+        } else if (result.blocked) {
+          event.deliveries[channel] = { ...previous, blockedAt: new Date().toISOString(), error: result.error };
+          event.nextAttemptAt = new Date(Date.now() + 60 * 60_000).toISOString();
+          event.state = "blocked";
+          receipt(event, channel, "blocked", { error: result.error });
+          summary.blocked += 1;
+        } else {
+          const attempts = previous.attempts + 1;
+          event.deliveries[channel] = { ...previous, attempts, lastAttemptAt: new Date().toISOString(), error: result.error };
+          event.nextAttemptAt = new Date(Date.now() + retryDelayMinutes(attempts) * 60_000).toISOString();
+          event.state = "retrying";
+          receipt(event, channel, "failed", { attempt: attempts, error: result.error });
+        }
+      }
+      const deliveries = Object.values(event.deliveries);
+      const complete = event.channels.length === 0 || deliveries.filter((delivery) => delivery.deliveredAt).length === event.channels.length;
+      const exhausted = deliveries.some((delivery) => (delivery.attempts || 0) >= config.maxAttempts && !delivery.deliveredAt);
+      if (complete) {
+        event.state = "delivered";
+        event.completedAt = new Date().toISOString();
+        moveEvent(item.path, dirs.sent, event);
+      } else if (exhausted) {
+        event.state = "dead-letter";
+        event.completedAt = new Date().toISOString();
+        receipt(event, "queue", "dead-letter");
+        moveEvent(item.path, dirs.dead, event);
+        summary.dead += 1;
+      } else {
+        atomicWrite(item.path, event);
+      }
+    }
+    prune(config);
+  } finally {
+    rmSync(lockPath, { recursive: true, force: true });
+  }
+  summary.pending = readEvents(dirs.pending).length;
+  if (!json) console.log(`processed=${summary.processed} delivered=${summary.delivered} pending=${summary.pending} blocked=${summary.blocked} dead=${summary.dead}`);
+  return summary;
+}
+
+function status(config, json = false) {
+  const pending = readEvents(dirs.pending).map(({ event }) => event);
+  const result = {
+    queue: {
+      pending: pending.length,
+      critical: pending.filter((event) => event.severity === "critical").length,
+      blocked: pending.filter((event) => event.state === "blocked").length,
+      sent: readEvents(dirs.sent).length,
+      deadLetter: readEvents(dirs.dead).length
+    },
+    quietHours: {
+      active: quietHoursActive(config),
+      timezone: config.timezone,
+      start: config.quietHours.start,
+      end: config.quietHours.end
+    },
+    adapters: Object.fromEntries([...knownChannels].map((channel) => [channel, adapterStatus(channel)]))
+  };
+  if (json) console.log(JSON.stringify(result));
+  else {
+    console.log(`pending: ${result.queue.pending} (${result.queue.critical} critical, ${result.queue.blocked} blocked)`);
+    console.log(`sent: ${result.queue.sent}`);
+    console.log(`dead letter: ${result.queue.deadLetter}`);
+    console.log(`quiet hours: ${result.quietHours.active ? "active" : "inactive"} (${config.quietHours.start}-${config.quietHours.end} ${config.timezone})`);
+    for (const [channel, adapter] of Object.entries(result.adapters)) console.log(`${channel}: ${adapter.ready ? "ready" : `blocked - ${adapter.reason}`}`);
+  }
+}
+
+function list(limit = 20, json = false) {
+  const items = Object.entries(dirs).flatMap(([bucket, dir]) => readEvents(dir).map(({ event }) => ({
+    id: event.id,
+    state: bucket === "dead" ? event.state : bucket,
+    severity: event.severity,
+    source: event.source,
+    project: event.project,
+    title: event.title,
+    occurredAt: event.occurredAt,
+    channels: event.channels
+  }))).sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).slice(0, limit);
+  if (json) console.log(JSON.stringify(items));
+  else items.forEach((item) => console.log(`${item.occurredAt}  ${item.severity.padEnd(8)}  ${item.state.padEnd(11)}  ${item.project || item.source}: ${item.title}`));
+}
+
+async function main() {
+  ensureState();
+  loadEnvFile();
+  const config = loadConfig();
+  const [command, ...args] = process.argv.slice(2);
+  if (!command || command === "help" || command === "--help" || command === "-h") usage();
+  if (command === "emit" || command === "test") {
+    const options = command === "test"
+      ? { severity: "warning", source: "fleet-notify", title: "Fleet notification test", body: "The durable notification path is working." }
+      : parseOptions(args);
+    const severity = options.severity || "info";
+    if (!severities.has(severity)) throw new Error(`invalid severity: ${severity}`);
+    if (!options.source || !options.title) throw new Error("--source and --title are required");
+    if (options.title.length > 160) throw new Error("--title must be 160 characters or fewer");
+    if ((options.body || "").length > 3000) throw new Error("--body must be 3000 characters or fewer");
+    if ((options.url || []).length > 3) throw new Error("at most three --url values are allowed");
+    const explicitChannels = Boolean(options.channel?.length);
+    const channels = explicitChannels
+      ? options.channel
+      : config.routes[severity].filter((channel) => !config.optionalChannels?.includes(channel) || adapterStatus(channel).ready);
+    for (const channel of channels) if (!knownChannels.has(channel)) throw new Error(`invalid channel: ${channel}`);
+    for (const url of options.url || []) if (!/^https:\/\//.test(url)) throw new Error(`only HTTPS URLs are allowed: ${url}`);
+    const occurredAt = new Date().toISOString();
+    const event = {
+      schemaVersion: 1,
+      id: randomUUID(),
+      source: options.source,
+      project: options.project || null,
+      node: process.env.FLEET_NODE_ID || "primary-mac",
+      severity,
+      title: options.title,
+      body: options.body || "",
+      urls: options.url || [],
+      dedupeKey: options["dedupe-key"] || null,
+      occurredAt,
+      expiresAt: new Date(Date.now() + Number(options["ttl-minutes"] || 7 * 24 * 60) * 60_000).toISOString(),
+      channels,
+      deliveries: {},
+      state: "pending"
+    };
+    event.fingerprint = fingerprint(event);
+    if (!await acquireLock(emitLockPath, 5000)) throw new Error("timed out waiting for the notification outbox");
+    try {
+      if (isDuplicate(event, config)) {
+        const result = { queued: false, duplicate: true, fingerprint: event.fingerprint };
+        console.log(options.json ? JSON.stringify(result) : "duplicate suppressed");
+        return;
+      }
+      atomicWrite(resolve(dirs.pending, `${event.id}.json`), event);
+      receipt(event, "queue", "queued");
+    } finally {
+      rmSync(emitLockPath, { recursive: true, force: true });
+    }
+    if (!options["no-drain"]) await drain(config, { json: Boolean(options.json) });
+    const result = { queued: true, id: event.id, severity, channels };
+    console.log(options.json ? JSON.stringify(result) : `queued ${event.id}`);
+    return;
+  }
+  const options = parseOptions(args);
+  if (command === "drain") {
+    const result = await drain(config, { json: Boolean(options.json) });
+    if (options.json) console.log(JSON.stringify(result));
+  } else if (command === "status") status(config, Boolean(options.json));
+  else if (command === "list") list(Number(options.limit || 20), Boolean(options.json));
+  else usage(2);
+}
+
+main().catch((error) => {
+  console.error(`fleet-notify: ${error instanceof Error ? error.message : String(error)}`);
+  process.exit(1);
+});

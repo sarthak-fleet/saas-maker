@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+CRON_DIR="$FLEET_OPS_DIR/automation/codex-cron"
+JOBS_FILE="$CRON_DIR/jobs.tsv"
+SYSTEM_JOBS_FILE="$CRON_DIR/system-jobs.tsv"
+CLEAN_MAIN_RUNNER="$SCRIPT_DIR/run-clean-main-codex-cron"
+WORKSPACE_RUNNER="$SCRIPT_DIR/run-codex-cron"
+POLICIES_FILE="$FLEET_OPS_DIR/automation/job-policies.json"
+SCHEDULER_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+WORKSPACE_ROOT="$SCHEDULER_ROOT"
+WORKSPACE_ROOT_SET=0
+BEGIN="# BEGIN FLEET OPS CODEX CRON"
+END="# END FLEET OPS CODEX CRON"
+ACTION="install"
+ACTION_SET=0
+
+usage() {
+  cat <<'EOF'
+usage: install-codex-cron [--workspace-root <path>] [--remove|--print|--check]
+
+Installs, removes, or prints the managed Fleet Ops Codex cron block.
+Workspace jobs use the explicit workspace root. Clean-main jobs always use the
+scheduler checkout containing this installer.
+EOF
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --workspace-root)
+      if [ "$#" -lt 2 ]; then
+        echo "--workspace-root requires a path" >&2
+        exit 2
+      fi
+      WORKSPACE_ROOT="$2"
+      WORKSPACE_ROOT_SET=1
+      shift 2
+      ;;
+    --remove|--print|--check)
+      if [ "$ACTION_SET" -eq 1 ]; then
+        echo "only one action may be selected" >&2
+        exit 2
+      fi
+      ACTION="${1#--}"
+      ACTION_SET=1
+      shift
+      ;;
+    --help|-h|help)
+      usage
+      exit 0
+      ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [ "$ACTION" = "install" ] && [ "$WORKSPACE_ROOT_SET" -ne 1 ]; then
+  echo "installation requires --workspace-root so @fleet is never rebound implicitly" >&2
+  exit 2
+fi
+
+WORKSPACE_ROOT="$(cd "$WORKSPACE_ROOT" 2>/dev/null && pwd)" || {
+  echo "workspace root is not a directory: $WORKSPACE_ROOT" >&2
+  exit 1
+}
+SYSTEM_RUNNER="$WORKSPACE_ROOT/foundry/ops/scripts/agent-bin/run-system-cron"
+
+run_crontab() {
+  local timeout_seconds="${FLEET_CRONTAB_TIMEOUT_SECONDS:-20}"
+  local elapsed=0
+  local crontab_pid
+
+  crontab "$@" &
+  crontab_pid=$!
+  while kill -0 "$crontab_pid" 2>/dev/null; do
+    if [ "$elapsed" -ge "$timeout_seconds" ]; then
+      kill "$crontab_pid" 2>/dev/null || true
+      wait "$crontab_pid" 2>/dev/null || true
+      echo "crontab update timed out after ${timeout_seconds}s; schedule was not changed" >&2
+      return 1
+    fi
+    sleep 1
+    elapsed=$((elapsed + 1))
+  done
+  wait "$crontab_pid"
+}
+
+if [ ! -x "$CLEAN_MAIN_RUNNER" ]; then
+  echo "clean-main runner is not executable: $CLEAN_MAIN_RUNNER" >&2
+  exit 1
+fi
+
+if [ ! -x "$WORKSPACE_RUNNER" ]; then
+  echo "workspace runner is not executable: $WORKSPACE_RUNNER" >&2
+  exit 1
+fi
+
+if [ ! -x "$SYSTEM_RUNNER" ]; then
+  echo "system runner is not executable: $SYSTEM_RUNNER" >&2
+  exit 1
+fi
+
+validate_registry() {
+  local failed=0
+  while IFS=$'\t' read -r id enabled cron_expr name cwd model effort prompt_file lock_minutes source execution_checkout; do
+    [ "$id" = "id" ] && continue
+    [ -z "$id" ] && continue
+    case "$execution_checkout" in
+      workspace) checkout_root="$WORKSPACE_ROOT" ;;
+      clean-main) checkout_root="$SCHEDULER_ROOT" ;;
+      *)
+        echo "invalid execution checkout for $id: $execution_checkout" >&2
+        failed=1
+        continue
+        ;;
+    esac
+    resolved_cwd="${cwd/@fleet/$checkout_root}"
+    if [ ! -d "$resolved_cwd" ]; then
+      echo "invalid cwd for $id: $resolved_cwd" >&2
+      failed=1
+    fi
+    if [ ! -f "$CRON_DIR/$prompt_file" ]; then
+      echo "missing prompt for $id: $prompt_file" >&2
+      failed=1
+    fi
+    if ! grep -q '"id"[[:space:]]*:[[:space:]]*"'"$id"'"' "$POLICIES_FILE"; then
+      echo "missing job policy for $id" >&2
+      failed=1
+    fi
+  done < "$JOBS_FILE"
+  while IFS=$'\t' read -r id enabled cron_expr name command; do
+    [ "$id" = "id" ] && continue
+    [ -z "$id" ] && continue
+    local resolved="${command/@fleet/$WORKSPACE_ROOT}"
+    if [ ! -x "$resolved" ]; then
+      echo "missing system command for $id: $resolved" >&2
+      failed=1
+    fi
+    if ! grep -q '"id"[[:space:]]*:[[:space:]]*"'"$id"'"' "$POLICIES_FILE"; then
+      echo "missing job policy for $id" >&2
+      failed=1
+    fi
+  done < "$SYSTEM_JOBS_FILE"
+  return "$failed"
+}
+
+validate_registry
+
+runtime_path="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+for executable in codex node pnpm bun; do
+  resolved="$(command -v "$executable" 2>/dev/null || true)"
+  if [ -n "$resolved" ]; then
+    executable_dir="$(dirname "$resolved")"
+    case ":$runtime_path:" in
+      *":$executable_dir:"*) ;;
+      *) runtime_path="$executable_dir:$runtime_path" ;;
+    esac
+  fi
+done
+
+managed_block="$(
+  {
+    echo "$BEGIN"
+    echo "SHELL=/bin/zsh"
+    echo "PATH=$runtime_path"
+    printf 'FLEET_CRON_WORKSPACE_ROOT=%q\n' "$WORKSPACE_ROOT"
+    awk -F '\t' -v workspace_runner="$WORKSPACE_RUNNER" -v clean_runner="$CLEAN_MAIN_RUNNER" '
+      NR == 1 { next }
+      $2 == "yes" {
+        runner = $11 == "clean-main" ? clean_runner : workspace_runner
+        printf "%s %s %s >/dev/null 2>&1\n", $3, runner, $1
+      }
+    ' "$JOBS_FILE"
+    awk -F '\t' -v runner="$SYSTEM_RUNNER" '
+      NR == 1 { next }
+      $2 == "yes" { printf "%s %s %s >/dev/null 2>&1\n", $3, runner, $1 }
+    ' "$SYSTEM_JOBS_FILE"
+    echo "$END"
+  }
+)"
+
+current="$(mktemp "${TMPDIR:-/tmp}/fleet-cron-current.XXXXXX")"
+next="$(mktemp "${TMPDIR:-/tmp}/fleet-cron-next.XXXXXX")"
+trap 'rm -f "$current" "$next"' EXIT
+
+case "$ACTION" in
+  check) echo "fleet cron definitions are portable and complete"; exit 0 ;;
+  print) printf '%s\n' "$managed_block"; exit 0 ;;
+  remove|install) ;;
+esac
+
+crontab -l > "$current" 2>/dev/null || true
+awk -v begin="$BEGIN" -v end="$END" '
+  $0 == begin { skip=1; next }
+  $0 == end { skip=0; next }
+  skip != 1 { print }
+' "$current" > "$next"
+
+if [ "$ACTION" = "remove" ]; then
+  if [ -s "$next" ]; then
+    run_crontab "$next"
+  else
+    run_crontab -r 2>/dev/null || true
+  fi
+  echo "removed fleet Codex cron jobs"
+  exit 0
+fi
+
+if [ -s "$next" ] && [ "$(tail -c 1 "$next" | wc -l | tr -d ' ')" = "0" ]; then
+  printf '\n' >> "$next"
+fi
+
+printf '%s\n' "$managed_block" >> "$next"
+run_crontab "$next"
+echo "installed fleet Codex cron jobs:"
+awk -F '\t' 'NR > 1 && $2 == "yes" { printf "- %s: %s\n", $1, $3 }' "$JOBS_FILE"
+awk -F '\t' 'NR > 1 && $2 == "yes" { printf "- %s: %s (deterministic)\n", $1, $3 }' "$SYSTEM_JOBS_FILE"

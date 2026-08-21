@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/assistant/memory-docs"
+SITE="$ROOT/site"
+LOGS="$ROOT/logs"
+PORT="${MEMORY_DOCS_PORT:-7077}"
+HOST_LOCAL="127.0.0.1"
+HOST_LAN="0.0.0.0"
+PYTHON="/opt/homebrew/bin/python3"
+CLOUDFLARED="/opt/homebrew/bin/cloudflared"
+SERVER_LABEL="com.assistant.memory-docs-server"
+TUNNEL_LABEL="com.assistant.memory-docs-tunnel"
+SERVER_PLIST="/Users/assistant/Library/LaunchAgents/${SERVER_LABEL}.plist"
+TUNNEL_PLIST="/Users/assistant/Library/LaunchAgents/${TUNNEL_LABEL}.plist"
+DOMAIN="gui/$(id -u)"
+
+mkdir -p "$LOGS"
+
+usage() {
+  cat <<EOF
+usage: memory-docs <command>
+
+Commands:
+  build             Regenerate the static memory documentation site.
+  serve-local       Start local LaunchAgent on 127.0.0.1:${PORT}; safest default.
+  serve-lan         Foreground serve on 0.0.0.0:${PORT}; use only behind firewall/LAN.
+  tunnel            Start local server and public Cloudflare quick tunnel.
+  local-only        Stop tunnel, keep local server running.
+  stop              Stop local server and tunnel LaunchAgents.
+  status            Show process and URL status.
+  open              Open the local docs URL in the browser.
+
+Environment:
+  MEMORY_DOCS_PORT  Override port, default 7077.
+EOF
+}
+
+build() {
+  /Users/assistant/memory-docs/bin/build-memory-site.mjs
+}
+
+bootout() {
+  local label="$1"
+  launchctl bootout "$DOMAIN/$label" >/dev/null 2>&1 || true
+}
+
+bootstrap() {
+  local label="$1"
+  local plist="$2"
+  bootout "$label"
+  launchctl bootstrap "$DOMAIN" "$plist"
+  launchctl enable "$DOMAIN/$label" >/dev/null 2>&1 || true
+}
+
+serve_local() {
+  build
+  bootstrap "$SERVER_LABEL" "$SERVER_PLIST"
+  echo "serving http://${HOST_LOCAL}:${PORT}/"
+}
+
+serve_lan() {
+  build
+  "$PYTHON" -m http.server "$PORT" --bind "$HOST_LAN" --directory "$SITE"
+}
+
+start_tunnel() {
+  if [ ! -x "$CLOUDFLARED" ]; then
+    echo "cloudflared missing; install with: brew install cloudflared" >&2
+    exit 1
+  fi
+  serve_local
+  : > "$LOGS/tunnel.log"
+  : > "$LOGS/tunnel.err.log"
+  bootstrap "$TUNNEL_LABEL" "$TUNNEL_PLIST"
+  echo "starting tunnel; run: memory-docs status"
+}
+
+status() {
+  local url
+  if launchctl print "$DOMAIN/$SERVER_LABEL" >/dev/null 2>&1; then
+    echo "server: running local=http://${HOST_LOCAL}:${PORT}/"
+  else
+    echo "server: stopped"
+  fi
+  if launchctl print "$DOMAIN/$TUNNEL_LABEL" >/dev/null 2>&1; then
+    echo "tunnel: running"
+    url="$(grep -Eho 'https://[-a-zA-Z0-9.]+\.trycloudflare\.com' "$LOGS/tunnel.log" "$LOGS/tunnel.err.log" 2>/dev/null | tail -1 || true)"
+    if [ -n "$url" ]; then
+      echo "public: $url"
+    else
+      echo "public: pending; check $LOGS/tunnel.log"
+    fi
+  else
+    echo "tunnel: stopped"
+  fi
+}
+
+case "${1:-}" in
+  build) build ;;
+  serve-local) serve_local ;;
+  serve-lan) serve_lan ;;
+  tunnel) start_tunnel ;;
+  local-only)
+    serve_local
+    bootout "$TUNNEL_LABEL"
+    echo "tunnel stopped; local server remains active"
+    ;;
+  stop)
+    bootout "$TUNNEL_LABEL"
+    bootout "$SERVER_LABEL"
+    echo "stopped"
+    ;;
+  status) status ;;
+  open) open "http://${HOST_LOCAL}:${PORT}/" ;;
+  ""|-h|--help|help) usage ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

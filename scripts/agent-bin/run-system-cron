@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+FLEET_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+CRON_DIR="$FLEET_OPS_DIR/automation/codex-cron"
+JOBS_FILE="$CRON_DIR/system-jobs.tsv"
+LOG_DIR="$CRON_DIR/logs"
+LOCK_DIR="$CRON_DIR/locks"
+NOTIFY="$SCRIPT_DIR/fleet-notify"
+
+if [ "$#" -ne 1 ]; then
+  echo "usage: run-system-cron <job-id>" >&2
+  exit 2
+fi
+
+job_row="$(awk -F '\t' -v id="$1" 'NR > 1 && $1 == id { print; found=1 } END { if (!found) exit 1 }' "$JOBS_FILE")" || {
+  echo "unknown system job: $1" >&2
+  exit 1
+}
+IFS=$'\t' read -r id enabled cron_expr name command <<<"$job_row"
+[ "$enabled" = "yes" ] || exit 0
+
+command="${command/@fleet/$FLEET_ROOT}"
+if [ ! -x "$command" ]; then
+  echo "missing system command: $command" >&2
+  exit 1
+fi
+
+mkdir -p "$LOG_DIR" "$LOCK_DIR"
+lock_path="$LOCK_DIR/$id.lockdir"
+log_path="$LOG_DIR/$id-$(date +%Y%m%d-%H%M%S).log"
+if ! mkdir "$lock_path" 2>/dev/null; then
+  echo "job already running: $id" | tee -a "$log_path"
+  exit 0
+fi
+trap 'rmdir "$lock_path" 2>/dev/null || true' EXIT INT TERM
+
+set +e
+{
+  echo "job: $name"
+  echo "id: $id"
+  echo "time: $(date +%Y-%m-%dT%H:%M:%S%z)"
+  echo "command: $command"
+  "$command"
+} 2>&1 | tee -a "$log_path"
+job_status="${PIPESTATUS[0]}"
+set -e
+printf 'exit_status: %s\n' "$job_status" >> "$log_path"
+
+if [ -x "$NOTIFY" ]; then
+  if [ "$job_status" -eq 0 ]; then
+    "$NOTIFY" emit --severity success --source system-cron --project "$id" \
+      --title "$name completed" --body "The deterministic Fleet job finished successfully." \
+      --dedupe-key "system-cron:$id:success:$(date +%Y-%m-%d)" >/dev/null 2>&1 || true
+  else
+    "$NOTIFY" emit --severity warning --source system-cron --project "$id" \
+      --title "$name failed" --body "The deterministic Fleet job exited with status $job_status. Check the machine-local cron log." \
+      --dedupe-key "system-cron:$id:failure" >/dev/null 2>&1 || true
+  fi
+fi
+
+exit "$job_status"

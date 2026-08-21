@@ -24,4 +24,6 @@ jobs:
       - name: Validate public manifest
         run: node scripts/audit.mjs --validate-only
       - name: Run tests
-        run: node --test
+        run: node --test test/*.test.mjs
+      - name: Validate scripts and skills
+        run: node scripts/validate-tooling.mjs

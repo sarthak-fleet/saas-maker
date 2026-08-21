@@ -1,19 +1,22 @@
-# Fleet Workflows — PROJECT STATUS
+# Workflows and Skills — PROJECT STATUS
 
 Last updated: 2026-08-21
 
 ## Why / What
 
-Fleet Workflows is the public, credential-free execution boundary for
-automation that needs only public code, public URLs, and sanitized output.
+Workflows and Skills is the public, credential-free source and execution
+boundary for reusable GitHub Actions, Fleet-owned agent skills, and Fleet
+operator scripts.
 
 **Users:** Sarthak and Fleet operators.
 
-**In scope:** Public site manifests, bounded availability checks, repeated HTTP
-latency measurements, reusable workflow examples, and sanitized public reports.
+**In scope:** Reusable workflows, public site checks, Fleet-owned skills,
+operator scripts, reusable libraries and templates, and sanitized public
+reports.
 
-**Out of scope:** Private source checkout, credentials, product CI, deployment,
-provider inventory, private registries, mobile proof, and production changes.
+**Out of scope:** Credentials, private project catalogs, provider inventory,
+retained operational output, production configuration, deploys, and scripts
+owned by individual products.
 
 ## Dependencies
 
@@ -25,11 +28,14 @@ provider inventory, private registries, mobile proof, and production changes.
 
 ### Internal
 
-- Fleet Workspace generates and validates the privacy-allowlisted site manifest.
-- Fleet pins an exact revision at `foundry/ops/workflows`.
+- Dashboard owns the private project catalog consumed by portfolio-aware tools.
+- Product repositories call reusable workflows by an exact revision.
 
 ## Timeline
 
+- 2026-08-21 — Restored all Fleet-owned scripts and skills removed during the
+  Dashboard cleanup into this repository, together with reusable libraries,
+  templates, contracts, syntax validation, and skill packaging validation.
 - 2026-08-21 — Moved the maintained personal habit surface from the Indulge
   compatibility domain to the canonical Habits domain without changing the
   credential-free probe contract or the 31-site scope.
@@ -49,8 +55,8 @@ provider inventory, private registries, mobile proof, and production changes.
 
 ## Products
 
-- `sass-maker/workflows` — public source and GitHub Actions execution.
-- `foundry/ops/workflows` — pinned Fleet Workspace submodule location.
+- `sass-maker/workflows-and-skills` — reusable workflows, skills, scripts, and
+  public automation evidence.
 
 ## Features (shipped)
 
@@ -60,8 +66,10 @@ provider inventory, private registries, mobile proof, and production changes.
 - Availability reports with status and redirect evidence.
 - Repeated header/total-response latency reports with p50 and p90.
 - Read-only pull-request validation and default-branch scheduled evidence.
+- Forty-four preserved and validated Fleet-owned agent skills.
+- Preserved Fleet operator scripts with shell and Node syntax validation.
 
 ## Work queue
 
 Open work is tracked only in
-[GitHub Issues](https://github.com/sass-maker/workflows/issues).
+[GitHub Issues](https://github.com/sass-maker/workflows-and-skills/issues).

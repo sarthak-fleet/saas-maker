@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/Users/assistant/.grok/bin:$PATH"
+
+if ! command -v grok >/dev/null 2>&1; then
+  echo "ask-grok: grok is not installed" >&2
+  exit 127
+fi
+
+if [ "$#" -eq 0 ]; then
+  echo "usage: ask-grok <prompt>" >&2
+  exit 2
+fi
+
+exec grok -p "$*" --output-format plain

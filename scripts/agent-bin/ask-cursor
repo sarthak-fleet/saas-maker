@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CURSOR_AGENT="/Users/assistant/.local/bin/cursor-agent"
+
+if [ ! -x "$CURSOR_AGENT" ]; then
+  echo "ask-cursor: Cursor agent is not installed at $CURSOR_AGENT" >&2
+  exit 127
+fi
+
+if [ "$#" -eq 0 ]; then
+  echo "usage: ask-cursor <prompt>" >&2
+  exit 2
+fi
+
+exec "$CURSOR_AGENT" -p "$*"

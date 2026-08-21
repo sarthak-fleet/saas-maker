@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Inspiration"
+  short_description: "Research, compare, and visualize design directions"
+  default_prompt: "Use $design-inspiration to research references, compare directions, or create a requested visual brand board."

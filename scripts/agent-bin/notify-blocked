@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BODY="${*:-Claude/Codex is blocked and needs input.}"
+
+"$SCRIPT_DIR/fleet-notify" emit \
+  --severity warning \
+  --source terminal-agent \
+  --title "Agent needs help" \
+  --body "$BODY"

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LABEL="com.assistant.fleet-domain-intelligence"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+RUNTIME_DIR="$HOME/Library/Application Support/Fleet Ops/domain-intelligence"
+RUNNER="$RUNTIME_DIR/update-domain-intelligence"
+SOURCE="/Users/assistant/Desktop/fleet/foundry/ops/scripts/agent-bin/update-domain-intelligence"
+LOG_DIR="$HOME/Library/Logs/Fleet Ops"
+DOMAIN="gui/$(id -u)"
+
+install_service() {
+  mkdir -p "$HOME/Library/LaunchAgents" "$RUNTIME_DIR" "$LOG_DIR"
+  cp "$SOURCE" "$RUNNER"
+  chmod 755 "$RUNNER"
+  cat > "$PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>$LABEL</string>
+  <key>ProgramArguments</key><array><string>/bin/zsh</string><string>$RUNNER</string></array>
+  <key>StartCalendarInterval</key><dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>30</integer></dict>
+  <key>StandardOutPath</key><string>$LOG_DIR/domain-intelligence.log</string>
+  <key>StandardErrorPath</key><string>$LOG_DIR/domain-intelligence.error.log</string>
+  <key>WorkingDirectory</key><string>/Users/assistant/Desktop/fleet</string>
+  <key>EnvironmentVariables</key><dict><key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string></dict>
+</dict></plist>
+EOF
+  launchctl bootout "$DOMAIN" "$PLIST" >/dev/null 2>&1 || true
+  launchctl bootstrap "$DOMAIN" "$PLIST"
+  launchctl enable "$DOMAIN/$LABEL" >/dev/null 2>&1 || true
+}
+
+case "${1:-}" in
+  install|start) install_service ;;
+  run) "$SOURCE" ;;
+  status) launchctl print "$DOMAIN/$LABEL" ;;
+  stop) launchctl bootout "$DOMAIN" "$PLIST" >/dev/null 2>&1 || true ;;
+  *) echo "usage: domain-intelligence-service <install|run|status|stop>" >&2; exit 2 ;;
+esac

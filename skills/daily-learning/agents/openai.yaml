@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Learning"
+  short_description: "Create private adaptive 30-minute Fleet learning sessions"
+  default_prompt: "Create a fresh learning session, focused on the requested source when one is named, and return the private session link."

@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+FLEET_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+RUNNER="$SCRIPT_DIR/run-codex-cron"
+LOG_DIR="$FLEET_OPS_DIR/automation/codex-cron/logs"
+NOTIFY="$SCRIPT_DIR/fleet-notify"
+JOB_ID="${1:-unknown}"
+
+preflight_failure() {
+  local reason="$1"
+  local log_path
+
+  mkdir -p "$LOG_DIR"
+  log_path="$LOG_DIR/$JOB_ID-$(date +%Y%m%d-%H%M%S).log"
+  {
+    echo "id: $JOB_ID"
+    echo "time: $(date +%Y-%m-%dT%H:%M:%S%z)"
+    echo "checkout: $FLEET_ROOT"
+    echo "preflight: failed"
+    echo "reason: $reason"
+    echo "exit_status: 1"
+  } | tee -a "$log_path" >&2
+
+  if [ -x "$NOTIFY" ]; then
+    "$NOTIFY" emit --severity warning --source codex-cron --project "$JOB_ID" \
+      --title "$JOB_ID checkout preflight failed" \
+      --body "The scheduler checkout was not clean, current main. Check the machine-local cron log." \
+      --dedupe-key "cron:$JOB_ID:checkout-preflight" >/dev/null 2>&1 || true
+  fi
+  exit 1
+}
+
+if [[ ! "$JOB_ID" =~ ^[a-z0-9][a-z0-9-]{0,63}$ ]]; then
+  JOB_ID="unknown"
+  preflight_failure "invalid job id"
+fi
+
+if [ ! -x "$RUNNER" ]; then
+  preflight_failure "inner runner is missing or not executable"
+fi
+
+if ! git -C "$FLEET_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  preflight_failure "scheduler checkout is not a Git worktree"
+fi
+
+branch="$(git -C "$FLEET_ROOT" branch --show-current)"
+if [ "$branch" != "main" ]; then
+  preflight_failure "scheduler checkout must be on main, found ${branch:-detached HEAD}"
+fi
+
+if [ -n "$(git -C "$FLEET_ROOT" status --porcelain --untracked-files=all)" ]; then
+  preflight_failure "scheduler checkout is dirty"
+fi
+
+if ! git -C "$FLEET_ROOT" fetch --quiet --no-tags origin \
+  refs/heads/main:refs/remotes/origin/main; then
+  preflight_failure "could not fetch origin/main"
+fi
+
+read -r behind ahead < <(
+  git -C "$FLEET_ROOT" rev-list --left-right --count \
+    refs/remotes/origin/main...HEAD
+)
+
+if [ "$ahead" -gt 0 ] && [ "$behind" -gt 0 ]; then
+  preflight_failure "scheduler checkout has diverged from origin/main"
+fi
+
+if [ "$ahead" -gt 0 ]; then
+  preflight_failure "scheduler checkout is ahead of origin/main"
+fi
+
+if [ "$behind" -gt 0 ]; then
+  if ! git -C "$FLEET_ROOT" merge --quiet --ff-only refs/remotes/origin/main; then
+    preflight_failure "scheduler checkout could not fast-forward to origin/main"
+  fi
+fi
+
+head_sha="$(git -C "$FLEET_ROOT" rev-parse HEAD)"
+origin_sha="$(git -C "$FLEET_ROOT" rev-parse refs/remotes/origin/main)"
+if [ "$head_sha" != "$origin_sha" ]; then
+  preflight_failure "scheduler checkout does not match origin/main after sync"
+fi
+
+if [ "$(git -C "$FLEET_ROOT" branch --show-current)" != "main" ] || \
+  [ -n "$(git -C "$FLEET_ROOT" status --porcelain --untracked-files=all)" ]; then
+  preflight_failure "scheduler checkout changed during sync"
+fi
+
+export FLEET_CRON_SOURCE_SHA="$head_sha"
+export FLEET_CRON_CLEAN_MAIN_VERIFIED=1
+export FLEET_CRON_WORKSPACE_ROOT="$FLEET_ROOT"
+exec "$RUNNER" "$@"

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR="$HOME/Library/Application Support/Fleet Ops/control-flow-test"
+
+usage() {
+  echo "usage: control-flow-test <complete|status> <run-id>" >&2
+  exit 2
+}
+
+command="${1:-}"
+run_id="${2:-}"
+
+if [ -z "$run_id" ] || ! [[ "$run_id" =~ ^[a-zA-Z0-9._-]{1,80}$ ]]; then
+  usage
+fi
+
+receipt="$STATE_DIR/$run_id.json"
+
+case "$command" in
+  complete)
+    mkdir -p "$STATE_DIR"
+    temporary="$receipt.$$.tmp"
+    printf '{"schemaVersion":1,"runId":"%s","status":"completed","completedAt":"%s"}\n' \
+      "$run_id" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$temporary"
+    chmod 600 "$temporary"
+    mv "$temporary" "$receipt"
+    printf '{"runId":"%s","status":"completed"}\n' "$run_id"
+    ;;
+  status)
+    if [ ! -f "$receipt" ]; then
+      printf '{"runId":"%s","status":"not-completed"}\n' "$run_id"
+      exit 1
+    fi
+    cat "$receipt"
+    ;;
+  *) usage ;;
+esac

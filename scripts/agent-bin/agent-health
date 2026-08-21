@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -u
+
+export PATH="/Users/assistant/.bun/bin:/Users/assistant/.local/bin:/opt/homebrew/opt/node@22/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
+echo "Codex:"
+if command -v codex >/dev/null 2>&1; then
+  codex --version 2>&1 | sed 's/^/  /'
+else
+  echo "  missing"
+fi
+
+echo "Claude:"
+if command -v claude >/dev/null 2>&1; then
+  claude --version 2>&1 | sed 's/^/  /'
+else
+  echo "  missing"
+fi
+
+echo "Grok:"
+if command -v grok >/dev/null 2>&1; then
+  grok --version 2>&1 | sed 's/^/  /'
+  grok models 2>&1 | sed 's/^/  /'
+else
+  echo "  missing"
+fi
+
+echo "Cursor:"
+if [ -x /Users/assistant/.local/bin/cursor-agent ]; then
+  echo "  installed: /Users/assistant/.local/bin/cursor-agent"
+  if [ -x /opt/homebrew/bin/cursor-agent ]; then
+    echo "  note: Homebrew cursor-agent is installed but currently unusable on this Mac; wrappers use the official install"
+  fi
+  /Users/assistant/.local/bin/cursor-agent status 2>&1 | sed 's/^/  /'
+else
+  echo "  missing"
+fi
+
+echo "GBrain:"
+if command -v gbrain >/dev/null 2>&1; then
+  gbrain --version 2>&1 | sed 's/^/  /'
+  gbrain search "memory hygiene" 2>&1 | head -3 | sed 's/^/  /'
+else
+  echo "  missing"
+fi

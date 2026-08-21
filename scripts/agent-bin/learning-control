@@ -1,0 +1,105 @@
+#!/usr/bin/env node
+
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const stateRoot = process.env.FLEET_LEARNING_STATE_ROOT ||
+  resolve(process.env.HOME || '', 'Library/Application Support/Fleet Ops/learning-sync');
+const statePath = resolve(stateRoot, 'control-state.json');
+const catalogPath = process.env.FLEET_LEARNING_CATALOG ||
+  resolve(stateRoot, 'swe-interview-prep/src/data/learning-sources.json');
+
+function readJson(path, fallback) {
+  if (!existsSync(path)) return fallback;
+  try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return fallback; }
+}
+
+function writeState(state) {
+  mkdirSync(stateRoot, { recursive: true });
+  const temp = `${statePath}.${process.pid}.tmp`;
+  writeFileSync(temp, `${JSON.stringify(state, null, 2)}\n`, { mode: 0o600 });
+  renameSync(temp, statePath);
+}
+
+function state() {
+  return readJson(statePath, { schema: 'fleet.learning-control.v1', sessions: [] });
+}
+
+function catalogStatus() {
+  const catalog = readJson(catalogPath, null);
+  if (!catalog) return { available: false, generatedAt: null, sources: 0, fresh: 0, stale: 0, pending: 0 };
+  const sources = Array.isArray(catalog.sources) ? catalog.sources : [];
+  const count = (value) => sources.filter((source) => source.syncStatus === value).length;
+  return {
+    available: true,
+    generatedAt: catalog.generatedAt || null,
+    sources: sources.length,
+    fresh: count('fresh'),
+    stale: count('stale'),
+    pending: count('pending'),
+  };
+}
+
+function start(source) {
+  const args = source ? [source] : [];
+  const session = JSON.parse(execFileSync(resolve(scriptDir, 'learning-session'), args, {
+    encoding: 'utf8',
+    env: process.env,
+  }));
+  const current = state();
+  current.sessions = [
+    ...current.sessions.filter((entry) => entry.sessionId !== session.sessionId),
+    { ...session, status: 'started', startedAt: new Date().toISOString(), completedAt: null },
+  ].slice(-100);
+  writeState(current);
+  return session;
+}
+
+function status() {
+  const current = state();
+  const sessions = current.sessions || [];
+  return {
+    schema: current.schema,
+    catalog: catalogStatus(),
+    active: sessions.filter((entry) => entry.status === 'started').slice(-10),
+    completedCount: sessions.filter((entry) => entry.status === 'completed').length,
+    latest: sessions.at(-1) || null,
+    learningUrl: 'https://learn.significanthobbies.com/sources',
+  };
+}
+
+function complete(sessionId) {
+  const current = state();
+  const match = current.sessions.find((entry) => entry.sessionId === sessionId);
+  if (!match) throw new Error(`unknown learning session: ${sessionId}`);
+  if (match.status !== 'completed') {
+    match.status = 'completed';
+    match.completedAt = new Date().toISOString();
+    writeState(current);
+  }
+  return match;
+}
+
+const [command = 'status', ...rest] = process.argv.slice(2);
+let result;
+if (command === 'sync') {
+  if (rest.length) throw new Error('usage: learning-control sync');
+  execFileSync(resolve(scriptDir, 'sync-learning-sources'), [], { stdio: 'inherit', env: process.env });
+  result = status();
+} else if (command === 'today' || command === 'start') {
+  if (rest.length > 1) throw new Error(`usage: learning-control ${command} [source]`);
+  result = start(rest[0]);
+} else if (command === 'status') {
+  if (rest.length) throw new Error('usage: learning-control status');
+  result = status();
+} else if (command === 'complete') {
+  if (rest.length !== 1) throw new Error('usage: learning-control complete <session-id>');
+  result = complete(rest[0]);
+} else {
+  throw new Error('usage: learning-control <sync|today|start|status|complete> [source|session-id]');
+}
+
+process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

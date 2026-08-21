@@ -1,0 +1,4 @@
+interface:
+  display_name: "Public Product Smoke"
+  short_description: "Test guest journeys and abuse boundaries safely"
+  default_prompt: "Use $public-product-smoke to test public Fleet journeys, respect each product's auth model, and record naturally observed rate-limit evidence without load testing."

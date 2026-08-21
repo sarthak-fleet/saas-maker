@@ -1,9 +1,10 @@
-# Agent instructions
+# Workflows and Skills agent instructions
 
 ## Scope
 
-This repository owns public, credential-free reusable automation. Product
-repositories call it directly; it is not mounted as a submodule.
+This repository owns public, credential-free reusable automation, Fleet-owned
+agent skills, and operator scripts. Product repositories call workflows
+directly and may link skills from a sibling checkout. It is not a submodule.
 
 **One documented exception:** `update-global-dr.yml` accepts an optional
 `AHREFS_API_KEY` secret (passed by the caller via `secrets: inherit`), because
@@ -20,6 +21,12 @@ the workflow remains functional without it before that date.
 - Persist no response bodies, headers, cookies, environment values, or private
   provider data.
 - Production deploys and provider-authenticated inventory stay out of scope.
+- Never commit private project catalogs, provider inventories, retained skill
+  output, host state, or production configuration.
+- Keep product-specific scripts in their product repositories; do not duplicate
+  them here.
+- Keep each skill self-contained under `skills/<name>/` and run the tooling
+  validator after changing scripts or skills.
 - Use only standard GitHub-hosted runners.
 - Pin third-party actions to full commit SHAs.
 
@@ -27,7 +34,8 @@ the workflow remains functional without it before that date.
 
 ```bash
 node scripts/audit.mjs --validate-only
-node --test
+node --test test/*.test.mjs
+node scripts/validate-tooling.mjs
 node scripts/audit.mjs --mode availability --runs 1
 node scripts/audit.mjs --mode performance --runs 3
 ```

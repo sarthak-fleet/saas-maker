@@ -1,0 +1,10 @@
+# One candidate per line. Optional style after TAB or colon.
+# Styles: compound | portmanteau | metaphor | abstract | descriptive | playful
+
+evidcite	compound
+phytoproof	compound
+remegram	portmanteau
+grafflora	portmanteau
+evinleaf:abstract
+proofgrove:metaphor
+studyforge:metaphor
