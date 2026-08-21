@@ -25,6 +25,11 @@ the workflow remains functional without it before that date.
   output, host state, or production configuration.
 - Keep product-specific scripts in their product repositories; do not duplicate
   them here.
+- Treat scripts listed as preserved in `docs/preserved-tooling.md` as
+  noncanonical history. Do not invoke or extend them as active capabilities.
+- Site Health owns AI visibility, Search Console, and portfolio performance
+  collection. Never update the retained copies here as a second source of
+  truth.
 - Keep each skill self-contained under `skills/<name>/` and run the tooling
   validator after changing scripts or skills.
 - Use only standard GitHub-hosted runners.

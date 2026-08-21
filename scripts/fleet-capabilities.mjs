@@ -46,12 +46,12 @@ Exit codes:
   2  Usage, command, filter, or capability lookup error.
 
 Examples:
-  node foundry/ops/scripts/fleet-capabilities.mjs search "deploy readiness"
-  node foundry/ops/scripts/fleet-capabilities.mjs search browser --type skill --json
-  node foundry/ops/scripts/fleet-capabilities.mjs get skill:fleet-deploy-guard --dense
-  node foundry/ops/scripts/fleet-capabilities.mjs execution skill:launch-campaign --runtime balanced:high
-  node foundry/ops/scripts/fleet-capabilities.mjs context "site health" --dense
-  node foundry/ops/scripts/fleet-capabilities.mjs doctor --json`;
+  node scripts/fleet-capabilities.mjs search "deploy readiness"
+  node scripts/fleet-capabilities.mjs search browser --type skill --json
+  node scripts/fleet-capabilities.mjs get skill:fleet-deploy-guard --dense
+  node scripts/fleet-capabilities.mjs execution skill:launch-campaign --runtime balanced:high
+  node scripts/fleet-capabilities.mjs context "site health" --dense
+  node scripts/fleet-capabilities.mjs doctor --json`;
 
 function readOptionValue(argv, index, errorMessage) {
   const value = argv[index + 1];

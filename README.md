@@ -14,10 +14,20 @@ Product-specific scripts remain with their products. Private project catalogs,
 provider inventories, credentials, production configuration, and retained
 operational evidence remain outside this public repository.
 
-The scripts and skills were preserved from the former Fleet Workspace rather
-than being deleted with the Dashboard product cleanup. Products call reusable
-workflows here directly. Agent runtimes link the relevant skills from this
-checkout with `scripts/agent-stack.sh`.
+Only standalone entrypoints are advertised by the capability catalog. Scripts
+preserved for historical reference remain tracked but noncanonical; see
+[`docs/preserved-tooling.md`](docs/preserved-tooling.md).
+
+The scripts and skills were preserved when Site Health was narrowed to its five
+owner views. Products call reusable workflows here directly. Agent runtimes
+link the relevant skills from this checkout with `scripts/agent-stack.sh`.
+
+Capability discovery is repository-relative and does not require the former
+`foundry/ops` checkout layout:
+
+```bash
+node scripts/fleet-capabilities.mjs doctor --json
+```
 
 ## Public monitoring
 
@@ -48,5 +58,4 @@ granted unless a license file is added through a separate owner decision.
 
 ## Work queue
 
-Use GitHub Issues in the `sass-maker/workflows-and-skills` repository after the
-repository rename is complete.
+Use [GitHub Issues](https://github.com/sass-maker/workflows-and-skills/issues).

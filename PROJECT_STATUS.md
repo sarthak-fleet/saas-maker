@@ -28,11 +28,18 @@ owned by individual products.
 
 ### Internal
 
-- Dashboard owns the private project catalog consumed by portfolio-aware tools.
+- Site Health owns the private project catalog consumed by portfolio-aware tools.
 - Product repositories call reusable workflows by an exact revision.
 
 ## Timeline
 
+- 2026-08-21 — Completed the standalone capability-catalog boundary: removed
+  the retired teammate skill root, made catalog paths repository-relative,
+  added execution profiles for all 44 cataloged skills, and added focused
+  regression coverage. Active standalone entrypoints are now separated from
+  preserved noncanonical Console, marketing, analytics, and Site Health code.
+  Historical Fleet issues were reconciled into this repository's issue
+  tracker; no skills or operator scripts were deleted.
 - 2026-08-21 — Restored all Fleet-owned scripts and skills removed during the
   Dashboard cleanup into this repository, together with reusable libraries,
   templates, contracts, syntax validation, and skill packaging validation.
@@ -66,8 +73,11 @@ owned by individual products.
 - Availability reports with status and redirect evidence.
 - Repeated header/total-response latency reports with p50 and p90.
 - Read-only pull-request validation and default-branch scheduled evidence.
-- Forty-four preserved and validated Fleet-owned agent skills.
-- Preserved Fleet operator scripts with shell and Node syntax validation.
+- Forty-four preserved agent skills with validated provider-neutral execution
+  profiles.
+- Nine standalone operator entrypoints exposed through the capability catalog,
+  with the remaining preserved scripts retained as explicitly noncanonical
+  history and still covered by shell and Node syntax validation.
 
 ## Work queue
 
