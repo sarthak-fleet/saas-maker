@@ -122,21 +122,35 @@ for project in $PROJECTS; do
     if [[ -n "$slug" ]]; then
       # Judge repository CI from pushes to main. Scheduled data refreshes are
       # operational signals and must not replace the product's current CI state.
-      conclusion=$(gh run list -R "$slug" --branch main --event push --limit 1 \
-        --json conclusion -q '.[0].conclusion // "none"' 2>/dev/null || echo "none")
-      case "$conclusion" in
-        success) ci_state="green" ;;
-        failure|cancelled|timed_out|action_required|startup_failure)
-          ci_state="red"
-          ci_red=$((ci_red + 1))
-          notes="${notes:+$notes }CI failing"
-          ;;
-        none|"")
-          ci_state="unknown"
-          ci_unknown=$((ci_unknown + 1))
-          ;;
-        *) ci_state="$conclusion" ;;
-      esac
+      ci_record=$(gh run list -R "$slug" --branch main --event push --limit 1 \
+        --json conclusion,headSha --jq '.[0] | [.conclusion // "none", .headSha // ""] | @tsv' \
+        2>/dev/null || true)
+      read -r conclusion ci_sha <<< "$ci_record"
+      main_sha=$(git -C "$dir" rev-parse origin/main 2>/dev/null || true)
+      if [[ -n "$ci_sha" && -n "$main_sha" && "$ci_sha" != "$main_sha" ]]; then
+        ci_state="unknown"
+        ci_unknown=$((ci_unknown + 1))
+        notes="${notes:+$notes }CI stale"
+      else
+        case "$conclusion" in
+          success) ci_state="green" ;;
+          failure|timed_out|action_required|startup_failure)
+            ci_state="red"
+            ci_red=$((ci_red + 1))
+            notes="${notes:+$notes }CI failing"
+            ;;
+          cancelled)
+            ci_state="unknown"
+            ci_unknown=$((ci_unknown + 1))
+            notes="${notes:+$notes }CI cancelled"
+            ;;
+          none|"")
+            ci_state="unknown"
+            ci_unknown=$((ci_unknown + 1))
+            ;;
+          *) ci_state="$conclusion" ;;
+        esac
+      fi
     else
       ci_unknown=$((ci_unknown + 1))
     fi
