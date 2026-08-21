@@ -11,7 +11,8 @@ Use this skill for Fleet-wide workspace decisions and cross-project maintenance.
 
 1. Read the nearest project `AGENTS.md`.
 2. Read `/Users/sarthak/Desktop/fleet/AGENTS.md` for Fleet-wide policy.
-3. If deeper Fleet policy is needed, read `/Users/sarthak/Desktop/fleet/workflows-and-skills/docs/fleet-agent-standards.md`.
+3. Read this repository's `README.md` and `docs/preserved-tooling.md` before
+   changing shared tooling ownership or reviving preserved legacy scripts.
 
 ## Rules
 
