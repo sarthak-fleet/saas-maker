@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 #
 # Fleet health check — update clean repositories, then check git state, CI
-# signal, and branch status across the fleet workspace and active projects.
+# signal, and branch status across the independent repositories in the Fleet
+# workspace.
 # Backs the fleet-audit skill (health mode).
 #
 # Usage:
-#   bash foundry/ops/scripts/fleet-health.sh
-#   bash foundry/ops/scripts/fleet-health.sh --no-fetch   # skip git fetch/pull
-#   bash foundry/ops/scripts/fleet-health.sh --only aliveville,codevetter
+#   bash scripts/fleet-health.sh
+#   bash scripts/fleet-health.sh --no-fetch   # skip git fetch/pull
+#   bash scripts/fleet-health.sh --only aliveville,codevetter
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FETCH=true
 ONLY=""
 
@@ -47,15 +48,10 @@ else
   PROJECTS=$(get_projects)
 fi
 
-if [[ -z "$ONLY" ]]; then
-  PROJECTS=$(printf '%s\nfleet\n' "$PROJECTS" | sort -u)
-fi
-
 repo_dir_for_project() {
   case "$1" in
     # ai-game was renamed to aliveville; the local checkout retains its old directory name.
     aliveville) printf 'ai-game\n' ;;
-    fleet) printf '.\n' ;;
     tinygpt) printf 'posttrainllm\n' ;;
     *) printf '%s\n' "$1" ;;
   esac
