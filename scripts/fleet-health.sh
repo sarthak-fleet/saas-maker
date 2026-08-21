@@ -120,7 +120,9 @@ for project in $PROJECTS; do
     slug="${slug%.git}"
 
     if [[ -n "$slug" ]]; then
-      conclusion=$(gh run list -R "$slug" --branch main --limit 1 \
+      # Judge repository CI from pushes to main. Scheduled data refreshes are
+      # operational signals and must not replace the product's current CI state.
+      conclusion=$(gh run list -R "$slug" --branch main --event push --limit 1 \
         --json conclusion -q '.[0].conclusion // "none"' 2>/dev/null || echo "none")
       case "$conclusion" in
         success) ci_state="green" ;;
