@@ -9,12 +9,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "hono": "4.12.15",
-    "jose": "6.2.2"
+    "hono": "4.12.15"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20260424.1",
-    "drizzle-kit": "0.31.10",
     "typescript": "6.0.3",
     "wrangler": "4.85.0"
   }
