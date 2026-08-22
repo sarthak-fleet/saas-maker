@@ -39,5 +39,11 @@ from Site Health's canonical private `projects.json` and consumed here through
 the checked-in `catalog/generated/public.json`; SaaS Maker never reads private
 Fleet state at runtime.
 
+The public directory labels each entry's curated `technologies` as “Prominent
+tools.” When a product's material stack changes, update the canonical
+`publicDirectory.projects[<id>].technologies` entry in Site Health and run
+`pnpm catalog:sync-public` here in the same task. Never hand-edit the generated
+catalog or expand this field into a dependency inventory.
+
 Do not deploy, migrate, publish/deprecate npm packages, change DNS, or archive
 repositories without explicit approval.

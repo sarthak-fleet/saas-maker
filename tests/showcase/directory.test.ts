@@ -50,6 +50,7 @@ describe('complete public Fleet directory', () => {
     expect(page).toMatch(/Search name, purpose, stack, or domain/);
     expect(page).toMatch(/First retained commit/);
     expect(page).toMatch(/Latest retained commit/);
+    expect(page).toMatch(/Prominent tools/);
     expect(page).toMatch(/data-directory-filter-return/);
     expect(page).toMatch(/Inventory is not promotion/);
     expect(data).toMatch(/publicCatalog\.directory/);
