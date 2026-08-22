@@ -2,6 +2,7 @@ import publicCatalog from '../../../../catalog/generated/public.json';
 import tokenWorld from './tokenWorld.json';
 import { CHANGELOG } from './changelog';
 import { LEARNINGS } from './learnings';
+import { CORE } from './projects';
 import { PAGED_PRODUCTS, type RegistryProduct } from './registry';
 
 export type PublicRoute = {
@@ -49,34 +50,13 @@ function productMarkdown(product: RegistryProduct): string {
 }
 
 function homeMarkdown(): string {
-  const products = publicCatalog.products
-    .filter((product) => product.id !== 'saas-maker')
-    .flatMap((product) => {
-      const links = product as typeof product & {
-        changelogUrl?: string;
-        roadmapUrl?: string;
-        repositoryUrl?: string;
-      };
-      const lines = [
-        `## ${product.name}`,
-        '',
-        product.description,
-        '',
-        `- Product: ${product.url}`,
-      ];
-      if (links.changelogUrl) lines.push(`- Changelog: ${links.changelogUrl}`);
-      if (links.roadmapUrl) lines.push(`- Roadmap: ${links.roadmapUrl}`);
-      if (links.repositoryUrl) lines.push(`- Source: ${links.repositoryUrl}`);
-      lines.push('');
-      return lines;
-    });
-  const pastProjects = publicCatalog.pastProjects.flatMap((project) => [
-    `## ${project.name}`,
+  const latestLearning = LEARNINGS[0];
+  const featuredProducts = CORE.flatMap((project) => [
+    `### ${project.name}`,
     '',
-    project.description,
+    project.desc,
     '',
-    `- Source: ${project.repositoryUrl}`,
-    '- Lifecycle: past project',
+    `- SaaS Maker profile: ${SITE_URL}${project.href}`,
     '',
   ]);
 
@@ -85,7 +65,7 @@ function homeMarkdown(): string {
     '',
     'Software as a specialized service: a living studio of focused products, generated from Fleet’s privacy-checked public projection.',
     '',
-    '# Tokens Spent for the World',
+    '## Tokens Spent for the World',
     '',
     `${tokenWorld.lifetimeTokens.toLocaleString('en-US')} verified model tokens across ${tokenWorld.projectsContributing} contributing project as of ${tokenWorld.snapshotDate}.`,
     '',
@@ -95,22 +75,32 @@ function homeMarkdown(): string {
     `- Projects contributing: ${tokenWorld.projectsContributing}`,
     `- Coverage: ${tokenWorld.coverage}`,
     '',
-    '# Learnings',
+    '## Products in focus',
     '',
-    ...LEARNINGS.flatMap((learning) => [
-      `## ${learning.title}`,
-      '',
-      learning.description,
-      '',
-      `- Article: ${SITE_URL}${learning.href}`,
-      `- Published: ${learning.publishedAt}`,
-      `- Author: ${learning.author}`,
-      '',
-    ]),
-    ...products,
-    '# Past projects',
+    ...featuredProducts,
+    '## Complete directory',
     '',
-    ...pastProjects,
+    `Current, supporting, parked, and past work is enumerated once at ${SITE_URL}/projects.`,
+    '',
+    `- Human directory: ${SITE_URL}/projects`,
+    `- Agent-readable directory: ${SITE_URL}/projects.md`,
+    `- JSON directory: ${SITE_URL}/projects.json`,
+    '',
+    '## Latest learning',
+    '',
+    `### ${latestLearning.title}`,
+    '',
+    latestLearning.description,
+    '',
+    `- Article: ${SITE_URL}${latestLearning.href}`,
+    `- Published: ${latestLearning.publishedAt}`,
+    `- Author: ${latestLearning.author}`,
+    '',
+    '## Public package',
+    '',
+    '@saas-maker/feedback is a React widget for bugs, feature requests, screenshots, and page-specific feedback.',
+    '',
+    `- Package overview: ${SITE_URL}/#package`,
   ].join('\n');
 }
 

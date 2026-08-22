@@ -55,6 +55,7 @@ local machine state, schedules, private repositories, or operational telemetry.
 - Lead with products, not infrastructure.
 - Show evidence through canonical links rather than invented metrics.
 - Keep the spotlight concise while preserving the complete public catalog.
+- Curate on the homepage; enumerate only in the complete `/projects` register.
 - Let one visual identity carry the directory without merging product brands.
 - Make the same public facts legible to people, search engines, and AI agents.
 

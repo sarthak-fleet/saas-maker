@@ -32,7 +32,8 @@ describe('SaaS Maker public source boundary', () => {
       /PAGED_PRODUCTS = REGISTRY_PRODUCTS\.filter\(\(product\) => product\.id !== 'saas-maker'\)/
     );
     expect(projectsSource).toMatch(/\['personal-website', 'saas-maker'\]\.includes\(product\.id\)/);
-    expect(routesSource).toMatch(/filter\(\(product\) => product\.id !== 'saas-maker'\)/);
+    expect(routesSource).toMatch(/CORE\.flatMap/);
+    expect(routesSource).toMatch(/PAGED_PRODUCTS\.map/);
     expect(navSource).toMatch(/GITHUB_ORG_URL/);
     expect(navSource).toMatch(/Public source index/);
     expect(redirects).toMatch(/^\/p\/saas-maker \/ 301$/m);
@@ -51,5 +52,30 @@ describe('SaaS Maker public source boundary', () => {
     expect(articleMarkdown).toMatch(/## Sources and implementation/);
     expect(articleMarkdown.split(/\s+/u).length).toBeGreaterThan(700);
     expect(articleMarkdown).not.toMatch(/full article is available at/i);
+  });
+
+  it('keeps the homepage curated and reserves full enumeration for /projects', async () => {
+    const [home, fleet, layout, routes, projects] = await Promise.all([
+      readShowcase('src/pages/index.astro'),
+      readShowcase('src/components/Fleet.astro'),
+      readShowcase('src/layouts/Layout.astro'),
+      readShowcase('src/data/publicRoutes.ts'),
+      readShowcase('src/data/projects.ts'),
+    ]);
+
+    expect(home).toMatch(/<Hero \/>/);
+    expect(home).toMatch(/SaaS Maker — a public product studio/);
+    expect(fleet).toMatch(/DIRECTORY_COUNT/);
+    expect(fleet).toMatch(/Open the complete directory/);
+    expect(fleet).toMatch(/<h2 id="learning-title"/);
+    expect(fleet).not.toMatch(/ACTIVE_GROUPS|PAST_PROJECTS|catalog-row|archive-wall/);
+    expect(fleet).not.toMatch(/project identities|accounted for once/);
+    expect(layout).not.toMatch(/src="https:\/\/sassmaker\.com\/project-strip\.js"/);
+    expect(routes).toMatch(/# Products in focus/);
+    expect(routes).toMatch(/# Complete directory/);
+    expect(routes).toMatch(/CORE\.flatMap/);
+    expect(routes).not.toMatch(/publicCatalog\.pastProjects\.flatMap/);
+    expect(projects).toMatch(/throw new Error\(`Homepage spotlight is missing/);
+    expect(projects).not.toMatch(/ACTIVE_GROUPS|PAST_PROJECTS/);
   });
 });

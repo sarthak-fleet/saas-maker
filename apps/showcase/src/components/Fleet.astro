@@ -1,43 +1,23 @@
 ---
-import { ACTIVE_GROUPS, PAST_PROJECTS, PROJECT_COUNT } from '../data/projects';
-import { LEARNINGS } from '../data/learnings';
 import { DIRECTORY_COUNT } from '../data/directory';
+import { LEARNINGS } from '../data/learnings';
 
 const latestLearning = LEARNINGS[0];
 ---
-<section class="studio-index" id="products" aria-labelledby="catalog-title">
-  <header class="studio-index-head">
-    <p class="studio-kicker">The maintained catalog</p>
-    <h2 id="catalog-title">{PROJECT_COUNT} products.<br />One accountable maker.</h2>
-    <div class="studio-index-context">
-      <p>
-        Each product keeps its own domain, roadmap, changelog, and release
-        boundary. Nothing here is a concept render.
-      </p>
-      <a href="/projects">Browse the complete {DIRECTORY_COUNT}-project directory <span aria-hidden="true">→</span></a>
-    </div>
-  </header>
-
-  <div class="catalog-wall">
-    <div class="catalog-groups">
-      {ACTIVE_GROUPS.map((group) => (
-        <section class="catalog-group" aria-labelledby={`group-${group.id}`}>
-          <h3 id={`group-${group.id}`}>{group.label}</h3>
-          <ul>
-            {group.products.map((project) => (
-              <li>
-                <a href={project.href} class="catalog-row">
-                  <strong>{project.name}</strong>
-                  <span>{project.desc}</span>
-                  <span aria-hidden="true">→</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
-  </div>
+<div class="studio-index">
+  <section id="directory" aria-labelledby="directory-title">
+    <header class="studio-index-head">
+      <p class="studio-kicker">The complete directory</p>
+      <h2 id="directory-title">{DIRECTORY_COUNT} projects.<br />{' '}One directory.</h2>
+      <div class="studio-index-context">
+        <p>
+          Browse current, supporting, parked, and past work in one place, with
+          public links, deployment details, prominent tools, and retained Git dates.
+        </p>
+        <a href="/projects">Open the complete directory <span aria-hidden="true">→</span></a>
+      </div>
+    </header>
+  </section>
 
   <article class="learning-ledger" id="latest-learning" aria-labelledby="learning-title">
     <header class="learning-ledger-meta">
@@ -48,7 +28,7 @@ const latestLearning = LEARNINGS[0];
       </div>
     </header>
     <div class="learning-ledger-story">
-      <h3 id="learning-title">{latestLearning.title}</h3>
+      <h2 id="learning-title">{latestLearning.title}</h2>
       <p>{latestLearning.description}</p>
       <a href={latestLearning.href}>
         Read the learning
@@ -56,26 +36,4 @@ const latestLearning = LEARNINGS[0];
       </a>
     </div>
   </article>
-
-  <section class="archive-wall" id="past-projects" aria-labelledby="archive-title">
-    <header>
-      <p class="studio-kicker">Public repository history</p>
-      <h2 id="archive-title">Past work, kept legible.</h2>
-      <p>
-        {PAST_PROJECTS.length} public repositories preserved for source and
-        attribution, without pretending they are still maintained.
-      </p>
-    </header>
-    <ul>
-      {PAST_PROJECTS.map((project) => (
-        <li>
-          <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
-            <strong>{project.name}</strong>
-            <span>{project.desc}</span>
-            <span aria-hidden="true">↗</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-</section>
+</div>
