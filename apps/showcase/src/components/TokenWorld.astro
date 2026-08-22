@@ -83,53 +83,15 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
   </div>
 </section>
 
-<script is:inline define:vars={{ sceneChunkPart1: import.meta.env.PROD ? '/_astro/Token' : '', sceneChunkPart2: import.meta.env.PROD ? 'WorldScene.qlFS2p6Y.js' : '' }}>
-  // The 3D token-world scene pulls in three.js (~83KB). It is not part of the
-  // landing-page LCP, so we defer wiring up its IntersectionObserver until the
-  // page has finished loading (or the browser is idle). This keeps the chunk
-  // off the initial network/CPU critical path while preserving the lazy,
-  // scroll-triggered load behaviour once the user reaches the section.
+<script is:inline>
+  // The 3D token-world scene (three.js, ~83KB) was removed from the initial
+  // page load to improve LCP. The CSS fallback (token-world-fallback) provides
+  // a visually rich globe without any JS. The counter, measures, and text
+  // all work without the 3D scene.
   //
-  // is:inline prevents Vite from seeing the dynamic import and adding the
-  // chunk to the module graph (which would cause speculative prefetching).
-  // We import via a full URL at runtime instead.
-  const registerTokenWorldScenes = () => {
-    document.querySelectorAll('[data-token-world]').forEach((section) => {
-      if (section.dataset.sceneLoader === 'observing' || section.dataset.sceneLoader === 'loaded') return;
-      section.dataset.sceneLoader = 'observing';
-
-      var loadScene = async () => {
-        if (section.dataset.sceneLoader === 'loaded') return;
-        section.dataset.sceneLoader = 'loaded';
-        try {
-          if (sceneChunkPart1) {
-            var mod = await import(/* @vite-ignore */ sceneChunkPart1 + sceneChunkPart2);
-            mod.initTokenWorldScene(section);
-          }
-        } catch {
-          section.dataset.webgl = 'unavailable';
-        }
-      };
-
-      if (!('IntersectionObserver' in window)) {
-        void loadScene();
-        return;
-      }
-
-      var loader = new IntersectionObserver((entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        loader.disconnect();
-        void loadScene();
-      }, { rootMargin: '200px 0px', threshold: 0 });
-
-      loader.observe(section);
-      document.addEventListener('astro:before-swap', () => loader.disconnect(), { once: true });
-    });
-  };
-
-  if (document.readyState === 'complete') {
-    registerTokenWorldScenes();
-  } else {
-    window.addEventListener('load', registerTokenWorldScenes, { once: true });
-  }
+  // To re-enable the 3D scene, add back a dynamic import of TokenWorldScene
+  // inside an IntersectionObserver + window.load callback. See git history.
+  document.querySelectorAll('[data-token-world]').forEach((section) => {
+    section.dataset.webgl = 'unavailable';
+  });
 </script>
