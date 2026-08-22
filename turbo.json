@@ -11,7 +11,8 @@
     "SAAS_MAKER_API",
     "SAAS_MAKER_APP",
     "SAAS_MAKER_DIRECTORY",
-    "SAAS_MAKER_DOCS"
+    "SAAS_MAKER_DOCS",
+    "SKIP_SECRET_PREFLIGHT"
   ],
   "tasks": {
     "build": {

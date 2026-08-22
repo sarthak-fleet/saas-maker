@@ -1,0 +1,27 @@
+# Cockpit (saasmaker-dashboard) — required environment
+#
+# Copy to `.dev.vars` for local development. In production these are Worker
+# SECRETS, not [vars] — set them with:
+#
+#   openssl rand -base64 32 | wrangler secret put BETTER_AUTH_SECRET --name saasmaker-dashboard
+#   wrangler secret put AUTH_GOOGLE_ID --name saasmaker-dashboard
+#   wrangler secret put AUTH_GOOGLE_SECRET --name saasmaker-dashboard
+#
+# `pnpm deploy:cockpit` refuses to deploy while any of the three is missing.
+# See scripts/check-worker-secrets.mjs.
+
+# Signs and verifies better-auth sessions. Read at apps/cockpit/src/lib/auth.ts.
+# better-auth >= 1.6.30 REFUSES TO START on its built-in default rather than
+# warning, so an unset value returns 500 from every /api/auth/* route.
+# At least 32 characters, randomly generated.
+BETTER_AUTH_SECRET=
+
+# Google OAuth client for the inbox sign-in. Both default to '' in auth.ts, so
+# an unset pair fails the social sign-in exchange even once the secret is set.
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
+
+# Already set as plain [vars] in wrangler.toml — listed here for local runs.
+AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8787
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
