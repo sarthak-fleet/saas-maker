@@ -21,6 +21,7 @@
       "!**/packages/cli/templates",
       "!**/openapi.json",
       "!**/design.html",
+      "!tooling",
       "!ops/assets",
       "!apps/mobile-cockpit",
       "!services/drank",

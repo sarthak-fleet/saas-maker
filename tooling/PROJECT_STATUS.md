@@ -1,12 +1,12 @@
-# Workflows and Skills — PROJECT STATUS
+# SaaS Maker Tooling — PROJECT STATUS
 
 Last updated: 2026-08-22
 
 ## Why / What
 
-Workflows and Skills is the public, credential-free source and execution
-boundary for reusable GitHub Actions, Fleet-owned agent skills, and Fleet
-operator scripts.
+SaaS Maker Tooling is the public, credential-free source and execution boundary
+for reusable GitHub Actions, Fleet-owned agent skills, and Fleet operator
+scripts. It lives under `tooling/` in `sass-maker/saas-maker`.
 
 **Users:** Sarthak and Fleet operators.
 
@@ -83,7 +83,7 @@ owned by individual products.
 
 ## Products
 
-- `sass-maker/workflows-and-skills` — reusable workflows, skills, scripts, and
+- `sass-maker/saas-maker/tooling` — reusable workflows, skills, scripts, and
   public automation evidence.
 
 ## Features (shipped)
@@ -111,4 +111,4 @@ owned by individual products.
 ## Work queue
 
 Open work is tracked only in
-[GitHub Issues](https://github.com/sass-maker/workflows-and-skills/issues).
+[SaaS Maker GitHub Issues](https://github.com/sass-maker/saas-maker/issues).

@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const workflowRoot = join(repositoryRoot, '.github/workflows');
 const workflowFiles = readdirSync(workflowRoot)
   .filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'))
@@ -13,7 +13,7 @@ const workflowFiles = readdirSync(workflowRoot)
 // Credential-free availability checks may run daily when explicitly reviewed.
 // Keep this filename allowlist narrow so product/build automation stays weekly.
 const frequentScheduleAllowlist = new Set();
-const unscopedTriggerAllowlist = new Set(['ci.yml']);
+const unscopedTriggerAllowlist = new Set(['ci.yml', 'tooling-ci.yml']);
 
 const errors = [];
 

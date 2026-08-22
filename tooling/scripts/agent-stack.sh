@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-FLEET_ROOT="${FLEET_WORKSPACE_ROOT:-$(cd "$FLEET_OPS_DIR/.." && pwd)}"
+FLEET_ROOT="${FLEET_WORKSPACE_ROOT:-$(cd "$FLEET_OPS_DIR/../.." && pwd)}"
 LEGACY_FLEET_OPS_DIR="$FLEET_ROOT/fleet-ops"
 EXPOSED_FLEET_SKILLS=(
   analyze-storage

@@ -1,6 +1,7 @@
 import publicCatalog from '../../../../catalog/generated/public.json';
 import { PACKAGE_URL } from '../data/links';
 import { LEARNINGS } from '../data/learnings';
+import { TOOLING_CAPABILITIES } from '../data/tooling';
 export const prerender = true;
 export function GET() {
   const products = publicCatalog.products.map(
@@ -28,6 +29,7 @@ export function GET() {
     '',
     '- [Studio home](https://sassmaker.com)',
     `- [Complete project directory](https://sassmaker.com/projects): ${publicCatalog.directory.length} current, supporting, parked, and past identities`,
+    `- [Reusable tooling](https://sassmaker.com/tools): ${TOOLING_CAPABILITIES.length} public skills, scripts, templates, and guides`,
     '- [Learnings](https://sassmaker.com/learnings): first-party notes from building products and agent workflows',
     ...LEARNINGS.map(
       (learning) =>
@@ -47,6 +49,7 @@ export function GET() {
     '',
     '- https://sassmaker.com/api/ai',
     '- https://sassmaker.com/projects.json',
+    '- https://sassmaker.com/tools.json',
     '- https://sassmaker.com/projects.md',
     '- https://sassmaker.com/index.md',
     '- https://sassmaker.com/llms-full.txt',

@@ -841,7 +841,7 @@ test('parses repeatable Bundlephobia candidates', () => {
 
 test('Fleet exposes the code cleanup skill and requires it before dependency edits', () => {
   const fleetRoot = path.resolve(import.meta.dirname, '../../../..');
-  const toolingRoot = path.join(fleetRoot, 'workflows-and-skills');
+  const toolingRoot = path.join(fleetRoot, 'saas-maker/tooling');
   const agentStack = readFileSync(
     path.join(toolingRoot, 'scripts/agent-stack.sh'),
     'utf8',

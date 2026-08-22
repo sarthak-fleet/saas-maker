@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { visibilityProjects } from '../../lib/visibility-projects.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// lib → scripts → workflows-and-skills → fleet root
+// lib → scripts → saas-maker/tooling → fleet root
 const FLEET_ROOT = resolve(__dirname, '../../../..');
 export const REGISTRY_PATH = join(
   FLEET_ROOT,

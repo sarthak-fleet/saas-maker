@@ -453,7 +453,7 @@ export function buildCatalog(opsRoot = resolve(import.meta.dirname, '..')) {
   items.sort((left, right) => left.id.localeCompare(right.id));
   return {
     schemaVersion: CATALOG_SCHEMA_VERSION,
-    generatedFrom: 'sass-maker/workflows-and-skills',
+    generatedFrom: 'sass-maker/saas-maker/tooling',
     opsRoot: resolvedOpsRoot,
     roots,
     items,
@@ -634,8 +634,8 @@ export function generateContext(catalog, { query, type, dense = false } = {}) {
     'Discover canonical Fleet Ops tools with:',
     '',
     '```bash',
-    'node workflows-and-skills/scripts/fleet-capabilities.mjs search "<intent>" --dense',
-    'node workflows-and-skills/scripts/fleet-capabilities.mjs get "<capability-id>"',
+    'node saas-maker/tooling/scripts/fleet-capabilities.mjs search "<intent>" --dense',
+    'node saas-maker/tooling/scripts/fleet-capabilities.mjs get "<capability-id>"',
     '```',
     '',
     'Read a capability at its repository path before using it. Discovery is read-only.',

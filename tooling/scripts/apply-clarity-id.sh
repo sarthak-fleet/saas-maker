@@ -19,7 +19,7 @@ if [[ ! "$ID" =~ ^[a-z0-9]{10}$ ]]; then
 fi
 
 FILES=(
-  "workflows-and-skills/templates/clarity-snippet.html"
+  "saas-maker/tooling/templates/clarity-snippet.html"
   "codevetter/apps/landing-page-astro/src/layouts/Layout.astro"
   "induldge/src/layouts/SiteLayout.astro"
   "posttrainllm/browser/src/layouts/Default.astro"

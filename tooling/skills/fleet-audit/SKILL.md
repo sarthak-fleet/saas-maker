@@ -18,9 +18,9 @@ across the fleet workspace plus active projects listed in
 the immediate child repositories under `~/Desktop/fleet`.
 
 ```bash
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-health.sh
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-health.sh --no-fetch     # skip git fetch and pull
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-health.sh --only saas-maker,aliveville
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-health.sh
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-health.sh --no-fetch     # skip git fetch and pull
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-health.sh --only saas-maker,aliveville
 ```
 
 The script discovers immediate child Git repositories. The Fleet container is
@@ -129,7 +129,7 @@ evidence through Site Health:
 
 ```bash
 cd ~/Desktop/fleet
-bash workflows-and-skills/scripts/fleet-health.sh --no-fetch
+bash saas-maker/tooling/scripts/fleet-health.sh --no-fetch
 cd site-health && pnpm run check
 ```
 

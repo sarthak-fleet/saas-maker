@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 NAME=""
 CATEGORY=""
 DESC=""
@@ -202,7 +202,7 @@ git push origin main 2>/dev/null || true
 
 # Keep Fleet and approved external skills available locally without committing
 # machine-specific symlinks into the new repository.
-"$ROOT/workflows-and-skills/scripts/link-project-agent-assets.sh" --skills-only "$NAME"
+"$ROOT/saas-maker/tooling/scripts/link-project-agent-assets.sh" --skills-only "$NAME"
 
 echo ""
 echo "2. Scaffold files committed and pushed."

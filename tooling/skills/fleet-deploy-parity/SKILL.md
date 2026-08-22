@@ -47,16 +47,16 @@ Run the Fleet-owned deploy health script from the Fleet root:
 
 ```bash
 cd ~/Desktop/fleet
-./workflows-and-skills/scripts/deploy-health.sh
+./saas-maker/tooling/scripts/deploy-health.sh
 ```
 
 Flags (all optional):
 
 ```bash
-./workflows-and-skills/scripts/deploy-health.sh --no-github      # skip Actions parity
-./workflows-and-skills/scripts/deploy-health.sh --no-cloudflare  # skip Cloudflare parity
-./workflows-and-skills/scripts/deploy-health.sh --no-standards   # skip deploy-entrypoint checks
-./workflows-and-skills/scripts/deploy-health.sh --targets path.json
+./saas-maker/tooling/scripts/deploy-health.sh --no-github      # skip Actions parity
+./saas-maker/tooling/scripts/deploy-health.sh --no-cloudflare  # skip Cloudflare parity
+./saas-maker/tooling/scripts/deploy-health.sh --no-standards   # skip deploy-entrypoint checks
+./saas-maker/tooling/scripts/deploy-health.sh --targets path.json
 ```
 
 The script exits non-zero if any `FAIL` is recorded. Requires `gh` (authed),

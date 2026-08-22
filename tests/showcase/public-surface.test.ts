@@ -54,6 +54,24 @@ describe('SaaS Maker public source boundary', () => {
     expect(articleMarkdown).not.toMatch(/full article is available at/i);
   });
 
+  it('publishes the canonical reusable tooling directory', async () => {
+    const [page, data, nav, agentCatalog, llms] = await Promise.all([
+      readShowcase('src/pages/tools.astro'),
+      readShowcase('src/data/tooling.ts'),
+      readShowcase('src/components/Nav.astro'),
+      readShowcase('src/pages/api/ai.ts'),
+      readShowcase('src/pages/llms.txt.ts'),
+    ]);
+
+    expect(page).toMatch(/Tools that survived reuse/);
+    expect(page).toMatch(/TOOLING_GROUPS/);
+    expect(data).toMatch(/\.\.\/\.\.\/\.\.\/\.\.\/tooling/);
+    expect(nav).toMatch(/href="\/tools"/);
+    expect(agentCatalog).toMatch(/TOOLING_CAPABILITIES/);
+    expect(agentCatalog).toMatch(/sass-maker\/saas-maker\/tooling/);
+    expect(llms).toMatch(/Reusable tooling/);
+  });
+
   it('keeps the homepage curated and reserves full enumeration for /projects', async () => {
     const [home, fleet, layout, routes, projects] = await Promise.all([
       readShowcase('src/pages/index.astro'),

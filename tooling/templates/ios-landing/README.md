@@ -8,7 +8,7 @@ Copy it into a product repo as `site/`. It is Indulge’s page set and
 story shape, with tokens and copy filled from one config file.
 
 ```bash
-cp -R workflows-and-skills/templates/ios-landing /path/to/app/site
+cp -R saas-maker/tooling/templates/ios-landing /path/to/app/site
 cd /path/to/app/site
 # edit src/site.config.ts
 # add public/images/screens/*.jpg and a mark/favicon

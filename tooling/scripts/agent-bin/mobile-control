@@ -131,7 +131,7 @@ Then run, without pasting secrets into git:
   export TELEGRAM_HOME_CHANNEL='123456789'
   # optional: export HERMES_TELEGRAM_BOT_TOKEN='...'
   # optional: export TELEGRAM_GROUP_ALLOWED_CHATS='-1001234567890'
-  ./workflows-and-skills/scripts/agent-bin/mobile-control configure-telegram
+  ./saas-maker/tooling/scripts/agent-bin/mobile-control configure-telegram
 
 EOF
 }

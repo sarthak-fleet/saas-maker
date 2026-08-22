@@ -52,7 +52,7 @@ local code merely to reduce a count.
 Set the canonical script path:
 
 ```bash
-CLEANUP=~/Desktop/fleet/workflows-and-skills/skills/code-cleanup/scripts/code-cleanup.mjs
+CLEANUP=~/Desktop/fleet/saas-maker/tooling/skills/code-cleanup/scripts/code-cleanup.mjs
 ```
 
 Run the complete read-only cleanup pass for one project:

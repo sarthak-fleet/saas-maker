@@ -304,7 +304,7 @@ function campaignRuntimeRoot(options = {}) {
   if (!isAbsolute(candidate)) {
     throw new CampaignManifestError('campaign runtime root must be absolute');
   }
-  const checkout = resolve(options.checkoutRoot ?? resolve(import.meta.dirname, '../..'));
+  const checkout = resolve(options.checkoutRoot ?? resolve(import.meta.dirname, '../../..'));
   const rel = relative(checkout, resolve(candidate));
   if (rel === '' || (!rel.startsWith('..') && !isAbsolute(rel))) {
     throw new CampaignManifestError('campaign runtime state must remain outside the checkout');

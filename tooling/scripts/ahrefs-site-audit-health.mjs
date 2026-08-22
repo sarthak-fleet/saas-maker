@@ -19,7 +19,7 @@ import {
 } from '../lib/local-site-audit.mjs';
 
 const REPOSITORY_ROOT = resolve(import.meta.dirname, '..');
-const FLEET_ROOT = resolve(REPOSITORY_ROOT, '..');
+const FLEET_ROOT = resolve(REPOSITORY_ROOT, '../..');
 export const DEFAULT_BRANDS_PATH = resolve(
   FLEET_ROOT,
   'site-health/apps/backend/config/root-brands.json',

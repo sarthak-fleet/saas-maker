@@ -13,13 +13,13 @@ making broad changes. Prefer facts from the audit script over manual guessing.
 Run the audit from any workspace:
 
 ```bash
-bash ~/Desktop/fleet/workflows-and-skills/skills/token-budget/scripts/token-budget.sh
+bash ~/Desktop/fleet/saas-maker/tooling/skills/token-budget/scripts/token-budget.sh
 ```
 
 Pass a target path when auditing a specific repo:
 
 ```bash
-bash ~/Desktop/fleet/workflows-and-skills/skills/token-budget/scripts/token-budget.sh /path/to/repo
+bash ~/Desktop/fleet/saas-maker/tooling/skills/token-budget/scripts/token-budget.sh /path/to/repo
 ```
 
 ## Workflow

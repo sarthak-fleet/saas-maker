@@ -52,7 +52,7 @@ function healthscore(overrides = {}) {
 test('standalone paths leave the retired Fleet root behind', () => {
   assert.equal(
     DEFAULT_BRANDS_PATH,
-    resolve(import.meta.dirname, '../../site-health/apps/backend/config/root-brands.json'),
+    resolve(import.meta.dirname, '../../../site-health/apps/backend/config/root-brands.json'),
   );
   assert.equal(
     DEFAULT_OUTPUT_PATH,

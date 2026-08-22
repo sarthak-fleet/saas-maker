@@ -81,7 +81,7 @@ export function classifyArchetype(value) {
 }
 
 export function inventoryRegistryProduct(productId, options = {}) {
-  const fleetRoot = resolve(options.fleetRoot ?? resolve(import.meta.dirname, '../..'));
+  const fleetRoot = resolve(options.fleetRoot ?? resolve(import.meta.dirname, '../../..'));
   const registryPath = resolve(
     options.registryPath
       ?? join(fleetRoot, 'site-health/apps/backend/config/agent-surfaces-registry.json'),

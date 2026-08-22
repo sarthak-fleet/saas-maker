@@ -28,9 +28,9 @@ to run. Enforces the fleet deployment standard from AGENTS.md.
 ## How to invoke
 
 ```bash
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-deploy-guard.sh <project>
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-deploy-guard.sh codevetter
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-deploy-guard.sh codevetter --force  # skip CI check
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-deploy-guard.sh <project>
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-deploy-guard.sh codevetter
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-deploy-guard.sh codevetter --force  # skip CI check
 ```
 
 The script checks all 6 gates and exits non-zero if any fail. Use `--force` to

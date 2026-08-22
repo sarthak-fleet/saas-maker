@@ -18,7 +18,7 @@ test('standalone capability catalog has valid roots and execution profiles', () 
     catalog.roots.map((root) => root.path),
     ['skills', 'scripts', 'templates', 'docs'],
   );
-  assert.equal(catalog.generatedFrom, 'sass-maker/workflows-and-skills');
+  assert.equal(catalog.generatedFrom, 'sass-maker/saas-maker/tooling');
 
   const skills = catalog.items.filter((item) => item.type === 'skill');
   assert.equal(skills.length, 47);

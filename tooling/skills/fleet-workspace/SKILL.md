@@ -28,7 +28,7 @@ Use this skill for Fleet-wide workspace decisions and cross-project maintenance.
 
 ## When Adding Shared Agent Assets
 
-- Put shared skills under `/Users/sarthak/Desktop/fleet/workflows-and-skills/skills/`.
-- Use `/Users/sarthak/Desktop/fleet/workflows-and-skills/scripts/link-project-agent-assets.sh`
+- Put shared skills under `/Users/sarthak/Desktop/fleet/saas-maker/tooling/skills/`.
+- Use `/Users/sarthak/Desktop/fleet/saas-maker/tooling/scripts/link-project-agent-assets.sh`
   when project-local agent assets need to be exposed.
 - Keep global machine config private and personal.

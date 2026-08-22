@@ -589,7 +589,7 @@ check_worker_target() {
 check_cloudflare_targets() {
   echo "== Cloudflare Deployments =="
 
-  local automation_registry="$ROOT/workflows-and-skills/config/automation-registry.json"
+  local automation_registry="$ROOT/saas-maker/tooling/config/automation-registry.json"
   local ignored_projects_json="[]"
 
   if ! require_command jq; then

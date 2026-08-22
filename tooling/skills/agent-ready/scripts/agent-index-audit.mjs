@@ -37,7 +37,7 @@ import {
 } from '../../../lib/agent-probe-retry.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// scripts → agent-ready → skills → workflows-and-skills → fleet root
+// scripts → agent-ready → skills → saas-maker/tooling → fleet root
 const FLEET_ROOT = resolve(__dirname, '../../../..');
 const INDEXNOW_CONFIG_PATH = join(
   FLEET_ROOT,

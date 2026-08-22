@@ -1139,6 +1139,185 @@ a {
   }
 }
 
+.tooling-shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 7rem 0 5rem;
+}
+
+.tooling-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 2rem;
+  align-items: end;
+  padding: 3rem;
+  color: #f4f0e8;
+  background: #111318;
+  border: 1px solid #262a32;
+}
+
+.tooling-intro h1 {
+  grid-column: 1;
+  max-width: 10ch;
+  margin: 0.6rem 0 1rem;
+  font-size: clamp(3rem, 7vw, 6.6rem);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.tooling-intro > p:not(.directory-kicker) {
+  grid-column: 1;
+  max-width: 64ch;
+  margin: 0;
+  color: #afb5c0;
+  line-height: 1.7;
+}
+
+.tooling-count {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  display: flex;
+  min-height: 13rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  color: #fff;
+  background: #2146d0;
+}
+
+.tooling-count strong {
+  font-size: clamp(4rem, 8vw, 7rem);
+  line-height: 0.8;
+  letter-spacing: -0.08em;
+}
+
+.tooling-count span {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+.tooling-jump {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0 3rem;
+  border: 1px solid #c8c1b5;
+}
+
+.tooling-jump a {
+  display: flex;
+  flex: 1 1 12rem;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  color: #16181d;
+  text-decoration: none;
+  border-right: 1px solid #c8c1b5;
+}
+
+.tooling-jump a:hover,
+.tooling-jump a:focus-visible {
+  color: #fff;
+  background: #2146d0;
+}
+
+.tooling-group {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.34fr) minmax(0, 1fr);
+  border-top: 1px solid #9f998f;
+}
+
+.tooling-group > header {
+  padding: 2rem 1.5rem 2rem 0;
+}
+
+.tooling-group > header p,
+.tooling-group code,
+.tooling-group small {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.tooling-group > header h2 {
+  margin: 0.5rem 0 0;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.045em;
+}
+
+.tooling-group ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid #9f998f;
+}
+
+.tooling-group li + li {
+  border-top: 1px solid #d4cec4;
+}
+
+.tooling-group li a {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.35fr) minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.35rem 1.5rem;
+  color: #16181d;
+  text-decoration: none;
+}
+
+.tooling-group li a:hover,
+.tooling-group li a:focus-visible {
+  background: #eeebe4;
+}
+
+.tooling-group li span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tooling-group li strong {
+  font-size: 1rem;
+}
+
+.tooling-group li code,
+.tooling-group li small {
+  overflow-wrap: anywhere;
+  color: #68645d;
+}
+
+.tooling-group li p {
+  margin: 0;
+  color: #4b4d52;
+  line-height: 1.55;
+}
+
+@media (max-width: 760px) {
+  .tooling-intro,
+  .tooling-group {
+    grid-template-columns: 1fr;
+  }
+
+  .tooling-intro {
+    padding: 2rem 1.5rem;
+  }
+
+  .tooling-count {
+    grid-column: 1;
+    grid-row: auto;
+    min-height: 10rem;
+  }
+
+  .tooling-group ol {
+    border-left: 0;
+  }
+
+  .tooling-group li a {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Homepage: the glazier's workshop */
 
 .workshop-world {

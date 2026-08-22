@@ -28,7 +28,7 @@ import {
 } from '../../site-health/apps/backend/lib/root-search-query-contract.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const FLEET_ROOT = resolve(__dirname, '../..');
+const FLEET_ROOT = resolve(__dirname, '../../..');
 const SITE_HEALTH_BACKEND = join(FLEET_ROOT, 'site-health/apps/backend');
 const CONFIG_PATH = join(SITE_HEALTH_BACKEND, 'config/geo-observatory.json');
 const ROOT_BRANDS_PATH = join(SITE_HEALTH_BACKEND, 'config/root-brands.json');

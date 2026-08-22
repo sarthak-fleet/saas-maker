@@ -42,10 +42,10 @@ and patch selection.
 ### CLI (local)
 
 ```bash
-node workflows-and-skills/scripts/verify-local.mjs --config qualification.json
-node workflows-and-skills/scripts/verify-local.mjs --config qualification.json --output result.json
-node workflows-and-skills/scripts/verify-local.mjs --config qualification.json --skip-failure-injection
-node workflows-and-skills/scripts/verify-local.mjs --config qualification.json --validate-only
+node saas-maker/tooling/scripts/verify-local.mjs --config qualification.json
+node saas-maker/tooling/scripts/verify-local.mjs --config qualification.json --output result.json
+node saas-maker/tooling/scripts/verify-local.mjs --config qualification.json --skip-failure-injection
+node saas-maker/tooling/scripts/verify-local.mjs --config qualification.json --validate-only
 ```
 
 ### Reusable workflow (CI)
@@ -55,7 +55,7 @@ Product repos call the reusable workflow from their own CI:
 ```yaml
 jobs:
   verify-local:
-    uses: sass-maker/workflows-and-skills/.github/workflows/verify-local.yml@main
+    uses: sass-maker/saas-maker/.github/workflows/verify-local.yml@main
     with:
       config-path: verify-local.json
       node-version: "22"

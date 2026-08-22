@@ -22,8 +22,11 @@ jobs:
       - name: Check out public automation
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Validate public manifest
+        working-directory: tooling
         run: node scripts/audit.mjs --validate-only
       - name: Run tests
+        working-directory: tooling
         run: node --test test/*.test.mjs
       - name: Validate scripts and skills
+        working-directory: tooling
         run: node scripts/validate-tooling.mjs

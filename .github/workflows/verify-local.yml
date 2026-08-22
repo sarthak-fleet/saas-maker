@@ -18,7 +18,7 @@ on:
         default: false
         type: boolean
       tooling-ref:
-        description: Git ref of sass-maker/workflows-and-skills to check out for the runner script
+        description: Git ref of sass-maker/saas-maker to check out for the runner script
         required: false
         default: "main"
         type: string
@@ -40,7 +40,7 @@ jobs:
       - name: Check out reusable verification tooling
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          repository: sass-maker/workflows-and-skills
+          repository: sass-maker/saas-maker
           path: .fleet-verification
           ref: ${{ inputs.tooling-ref || 'main' }}
       - name: Set up Node.js
@@ -49,13 +49,13 @@ jobs:
           node-version: ${{ inputs.node-version }}
       - name: Validate qualification config
         run: |
-          node .fleet-verification/scripts/verify-local.mjs \
+          node .fleet-verification/tooling/scripts/verify-local.mjs \
             --config "${{ inputs.config-path }}" \
             --validate-only
       - name: Run local verification qualification
         id: verify
         run: |
-          node .fleet-verification/scripts/verify-local.mjs \
+          node .fleet-verification/tooling/scripts/verify-local.mjs \
             --config "${{ inputs.config-path }}" \
             --output verify-local-result.json \
             ${{ inputs.skip-failure-injection == true && '--skip-failure-injection' || '' }}

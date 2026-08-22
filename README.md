@@ -6,11 +6,15 @@ image upload, project keys, and private feedback inbox.
 
 Site Health owns private project identity and portfolio operations. SaaS Maker
 consumes only its checked-in, privacy-filtered public catalog and never reads
-private Fleet state at runtime. Workflows and Skills owns reusable automation.
+private Fleet state at runtime. Reusable public automation is canonical under
+[`tooling/`](tooling/README.md) and indexed at
+[sassmaker.com/tools](https://sassmaker.com/tools).
 
 ## Products
 
 - [sassmaker.com](https://sassmaker.com) — public product directory.
+- [sassmaker.com/tools](https://sassmaker.com/tools) — reusable skills,
+  workflows, scripts, templates, and guides.
 - `@saas-maker/feedback` — React feedback widget backed by the optional hosted
   submission service.
 - `@saas-maker/ai-chat-footer` — backend-free links for asking AI assistants

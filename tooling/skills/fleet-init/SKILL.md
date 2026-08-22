@@ -41,7 +41,7 @@ Confirm with the user:
 Then run the backing script:
 
 ```bash
-bash ~/Desktop/fleet/workflows-and-skills/scripts/fleet-init.sh <name> \
+bash ~/Desktop/fleet/saas-maker/tooling/scripts/fleet-init.sh <name> \
   --category <cat> \
   --desc "<one-line description>" \
   --stack "<stack>" \

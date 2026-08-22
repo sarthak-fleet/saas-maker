@@ -10,15 +10,18 @@ SaaS Maker owns only:
 - @saas-maker/ai-chat-footer;
 - @saas-maker/portfolio-project-strip;
 - the feedback API, image upload, project keys, narrow auth, and private inbox.
+- public, credential-free reusable workflows, Fleet-owned skills, operator
+  scripts, templates, and their capability directory under `tooling/`.
 
-Workflows and Skills owns shared schedules, skills, and host automation. Site
+SaaS Maker Tooling owns shared schedules, skills, and host automation. Site
 Health owns the private project catalog and portfolio operations. Drank, PSI
 Swarm, Reel Pipeline, CodeVetter, App Health, and Mobile Dev Cockpit remain
 independent products or repositories.
 
-Do not add tasks, workflows, jobs, marketing queues, analytics dashboards,
-observability, App Health, AI gateways, changelogs, testimonials, waitlists,
-Droid, or fleet-control features here.
+Do not add product task systems, marketing queues, analytics dashboards,
+observability, App Health, AI gateways, testimonials, waitlists, Droid, or
+fleet-control features here. Shared tooling must remain public,
+credential-free, provider-bounded, and independently validated.
 
 ## Commands
 

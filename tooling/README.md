@@ -1,7 +1,8 @@
-# Workflows and Skills
+# SaaS Maker Tooling
 
 Public, credential-free automation and agent tooling shared by the projects
-under SaaS Maker.
+under SaaS Maker. This directory is the canonical successor to the standalone
+`sass-maker/workflows-and-skills` repository.
 
 This repository is the canonical home for:
 
@@ -66,4 +67,4 @@ granted unless a license file is added through a separate owner decision.
 
 ## Work queue
 
-Use [GitHub Issues](https://github.com/sass-maker/workflows-and-skills/issues).
+Use [SaaS Maker GitHub Issues](https://github.com/sass-maker/saas-maker/issues).

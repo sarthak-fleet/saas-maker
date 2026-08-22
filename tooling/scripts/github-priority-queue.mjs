@@ -12,7 +12,7 @@ const TOKEN_PATTERNS = [
 
 function usage() {
   return `Usage:
-  node workflows-and-skills/scripts/github-priority-queue.mjs \\
+  node saas-maker/tooling/scripts/github-priority-queue.mjs \\
     --owner OWNER --project NUMBER --author LOGIN [--apply]
 
 Options:
