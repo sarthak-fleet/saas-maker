@@ -1,0 +1,5 @@
+[
+  { "schema": "fleet.video-agent-operation.v1", "product": "studio", "operation": "manifest", "operationId": "golden-studio", "input": {} },
+  { "schema": "fleet.video-agent-operation.v1", "product": "mashup", "operation": "manifest", "operationId": "golden-mashup", "input": {} },
+  { "schema": "fleet.video-agent-operation.v1", "product": "reel-pipeline", "operation": "manifest", "operationId": "golden-reel", "input": {} }
+]

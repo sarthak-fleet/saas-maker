@@ -1,0 +1,4 @@
+interface:
+  display_name: "Launch Campaign"
+  short_description: "Plan and execute approved cross-channel launches"
+  default_prompt: "Use $launch-campaign to preview and execute a complete article, product, or major-feature campaign across protected and broad channels."

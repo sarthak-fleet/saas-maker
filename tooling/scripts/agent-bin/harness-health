@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "OpenClaw"
+openclaw status | sed -n '1,32p'
+echo
+echo "Configured agents"
+openclaw agents list --json
+echo
+echo "Codex"
+codex --version 2>&1
+echo
+echo "Grok"
+grok models 2>&1 || true
+echo
+echo "Hermes"
+if command -v hermes >/dev/null 2>&1; then
+  hermes --version 2>&1
+else
+  echo "  not installed"
+fi

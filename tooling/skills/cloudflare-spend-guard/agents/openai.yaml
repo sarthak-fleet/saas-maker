@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cloudflare + Turso Spend Guard"
+  short_description: "Audit cloud spend, quotas, and optimization"
+  default_prompt: "Use $cloudflare-spend-guard to audit whether my Fleet projects are incurring Cloudflare or Turso charges, approaching Turso quota blocks, and what can be optimized safely."

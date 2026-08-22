@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+
+FLEET_ROOT="${FLEET_ROOT:-$HOME/Desktop/fleet}"
+FLEET_OPS_DIR="$FLEET_ROOT/foundry/ops"
+BOARD="general"
+MODEL="${OPENCLAW_SUPPORT_MODEL:-openai/gpt-5.5}"
+TOKEN_ENV=""
+TELEGRAM_ACCOUNT=""
+MENTION=""
+DRY_RUN=0
+
+usage() {
+  cat <<'EOF'
+usage: create-teammate <id> [options]
+
+Creates a versioned teammate persona workspace and registers it as an OpenClaw
+agent. If a Telegram bot token env var is provided, also configures a Telegram
+account and binds that bot/account to the agent.
+
+Options:
+  --board <name>              Board/folder for the teammate persona.
+  --model <provider/model>    OpenClaw model for the teammate.
+  --mention <pattern>         Group mention pattern, e.g. @shipbot.
+  --telegram-account <id>     Telegram account id. Defaults to teammate id.
+  --token-env <ENV_NAME>      Env var containing this teammate's BotFather token.
+  --dry-run                   Print commands without changing machine config.
+
+Examples:
+  create-teammate ship --board shipping --mention @shipbot
+  SHIP_TELEGRAM_BOT_TOKEN='...' create-teammate ship \
+    --board shipping --mention @shipbot --token-env SHIP_TELEGRAM_BOT_TOKEN
+EOF
+}
+
+slugify() {
+  printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9_-' '-' | sed 's/^-//;s/-$//'
+}
+
+run() {
+  if [[ "$DRY_RUN" == "1" ]]; then
+    printf '[dry-run]'
+    for arg in "$@"; do
+      printf ' %q' "$arg"
+    done
+    printf '\n'
+  else
+    "$@"
+  fi
+}
+
+write_persona_files() {
+  local workspace="$1"
+  local id="$2"
+  local board="$3"
+  local mention="$4"
+
+  run mkdir -p "$workspace"
+  if [[ "$DRY_RUN" == "1" ]]; then
+    echo "[dry-run] write $workspace/AGENTS.md"
+    echo "[dry-run] write $workspace/SOUL.md"
+    return
+  fi
+
+  cat > "$workspace/AGENTS.md" <<EOF
+# Teammate: $id
+
+You are a Fleet teammate persona on the "$board" board.
+
+## Operating Rules
+
+- Stay inside the Fleet workspace unless the task explicitly requires otherwise.
+- Ask for clarification only when the next action would be risky or irreversible.
+- Keep replies short and operational in Telegram.
+- Do not deploy, rotate credentials, or change DNS unless explicitly asked.
+- Summarize work with links, commands run, blockers, and next action.
+EOF
+
+  cat > "$workspace/SOUL.md" <<EOF
+# $id
+
+Board: $board
+Mention: ${mention:-unset}
+
+Purpose:
+- Handle bounded Fleet tasks routed to this teammate.
+- Keep status visible and hand work back cleanly when blocked.
+EOF
+}
+
+main() {
+  if [[ "$#" -lt 1 ]]; then
+    usage >&2
+    exit 2
+  fi
+
+  case "${1:-}" in
+    -h|--help|help)
+      usage
+      exit 0
+      ;;
+  esac
+
+  local raw_id="$1"
+  shift
+  local id
+  id="$(slugify "$raw_id")"
+  local token_example
+  token_example="$(printf '%s_TELEGRAM_BOT_TOKEN' "$id" | tr '[:lower:]-' '[:upper:]_')"
+  TELEGRAM_ACCOUNT="$id"
+
+  while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+      --board)
+        BOARD="$(slugify "$2")"
+        shift 2
+        ;;
+      --model)
+        MODEL="$2"
+        shift 2
+        ;;
+      --mention)
+        MENTION="$2"
+        shift 2
+        ;;
+      --telegram-account)
+        TELEGRAM_ACCOUNT="$(slugify "$2")"
+        shift 2
+        ;;
+      --token-env)
+        TOKEN_ENV="$2"
+        shift 2
+        ;;
+      --dry-run)
+        DRY_RUN=1
+        shift
+        ;;
+      -h|--help|help)
+        usage
+        exit 0
+        ;;
+      *)
+        usage >&2
+        exit 2
+        ;;
+    esac
+  done
+
+  local workspace="$FLEET_OPS_DIR/teammates/boards/$BOARD/$id"
+  write_persona_files "$workspace" "$id" "$BOARD" "$MENTION"
+
+  if ! command -v openclaw >/dev/null 2>&1; then
+    echo "created persona files; openclaw not found, skipping agent registration"
+    exit 0
+  fi
+
+  if openclaw agents list --json 2>/dev/null | node -e 'const id=process.argv[1]; const a=JSON.parse(require("fs").readFileSync(0,"utf8")); process.exit(a.some(x=>x.id===id)?0:1)' "$id"; then
+    echo "ok: OpenClaw agent $id already exists"
+  else
+    run openclaw agents add "$id" \
+      --workspace "$workspace" \
+      --model "$MODEL" \
+      --non-interactive
+  fi
+
+  run openclaw agents set-identity --agent "$id" --name "Fleet teammate: $id"
+
+  if [[ -n "$MENTION" ]]; then
+    echo "recorded mention pattern $MENTION in $workspace/SOUL.md"
+    echo "dedicated Telegram bot routing uses account binding; shared-bot mention routing needs a full config merge."
+  fi
+
+  if [[ -n "$TOKEN_ENV" ]]; then
+    if [[ -z "${!TOKEN_ENV:-}" ]]; then
+      echo "missing token env: $TOKEN_ENV" >&2
+      exit 2
+    fi
+    local token_file
+    token_file="$(mktemp)"
+    chmod 600 "$token_file"
+    printf '%s' "${!TOKEN_ENV}" > "$token_file"
+    run openclaw channels add --channel telegram --account "$TELEGRAM_ACCOUNT" --token-file "$token_file"
+    rm -f "$token_file"
+    run openclaw agents bind --agent "$id" --bind "telegram:$TELEGRAM_ACCOUNT"
+    echo "configured Telegram account $TELEGRAM_ACCOUNT for teammate $id"
+    echo "invite that bot to the Fleet Telegram group and mention its BotFather username to route work."
+  else
+    echo "created teammate $id without a dedicated Telegram bot."
+    echo "Add one later with: $token_example=... create-teammate $id --token-env $token_example"
+  fi
+}
+
+main "$@"

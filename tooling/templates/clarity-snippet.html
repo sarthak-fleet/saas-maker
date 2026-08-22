@@ -1,0 +1,23 @@
+<!--
+  Microsoft Clarity snippet — session replay + heatmaps.
+
+  One shared Clarity project for the whole fleet. Each site sets a
+  `project_id` custom tag so sessions can be filtered by product in
+  the Clarity dashboard.
+
+  USAGE:
+    1. Replace y39u4kk9oq with your Clarity project ID
+       (from Settings > Setup > Install tracking code).
+    2. Replace PROJECT_SLUG with this site's fleet project id
+       (e.g. "codevetter", "significanthobbies", "drank").
+
+  PostHog is NOT removed — Clarity is additive for replay + heatmaps.
+-->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window,document,"clarity","script","y39u4kk9oq");
+  window.clarity("set","project_id","PROJECT_SLUG");
+</script>

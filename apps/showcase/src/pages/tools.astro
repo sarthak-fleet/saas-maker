@@ -1,0 +1,63 @@
+---
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import { TOOLING_CAPABILITIES, TOOLING_GROUPS } from '../data/tooling';
+import Layout from '../layouts/Layout.astro';
+
+const sourceUrl = (path: string) =>
+  `https://github.com/sass-maker/saas-maker/blob/main/tooling/${path}`;
+---
+
+<Layout
+  title={`${TOOLING_CAPABILITIES.length} reusable tools — SaaS Maker`}
+  description="The canonical public catalog of reusable Fleet agent skills, workflows, operator scripts, templates, and guides."
+>
+  <Nav />
+  <main id="main-content" class="tooling-shell">
+    <header class="tooling-intro">
+      <p class="directory-kicker">Shared capability register</p>
+      <h1>Tools that survived reuse.</h1>
+      <p>
+        Credential-free workflows, agent skills, scripts, and templates used across Fleet.
+        Product-specific automation stays with its product; every item here has one canonical source.
+      </p>
+      <div class="tooling-count" aria-label={`${TOOLING_CAPABILITIES.length} reusable capabilities`}>
+        <strong>{TOOLING_CAPABILITIES.length}</strong>
+        <span>reusable capabilities</span>
+      </div>
+    </header>
+
+    <nav class="tooling-jump" aria-label="Tool types">
+      {TOOLING_GROUPS.filter((group) => group.items.length > 0).map((group) => (
+        <a href={`#${group.type}`}>{group.label} <span>{group.items.length}</span></a>
+      ))}
+      <a href="/tools.json">JSON <span>API</span></a>
+    </nav>
+
+    <div class="tooling-groups">
+      {TOOLING_GROUPS.filter((group) => group.items.length > 0).map((group) => (
+        <section id={group.type} class="tooling-group">
+          <header>
+            <p>{group.items.length} capabilities</p>
+            <h2>{group.label}</h2>
+          </header>
+          <ol>
+            {group.items.map((item) => (
+              <li>
+                <a href={sourceUrl(item.path)} target="_blank" rel="noopener noreferrer">
+                  <span>
+                    <strong>{item.name}</strong>
+                    <code>{item.id}</code>
+                  </span>
+                  <p>{item.summary}</p>
+                  <small>{item.path} ↗</small>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Layout>

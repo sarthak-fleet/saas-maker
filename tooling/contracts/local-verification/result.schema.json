@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fleet.local-verification-qualification.v1.result",
+  "title": "Local verification qualification result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "project",
+    "state",
+    "startedAt",
+    "finishedAt",
+    "durationMs",
+    "readiness",
+    "patchSelection",
+    "failureInjection",
+    "error"
+  ],
+  "properties": {
+    "schema": { "const": "fleet.local-verification-qualification.v1" },
+    "project": { "type": "string" },
+    "state": { "enum": ["qualified", "failed", "cancelled"] },
+    "startedAt": { "type": "string" },
+    "finishedAt": { "type": "string" },
+    "durationMs": { "type": "integer", "minimum": 0 },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "durationMs", "attempts", "probes"],
+      "properties": {
+        "state": { "enum": ["ready", "timeout", "error"] },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "attempts": { "type": "integer", "minimum": 0 },
+        "probes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "type", "ok", "detail"],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "enum": ["http", "tcp", "log", "command"] },
+              "ok": { "type": "boolean" },
+              "detail": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "patchSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "expected", "observed"],
+      "properties": {
+        "state": { "enum": ["match", "mismatch", "error", "skipped"] },
+        "expected": { "type": ["string", "null"] },
+        "observed": { "type": ["string", "null"] },
+        "detail": { "type": "string" }
+      }
+    },
+    "failureInjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "detail"],
+      "properties": {
+        "state": { "enum": ["detected", "not_detected", "error", "skipped"] },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "detail": { "type": "string" }
+      }
+    },
+    "error": { "type": ["object", "null"] }
+  }
+}

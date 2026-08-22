@@ -2,6 +2,7 @@ import publicCatalog from '../../../../../catalog/generated/public.json';
 import tokenWorld from '../../data/tokenWorld.json';
 import { PACKAGE_URL } from '../../data/links';
 import { LEARNINGS } from '../../data/learnings';
+import { TOOLING_CAPABILITIES } from '../../data/tooling';
 import { markdownPath, PUBLIC_ROUTES, publicRouteUrl } from '../../data/publicRoutes';
 export const prerender = true;
 export function GET() {
@@ -33,6 +34,12 @@ export function GET() {
             description: 'Published feedback package and hosted submission service',
           },
         ],
+        tooling: {
+          url: 'https://sassmaker.com/tools',
+          json: 'https://sassmaker.com/tools.json',
+          generatedFrom: 'sass-maker/saas-maker/tooling',
+          capabilities: TOOLING_CAPABILITIES,
+        },
         auth: { public: true, notes: 'Private Fleet controls are intentionally excluded.' },
         tokenImpact: {
           name: 'Tokens Spent for the World',

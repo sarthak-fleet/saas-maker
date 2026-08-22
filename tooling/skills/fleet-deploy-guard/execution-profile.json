@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "frontier", "reasoning": "high" },
+  "minimum": { "intelligence": "balanced", "reasoning": "high" },
+  "degradation": "deny",
+  "rationale": "A deploy gate must fail safely when interpreting branch, CI, target, and blocker evidence."
+}

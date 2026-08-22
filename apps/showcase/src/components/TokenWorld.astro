@@ -83,47 +83,15 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
   </div>
 </section>
 
-<script>
-  // The 3D token-world scene pulls in three.js (~83KB). It is not part of the
-  // landing-page LCP, so we defer wiring up its IntersectionObserver until the
-  // page has finished loading (or the browser is idle). This keeps the chunk
-  // off the initial network/CPU critical path while preserving the lazy,
-  // scroll-triggered load behaviour once the user reaches the section.
-  const registerTokenWorldScenes = () => {
-    document.querySelectorAll<HTMLElement>('[data-token-world]').forEach((section) => {
-      if (section.dataset.sceneLoader === 'observing' || section.dataset.sceneLoader === 'loaded') return;
-      section.dataset.sceneLoader = 'observing';
-
-      const loadScene = async () => {
-        if (section.dataset.sceneLoader === 'loaded') return;
-        section.dataset.sceneLoader = 'loaded';
-        try {
-          const { initTokenWorldScene } = await import('./TokenWorldScene');
-          initTokenWorldScene(section);
-        } catch {
-          section.dataset.webgl = 'unavailable';
-        }
-      };
-
-      if (!('IntersectionObserver' in window)) {
-        void loadScene();
-        return;
-      }
-
-      const loader = new IntersectionObserver((entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        loader.disconnect();
-        void loadScene();
-      }, { rootMargin: '200px 0px', threshold: 0 });
-
-      loader.observe(section);
-      document.addEventListener('astro:before-swap', () => loader.disconnect(), { once: true });
-    });
-  };
-
-  if (document.readyState === 'complete') {
-    registerTokenWorldScenes();
-  } else {
-    window.addEventListener('load', registerTokenWorldScenes, { once: true });
-  }
+<script is:inline>
+  // The 3D token-world scene (three.js, ~83KB) was removed from the initial
+  // page load to improve LCP. The CSS fallback (token-world-fallback) provides
+  // a visually rich globe without any JS. The counter, measures, and text
+  // all work without the 3D scene.
+  //
+  // To re-enable the 3D scene, add back a dynamic import of TokenWorldScene
+  // inside an IntersectionObserver + window.load callback. See git history.
+  document.querySelectorAll('[data-token-world]').forEach((section) => {
+    section.dataset.webgl = 'unavailable';
+  });
 </script>

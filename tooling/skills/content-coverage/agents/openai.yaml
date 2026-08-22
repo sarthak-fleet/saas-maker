@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Coverage"
+  short_description: "Audit and publish missing SEO intent pages"
+  default_prompt: "Use $content-coverage to audit this product's competitive SEO page coverage and preview any missing pages."

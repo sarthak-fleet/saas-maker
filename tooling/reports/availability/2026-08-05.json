@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-05T09:22:13.380Z",
+  "mode": "availability",
+  "runs": 1,
+  "summary": {
+    "sites": 27,
+    "passed": 27,
+    "failed": 0
+  },
+  "results": [
+    {
+      "id": "codevetter",
+      "target": "https://codevetter.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://codevetter.com/",
+          "headersMs": 289.3,
+          "totalMs": 289.6,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 289.3,
+        "headersP90Ms": 289.3,
+        "totalP50Ms": 289.6,
+        "totalP90Ms": 289.6
+      }
+    },
+    {
+      "id": "pace",
+      "target": "https://heypace.app/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://heypace.app/",
+          "headersMs": 235,
+          "totalMs": 235.3,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 235,
+        "headersP90Ms": 235,
+        "totalP50Ms": 235.3,
+        "totalP90Ms": 235.3
+      }
+    },
+    {
+      "id": "high-signal",
+      "target": "https://highsignal.app/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://highsignal.app/",
+          "headersMs": 221.7,
+          "totalMs": 223.9,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 221.7,
+        "headersP90Ms": 221.7,
+        "totalP50Ms": 223.9,
+        "totalP90Ms": 223.9
+      }
+    },
+    {
+      "id": "posttrainllm",
+      "target": "https://posttrainllm.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://posttrainllm.com/",
+          "headersMs": 257.8,
+          "totalMs": 258.2,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 257.8,
+        "headersP90Ms": 257.8,
+        "totalP50Ms": 258.2,
+        "totalP90Ms": 258.2
+      }
+    },
+    {
+      "id": "anime-list",
+      "target": "https://anime.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://anime.significanthobbies.com/",
+          "headersMs": 333.9,
+          "totalMs": 334.3,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 333.9,
+        "headersP90Ms": 333.9,
+        "totalP50Ms": 334.3,
+        "totalP90Ms": 334.3
+      }
+    },
+    {
+      "id": "app-health",
+      "target": "https://health.sassmaker.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://health.sassmaker.com/",
+          "headersMs": 165.1,
+          "totalMs": 165.5,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 165.1,
+        "headersP90Ms": 165.1,
+        "totalP50Ms": 165.5,
+        "totalP90Ms": 165.5
+      }
+    },
+    {
+      "id": "calorie",
+      "target": "https://calorie.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://calorie.significanthobbies.com/",
+          "headersMs": 258.1,
+          "totalMs": 258.4,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 258.1,
+        "headersP90Ms": 258.1,
+        "totalP50Ms": 258.4,
+        "totalP90Ms": 258.4
+      }
+    },
+    {
+      "id": "chess",
+      "target": "https://chess.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://chess.significanthobbies.com/",
+          "headersMs": 268.1,
+          "totalMs": 268.4,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 268.1,
+        "headersP90Ms": 268.1,
+        "totalP50Ms": 268.4,
+        "totalP90Ms": 268.4
+      }
+    },
+    {
+      "id": "drank",
+      "target": "https://domains.sassmaker.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://domains.sassmaker.com/",
+          "headersMs": 276.9,
+          "totalMs": 277.3,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 276.9,
+        "headersP90Ms": 276.9,
+        "totalP50Ms": 277.3,
+        "totalP90Ms": 277.3
+      }
+    },
+    {
+      "id": "email-manager",
+      "target": "https://mail.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://mail.significanthobbies.com/",
+          "headersMs": 162.6,
+          "totalMs": 163,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 162.6,
+        "headersP90Ms": 162.6,
+        "totalP50Ms": 163,
+        "totalP90Ms": 163
+      }
+    },
+    {
+      "id": "free-ai",
+      "target": "https://ai-gateway.sassmaker.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://ai-gateway.sassmaker.com/",
+          "headersMs": 271.1,
+          "totalMs": 271.3,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 271.1,
+        "headersP90Ms": 271.1,
+        "totalP50Ms": 271.3,
+        "totalP90Ms": 271.3
+      }
+    },
+    {
+      "id": "karte",
+      "target": "https://karte.cc/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://karte.cc/",
+          "headersMs": 160.6,
+          "totalMs": 160.9,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 160.6,
+        "headersP90Ms": 160.6,
+        "totalP50Ms": 160.9,
+        "totalP90Ms": 160.9
+      }
+    },
+    {
+      "id": "knowledge-base",
+      "target": "https://knowledgebase.sassmaker.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://knowledgebase.sassmaker.com/",
+          "headersMs": 292.9,
+          "totalMs": 293.1,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 292.9,
+        "headersP90Ms": 292.9,
+        "totalP50Ms": 293.1,
+        "totalP90Ms": 293.1
+      }
+    },
+    {
+      "id": "looptv",
+      "target": "https://tv.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://tv.significanthobbies.com/",
+          "headersMs": 204.6,
+          "totalMs": 204.8,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 204.6,
+        "headersP90Ms": 204.6,
+        "totalP50Ms": 204.8,
+        "totalP90Ms": 204.8
+      }
+    },
+    {
+      "id": "chatgpt-memory-insights",
+      "target": "https://chatgpt.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://chatgpt.significanthobbies.com/",
+          "headersMs": 310.7,
+          "totalMs": 310.9,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 310.7,
+        "headersP90Ms": 310.7,
+        "totalP50Ms": 310.9,
+        "totalP90Ms": 310.9
+      }
+    },
+    {
+      "id": "motion",
+      "target": "https://motion.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://motion.significanthobbies.com/",
+          "headersMs": 228.4,
+          "totalMs": 228.6,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 228.4,
+        "headersP90Ms": 228.4,
+        "totalP50Ms": 228.6,
+        "totalP90Ms": 228.6
+      }
+    },
+    {
+      "id": "psi-swarm",
+      "target": "https://performance.sassmaker.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://performance.sassmaker.com/",
+          "headersMs": 241.4,
+          "totalMs": 241.6,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 241.4,
+        "headersP90Ms": 241.4,
+        "totalP50Ms": 241.6,
+        "totalP90Ms": 241.6
+      }
+    },
+    {
+      "id": "reader",
+      "target": "https://read.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://read.significanthobbies.com/",
+          "headersMs": 795.1,
+          "totalMs": 795.4,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 795.1,
+        "headersP90Ms": 795.1,
+        "totalP50Ms": 795.4,
+        "totalP90Ms": 795.4
+      }
+    },
+    {
+      "id": "research-papers",
+      "target": "https://papers.highsignal.app/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://papers.highsignal.app/",
+          "headersMs": 498.1,
+          "totalMs": 498.4,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 498.1,
+        "headersP90Ms": 498.1,
+        "totalP50Ms": 498.4,
+        "totalP90Ms": 498.4
+      }
+    },
+    {
+      "id": "rolepatch",
+      "target": "https://rolepatch.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://rolepatch.com/",
+          "headersMs": 189.3,
+          "totalMs": 189.6,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 189.3,
+        "headersP90Ms": 189.3,
+        "totalP50Ms": 189.6,
+        "totalP90Ms": 189.6
+      }
+    },
+    {
+      "id": "saas-maker",
+      "target": "https://sassmaker.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://sassmaker.com/",
+          "headersMs": 306.9,
+          "totalMs": 307.2,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 306.9,
+        "headersP90Ms": 306.9,
+        "totalP50Ms": 307.2,
+        "totalP90Ms": 307.2
+      }
+    },
+    {
+      "id": "personal-website",
+      "target": "https://sarthakagrawal.dev/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://sarthakagrawal.dev/",
+          "headersMs": 266.6,
+          "totalMs": 267,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 266.6,
+        "headersP90Ms": 266.6,
+        "totalP50Ms": 267,
+        "totalP90Ms": 267
+      }
+    },
+    {
+      "id": "setline",
+      "target": "https://setline.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://setline.significanthobbies.com/",
+          "headersMs": 501.9,
+          "totalMs": 502.1,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 501.9,
+        "headersP90Ms": 501.9,
+        "totalP50Ms": 502.1,
+        "totalP90Ms": 502.1
+      }
+    },
+    {
+      "id": "significanthobbies",
+      "target": "https://significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://significanthobbies.com/",
+          "headersMs": 676.3,
+          "totalMs": 676.6,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 676.3,
+        "headersP90Ms": 676.3,
+        "totalP50Ms": 676.6,
+        "totalP90Ms": 676.6
+      }
+    },
+    {
+      "id": "starboard",
+      "target": "https://starboard.codevetter.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://starboard.codevetter.com/",
+          "headersMs": 148.9,
+          "totalMs": 149.2,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 148.9,
+        "headersP90Ms": 148.9,
+        "totalP50Ms": 149.2,
+        "totalP90Ms": 149.2
+      }
+    },
+    {
+      "id": "swe-interview-prep",
+      "target": "https://learn.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://learn.significanthobbies.com/",
+          "headersMs": 170.2,
+          "totalMs": 170.4,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 170.2,
+        "headersP90Ms": 170.2,
+        "totalP50Ms": 170.4,
+        "totalP90Ms": 170.4
+      }
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "target": "https://paths.significanthobbies.com/",
+      "ok": true,
+      "attempts": [
+        {
+          "ok": true,
+          "status": 200,
+          "finalUrl": "https://paths.significanthobbies.com/",
+          "headersMs": 226.5,
+          "totalMs": 226.8,
+          "redirects": []
+        }
+      ],
+      "metrics": {
+        "headersP50Ms": 226.5,
+        "headersP90Ms": 226.5,
+        "totalP50Ms": 226.8,
+        "totalP90Ms": 226.8
+      }
+    }
+  ]
+}

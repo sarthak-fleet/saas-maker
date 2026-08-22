@@ -1,0 +1,4 @@
+interface:
+  display_name: "Creative Web Effects"
+  short_description: "Shape, audit, and specify web effects"
+  default_prompt: "Use $creative-web-effects to shape, audit, discover, or precisely specify this browser effect."

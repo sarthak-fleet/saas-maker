@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+FLEET_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+APP_DIR="$FLEET_ROOT/foundry/apps/dashboard/fleet-console"
+NODE_BIN="$(command -v node)"
+LABEL="com.assistant.fleet-ops-console"
+HEARTBEAT_LABEL="com.assistant.fleet-ops-console-heartbeat"
+LEGACY_REFRESH_LABEL="com.assistant.fleet-ops-console-refresh"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+HEARTBEAT_PLIST="$HOME/Library/LaunchAgents/$HEARTBEAT_LABEL.plist"
+LEGACY_REFRESH_PLIST="$HOME/Library/LaunchAgents/$LEGACY_REFRESH_LABEL.plist"
+LOG_DIR="$HOME/Library/Logs"
+RUNTIME_DIR="$HOME/Library/Application Support/Fleet Ops/ops-console"
+HEARTBEAT_RUNNER="$RUNTIME_DIR/heartbeat.zsh"
+HEARTBEAT_SCRIPT="$FLEET_OPS_DIR/scripts/agent-bin/public-heartbeat.mjs"
+PORT="${FLEET_OPS_CONSOLE_PORT:-4329}"
+PUBLIC_URL="${FLEET_OPS_CONSOLE_URL:-https://fleet.sassmaker.com}"
+
+usage() {
+  cat <<'EOF'
+usage: ops-console <install|start|stop|restart|status|open|publish|serve>
+
+Manages the local Fleet Ops Astro console used by the Cloudflare Tunnel.
+EOF
+}
+
+write_plist() {
+  mkdir -p "$HOME/Library/LaunchAgents" "$LOG_DIR" "$RUNTIME_DIR"
+  cat > "$PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>$LABEL</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>$NODE_BIN</string>
+    <string>$RUNTIME_DIR/server.mjs</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PORT</key>
+    <string>$PORT</string>
+    <key>FOUNDER_CONTROL_TRUST_ACCESS</key>
+    <string>1</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>$LOG_DIR/fleet-ops-console.log</string>
+  <key>StandardErrorPath</key>
+  <string>$LOG_DIR/fleet-ops-console.err.log</string>
+  <key>WorkingDirectory</key>
+  <string>$RUNTIME_DIR</string>
+</dict>
+</plist>
+EOF
+}
+
+write_heartbeat_plist() {
+  mkdir -p "$HOME/Library/LaunchAgents" "$LOG_DIR" "$RUNTIME_DIR"
+  cat > "$HEARTBEAT_RUNNER" <<EOF
+#!/bin/zsh
+set -euo pipefail
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:\${PATH:-}"
+"$NODE_BIN" "$HEARTBEAT_SCRIPT" >/dev/null
+EOF
+  chmod 755 "$HEARTBEAT_RUNNER"
+  cat > "$HEARTBEAT_PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>$HEARTBEAT_LABEL</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>$HEARTBEAT_RUNNER</string>
+  </array>
+  <key>StartInterval</key>
+  <integer>60</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>$LOG_DIR/fleet-ops-console-heartbeat.log</string>
+  <key>StandardErrorPath</key>
+  <string>$LOG_DIR/fleet-ops-console-heartbeat.err.log</string>
+  <key>WorkingDirectory</key>
+  <string>$APP_DIR</string>
+</dict>
+</plist>
+EOF
+}
+
+publish_runtime() {
+  cd "$APP_DIR"
+  npm run build
+  mkdir -p "$RUNTIME_DIR"
+  rm -rf "$RUNTIME_DIR/dist"
+  cp -R "$APP_DIR/dist" "$RUNTIME_DIR/dist"
+  mkdir -p "$RUNTIME_DIR/lib/founder-control"
+  cp -R "$FLEET_OPS_DIR/lib/founder-control/." "$RUNTIME_DIR/lib/founder-control/"
+  cp "$FLEET_OPS_DIR"/lib/*.mjs "$RUNTIME_DIR/lib/"
+  mkdir -p "$RUNTIME_DIR/config"
+  cp "$FLEET_OPS_DIR/config/projects.json" "$RUNTIME_DIR/config/projects.json"
+  cp "$FLEET_OPS_DIR/config/automation-registry.json" "$RUNTIME_DIR/config/automation-registry.json"
+  cp "$FLEET_OPS_DIR/config/marketing-program.json" "$RUNTIME_DIR/config/marketing-program.json"
+  cp "$FLEET_OPS_DIR/scripts/agent-bin/ops-console-server.mjs" "$RUNTIME_DIR/server.mjs"
+  "$NODE_BIN" "$HEARTBEAT_SCRIPT" >/dev/null
+}
+
+start_service() {
+  publish_runtime
+  write_plist
+  write_heartbeat_plist
+  launchctl bootout "gui/$(id -u)" "$LEGACY_REFRESH_PLIST" >/dev/null 2>&1 || true
+  launchctl bootout "gui/$(id -u)" "$PLIST" >/dev/null 2>&1 || true
+  launchctl bootstrap "gui/$(id -u)" "$PLIST"
+  launchctl enable "gui/$(id -u)/$LABEL" >/dev/null 2>&1 || true
+  launchctl kickstart -k "gui/$(id -u)/$LABEL"
+  launchctl bootout "gui/$(id -u)" "$HEARTBEAT_PLIST" >/dev/null 2>&1 || true
+  launchctl bootstrap "gui/$(id -u)" "$HEARTBEAT_PLIST"
+  launchctl enable "gui/$(id -u)/$HEARTBEAT_LABEL" >/dev/null 2>&1 || true
+  launchctl kickstart -k "gui/$(id -u)/$HEARTBEAT_LABEL"
+  "$HEARTBEAT_RUNNER"
+}
+
+stop_service() {
+  launchctl bootout "gui/$(id -u)" "$PLIST" >/dev/null 2>&1 || true
+  launchctl bootout "gui/$(id -u)" "$HEARTBEAT_PLIST" >/dev/null 2>&1 || true
+  launchctl bootout "gui/$(id -u)" "$LEGACY_REFRESH_PLIST" >/dev/null 2>&1 || true
+}
+
+case "${1:-}" in
+  install|start) start_service ;;
+  stop) stop_service ;;
+  restart)
+    stop_service
+    start_service
+    ;;
+  status)
+    launchctl list | grep "$LABEL" || true
+    local_health="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 "http://127.0.0.1:$PORT/healthz" 2>/dev/null || true)"
+    local_root="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 "http://127.0.0.1:$PORT/" 2>/dev/null || true)"
+    local_projects="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 "http://127.0.0.1:$PORT/projects" 2>/dev/null || true)"
+    local_runtime="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 5 "http://127.0.0.1:$PORT/api/runtime" 2>/dev/null || true)"
+    [ "$local_health" = "200" ] && echo "local health: ok" || echo "local health: down ($local_health)"
+    [ "$local_root" = "401" ] && echo "local console: protected" || echo "local console: unexpected ($local_root)"
+    [ "$local_projects" = "401" ] && echo "local projects: protected" || echo "local projects: unexpected ($local_projects)"
+    [ "$local_runtime" = "401" ] && echo "local heartbeat: protected" || echo "local heartbeat: unexpected ($local_runtime)"
+    if [ "$(curl -fsSL --max-time 10 "$PUBLIC_URL/healthz" 2>/dev/null || true)" = "ok" ]; then
+      public_status="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$PUBLIC_URL/" 2>/dev/null || true)"
+      case "$public_status" in
+        302|401|403) echo "public: protected ($public_status) $PUBLIC_URL" ;;
+        200) echo "public: reachable but not protected (200) $PUBLIC_URL" ;;
+        *) echo "public: health ok; console unexpected ($public_status) $PUBLIC_URL" ;;
+      esac
+    else
+      echo "public: down $PUBLIC_URL"
+    fi
+    ;;
+  open) open "$PUBLIC_URL" ;;
+  publish) publish_runtime ;;
+  serve)
+    publish_runtime
+    exec "$NODE_BIN" "$RUNTIME_DIR/server.mjs"
+    ;;
+  -h|--help|help|"") usage ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

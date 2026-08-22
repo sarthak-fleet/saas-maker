@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "balanced", "reasoning": "medium" },
+  "minimum": { "intelligence": "economy", "reasoning": "medium" },
+  "degradation": "allow",
+  "rationale": "The current runtime briefs and verifies a separately configured teammate."
+}

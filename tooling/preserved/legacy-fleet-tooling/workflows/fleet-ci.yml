@@ -1,0 +1,30 @@
+name: Fleet Contracts CI
+
+on:
+  workflow_call:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Initialize public workflow module
+        run: git submodule update --init --depth 1 foundry/ops/workflows
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: foundry/ops/pnpm-lock.yaml
+      - working-directory: foundry/ops
+        run: pnpm install --frozen-lockfile
+      - run: pnpm run test:fleet
+      - run: pnpm run check:registry
+      - run: pnpm run check:public

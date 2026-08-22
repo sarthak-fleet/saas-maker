@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fleet Design Workflow"
+  short_description: "Ship Fleet UI with evidence and owner alignment"
+  default_prompt: "Use $design-workflow to classify, implement, and verify this meaningful Fleet UI change."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web 3D Pipeline"
+  short_description: "Shape and validate performant web 3D"
+  default_prompt: "Use $web-3d-pipeline to choose and validate the right web 3D delivery pipeline."

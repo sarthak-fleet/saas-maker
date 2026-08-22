@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SERVER_PLIST="$HOME/Library/LaunchAgents/com.assistant.wifi-watch-server.plist"
+TUNNEL_PLIST="$HOME/Library/LaunchAgents/com.assistant.wifi-watch-tunnel.plist"
+SERVER_LABEL="gui/$(id -u)/com.assistant.wifi-watch-server"
+TUNNEL_LABEL="gui/$(id -u)/com.assistant.wifi-watch-tunnel"
+LOCAL_URL="http://127.0.0.1:7088"
+
+load_server() {
+  launchctl bootstrap "gui/$(id -u)" "$SERVER_PLIST" 2>/dev/null || true
+  launchctl kickstart -k "$SERVER_LABEL"
+}
+
+unload_tunnel() {
+  launchctl bootout "$TUNNEL_LABEL" 2>/dev/null || true
+}
+
+case "${1:-status}" in
+  start)
+    load_server
+    launchctl bootstrap "gui/$(id -u)" "$TUNNEL_PLIST" 2>/dev/null || true
+    launchctl kickstart -k "$TUNNEL_LABEL"
+    ;;
+  local-only)
+    load_server
+    unload_tunnel
+    ;;
+  tunnel)
+    load_server
+    launchctl bootstrap "gui/$(id -u)" "$TUNNEL_PLIST" 2>/dev/null || true
+    launchctl kickstart -k "$TUNNEL_LABEL"
+    ;;
+  stop)
+    unload_tunnel
+    launchctl bootout "$SERVER_LABEL" 2>/dev/null || true
+    ;;
+  status)
+    echo "Local: $LOCAL_URL"
+    curl -fsS "$LOCAL_URL/api/status" || true
+    echo
+    grep -Eo 'https://[-a-zA-Z0-9.]+\.trycloudflare\.com' "$HOME/Library/Logs/wifi-watch-tunnel.err.log" 2>/dev/null | tail -1 | sed 's/^/Public: /' || true
+    ;;
+  *)
+    echo "Usage: wifi-watch {start|tunnel|local-only|stop|status}" >&2
+    exit 2
+    ;;
+esac

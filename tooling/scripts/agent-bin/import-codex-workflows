@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -ne 1 ]; then
+  echo "usage: import-codex-workflows <codex-workflows.tgz>" >&2
+  exit 2
+fi
+
+ARCHIVE="$1"
+CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+STAMP="$(date +%Y%m%d-%H%M%S)"
+WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/codex-workflows.XXXXXX")"
+
+cleanup() {
+  rm -rf "$WORKDIR"
+}
+trap cleanup EXIT
+
+if [ ! -f "$ARCHIVE" ]; then
+  echo "archive not found: $ARCHIVE" >&2
+  exit 1
+fi
+
+mkdir -p "$CODEX_HOME"
+tar -xzf "$ARCHIVE" -C "$WORKDIR"
+
+SRC="$WORKDIR/.codex"
+if [ ! -d "$SRC" ]; then
+  SRC="$WORKDIR"
+fi
+
+BACKUP="$CODEX_HOME/import-backup-$STAMP"
+mkdir -p "$BACKUP"
+
+for name in workflows rules skills plugins memories; do
+  if [ -e "$SRC/$name" ]; then
+    if [ -e "$CODEX_HOME/$name" ]; then
+      cp -R "$CODEX_HOME/$name" "$BACKUP/$name"
+    fi
+    mkdir -p "$CODEX_HOME/$name"
+    rsync -a "$SRC/$name/" "$CODEX_HOME/$name/"
+    echo "imported: $name"
+  fi
+done
+
+if [ -f "$SRC/config.toml" ]; then
+  cp "$SRC/config.toml" "$BACKUP/config.toml.source"
+  echo "saved source config for manual review: $BACKUP/config.toml.source"
+fi
+
+echo "backup: $BACKUP"
+echo "done"

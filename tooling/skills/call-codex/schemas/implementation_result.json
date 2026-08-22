@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["completed", "partial", "blocked", "failed"],
+      "description": "completed = task done as briefed; partial = some of it done, see followups; blocked = could not proceed, see blockers in summary; failed = attempted and abandoned"
+    },
+    "summary": {
+      "type": "string",
+      "description": "2-5 sentences: what was changed and why, plus any blockers"
+    },
+    "files_changed": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Repo-relative paths of every file created, modified, or deleted"
+    },
+    "tests": {
+      "type": "object",
+      "properties": {
+        "command": { "type": "string", "description": "Exact test command run, or empty if none" },
+        "result": { "type": "string", "enum": ["passed", "failed", "not_run"] },
+        "detail": { "type": "string", "description": "Failure output summary if failed, else empty" }
+      },
+      "required": ["command", "result", "detail"],
+      "additionalProperties": false
+    },
+    "followups": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Work intentionally left undone, discovered debt, or things the parent should verify"
+    },
+    "deviations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Every place the implementation departs from the brief, and why. Empty if none."
+    }
+  },
+  "required": ["status", "summary", "files_changed", "tests", "followups", "deviations"],
+  "additionalProperties": false
+}

@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+FLEET_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+STATE_ROOT="$HOME/Library/Application Support/Fleet Ops/learning-sync"
+CHECKOUT="$STATE_ROOT/swe-interview-prep"
+LOG_DIR="$STATE_ROOT/logs"
+LOCK_DIR="$STATE_ROOT/sync.lock"
+NOTIFY="$SCRIPT_DIR/fleet-notify"
+REMOTE="https://github.com/Significant-Hobbies/swe-interview-prep.git"
+
+mkdir -p "$STATE_ROOT" "$LOG_DIR"
+
+ensure_checkout() {
+  if [ ! -d "$CHECKOUT/.git" ]; then
+    git clone "$REMOTE" "$CHECKOUT"
+  fi
+  git -C "$CHECKOUT" switch main
+  git -C "$CHECKOUT" pull --ff-only origin main
+  if [ ! -d "$CHECKOUT/node_modules" ]; then
+    pnpm --dir "$CHECKOUT" install --frozen-lockfile
+  fi
+}
+
+if [ "${1:-}" = "configure-reader" ]; then
+  printf "Reader API token (starts with rdr_): " >&2
+  IFS= read -r -s token
+  printf '\n' >&2
+  if [[ "$token" != rdr_* ]]; then
+    echo "invalid Reader API token" >&2
+    exit 2
+  fi
+  ensure_checkout
+  printf '%s' "$token" | pnpm --dir "$CHECKOUT" exec wrangler pages secret put \
+    READER_API_TOKEN --project-name=swe-interview-prep
+  unset token
+  echo "Private Reader learning proxy configured in Cloudflare Pages"
+  exit 0
+fi
+
+if [ "$#" -gt 0 ]; then
+  echo "usage: sync-learning-sources [configure-reader]" >&2
+  exit 2
+fi
+
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+  echo "learning sync already running"
+  exit 0
+fi
+cleanup() {
+  status=$?
+  rmdir "$LOCK_DIR" 2>/dev/null || true
+  if [ "$status" -ne 0 ] && [ -x "$NOTIFY" ]; then
+    "$NOTIFY" emit --severity warning --source learning-sync --project swe-interview-prep \
+      --title "Learning source sync failed" \
+      --body "The nightly learning registry refresh failed. Check the machine-local sync log." \
+      --dedupe-key "learning-sync:failure" >/dev/null 2>&1 || true
+  fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+log="$LOG_DIR/$(date +%Y%m%d-%H%M%S).log"
+exec > >(tee -a "$log") 2>&1
+
+ensure_checkout
+
+FLEET_ROOT="$FLEET_ROOT" pnpm --dir "$CHECKOUT" sync:learning-sources
+
+if git -C "$CHECKOUT" diff --quiet -- src/data/learning-sources.json; then
+  echo "learning registry already current"
+  exit 0
+fi
+
+git -C "$CHECKOUT" add src/data/learning-sources.json
+git -C "$CHECKOUT" commit -m "chore: refresh unified learning sources"
+git -C "$CHECKOUT" push origin main
+
+if [ -x "$NOTIFY" ]; then
+  "$NOTIFY" emit --severity success --source learning-sync --project swe-interview-prep \
+    --title "Learning sources refreshed" \
+    --body "Project learning docs, research paths, and the daily briefing registry were refreshed. Reader saves load privately at request time." \
+    --dedupe-key "learning-sync:$(date +%Y-%m-%d)" >/dev/null 2>&1 || true
+fi

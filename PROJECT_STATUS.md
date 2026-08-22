@@ -9,8 +9,8 @@ collect and review customer feedback, and package reusable public-facing
 components without pulling product code into Foundry.
 
 It is not the Fleet control plane. Site Health is the source of truth for the
-private project catalog and portfolio health. Workflows and Skills owns shared
-automation and agent skills. Drank, Reel Pipeline, PSI Swarm, Mobile Dev
+private project catalog and portfolio health. SaaS Maker Tooling owns shared
+automation and agent skills under `tooling/`. Drank, Reel Pipeline, PSI Swarm, Mobile Dev
 Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Dependencies
@@ -24,6 +24,12 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 - React as the peer runtime for the AI Chat Footer and Portfolio Project Strip.
 
 ## Timeline
+
+- **2026-08-23 — Shared tooling consolidated:** Imported the complete public
+  Workflows and Skills history under `tooling/`, moved reusable GitHub workflow
+  entrypoints to the repository root, and added human and JSON capability
+  directories at `/tools` and `/tools.json`. Callers resolve one SaaS Maker
+  source; predecessor archival is verified separately after cutover.
 
 - **2026-08-22 — Homepage and directory roles separated:** Reduced the public
   homepage to four products in focus, one complete-directory gateway, the
@@ -115,6 +121,8 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 | @saas-maker/feedback | Maintained public runtime package |
 | @saas-maker/ai-chat-footer | Backend-free AI assistant footer package |
 | @saas-maker/portfolio-project-strip | Backend-free portfolio discovery strip package |
+| sassmaker.com/tools | Public directory for reusable skills, scripts, templates, and guides |
+| tooling/ | Canonical credential-free shared automation source |
 
 ## Features (shipped)
 
@@ -128,6 +136,8 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   links, deployment context, and retained Git-history bounds.
 - Matching human, JSON, Markdown, sitemap, and agent-readable directory
   surfaces.
+- Public human and JSON indexes for reusable Fleet capabilities, backed by the
+  same checked-in catalog validator used by operators and agents.
 - Feedback submission for bug, feature, and general feedback.
 - Optional screenshots and page-element anchoring.
 - Private cross-product feedback inbox with type/status filters and status controls.

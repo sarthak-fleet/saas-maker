@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "balanced", "reasoning": "high" },
+  "minimum": { "intelligence": "economy", "reasoning": "medium" },
+  "degradation": "ask",
+  "rationale": "Local verification needs precise probe interpretation and honest timeout reporting, but the engine is deterministic and does not require frontier reasoning."
+}

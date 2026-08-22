@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+session="$($SCRIPT_DIR/learning-session)"
+url="$(jq -r '.url' <<<"$session")"
+date_key="$(jq -r '.date' <<<"$session")"
+
+"$SCRIPT_DIR/fleet-notify" emit \
+  --severity info \
+  --source daily-learning \
+  --project swe-interview-prep \
+  --title "Today's 30-minute learning session" \
+  --body "High Signal plus due Fleet learning. Ask for another session or name any project to focus." \
+  --url "$url" \
+  --dedupe-key "daily-learning:$date_key" \
+  --ttl-minutes 840 \
+  --channel openclaw-telegram >/dev/null
+
+printf '%s\n' "$url"

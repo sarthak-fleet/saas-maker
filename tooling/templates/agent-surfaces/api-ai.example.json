@@ -1,0 +1,25 @@
+{
+  "name": "example",
+  "version": "1",
+  "url": "https://example.com",
+  "llms": "https://example.com/llms.txt",
+  "llmsFull": null,
+  "sitemap": "https://example.com/sitemap.xml",
+  "markdown": {
+    "suffix": ".md",
+    "negotiation": true
+  },
+  "surfaces": [
+    {
+      "id": "home",
+      "url": "https://example.com/",
+      "md": "https://example.com/index.md",
+      "kind": "static",
+      "description": "Product landing"
+    }
+  ],
+  "auth": {
+    "public": true,
+    "notes": "Dashboard routes require a session and are not agent-indexed."
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Storage"
+  short_description: "Create a safe workspace-local storage report"
+  default_prompt: "Use $analyze-storage to inspect disk usage and create a read-only report inside Fleet Workspace."

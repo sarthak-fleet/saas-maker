@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LABEL="com.assistant.fleet-notifications"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+LOG_DIR="$HOME/Library/Logs/Fleet Ops"
+UID_VALUE="$(id -u)"
+NODE_BIN="$(command -v node)"
+
+usage() {
+  echo "usage: fleet-notification-service <start|stop|restart|status>"
+}
+
+start() {
+  mkdir -p "$(dirname "$PLIST")" "$LOG_DIR"
+  cat > "$PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>$LABEL</string>
+  <key>ProgramArguments</key><array>
+    <string>$NODE_BIN</string><string>$SCRIPT_DIR/fleet-notify</string><string>drain</string>
+  </array>
+  <key>EnvironmentVariables</key><dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/opt/homebrew/opt/node@22/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>StartInterval</key><integer>60</integer>
+  <key>RunAtLoad</key><true/>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>$LOG_DIR/notifications.log</string>
+  <key>StandardErrorPath</key><string>$LOG_DIR/notifications.error.log</string>
+</dict></plist>
+EOF
+  plutil -lint "$PLIST" >/dev/null
+  launchctl bootout "gui/$UID_VALUE/$LABEL" 2>/dev/null || true
+  launchctl bootstrap "gui/$UID_VALUE" "$PLIST"
+  echo "fleet notification worker started"
+}
+
+stop() {
+  launchctl bootout "gui/$UID_VALUE/$LABEL" 2>/dev/null || true
+  echo "fleet notification worker stopped"
+}
+
+case "${1:-}" in
+  start) start ;;
+  stop) stop ;;
+  restart) stop; start ;;
+  status) launchctl print "gui/$UID_VALUE/$LABEL" 2>/dev/null | sed -n '1,45p' || echo "fleet notification worker is stopped" ;;
+  *) usage >&2; exit 2 ;;
+esac

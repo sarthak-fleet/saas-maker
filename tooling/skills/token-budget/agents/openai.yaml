@@ -1,0 +1,4 @@
+interface:
+  display_name: "Token Budget"
+  short_description: "Audit Codex context and token bloat"
+  default_prompt: "Use $token-budget to audit this workspace for avoidable Codex token usage."

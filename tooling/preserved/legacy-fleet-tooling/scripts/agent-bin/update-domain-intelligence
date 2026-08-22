@@ -1,0 +1,34 @@
+#!/bin/zsh
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+FLEET_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+DRANK_ROOT="$FLEET_ROOT/drank"
+PSI_ROOT="$FLEET_ROOT/psi-swarm"
+LOCK="$HOME/Library/Application Support/Fleet Ops/domain-intelligence/update.lock"
+
+mkdir -p "${LOCK:h}"
+if ! mkdir "$LOCK" 2>/dev/null; then
+  echo "domain intelligence update already running"
+  exit 0
+fi
+trap 'rmdir "$LOCK" 2>/dev/null || true' EXIT
+
+node "$DRANK_ROOT/scripts/update-global-dr.mjs" \
+  --sites data/fleet-sites.json \
+  --data data/fleet-dr.json \
+  --label fleet
+
+if [[ ! -f "$PSI_ROOT/cli/dist/cli.js" ]]; then
+  pnpm --dir "$PSI_ROOT" install --frozen-lockfile
+  pnpm --dir "$PSI_ROOT" run build:cli
+fi
+
+jq -r '.[]' "$DRANK_ROOT/data/fleet-sites.json" | while IFS= read -r domain; do
+  pnpm --dir "$PSI_ROOT" cli run "https://$domain" \
+    --runs 3 --presets mobile-mid --tag fleet-weekly --parallel 1 \
+    --no-suggest --no-crux --no-ahrefs --no-diagnose --no-insight
+done
+
+node "$FLEET_ROOT/workflows-and-skills/scripts/agent-bin/public-heartbeat.mjs" >/dev/null

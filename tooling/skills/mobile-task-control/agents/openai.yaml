@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Task Control"
+  short_description: "Start and supervise approval-gated Fleet work from chat"
+  default_prompt: "Start a Fleet task from this chat, expose its status, and request approval before any side effect."
