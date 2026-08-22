@@ -37,8 +37,9 @@ long prose near 70 characters.
 Compose public product discovery as a wall elevation. Matte-black mullions
 separate unevenly proportioned panes; each pane carries one statement or
 destination. The homepage first viewport pairs one large studio pane with four
-featured product panes. Supporting products become disciplined specimen rows
-rather than cards.
+featured product panes. It does not repeat the catalog: one directory gateway
+points to `/projects`, where supporting and past work become disciplined
+specimen rows rather than cards.
 
 Product detail pages inherit the same workshop world: one clear identity pane
 shares a steel frame with a saturated canonical-product action, while public
