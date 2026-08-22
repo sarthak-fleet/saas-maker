@@ -25,6 +25,13 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-22 — Complete Fleet directory published:** Expanded the public,
+  privacy-filtered projection from the maintained subset to all 58 retained
+  Fleet identities. The new `/projects` register separates current,
+  supporting/parked, and past work; exposes public destinations, deployment
+  classification, platforms, curated technology, and first/latest retained Git
+  commit dates; and keeps the HTML, JSON, Markdown, sitemap, and agent surfaces
+  aligned without runtime access to Site Health.
 - **2026-08-22 — Feedback agent contract deployed:** Applied D1 migration
   `0025` (both preserved feedback rows kept), deployed `saasmaker-api` and
   `saasmaker-dashboard` at `c5d3e845`, and attached `app.sassmaker.com` as a
@@ -90,8 +97,14 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Features (shipped)
 
-- Deterministic 31-product public projection consumed without private Fleet
-  runtime access.
+- Deterministic 58-identity public projection consumed without private Fleet
+  runtime access, with deny-by-default field validation.
+- Searchable `/projects` register grouped by current, supporting/parked, and
+  past work, with form-family and platform filters, mobile filter return,
+  deployment context, public links, technology labels, and retained Git-history
+  bounds.
+- Matching human, JSON, Markdown, sitemap, and agent-readable directory
+  surfaces.
 - Feedback submission for bug, feature, and general feedback.
 - Optional screenshots and page-element anchoring.
 - Private cross-product feedback inbox with type/status filters and status controls.

@@ -10,7 +10,7 @@
     "start": "astro dev",
     "build": "astro build",
     "build:showcase-only": "astro build",
-    "deploy": "pnpm build && wrangler pages deploy dist --project-name saas-maker-home --branch main && node ../../scripts/smoke-prod.mjs",
+    "deploy": "pnpm build && wrangler pages deploy dist --project-name saas-maker-home --branch main && node ../../scripts/smoke-prod.mjs --directory-only",
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "astro sync && tsc --noEmit"

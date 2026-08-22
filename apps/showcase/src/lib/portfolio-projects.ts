@@ -26,3 +26,5 @@ export const portfolioProjects = (publicCatalog.products as PublicProject[]).map
     domains: [new URL(url).hostname],
   })
 );
+
+export const directoryProjects = publicCatalog.directory;

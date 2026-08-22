@@ -1,6 +1,7 @@
 ---
 import { ACTIVE_GROUPS, PAST_PROJECTS, PROJECT_COUNT } from '../data/projects';
 import { LEARNINGS } from '../data/learnings';
+import { DIRECTORY_COUNT } from '../data/directory';
 
 const latestLearning = LEARNINGS[0];
 ---
@@ -13,7 +14,7 @@ const latestLearning = LEARNINGS[0];
         Each product keeps its own domain, roadmap, changelog, and release
         boundary. Nothing here is a concept render.
       </p>
-      <a href="#latest-learning">Skip to latest learning <span aria-hidden="true">↓</span></a>
+      <a href="/projects">Browse the complete {DIRECTORY_COUNT}-project directory <span aria-hidden="true">→</span></a>
     </div>
   </header>
 

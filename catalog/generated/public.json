@@ -1,7 +1,1742 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "generatedFrom": [
     "site-health/apps/backend/config/projects.json"
+  ],
+  "historySemantics": "firstCommitAt and latestCommitAt are dates from the currently retained Git history. They are not incorporation, launch, or retirement dates.",
+  "directory": [
+    {
+      "id": "codevetter",
+      "name": "CodeVetter",
+      "description": "AI code review platform — desktop-first, works offline.",
+      "kind": "product",
+      "form": "Desktop app",
+      "platforms": [
+        "macOS",
+        "Windows",
+        "Linux",
+        "Web"
+      ],
+      "technologies": [
+        "Tauri",
+        "React",
+        "Go",
+        "Rust"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "codevetter.com"
+      ],
+      "url": "https://codevetter.com",
+      "repositoryUrl": "https://github.com/Codevetter/codevetter",
+      "changelogUrl": "https://codevetter.com/changelog",
+      "roadmapUrl": "https://github.com/Codevetter/codevetter/issues",
+      "firstCommitAt": "2025-11-30",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "pace",
+      "name": "HeyPace",
+      "description": "Local-only macOS voice agent that can understand what is on your screen.",
+      "kind": "product",
+      "form": "macOS app",
+      "platforms": [
+        "macOS",
+        "Web"
+      ],
+      "technologies": [
+        "Swift",
+        "SwiftUI",
+        "Astro",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "heypace.app"
+      ],
+      "url": "https://heypace.app",
+      "repositoryUrl": "https://github.com/HeyPace/pace",
+      "changelogUrl": "https://heypace.app/changelog",
+      "roadmapUrl": "https://github.com/HeyPace/pace/issues",
+      "firstCommitAt": "2026-07-13",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "posttrainllm",
+      "name": "PostTrainLLM",
+      "description": "A local factory for training, evaluating, and running specialist language models.",
+      "kind": "product",
+      "form": "Research platform",
+      "platforms": [
+        "Web",
+        "Local"
+      ],
+      "technologies": [
+        "Astro",
+        "Python",
+        "Rust",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "posttrainllm.com"
+      ],
+      "url": "https://posttrainllm.com",
+      "repositoryUrl": "https://github.com/PostTrainLLM/posttrainllm",
+      "changelogUrl": "https://posttrainllm.com/changelog",
+      "roadmapUrl": "https://github.com/PostTrainLLM/posttrainllm/issues",
+      "firstCommitAt": "2026-05-21",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "site-health",
+      "name": "Site Health",
+      "description": "A local portfolio dashboard for domains, performance, search, and AI visibility evidence.",
+      "kind": "platform",
+      "form": "Local dashboard",
+      "platforms": [
+        "Web",
+        "Local"
+      ],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Node.js"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "firstCommitAt": "2026-05-02",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "workflows-and-skills",
+      "name": "Workflows and Skills",
+      "description": "Reusable Fleet skills, workflows, and operator scripts without product runtime ownership.",
+      "kind": "platform",
+      "form": "Automation toolkit",
+      "platforms": [
+        "CLI",
+        "GitHub Actions"
+      ],
+      "technologies": [
+        "JavaScript",
+        "Shell",
+        "GitHub Actions"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "GitHub Actions"
+      ],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sass-maker/workflows-and-skills",
+      "roadmapUrl": "https://github.com/sass-maker/workflows-and-skills/issues",
+      "firstCommitAt": "2026-07-30",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "chatgpt-connections",
+      "name": "ChatGPT Connections",
+      "description": "A read-only MCP gateway that exposes selected public Fleet data to ChatGPT connections.",
+      "kind": "platform",
+      "form": "MCP service",
+      "platforms": [
+        "API",
+        "ChatGPT"
+      ],
+      "technologies": [
+        "TypeScript",
+        "Cloudflare Workers",
+        "MCP"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sass-maker/chatgpt-connections",
+      "roadmapUrl": "https://github.com/sass-maker/chatgpt-connections/issues",
+      "firstCommitAt": "2026-08-11",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "saas-maker",
+      "name": "SaaS Maker",
+      "description": "Software as a specialized service: a living studio of focused products built for particular problems and maintained in public.",
+      "kind": "product",
+      "form": "Web directory and service",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Astro",
+        "React",
+        "Cloudflare",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "sassmaker.com"
+      ],
+      "url": "https://sassmaker.com",
+      "repositoryUrl": "https://github.com/sass-maker/saas-maker",
+      "changelogUrl": "https://sassmaker.com/changelog",
+      "roadmapUrl": "https://github.com/sass-maker/saas-maker/issues",
+      "firstCommitAt": "2026-02-26",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "gitstat",
+      "name": "GitStat",
+      "description": "A GitHub analytics dashboard for contribution history, code churn, collaboration, and AI-assisted work.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "git.significanthobbies.com"
+      ],
+      "url": "https://git.significanthobbies.com",
+      "repositoryUrl": "https://github.com/sass-maker/gitstat",
+      "roadmapUrl": "https://github.com/sass-maker/gitstat/issues",
+      "firstCommitAt": "2026-08-21",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "reel-pipeline",
+      "name": "Reel Pipeline",
+      "description": "A cost-bounded pipeline for planning, producing, and retaining short-form video artifacts.",
+      "kind": "product",
+      "form": "Video pipeline",
+      "platforms": [
+        "CLI",
+        "API",
+        "Local"
+      ],
+      "technologies": [
+        "Python",
+        "Rust",
+        "Cloudflare Workers",
+        "R2"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sass-maker/reel-pipeline",
+      "roadmapUrl": "https://github.com/sass-maker/reel-pipeline/issues",
+      "firstCommitAt": "2026-05-28",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "mobile-dev-cockpit",
+      "name": "Mobile Dev Cockpit",
+      "description": "A parked mobile supervision client retained for possible future reactivation.",
+      "kind": "product",
+      "form": "Mobile app",
+      "platforms": [
+        "iOS",
+        "Android"
+      ],
+      "technologies": [
+        "React Native",
+        "TypeScript"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sarthakagrawal927/mobile-dev-cockpit",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/mobile-dev-cockpit/issues",
+      "firstCommitAt": "2026-07-13",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "drank",
+      "name": "Drank",
+      "description": "Domain Rating intelligence for product, SEO, and market research.",
+      "kind": "product",
+      "form": "Web tool",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "domains.sassmaker.com"
+      ],
+      "url": "https://domains.sassmaker.com",
+      "repositoryUrl": "https://github.com/sass-maker/drank",
+      "changelogUrl": "https://domains.sassmaker.com/changelog",
+      "roadmapUrl": "https://github.com/sass-maker/drank/issues",
+      "firstCommitAt": "2026-06-10",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "email-manager",
+      "name": "Email Manager",
+      "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "React",
+        "Hono",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "mail.significanthobbies.com"
+      ],
+      "url": "https://mail.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/email-manager",
+      "changelogUrl": "https://mail.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
+      "firstCommitAt": "2026-02-24",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "chatgpt-memory-insights",
+      "name": "Memory Map",
+      "description": "Turn a ChatGPT export into a private, browser-computed map of recurring themes, facts, and conversations.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "chatgpt.significanthobbies.com"
+      ],
+      "url": "https://chatgpt.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights",
+      "changelogUrl": "https://chatgpt.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights/issues",
+      "firstCommitAt": "2026-07-28",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "free-ai",
+      "name": "Free AI",
+      "description": "OpenAI-compatible gateway across free-tier model providers.",
+      "kind": "platform",
+      "form": "API gateway",
+      "platforms": [
+        "API",
+        "Web"
+      ],
+      "technologies": [
+        "Hono",
+        "TypeScript",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "ai-gateway.sassmaker.com"
+      ],
+      "url": "https://ai-gateway.sassmaker.com",
+      "repositoryUrl": "https://github.com/sass-maker/free-ai",
+      "changelogUrl": "https://ai-gateway.sassmaker.com/changelog",
+      "roadmapUrl": "https://github.com/sass-maker/free-ai/issues",
+      "firstCommitAt": "2026-02-15",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "psi-swarm",
+      "name": "PSI Swarm",
+      "description": "Repeated Lighthouse distributions for honest website performance tracking.",
+      "kind": "platform",
+      "form": "Performance platform",
+      "platforms": [
+        "Web",
+        "CLI"
+      ],
+      "technologies": [
+        "Astro",
+        "React",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "performance.sassmaker.com"
+      ],
+      "url": "https://performance.sassmaker.com",
+      "repositoryUrl": "https://github.com/sass-maker/psi-swarm",
+      "changelogUrl": "https://performance.sassmaker.com/changelog",
+      "roadmapUrl": "https://github.com/sass-maker/psi-swarm/issues",
+      "firstCommitAt": "2026-06-03",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "high-signal",
+      "name": "High Signal",
+      "description": "Evidence-backed daily intelligence across technology, startups, finance, and public markets.",
+      "kind": "product",
+      "form": "Intelligence web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "Hono",
+        "Cloudflare"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "highsignal.app"
+      ],
+      "url": "https://highsignal.app",
+      "repositoryUrl": "https://github.com/High-Signal-App/high-signal",
+      "changelogUrl": "https://highsignal.app/changelog",
+      "roadmapUrl": "https://github.com/High-Signal-App/high-signal/issues",
+      "firstCommitAt": "2026-04-25",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "everythingrated",
+      "name": "EverythingRated",
+      "description": "A general-purpose rating and comparison experiment.",
+      "kind": "experiment",
+      "form": "Ratings experiment",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "Next.js",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "ratings.highsignal.app"
+      ],
+      "url": "https://ratings.highsignal.app",
+      "repositoryUrl": "https://github.com/High-Signal-App/everythingrated",
+      "roadmapUrl": "https://github.com/High-Signal-App/everythingrated/issues",
+      "firstCommitAt": "2026-04-26",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "research-papers",
+      "name": "Research Papers",
+      "description": "Academic paper discovery and a structured research data asset.",
+      "kind": "product",
+      "form": "Research library",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "Python",
+        "React",
+        "TypeScript"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "papers.highsignal.app"
+      ],
+      "url": "https://papers.highsignal.app",
+      "repositoryUrl": "https://github.com/High-Signal-App/research-papers",
+      "changelogUrl": "https://papers.highsignal.app/changelog",
+      "roadmapUrl": "https://github.com/High-Signal-App/research-papers/issues",
+      "firstCommitAt": "2026-05-30",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "materia",
+      "name": "Materia",
+      "description": "Evidence-graded remedy reference organized by body system.",
+      "kind": "experiment",
+      "form": "Interactive experiment",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "React",
+        "Three.js",
+        "Cloudflare Pages"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "materia.significanthobbies.com"
+      ],
+      "url": "https://materia.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/materia",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/materia/issues",
+      "firstCommitAt": "2026-06-21",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "knowledge-base",
+      "name": "Knowledge Base",
+      "description": "Private agent search over specialized corpora with ranked citations, provenance, and schema-aware retrieval.",
+      "kind": "platform",
+      "form": "Knowledge platform",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Astro",
+        "Hono",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "knowledgebase.sassmaker.com",
+        "search.sassmaker.com"
+      ],
+      "url": "https://knowledgebase.sassmaker.com",
+      "repositoryUrl": "https://github.com/sass-maker/knowledge-base",
+      "changelogUrl": "https://knowledgebase.sassmaker.com/changelog",
+      "roadmapUrl": "https://github.com/sass-maker/knowledge-base/issues",
+      "firstCommitAt": "2026-05-27",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "significanthobbies",
+      "name": "Significant Hobbies",
+      "description": "A simple directory for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor.",
+      "kind": "product",
+      "form": "Publication",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "Next.js",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers",
+        "Apple App Store Connect"
+      ],
+      "domains": [
+        "significanthobbies.com",
+        "live.significanthobbies.com"
+      ],
+      "url": "https://significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/significanthobbies",
+      "changelogUrl": "https://significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/significanthobbies/issues",
+      "firstCommitAt": "2026-03-01",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "india-standards",
+      "name": "India Standards",
+      "description": "A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.",
+      "kind": "product",
+      "form": "Reference web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Cloudflare Workers"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "india-standards.significanthobbies.com",
+        "india-numbers.significanthobbies.com"
+      ],
+      "url": "https://india-standards.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/india-standards",
+      "changelogUrl": "https://india-standards.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/india-standards/issues",
+      "firstCommitAt": "2026-07-27",
+      "latestCommitAt": "2026-08-21"
+    },
+    {
+      "id": "anime-list",
+      "name": "Anime List",
+      "description": "Anime and manga discovery with multi-axis filtering and personal watchlists.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "Hono",
+        "Cloudflare"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "anime.significanthobbies.com"
+      ],
+      "url": "https://anime.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/anime-list",
+      "changelogUrl": "https://anime.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/anime-list/issues",
+      "firstCommitAt": "2025-02-16",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "chess",
+      "name": "Chess Coach",
+      "description": "Browser chess against Stockfish with optional AI move coaching.",
+      "kind": "experiment",
+      "form": "Web game",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "React",
+        "Vite",
+        "Cloudflare Pages"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "chess.significanthobbies.com"
+      ],
+      "url": "https://chess.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/chess",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/chess/issues",
+      "firstCommitAt": "2026-02-22",
+      "latestCommitAt": "2026-08-17"
+    },
+    {
+      "id": "looptv",
+      "name": "LoopTV",
+      "description": "A lean-back, TV-style random video player for curated channels.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web",
+        "TV"
+      ],
+      "technologies": [
+        "Astro",
+        "React",
+        "Vite",
+        "Cloudflare Pages"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "tv.significanthobbies.com"
+      ],
+      "url": "https://tv.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/looptv",
+      "changelogUrl": "https://tv.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/looptv/issues",
+      "firstCommitAt": "2026-04-04",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "reader",
+      "name": "Reader",
+      "description": "Capture, annotate, revisit, and discuss saved reading.",
+      "kind": "product",
+      "form": "Reading web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "React",
+        "Hono",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "read.significanthobbies.com"
+      ],
+      "url": "https://read.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/reader",
+      "changelogUrl": "https://read.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/reader/issues",
+      "firstCommitAt": "2025-11-16",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "swe-interview-prep",
+      "name": "SWE Interview Prep",
+      "description": "A learning OS for software-engineering interview practice.",
+      "kind": "product",
+      "form": "Learning web app",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "learn.significanthobbies.com"
+      ],
+      "url": "https://learn.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/swe-interview-prep",
+      "changelogUrl": "https://learn.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/swe-interview-prep/issues",
+      "firstCommitAt": "2026-02-08",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "calorie",
+      "name": "Calorie",
+      "description": "A private, local-first food, water, and weight journal with transparent timing guidance.",
+      "kind": "product",
+      "form": "iOS app",
+      "platforms": [
+        "iOS",
+        "API"
+      ],
+      "technologies": [
+        "SwiftUI",
+        "Hono",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers",
+        "Apple App Store Connect"
+      ],
+      "domains": [
+        "calorie.significanthobbies.com"
+      ],
+      "url": "https://calorie.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/calorie",
+      "changelogUrl": "https://calorie.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/calorie/issues",
+      "firstCommitAt": "2026-07-25",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "setline",
+      "name": "Setline",
+      "description": "An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Apple App Store Connect"
+      ],
+      "domains": [
+        "setline.significanthobbies.com"
+      ],
+      "url": "https://setline.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/setline",
+      "changelogUrl": "https://setline.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/setline/issues",
+      "firstCommitAt": "2026-07-27",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "personal-platform",
+      "name": "Personal Platform",
+      "description": "A private shared identity and data plane for selected Significant Hobbies apps.",
+      "kind": "platform",
+      "form": "Shared API platform",
+      "platforms": [
+        "API"
+      ],
+      "technologies": [
+        "TypeScript",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [],
+      "repositoryUrl": "https://github.com/Significant-Hobbies/personal-platform",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/personal-platform/issues",
+      "firstCommitAt": "2026-08-21",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "kith",
+      "name": "Kith",
+      "description": "A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Apple App Store Connect"
+      ],
+      "domains": [
+        "kith.significanthobbies.com"
+      ],
+      "url": "https://kith.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/kith",
+      "changelogUrl": "https://kith.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/kith/issues",
+      "firstCommitAt": "2026-08-16",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "ios-landings",
+      "name": "iOS landings",
+      "description": "Shared Astro factory that builds separate static sites for Significant Hobbies iOS apps.",
+      "kind": "platform",
+      "form": "Landing-site factory",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "journal.significanthobbies.com"
+      ],
+      "url": "https://journal.significanthobbies.com",
+      "firstCommitAt": "2026-08-17",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "rolepatch",
+      "name": "RolePatch",
+      "description": "AI-assisted resume tailoring, role research, and interview preparation.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "rolepatch.com"
+      ],
+      "url": "https://rolepatch.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/rolepatch",
+      "changelogUrl": "https://rolepatch.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/rolepatch/issues",
+      "firstCommitAt": "2026-02-23",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "karte",
+      "name": "Karte",
+      "description": "An AI link-in-bio that turns a profile into a conversation.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers",
+        "Cloudflare Email Workers"
+      ],
+      "domains": [
+        "karte.cc"
+      ],
+      "url": "https://karte.cc",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/karte",
+      "changelogUrl": "https://karte.cc/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/karte/issues",
+      "firstCommitAt": "2026-03-05",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "starboard",
+      "name": "Starboard",
+      "description": "Organize and semantically search your GitHub stars.",
+      "kind": "product",
+      "form": "Web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "starboard.codevetter.com"
+      ],
+      "url": "https://starboard.codevetter.com",
+      "repositoryUrl": "https://github.com/Codevetter/starboard",
+      "changelogUrl": "https://starboard.codevetter.com/changelog",
+      "roadmapUrl": "https://github.com/Codevetter/starboard/issues",
+      "firstCommitAt": "2026-02-22",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "ai-game",
+      "name": "AliveVille",
+      "description": "Persistent AI world and multi-agent simulation experiments.",
+      "kind": "experiment",
+      "form": "Web game",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "Three.js",
+        "Cloudflare"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "aliveville.com"
+      ],
+      "url": "https://aliveville.com",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/aliveville",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/aliveville/issues",
+      "firstCommitAt": "2026-05-03",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "protein-index",
+      "name": "Protein Index",
+      "description": "Searchable protein and nutrition reference.",
+      "kind": "experiment",
+      "form": "Data API and web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "React",
+        "Hono",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "protein.significanthobbies.com"
+      ],
+      "url": "https://protein.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/protein-index-resilience",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/protein-index-resilience/issues",
+      "firstCommitAt": "2026-07-15",
+      "latestCommitAt": "2026-07-25"
+    },
+    {
+      "id": "veg-protein-food",
+      "name": "Recipe Index",
+      "description": "A searchable directory of vegetarian protein foods and practical nutrition comparisons.",
+      "kind": "experiment",
+      "form": "Food directory",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "Cloudflare Pages"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "veg-protein-food.significanthobbies.com"
+      ],
+      "url": "https://veg-protein-food.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/veg-protein-food",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/veg-protein-food/issues",
+      "firstCommitAt": "2026-08-15",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "app-health",
+      "name": "App Health",
+      "description": "Privacy-first endpoint health for Node, Go, and OpenTelemetry services.",
+      "kind": "product",
+      "form": "Monitoring service",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Hono",
+        "TypeScript",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "health.sassmaker.com",
+        "ingest.sassmaker.com"
+      ],
+      "url": "https://health.sassmaker.com",
+      "repositoryUrl": "https://github.com/sass-maker/app-health",
+      "changelogUrl": "https://health.sassmaker.com/changelog",
+      "roadmapUrl": "https://github.com/sass-maker/app-health/issues",
+      "firstCommitAt": "2026-07-20",
+      "latestCommitAt": "2026-08-21"
+    },
+    {
+      "id": "mashup",
+      "name": "Mashup",
+      "description": "A local-first tool that turns owned media archives into inspectable multi-clip edits.",
+      "kind": "experiment",
+      "form": "Local media tool",
+      "platforms": [
+        "CLI",
+        "Local"
+      ],
+      "technologies": [
+        "Python",
+        "FFmpeg",
+        "SQLite",
+        "MLX"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sass-maker/mashup",
+      "roadmapUrl": "https://github.com/sass-maker/mashup/issues",
+      "firstCommitAt": "2026-07-25",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "saas-ideas",
+      "name": "SaaS Ideas",
+      "description": "A past public directory of software product ideas.",
+      "kind": "product",
+      "form": "Idea directory",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "JavaScript",
+        "Cloudflare Pages"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "ideas.sassmaker.com"
+      ],
+      "url": "https://ideas.sassmaker.com",
+      "firstCommitAt": "2025-05-10",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "motion",
+      "name": "Motion",
+      "description": "Use your body as the controller for an iPhone-hosted game that can mirror to a larger screen.",
+      "kind": "product",
+      "form": "iOS game",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "Web"
+      ],
+      "technologies": [
+        "SwiftUI",
+        "Apple Vision",
+        "Vite",
+        "TypeScript"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "motion.significanthobbies.com"
+      ],
+      "url": "https://motion.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/motion",
+      "changelogUrl": "https://motion.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/motion/issues",
+      "firstCommitAt": "2026-08-17",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "truehire",
+      "name": "TrueHire",
+      "description": "Earlier resume and hiring workflow superseded by RolePatch.",
+      "kind": "experiment",
+      "form": "Hiring experiment",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Cloudflare"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sarthakagrawal927/truehire",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/truehire/issues",
+      "firstCommitAt": "2026-04-24",
+      "latestCommitAt": "2026-07-20"
+    },
+    {
+      "id": "today-little-log",
+      "name": "Today Little Log",
+      "description": "A small daily logging experiment later folded into other work.",
+      "kind": "experiment",
+      "form": "Personal PWA",
+      "platforms": [
+        "Web",
+        "Mobile"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "TypeScript",
+        "Cloudflare"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": false,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sarthakagrawal927/today-little-log",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/today-little-log/issues",
+      "firstCommitAt": "2025-12-03",
+      "latestCommitAt": "2026-07-03"
+    },
+    {
+      "id": "open-historia",
+      "name": "Open Historia",
+      "description": "Interactive historical storytelling and world simulation.",
+      "kind": "experiment",
+      "form": "Strategy web game",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "Hono",
+        "Cloudflare Workers"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "historia.aliveville.com"
+      ],
+      "url": "https://historia.aliveville.com",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/open-historia",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/open-historia/issues",
+      "firstCommitAt": "2026-02-08",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "companion-robot",
+      "name": "Companion Robot",
+      "description": "Earlier companion robotics and embodied-agent exploration.",
+      "kind": "experiment",
+      "form": "Hardware experiment",
+      "platforms": [
+        "iOS",
+        "macOS",
+        "ESP32"
+      ],
+      "technologies": [
+        "Swift",
+        "Apple Vision",
+        "ESP32",
+        "Local AI"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "repositoryUrl": "https://github.com/HeyPace/companion-robot",
+      "roadmapUrl": "https://github.com/HeyPace/companion-robot/issues",
+      "firstCommitAt": "2026-06-25",
+      "latestCommitAt": "2026-07-17"
+    },
+    {
+      "id": "elves-hq",
+      "name": "Elves HQ",
+      "description": "A past collaborative-agent interface experiment retained for reference.",
+      "kind": "experiment",
+      "form": "Web experiment",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "React",
+        "Vite",
+        "TypeScript"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "firstCommitAt": "2026-07-06",
+      "latestCommitAt": "2026-07-25"
+    },
+    {
+      "id": "forecast-lab",
+      "name": "Forecast Lab",
+      "description": "Forecasting experiments and evaluation tooling.",
+      "kind": "experiment",
+      "form": "Research toolkit",
+      "platforms": [
+        "CLI",
+        "Web"
+      ],
+      "technologies": [
+        "Rust",
+        "Python",
+        "React",
+        "Vite"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "repositoryUrl": "https://github.com/sarthakagrawal927/forecast-lab",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/forecast-lab/issues",
+      "firstCommitAt": "2026-06-21",
+      "latestCommitAt": "2026-07-04"
+    },
+    {
+      "id": "web-playables",
+      "name": "Web Playables",
+      "description": "Small browser-playable game experiments.",
+      "kind": "experiment",
+      "form": "Game collection",
+      "platforms": [
+        "Web",
+        "YouTube Playables"
+      ],
+      "technologies": [
+        "TypeScript",
+        "Vite",
+        "Cloudflare Pages"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "idle.aliveville.com"
+      ],
+      "url": "https://idle.aliveville.com",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/web-playables",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/web-playables/issues",
+      "firstCommitAt": "2026-07-10",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "name": "What It Takes to Win",
+      "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
+      "kind": "product",
+      "form": "Research publication",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "paths.significanthobbies.com"
+      ],
+      "url": "https://paths.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win",
+      "changelogUrl": "https://paths.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win/issues",
+      "firstCommitAt": "2026-07-21",
+      "latestCommitAt": "2026-08-21"
+    },
+    {
+      "id": "sarthakagrawal-personal",
+      "name": "Sarthak Agrawal",
+      "description": "Personal portfolio of Sarthak Agrawal — AI infrastructure and product engineer.",
+      "kind": "product",
+      "form": "Portfolio website",
+      "platforms": [
+        "Web"
+      ],
+      "technologies": [
+        "Astro",
+        "React",
+        "TypeScript",
+        "Cloudflare Pages"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "sarthakagrawal.dev"
+      ],
+      "url": "https://sarthakagrawal.dev",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/portfolio",
+      "changelogUrl": "https://sarthakagrawal.dev/changelog",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/portfolio/issues",
+      "firstCommitAt": "2026-05-22",
+      "latestCommitAt": "2026-08-17"
+    },
+    {
+      "id": "agent-office",
+      "name": "Office OS",
+      "description": "A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.",
+      "kind": "product",
+      "form": "macOS app",
+      "platforms": [
+        "macOS",
+        "Local"
+      ],
+      "technologies": [
+        "SwiftUI",
+        "SpriteKit",
+        "Codex CLI"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Local macOS"
+      ],
+      "domains": [
+        "office-os.sassmaker.com"
+      ],
+      "url": "https://office-os.sassmaker.com",
+      "firstCommitAt": "2026-08-09",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "indulge",
+      "name": "Habits",
+      "description": "A private habit practice for noticing patterns, making intentional trades, and building better defaults.",
+      "kind": "product",
+      "form": "iOS app",
+      "platforms": [
+        "iOS",
+        "Web"
+      ],
+      "technologies": [
+        "SwiftUI",
+        "Astro",
+        "Cloudflare Pages"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Apple App Store Connect"
+      ],
+      "domains": [
+        "habits.significanthobbies.com",
+        "indulge.significanthobbies.com"
+      ],
+      "url": "https://habits.significanthobbies.com",
+      "firstCommitAt": "2026-08-17",
+      "latestCommitAt": "2026-08-22"
+    },
+    {
+      "id": "local-ai-video-studio",
+      "name": "Local AI Video Studio",
+      "description": "A local-first Mac studio for comparing reproducible video-effect variants before export.",
+      "kind": "experiment",
+      "form": "macOS app",
+      "platforms": [
+        "macOS",
+        "Local"
+      ],
+      "technologies": [
+        "SwiftUI",
+        "AVFoundation",
+        "Core Image",
+        "VideoToolbox"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Local macOS"
+      ],
+      "domains": [
+        "local-ai-video-studio.sassmaker.com"
+      ],
+      "url": "https://local-ai-video-studio.sassmaker.com",
+      "firstCommitAt": "2026-08-09",
+      "latestCommitAt": "2026-08-21"
+    },
+    {
+      "id": "field-track",
+      "name": "Field Track",
+      "description": "A private field-location system for managed Android devices and team-scoped route review.",
+      "kind": "product",
+      "form": "Android app and dashboard",
+      "platforms": [
+        "Android",
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "React Native",
+        "MapLibre",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
+      "firstCommitAt": "2026-08-12",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "reddit-insights",
+      "name": "Reddit Insights",
+      "description": "A bounded research collector for subreddit evidence and recurring insight snapshots.",
+      "kind": "experiment",
+      "form": "Research collector",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "TypeScript",
+        "Cloudflare Workers",
+        "R2"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "reddit-insights.highsignal.app"
+      ],
+      "url": "https://reddit-insights.highsignal.app",
+      "firstCommitAt": "2026-08-07",
+      "latestCommitAt": "2026-08-20"
+    },
+    {
+      "id": "verified-bases",
+      "name": "Verified Bases",
+      "description": "A retained research-data identity with no retained local Git history or standalone public destination.",
+      "kind": "experiment",
+      "form": "Research dataset",
+      "platforms": [
+        "GitHub"
+      ],
+      "technologies": [
+        "Markdown",
+        "Git"
+      ],
+      "group": "past",
+      "lifecycle": "past",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [],
+      "firstCommitAt": null,
+      "latestCommitAt": null
+    },
+    {
+      "id": "anchor",
+      "name": "Anchor",
+      "description": "A local-first focus timer for Mac, iPhone and Apple Watch that parks distractions instead of losing the session, and shows what actually costs you your focus.",
+      "kind": "product",
+      "form": "Apple app",
+      "platforms": [
+        "macOS",
+        "iOS",
+        "watchOS",
+        "Web"
+      ],
+      "technologies": [
+        "SwiftUI",
+        "SwiftData",
+        "CloudKit",
+        "Foundation Models"
+      ],
+      "group": "current",
+      "lifecycle": "local-only",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages",
+        "Apple App Store Connect"
+      ],
+      "domains": [
+        "anchor.significanthobbies.com"
+      ],
+      "url": "https://anchor.significanthobbies.com",
+      "firstCommitAt": "2026-08-16",
+      "latestCommitAt": "2026-08-22"
+    }
   ],
   "products": [
     {

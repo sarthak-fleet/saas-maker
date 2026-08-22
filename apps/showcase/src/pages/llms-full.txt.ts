@@ -2,30 +2,22 @@ import publicCatalog from '../../../../catalog/generated/public.json';
 import { LEARNINGS } from '../data/learnings';
 export const prerender = true;
 export function GET() {
-  const products = publicCatalog.products.flatMap((product) => {
-    const links = product as typeof product & {
-      changelogUrl?: string;
-      roadmapUrl?: string;
-      repositoryUrl?: string;
-    };
+  const projects = publicCatalog.directory.flatMap((project) => {
     return [
-      `## ${product.name}`,
-      product.description,
-      `Product: ${product.url}`,
-      `Pillar: ${product.pillarId}`,
-      ...(links.changelogUrl ? [`Changelog: ${links.changelogUrl}`] : []),
-      ...(links.roadmapUrl ? [`Roadmap: ${links.roadmapUrl}`] : []),
-      ...(links.repositoryUrl ? [`Source: ${links.repositoryUrl}`] : []),
+      `## ${project.name}`,
+      project.description,
+      `Group: ${project.group}`,
+      `Form: ${project.form}`,
+      `Platforms: ${project.platforms.join(', ')}`,
+      `Uses: ${project.technologies.join(', ')}`,
+      `Deployment: ${project.deployed ? 'deployed' : 'not deployed'}`,
+      ...project.domains.map((domain) => `Destination: https://${domain}`),
+      ...(project.repositoryUrl ? [`Source: ${project.repositoryUrl}`] : []),
+      `First retained commit: ${project.firstCommitAt ?? 'not retained'}`,
+      `Latest retained commit: ${project.latestCommitAt ?? 'not retained'}`,
       '',
     ];
   });
-  const pastProjects = publicCatalog.pastProjects.flatMap((project) => [
-    `## ${project.name}`,
-    project.description,
-    'Lifecycle: past project',
-    `Source: ${project.repositoryUrl}`,
-    '',
-  ]);
   const body = [
     '# SaaS Maker — full product index',
     '',
@@ -41,10 +33,11 @@ export function GET() {
       `Author: ${learning.author}`,
       '',
     ]),
-    ...products,
-    '# Past public repositories',
+    '# Complete project directory',
     '',
-    ...pastProjects,
+    publicCatalog.historySemantics,
+    '',
+    ...projects,
   ].join('\n');
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

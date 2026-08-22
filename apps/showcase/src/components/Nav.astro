@@ -2,6 +2,7 @@
 import { GITHUB_ORG_URL } from '../data/links';
 
 const isLearnings = Astro.url.pathname.startsWith('/learnings');
+const isProjects = Astro.url.pathname.startsWith('/projects');
 ---
 <nav class="nav" aria-label="Primary navigation">
   <a href="/" class="brand">
@@ -9,7 +10,7 @@ const isLearnings = Astro.url.pathname.startsWith('/learnings');
     <span class="brand-name">SaaS Maker</span>
   </a>
   <div class="nav-links">
-    <a href="/#products">Products</a>
+    <a href="/projects" aria-current={isProjects ? 'page' : undefined}>Products</a>
     <a href="/learnings" aria-current={isLearnings ? 'page' : undefined}>Learnings</a>
     <a href="/#package">Package</a>
     <a class="nav-source" href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">Public source index ↗</a>

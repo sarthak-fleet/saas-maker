@@ -12,6 +12,7 @@
  *
  * Run:
  *   node scripts/smoke-prod.mjs
+ *   node scripts/smoke-prod.mjs --directory-only
  *   SAAS_MAKER_API=https://api.sassmaker.com SAAS_MAKER_APP=https://app.sassmaker.com node scripts/smoke-prod.mjs
  */
 
@@ -19,10 +20,11 @@ const API = process.env.SAAS_MAKER_API ?? 'https://api.sassmaker.com';
 const APP = process.env.SAAS_MAKER_APP ?? 'https://app.sassmaker.com';
 const DIRECTORY = process.env.SAAS_MAKER_DIRECTORY ?? 'https://sassmaker.com';
 const DOCS = process.env.SAAS_MAKER_DOCS ?? 'https://saas-maker-packages.pages.dev';
+const DIRECTORY_ONLY = process.argv.includes('--directory-only');
 
-const checks = [
+const directoryChecks = [
   {
-    name: 'Public directory renders',
+    name: 'Public directory index renders',
     fn: async () => {
       const res = await fetch(DIRECTORY);
       if (res.status !== 200) throw new Error(`status ${res.status}`);
@@ -30,6 +32,35 @@ const checks = [
       if (!body.includes('SaaS Maker')) throw new Error('missing SaaS Maker identity');
     },
   },
+  {
+    name: 'Complete project directory renders 58 identities',
+    fn: async () => {
+      const res = await fetch(`${DIRECTORY}/projects`);
+      if (res.status !== 200) throw new Error(`status ${res.status}`);
+      const body = await res.text();
+      const rows = body.match(/<article class="directory-row" data-directory-row/g)?.length ?? 0;
+      if (rows !== 58) throw new Error(`expected 58 directory rows, got ${rows}`);
+      if (!body.includes('First retained commit') || !body.includes('Latest retained commit')) {
+        throw new Error('missing Git-history bounds');
+      }
+    },
+  },
+  {
+    name: 'Machine-readable directory exposes 58 identities',
+    fn: async () => {
+      const res = await fetch(`${DIRECTORY}/projects.json`);
+      if (res.status !== 200) throw new Error(`status ${res.status}`);
+      const body = await res.json();
+      if (!Array.isArray(body) || body.length !== 58) {
+        throw new Error(
+          `expected 58 JSON entries, got ${Array.isArray(body) ? body.length : 'non-array'}`
+        );
+      }
+    },
+  },
+];
+
+const productChecks = [
   {
     name: 'Package docs render',
     fn: async () => {
@@ -113,6 +144,8 @@ const checks = [
     },
   },
 ];
+
+const checks = DIRECTORY_ONLY ? directoryChecks : [...directoryChecks, ...productChecks];
 
 const start = Date.now();
 let failures = 0;

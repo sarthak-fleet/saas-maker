@@ -114,6 +114,48 @@ function homeMarkdown(): string {
   ].join('\n');
 }
 
+function directoryMarkdown(): string {
+  const groups = [
+    ['current', 'Current work'],
+    ['supporting', 'Supporting and parked'],
+    ['past', 'Past projects'],
+  ] as const;
+  const entries = groups.flatMap(([group, label]) => [
+    `# ${label}`,
+    '',
+    ...publicCatalog.directory
+      .filter((project) => project.group === group)
+      .flatMap((project) => [
+        `## ${project.name}`,
+        '',
+        project.description,
+        '',
+        `- Form: ${project.form}`,
+        `- Platforms: ${project.platforms.join(', ')}`,
+        `- Uses: ${project.technologies.join(', ')}`,
+        `- Deployment: ${project.deployed ? 'deployed' : 'not deployed'}`,
+        ...(project.deploymentProviders.length > 0
+          ? [`- Providers: ${project.deploymentProviders.join(', ')}`]
+          : []),
+        ...project.domains.map((domain) => `- Public destination: https://${domain}`),
+        ...(project.repositoryUrl ? [`- Public source: ${project.repositoryUrl}`] : []),
+        `- First retained commit: ${project.firstCommitAt ?? 'not retained'}`,
+        `- Latest retained commit: ${project.latestCommitAt ?? 'not retained'}`,
+        '',
+      ]),
+  ]);
+
+  return [
+    '# SaaS Maker complete project directory',
+    '',
+    `${publicCatalog.directory.length} Fleet identities, including current, supporting, parked, and past work. Inclusion is inventory, not a maintenance or deployment claim.`,
+    '',
+    publicCatalog.historySemantics,
+    '',
+    ...entries,
+  ].join('\n');
+}
+
 const fixedRoutes: PublicRoute[] = [
   {
     id: 'directory',
@@ -121,6 +163,13 @@ const fixedRoutes: PublicRoute[] = [
     description: 'Software as a specialized service: a living studio of focused products',
     kind: 'collection',
     markdown: homeMarkdown(),
+  },
+  {
+    id: 'projects',
+    path: '/projects',
+    description: 'Complete public directory of all Fleet project identities',
+    kind: 'collection',
+    markdown: directoryMarkdown(),
   },
   {
     id: 'privacy',

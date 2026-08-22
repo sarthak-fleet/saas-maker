@@ -15,6 +15,26 @@ const PRODUCT_FIELDS = new Set([
 ]);
 
 const PAST_PROJECT_FIELDS = new Set(['id', 'name', 'description', 'lifecycle', 'repositoryUrl']);
+const DIRECTORY_FIELDS = new Set([
+  'id',
+  'name',
+  'description',
+  'kind',
+  'form',
+  'platforms',
+  'technologies',
+  'group',
+  'lifecycle',
+  'deployed',
+  'deploymentProviders',
+  'domains',
+  'url',
+  'repositoryUrl',
+  'changelogUrl',
+  'roadmapUrl',
+  'firstCommitAt',
+  'latestCommitAt',
+]);
 
 const FORBIDDEN_KEYS =
   /(?:secret|token|password|credential|private|owner|cfProject|notes|dependencies|evidenceSources|contracts|sourcePath|attention)/i;
@@ -24,6 +44,12 @@ const CREDENTIAL_VALUE =
 export function buildPublicProducts(catalog) {
   const products = [];
   const pastProjects = [];
+  const directory = [];
+  const directoryMetadata = catalog.publicDirectory?.projects;
+
+  if (!directoryMetadata || typeof directoryMetadata !== 'object') {
+    throw new Error('catalog.publicDirectory.projects is required');
+  }
 
   for (const project of catalog.projects) {
     const metadata = project.public ?? { listing: 'hidden' };
@@ -83,6 +109,62 @@ export function buildPublicProducts(catalog) {
     throw new Error(`${project.id}: unsupported public listing ${metadata.listing}`);
   }
 
+  const catalogIds = catalog.projects.map((project) => project.id).sort();
+  const directoryIds = Object.keys(directoryMetadata).sort();
+  if (JSON.stringify(catalogIds) !== JSON.stringify(directoryIds)) {
+    throw new Error('public directory metadata must cover every canonical project exactly once');
+  }
+
+  for (const project of catalog.projects) {
+    const metadata = directoryMetadata[project.id];
+    const repositoryUrl = publicRepositoryUrl(project);
+    const domains = project.domains ?? [];
+    const output = {
+      id: project.id,
+      name: project.public?.name ?? project.name,
+      description: metadata.description ?? project.public?.description,
+      kind: project.portfolio.kind,
+      form: metadata.form,
+      platforms: metadata.platforms,
+      technologies: metadata.technologies,
+      group: directoryGroup(project),
+      lifecycle: project.lifecycle,
+      deployed: project.portfolio.deployed,
+      deploymentProviders: publicDeploymentProviders(
+        catalog.infrastructure.projects[project.id]?.deployments ?? []
+      ),
+      domains,
+      ...(domains[0] ? { url: `https://${domains[0]}` } : {}),
+      ...(repositoryUrl ? { repositoryUrl } : {}),
+      ...(project.public?.listing === 'maintained' &&
+      project.public?.hasChangelog !== false &&
+      domains[0]
+        ? { changelogUrl: `https://${domains[0]}/changelog` }
+        : {}),
+      ...(repositoryUrl ? { roadmapUrl: `${repositoryUrl}/issues` } : {}),
+      firstCommitAt: metadata.firstCommitAt,
+      latestCommitAt: metadata.latestCommitAt,
+    };
+    assertShape(output, DIRECTORY_FIELDS, [
+      'id',
+      'name',
+      'description',
+      'kind',
+      'form',
+      'platforms',
+      'technologies',
+      'group',
+      'lifecycle',
+    ]);
+    if (!Array.isArray(output.platforms) || output.platforms.length === 0) {
+      throw new Error(`${project.id}: directory platforms are required`);
+    }
+    if (!Array.isArray(output.technologies) || output.technologies.length === 0) {
+      throw new Error(`${project.id}: directory technologies are required`);
+    }
+    directory.push(output);
+  }
+
   assertUnique(products, 'maintained product');
   assertUnique(pastProjects, 'past project');
   const allIds = [...products, ...pastProjects].map((project) => project.id);
@@ -97,13 +179,56 @@ export function buildPublicProducts(catalog) {
   pastProjects.sort((left, right) => left.name.localeCompare(right.name));
 
   const projection = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     generatedFrom: ['site-health/apps/backend/config/projects.json'],
+    historySemantics: catalog.publicDirectory.historySemantics,
+    directory,
     products,
     pastProjects,
   };
   assertNoPrivateData(projection);
   return projection;
+}
+
+function directoryGroup(project) {
+  if (project.portfolio.status === 'archived' || project.lifecycle === 'past') return 'past';
+  if (
+    project.status === 'orphan' ||
+    project.lifecycle === 'non-product' ||
+    project.attention === 'ignored' ||
+    project.tier === 'out-of-fleet' ||
+    project.portfolio.priority === 'P4'
+  ) {
+    return 'supporting';
+  }
+  return 'current';
+}
+
+function publicRepositoryUrl(project) {
+  if (project.repositoryVisibility !== 'public') return undefined;
+  const repositoryUrl = project.public?.repositoryUrl ?? project.repositoryUrl;
+  if (!repositoryUrl) return undefined;
+  if (!/^https:\/\/github\.com\/[^/]+\/[^/]+$/.test(repositoryUrl)) {
+    throw new Error(`${project.id}: public directory repository must be a GitHub root URL`);
+  }
+  return repositoryUrl;
+}
+
+function publicDeploymentProviders(deployments) {
+  const labels = new Set();
+  for (const deployment of deployments) {
+    const key = `${deployment.provider}:${deployment.kind}`;
+    const label = {
+      'apple:app-store-connect': 'Apple App Store Connect',
+      'cloudflare:email-worker': 'Cloudflare Email Workers',
+      'cloudflare:pages': 'Cloudflare Pages',
+      'cloudflare:worker': 'Cloudflare Workers',
+      'github:actions': 'GitHub Actions',
+      'local:macos-app': 'Local macOS',
+    }[key];
+    if (label) labels.add(label);
+  }
+  return [...labels];
 }
 
 export function assertEvidenceLinks(product) {
