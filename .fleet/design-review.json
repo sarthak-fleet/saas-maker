@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "saas-maker",
-  "target": "/projects directory distillation",
+  "target": "shared workshop frame and /projects alignment",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -14,33 +14,33 @@
     "probes": [],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/directory-distill-before-1440.png"
+    "before": "artifacts/design/live-projects-1440.png"
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/after-390.png"
+        "path": "artifacts/design/after-projects-390.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/after-768.png"
+        "path": "artifacts/design/after-projects-768.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/after-1440.png"
+        "path": "artifacts/design/after-projects-1440.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm test -- tests/showcase/directory.test.ts && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && git diff --check",
+      "command": "pnpm catalog:validate-public && pnpm check:docs && pnpm test && pnpm typecheck && pnpm build:widget && pnpm check:shared-packages && pnpm build:showcase && pnpm build:docs && pnpm build:cockpit && git diff --check",
       "status": "pass"
     },
     "critique": {
-      "score": 34,
+      "score": 36,
       "maximum": 40
     },
     "audit": {
-      "score": 16,
+      "score": 18,
       "maximum": 20
     },
     "unresolved": {
@@ -54,6 +54,6 @@
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "Owner requested an agent-led cleanup of the repeated directory anatomy while preserving all project facts."
+    "note": "Owner explicitly delegated correcting the public frame mismatch and unnecessary gutter while preserving the established landing-page direction."
   }
 }

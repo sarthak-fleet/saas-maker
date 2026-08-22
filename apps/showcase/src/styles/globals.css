@@ -1142,6 +1142,7 @@ a {
 /* Homepage: the glazier's workshop */
 
 .workshop-world {
+  --workshop-frame-width: min(92rem, 100%);
   --workshop-ground: #eee8dc;
   --workshop-pane: rgba(250, 247, 239, 0.9);
   --workshop-seeded: #d9d2c4;
@@ -1152,7 +1153,7 @@ a {
   --workshop-amber: #c9820d;
   --workshop-oxblood: #7b211c;
   min-height: 100svh;
-  overflow: hidden;
+  overflow-x: clip;
   background: var(--workshop-ground);
   color: var(--workshop-ink);
 }
@@ -1164,7 +1165,7 @@ a {
 .studio-package,
 .studio-commission,
 .workshop-world .footer {
-  width: min(92rem, calc(100% - 2rem));
+  width: var(--workshop-frame-width);
   margin-inline: auto;
 }
 
@@ -1781,6 +1782,7 @@ a {
 
 .workshop-world .footer {
   margin-top: clamp(2rem, 5vw, 4rem);
+  padding-inline: 1rem;
   border-color: rgba(20, 21, 17, 0.35);
   color: var(--workshop-muted);
 }
@@ -2103,16 +2105,6 @@ a {
 }
 
 @media (max-width: 760px) {
-  .workshop-world .nav,
-  .studio-hero,
-  .token-world,
-  .studio-index,
-  .studio-package,
-  .studio-commission,
-  .workshop-world .footer {
-    width: min(100% - 1rem, 92rem);
-  }
-
   .workshop-world .nav {
     min-height: 4.25rem;
     padding-inline: 0.9rem;
