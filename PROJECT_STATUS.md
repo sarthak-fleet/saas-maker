@@ -32,11 +32,11 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   classification, platforms, curated technology, and first/latest retained Git
   commit dates; and keeps the HTML, JSON, Markdown, sitemap, and agent surfaces
   aligned without runtime access to Site Health.
-- **2026-08-22 — Feedback agent contract completed in source:** Hosted
-  submission now keeps page/Pinpoint evidence, accepts one multipart request,
-  issues read-only-by-default agent tokens, and records status mutations. The
-  private inbox copies structured records for agent workflows. Production D1
-  migration, DNS, deploy, and npm publication still need explicit approval.
+- **2026-08-22 — Feedback agent contract deployed:** Applied D1 migration
+  `0025` (both preserved feedback rows kept), deployed `saasmaker-api` and
+  `saasmaker-dashboard` at `c5d3e845`, and attached `app.sassmaker.com` as a
+  Worker custom domain. npm publication of `@saas-maker/feedback` and the
+  Anime List consumer merge are still blocked.
 - **2026-08-22 — Standalone catalog boundary repaired:** Repointed public
   catalog synchronization to Site Health's canonical `projects.json`, retained
   the checked-in privacy-filtered projection for runtime use, and repointed the
