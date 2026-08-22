@@ -40,6 +40,8 @@ export function GET() {
           ...tokenWorld,
         },
         products: publicCatalog.products,
+        directory: publicCatalog.directory,
+        historySemantics: publicCatalog.historySemantics,
         pastProjects: publicCatalog.pastProjects,
         learnings: LEARNINGS.map((learning) => ({
           ...learning,

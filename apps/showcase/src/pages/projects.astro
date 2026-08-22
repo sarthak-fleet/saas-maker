@@ -1,0 +1,960 @@
+---
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import {
+  DIRECTORY_COUNT,
+  DIRECTORY_FORMS,
+  DIRECTORY_GROUPS,
+  DIRECTORY_PLATFORMS,
+  HISTORY_SEMANTICS,
+  directoryFormFamilies,
+  type DirectoryProject,
+} from '../data/directory';
+import Layout from '../layouts/Layout.astro';
+
+const formatDate = (date: string | null) =>
+  date
+    ? new Intl.DateTimeFormat('en', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(`${date}T00:00:00Z`))
+    : 'Not retained';
+
+const deploymentLabel = (project: DirectoryProject) => {
+  if (project.group === 'past' && project.deployed) return 'Live archive';
+  if (project.deployed) return 'Deployed';
+  if (project.lifecycle === 'local-only' || project.platforms.includes('Local')) return 'Local only';
+  return 'Not deployed';
+};
+
+const searchableText = (project: DirectoryProject) =>
+  [
+    project.name,
+    project.description,
+    project.form,
+    project.kind,
+    ...project.platforms,
+    ...project.technologies,
+    ...project.deploymentProviders,
+    ...project.domains,
+  ]
+    .join(' ')
+    .toLocaleLowerCase();
+
+const currentCount = DIRECTORY_GROUPS.find((group) => group.id === 'current')?.projects.length ?? 0;
+const supportingCount = DIRECTORY_GROUPS.find((group) => group.id === 'supporting')?.projects.length ?? 0;
+const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.projects.length ?? 0;
+---
+
+<Layout
+  title={`${DIRECTORY_COUNT} projects — SaaS Maker directory`}
+  description="The complete public Fleet project directory: current products, supporting tools, parked work, and past experiments with platforms, technology, deployment links, and Git history."
+>
+  <!--
+  THESIS: A complete portfolio is clearest as a working register, not a promotional card grid.
+  OWN-WORLD: Limestone panes, matte-black mullions, seeded metadata bays, and one cobalt index pane extend the SaaS Maker workshop wall.
+  STORY: Understand the 58-project boundary, narrow it by form or platform, then inspect purpose, deployment, public links, stack, and Git span.
+  FIRST VIEWPORT: A wide identity pane and cobalt count pane sit above a black filter rail; the first current-project rows begin without a marketing detour.
+  FORM: Lifecycle bays crossed by platform and technology rails; fourth grounded structure, seed 2aaa2e62.
+  -->
+  <div class="workshop-world directory-world">
+    <Nav />
+    <main id="main-content" class="directory-shell">
+      <header class="directory-intro">
+        <div class="directory-intro-copy">
+          <p class="directory-kicker">The complete register</p>
+          <h1>Everything in Fleet.<br />Nothing hidden by focus.</h1>
+          <p>
+            Current products, supporting tools, local work, and past experiments—each shown once
+            with what it is, where it runs, what it uses, and the public evidence available.
+          </p>
+        </div>
+        <div class="directory-count-pane" aria-label={`${DIRECTORY_COUNT} project identities`}>
+          <strong>{DIRECTORY_COUNT}</strong>
+          <span>project identities</span>
+          <small>{currentCount} current · {supportingCount} supporting · {pastCount} past</small>
+        </div>
+      </header>
+
+      <section
+        id="directory-filters"
+        class="directory-controls"
+        data-directory-controls
+        hidden
+        aria-label="Filter the project directory"
+      >
+        <div class="directory-search">
+          <label for="directory-search">Search name, purpose, stack, or domain</label>
+          <input
+            id="directory-search"
+            name="query"
+            type="search"
+            inputmode="search"
+            autocomplete="off"
+            placeholder="Try SwiftUI, Cloudflare, video…"
+          />
+        </div>
+
+        <div class="directory-selects">
+          <label>
+            <span>Form family</span>
+            <select id="directory-form" name="form">
+              <option value="">Every form family</option>
+              {DIRECTORY_FORMS.map((form) => <option value={form}>{form}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Platform</span>
+            <select id="directory-platform" name="platform">
+              <option value="">Every platform</option>
+              {DIRECTORY_PLATFORMS.map((platform) => <option value={platform}>{platform}</option>)}
+            </select>
+          </label>
+        </div>
+
+        <div class="directory-groups" role="group" aria-label="Project lifecycle">
+          <button type="button" data-group-filter="all" aria-pressed="true">All</button>
+          {DIRECTORY_GROUPS.map((group) => (
+            <button type="button" data-group-filter={group.id} aria-pressed="false">
+              {group.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="directory-result-line">
+          <p id="directory-result-count" aria-live="polite">Showing all {DIRECTORY_COUNT} identities</p>
+          <button id="directory-reset" type="button">Reset filters</button>
+        </div>
+      </section>
+
+      <div class="directory-sections" data-directory-root>
+        {DIRECTORY_GROUPS.map((group) => (
+          <section class="directory-section" data-directory-section={group.id} aria-labelledby={`directory-${group.id}`}>
+            <header class="directory-section-head">
+              <div>
+                <p>{group.projects.length} identities</p>
+                <h2 id={`directory-${group.id}`}>{group.label}</h2>
+              </div>
+              <p>{group.description}</p>
+            </header>
+
+            <div class="directory-rows">
+              {group.projects.map((project) => (
+                <article
+                  class="directory-row"
+                  data-directory-row
+                  data-group={project.group}
+                  data-form={directoryFormFamilies(project).join('|')}
+                  data-platforms={project.platforms.join('|')}
+                  data-search={searchableText(project)}
+                >
+                  <div class="directory-identity">
+                    <div class="directory-row-heading">
+                      <h3>{project.name}</h3>
+                      <span>{project.kind}</span>
+                    </div>
+                    <p>{project.description}</p>
+                    <div class="directory-links" aria-label={`${project.name} public links`}>
+                      {project.domains.map((domain, index) => (
+                        <a
+                          class:list={{ 'directory-link--primary': index === 0 }}
+                          href={`https://${domain}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {domain} <span aria-hidden="true">↗</span>
+                        </a>
+                      ))}
+                      {project.repositoryUrl && (
+                        <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+                          Source <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                      {project.changelogUrl && (
+                        <a href={project.changelogUrl} target="_blank" rel="noopener noreferrer">
+                          Changelog <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                      {project.roadmapUrl && (
+                        <a href={project.roadmapUrl} target="_blank" rel="noopener noreferrer">
+                          Issues <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                      {project.domains.length === 0 && !project.repositoryUrl && (
+                        <span>No public destination</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <dl class="directory-anatomy">
+                    <div>
+                      <dt>Form</dt>
+                      <dd>{project.form}</dd>
+                    </div>
+                    <div>
+                      <dt>Platforms</dt>
+                      <dd>{project.platforms.join(' · ')}</dd>
+                    </div>
+                    <div>
+                      <dt>Deployment</dt>
+                      <dd>
+                        <span class:list={['deployment-state', { 'deployment-state--live': project.deployed }]}>
+                          {deploymentLabel(project)}
+                        </span>
+                        {project.deploymentProviders.length > 0 && (
+                          <small>{project.deploymentProviders.join(' · ')}</small>
+                        )}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div class="directory-stack">
+                    <span>Uses</span>
+                    <ul>
+                      {project.technologies.map((technology) => <li>{technology}</li>)}
+                    </ul>
+                  </div>
+
+                  <dl class="directory-history">
+                    <div>
+                      <dt>First retained commit</dt>
+                      <dd>{formatDate(project.firstCommitAt)}</dd>
+                    </div>
+                    <div>
+                      <dt>Latest retained commit</dt>
+                      <dd>{formatDate(project.latestCommitAt)}</dd>
+                    </div>
+                  </dl>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <section class="directory-empty" data-directory-empty hidden aria-live="polite">
+        <strong>No identities match those filters.</strong>
+        <p>Clear the filters to return to the complete register.</p>
+        <button type="button" data-empty-reset>Show all {DIRECTORY_COUNT}</button>
+      </section>
+
+      <aside class="directory-provenance" aria-labelledby="directory-provenance-title">
+        <div>
+          <p class="directory-kicker">How to read this</p>
+          <h2 id="directory-provenance-title">Inventory is not promotion.</h2>
+        </div>
+        <div>
+          <p>
+            Inclusion means the identity remains accounted for. “Current” is the working set;
+            supporting and past projects stay visible so the portfolio does not become revisionist.
+          </p>
+          <p>Deployment labels reflect catalog ownership, not a real-time availability check.</p>
+          <p>{HISTORY_SEMANTICS}</p>
+          <a href="/projects.json">Open the machine-readable directory <span aria-hidden="true">→</span></a>
+        </div>
+      </aside>
+
+      <button class="directory-filter-return" data-directory-filter-return hidden type="button">
+        <span data-filter-return-count>{DIRECTORY_COUNT}</span> results · Filters
+      </button>
+    </main>
+    <Footer />
+  </div>
+</Layout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-directory-root]');
+  const controls = document.querySelector<HTMLElement>('[data-directory-controls]');
+  const filterReturn = document.querySelector<HTMLButtonElement>('[data-directory-filter-return]');
+  const filterReturnCount = document.querySelector<HTMLElement>('[data-filter-return-count]');
+  const search = document.querySelector<HTMLInputElement>('#directory-search');
+  const form = document.querySelector<HTMLSelectElement>('#directory-form');
+  const platform = document.querySelector<HTMLSelectElement>('#directory-platform');
+  const resultCount = document.querySelector<HTMLElement>('#directory-result-count');
+  const reset = document.querySelector<HTMLButtonElement>('#directory-reset');
+  const empty = document.querySelector<HTMLElement>('[data-directory-empty]');
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-directory-row]')];
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-directory-section]')];
+  const groupButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-group-filter]')];
+  let activeGroup = 'all';
+
+  if (controls) controls.hidden = false;
+  if (filterReturn) filterReturn.hidden = false;
+
+  if (controls && filterReturn) {
+    const updateFilterReturnVisibility = () => {
+      filterReturn.classList.toggle(
+        'directory-filter-return--hidden',
+        controls.getBoundingClientRect().bottom > 0
+      );
+    };
+    updateFilterReturnVisibility();
+    window.addEventListener('scroll', updateFilterReturnVisibility, { passive: true });
+  }
+
+  const normalize = (value: string) => value.trim().toLocaleLowerCase();
+
+  function updateDirectory() {
+    const query = normalize(search?.value ?? '');
+    const selectedForm = form?.value ?? '';
+    const selectedPlatform = platform?.value ?? '';
+    let visible = 0;
+
+    for (const row of rows) {
+      const matches =
+        (activeGroup === 'all' || row.dataset.group === activeGroup) &&
+        (!selectedForm || (row.dataset.form ?? '').split('|').includes(selectedForm)) &&
+        (!selectedPlatform || (row.dataset.platforms ?? '').split('|').includes(selectedPlatform)) &&
+        (!query || (row.dataset.search ?? '').includes(query));
+      row.hidden = !matches;
+      if (matches) visible += 1;
+    }
+
+    for (const section of sections) {
+      section.hidden = !section.querySelector('[data-directory-row]:not([hidden])');
+    }
+
+    if (resultCount) {
+      resultCount.textContent =
+        visible === rows.length ? `Showing all ${visible} identities` : `Showing ${visible} of ${rows.length} identities`;
+    }
+    if (filterReturnCount) filterReturnCount.textContent = String(visible);
+    if (empty) empty.hidden = visible !== 0;
+    if (root) root.hidden = visible === 0;
+  }
+
+  function resetDirectory() {
+    if (search) search.value = '';
+    if (form) form.value = '';
+    if (platform) platform.value = '';
+    activeGroup = 'all';
+    for (const button of groupButtons) {
+      button.setAttribute('aria-pressed', String(button.dataset.groupFilter === 'all'));
+    }
+    updateDirectory();
+    search?.focus();
+  }
+
+  search?.addEventListener('input', updateDirectory);
+  form?.addEventListener('change', updateDirectory);
+  platform?.addEventListener('change', updateDirectory);
+  reset?.addEventListener('click', resetDirectory);
+  filterReturn?.addEventListener('click', () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    controls?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    window.setTimeout(() => search?.focus({ preventScroll: true }), reduceMotion ? 0 : 350);
+  });
+  document.querySelector('[data-empty-reset]')?.addEventListener('click', resetDirectory);
+
+  for (const button of groupButtons) {
+    button.addEventListener('click', () => {
+      activeGroup = button.dataset.groupFilter ?? 'all';
+      for (const candidate of groupButtons) {
+        candidate.setAttribute('aria-pressed', String(candidate === button));
+      }
+      updateDirectory();
+    });
+  }
+</script>
+
+<style>
+  .directory-world {
+    min-height: 100vh;
+    --directory-line: rgba(20, 21, 17, 0.2);
+    --directory-pane: rgba(250, 247, 239, 0.97);
+    --directory-quiet: #494842;
+    background: var(--workshop-ground);
+    color: var(--workshop-ink);
+  }
+
+  .directory-world :global(:focus-visible) {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--workshop-cobalt);
+  }
+
+  .directory-shell {
+    width: min(92rem, calc(100% - 2rem));
+    margin-inline: auto;
+    padding-bottom: 1rem;
+  }
+
+  .directory-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.3fr);
+    gap: 6px;
+    padding-top: 6px;
+    background: var(--workshop-steel);
+  }
+
+  .directory-intro > *,
+  .directory-controls > *,
+  .directory-row > * {
+    min-width: 0;
+  }
+
+  .directory-intro-copy,
+  .directory-count-pane {
+    min-height: 27rem;
+    padding: clamp(2rem, 6vw, 5.5rem);
+  }
+
+  .directory-intro-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: var(--workshop-pane);
+  }
+
+  .directory-kicker {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .directory-intro h1 {
+    max-width: 14ch;
+    margin-top: 1.25rem;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.96;
+    text-wrap: balance;
+  }
+
+  .directory-intro-copy > p:last-child {
+    max-width: 64ch;
+    margin-top: 2rem;
+    color: var(--workshop-muted);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+  }
+
+  .directory-count-pane {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--workshop-cobalt);
+    color: #fff;
+  }
+
+  .directory-count-pane strong {
+    font-size: clamp(5rem, 11vw, 10rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.8;
+  }
+
+  .directory-count-pane span {
+    max-width: 9ch;
+    font-size: clamp(1.7rem, 3vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+
+  .directory-count-pane small {
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .directory-controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: minmax(16rem, 1.3fr) minmax(18rem, 1fr);
+    gap: 1.5rem 3rem;
+    padding: 1.5rem clamp(1rem, 3vw, 2.5rem);
+    background: var(--workshop-steel);
+    color: #fff;
+  }
+
+  .directory-search label,
+  .directory-selects label > span {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #c9c4b8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .directory-search input,
+  .directory-selects select {
+    width: 100%;
+    min-height: 3rem;
+    border: 1px solid var(--workshop-muted);
+    border-radius: 0;
+    background: var(--workshop-steel);
+    color: #fff;
+    font: inherit;
+  }
+
+  .directory-search input {
+    padding: 0 0.9rem;
+  }
+
+  .directory-search input::placeholder {
+    color: #aaa69c;
+  }
+
+  .directory-selects {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .directory-selects select {
+    padding: 0 2.2rem 0 0.75rem;
+  }
+
+  .directory-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .directory-groups button,
+  .directory-result-line button,
+  .directory-empty button {
+    min-height: 2.75rem;
+    border: 1px solid var(--workshop-muted);
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .directory-groups button[aria-pressed='true'] {
+    border-color: #fff;
+    background: #fff;
+    color: #11120f;
+  }
+
+  .directory-result-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: #c9c4b8;
+    font-size: 0.82rem;
+  }
+
+  .directory-result-line button {
+    border: 0;
+    padding-inline: 0;
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .directory-section {
+    padding-top: 6px;
+    background: var(--workshop-steel);
+  }
+
+  .directory-section-head {
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.65fr) minmax(18rem, 1fr);
+    gap: 2rem;
+    align-items: end;
+    padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.25rem, 4vw, 3.5rem);
+    background: var(--workshop-seeded);
+  }
+
+  .directory-section-head > div > p {
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .directory-section-head h2 {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
+  .directory-section-head > p {
+    max-width: 52ch;
+    color: var(--workshop-muted);
+    font-size: 1.05rem;
+  }
+
+  .directory-rows {
+    display: grid;
+    gap: 1px;
+    background: rgba(20, 21, 17, 0.32);
+  }
+
+  .directory-row {
+    display: grid;
+    grid-template-columns: minmax(19rem, 1.25fr) minmax(14rem, 0.72fr) minmax(12rem, 0.58fr) minmax(10rem, 0.46fr);
+    min-height: 15rem;
+    background: var(--directory-pane);
+  }
+
+  .directory-row > * {
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .directory-row > * + * {
+    border-left: 1px solid var(--directory-line);
+  }
+
+  .directory-row-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .directory-row-heading h3 {
+    font-size: clamp(1.55rem, 2.4vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .directory-row-heading span {
+    color: var(--workshop-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .directory-identity > p {
+    max-width: 58ch;
+    margin-top: 1rem;
+    color: #5f5d55;
+  }
+
+  .directory-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .directory-links a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .directory-links .directory-link--primary {
+    color: var(--workshop-cobalt);
+  }
+
+  .directory-links > span {
+    color: #747168;
+  }
+
+  .directory-anatomy,
+  .directory-history {
+    display: grid;
+    align-content: start;
+    gap: 1.25rem;
+  }
+
+  .directory-anatomy div,
+  .directory-history div {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .directory-anatomy dt,
+  .directory-history dt,
+  .directory-stack > span {
+    color: var(--directory-quiet);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .directory-anatomy dd,
+  .directory-history dd {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .directory-anatomy small {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--directory-quiet);
+    font-size: 0.76rem;
+    font-weight: 500;
+  }
+
+  .deployment-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .deployment-state::before {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #747168;
+    content: '';
+  }
+
+  .deployment-state--live::before {
+    background: #1746a2;
+  }
+
+  .directory-stack {
+    background: var(--workshop-seeded);
+  }
+
+  .directory-stack ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.75rem;
+    list-style: none;
+  }
+
+  .directory-stack li {
+    border: 1px solid rgba(20, 21, 17, 0.28);
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 650;
+  }
+
+  .directory-history {
+    background: #f5f0e6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .directory-empty {
+    padding: clamp(4rem, 10vw, 8rem) 2rem;
+    background: var(--workshop-seeded);
+    text-align: center;
+  }
+
+  .directory-empty strong {
+    display: block;
+    font-size: clamp(2rem, 4vw, 4rem);
+    letter-spacing: -0.04em;
+  }
+
+  .directory-empty p {
+    margin-top: 0.75rem;
+    color: var(--workshop-muted);
+  }
+
+  .directory-empty button {
+    margin-top: 1.5rem;
+    border-color: #11120f;
+  }
+
+  .directory-provenance {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.7fr) minmax(18rem, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+    background: var(--workshop-steel);
+  }
+
+  .directory-provenance > div {
+    padding: clamp(2rem, 5vw, 4.5rem);
+    background: var(--workshop-amber);
+  }
+
+  .directory-provenance > div:last-child {
+    display: grid;
+    align-content: center;
+    gap: 1rem;
+    background: var(--directory-pane);
+  }
+
+  .directory-provenance h2 {
+    max-width: 10ch;
+    margin-top: 1rem;
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+  }
+
+  .directory-provenance p {
+    max-width: 68ch;
+    color: var(--workshop-muted);
+  }
+
+  .directory-provenance a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    margin-top: 0.5rem;
+    font-weight: 700;
+  }
+
+  .directory-filter-return {
+    display: none;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  @media (max-width: 72rem) {
+    .directory-row {
+      grid-template-columns: minmax(18rem, 1.2fr) minmax(13rem, 0.8fr) minmax(13rem, 0.7fr);
+    }
+
+    .directory-history {
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-top: 1px solid var(--directory-line);
+      border-left: 0 !important;
+    }
+  }
+
+  @media (max-width: 50rem) {
+    .directory-intro,
+    .directory-section-head,
+    .directory-provenance {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .directory-intro-copy,
+    .directory-count-pane {
+      min-height: 23rem;
+    }
+
+    .directory-controls {
+      position: static;
+      grid-template-columns: 1fr;
+    }
+
+    .directory-filter-return {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 20;
+      display: inline-flex;
+      min-height: 2.75rem;
+      align-items: center;
+      border: 1px solid #fff;
+      border-radius: 999px;
+      padding: 0.65rem 1rem;
+      background: var(--workshop-steel);
+      color: #fff;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 140ms ease, translate 140ms ease;
+    }
+
+    .directory-filter-return--hidden {
+      pointer-events: none;
+      opacity: 0;
+      translate: 0 0.5rem;
+    }
+
+    .directory-row {
+      grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.55fr);
+    }
+
+    .directory-identity {
+      grid-column: 1 / -1;
+    }
+
+    .directory-anatomy {
+      border-top: 1px solid var(--directory-line);
+      border-left: 0 !important;
+    }
+
+    .directory-history {
+      grid-column: auto;
+      grid-template-columns: 1fr;
+      border-top: 0;
+      border-left: 1px solid var(--directory-line) !important;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .directory-shell {
+      width: min(100% - 1rem, 92rem);
+    }
+
+    .directory-intro-copy,
+    .directory-count-pane {
+      min-height: 21rem;
+      padding: 1.5rem;
+    }
+
+    .directory-intro h1 {
+      max-width: 12ch;
+      font-size: 2.65rem;
+      line-height: 0.98;
+    }
+
+    .directory-intro-copy > p:last-child {
+      overflow-wrap: anywhere;
+    }
+
+    :global(.directory-world .nav-links a:nth-child(2)) {
+      display: none;
+    }
+
+    .directory-count-pane strong {
+      font-size: 6rem;
+    }
+
+    .directory-selects,
+    .directory-row,
+    .directory-history {
+      grid-template-columns: 1fr;
+    }
+
+    .directory-row > * {
+      grid-column: auto;
+      border-top: 1px solid var(--directory-line);
+      border-left: 0 !important;
+    }
+
+    .directory-identity {
+      border-top: 0;
+    }
+
+    .directory-row-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .directory-result-line {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .directory-filter-return {
+      transition: none;
+    }
+  }
+</style>
