@@ -125,7 +125,7 @@
       "deploymentProviders": [],
       "domains": [],
       "firstCommitAt": "2026-05-02",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "live",
@@ -216,7 +216,7 @@
       "changelogUrl": "https://sassmaker.com/changelog",
       "roadmapUrl": "https://github.com/sass-maker/saas-maker/issues",
       "firstCommitAt": "2026-02-26",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "gitstat",
@@ -332,7 +332,7 @@
       "changelogUrl": "https://domains.sassmaker.com/changelog",
       "roadmapUrl": "https://github.com/sass-maker/drank/issues",
       "firstCommitAt": "2026-06-10",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "email-manager",
@@ -458,7 +458,7 @@
       "changelogUrl": "https://performance.sassmaker.com/changelog",
       "roadmapUrl": "https://github.com/sass-maker/psi-swarm/issues",
       "firstCommitAt": "2026-06-03",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "high-signal",
@@ -872,7 +872,7 @@
       "changelogUrl": "https://calorie.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/calorie/issues",
       "firstCommitAt": "2026-07-25",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "setline",
@@ -903,7 +903,7 @@
       "changelogUrl": "https://setline.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/setline/issues",
       "firstCommitAt": "2026-07-27",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "journal",
@@ -967,7 +967,7 @@
       "changelogUrl": "https://kith.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/kith/issues",
       "firstCommitAt": "2026-08-16",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "ios-landings",
@@ -1543,7 +1543,7 @@
       "changelogUrl": "https://sarthakagrawal.dev/changelog",
       "roadmapUrl": "https://github.com/sarthakagrawal927/portfolio/issues",
       "firstCommitAt": "2026-05-22",
-      "latestCommitAt": "2026-08-17"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "agent-office",
@@ -1602,7 +1602,7 @@
       ],
       "url": "https://habits.significanthobbies.com",
       "firstCommitAt": "2026-08-17",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "local-ai-video-studio",
@@ -1741,7 +1741,7 @@
       ],
       "url": "https://anchor.significanthobbies.com",
       "firstCommitAt": "2026-08-16",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     }
   ],
   "products": [
