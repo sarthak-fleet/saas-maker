@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 0 ]; then
+  echo "usage: research-dispatch <research question>" >&2
+  exit 2
+fi
+
+exec openclaw agent \
+  --agent research \
+  --message "Research this request using the evidence-research skill. Save a decision-ready report in reports/ before replying: $*"

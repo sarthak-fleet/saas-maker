@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "balanced", "reasoning": "medium" },
+  "minimum": { "intelligence": "economy", "reasoning": "medium" },
+  "degradation": "allow",
+  "rationale": "Durable task control is bounded but must preserve scope and truthful status."
+}

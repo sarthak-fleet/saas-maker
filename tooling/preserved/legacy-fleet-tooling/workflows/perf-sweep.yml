@@ -1,0 +1,60 @@
+name: Fleet PSI Sweep
+
+on:
+  workflow_call:
+    inputs:
+      runs:
+        description: 'Runs per site'
+        required: false
+        type: string
+        default: '3'
+      concurrency:
+        description: 'Concurrent sites'
+        required: false
+        type: string
+        default: '2'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Build bundled psi-swarm CLI
+        working-directory: foundry/helpers/psi-swarm
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm --filter psi-swarm run build
+
+      - name: Run fleet perf sweep
+        run: |
+          cd foundry/ops
+          node scripts/fleet-perf-sweep.mjs \
+            --runs ${{ inputs.runs }} \
+            --concurrency ${{ inputs.concurrency }}
+
+      - name: Regression check
+        run: |
+          cd foundry/ops
+          node scripts/fleet-perf-regression-check.mjs --threshold 15 || true
+
+      - name: Commit scoreboard
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add foundry/ops/docs/fleet-perf-scoreboard-*.json
+          git commit -m "perf: weekly PSI sweep $(date -u +%Y-%m-%d)" || echo "No changes to commit"
+          git push

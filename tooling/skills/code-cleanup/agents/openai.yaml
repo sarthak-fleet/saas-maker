@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Cleanup"
+  short_description: "Clean code and safely update packages"
+  default_prompt: "Use $code-cleanup to inspect code and dependency health, preview upgrades, and apply only the package changes I explicitly authorize."

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fleet.video-agent-operation.v1.result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "product", "operation", "operationId", "state", "sideEffect", "startedAt", "finishedAt", "result", "warnings", "artifacts", "error"],
+  "properties": {
+    "schema": { "const": "fleet.video-agent-operation.v1" },
+    "product": { "type": "string" },
+    "operation": { "type": ["string", "null"] },
+    "operationId": { "type": ["string", "null"] },
+    "idempotencyKey": { "type": ["string", "null"] },
+    "state": { "enum": ["validated", "completed", "failed", "cancelled"] },
+    "sideEffect": { "enum": ["none", "read", "plan", "write", "render", "external"] },
+    "startedAt": { "type": "string" },
+    "finishedAt": { "type": "string" },
+    "requestHash": { "type": ["string", "null"] },
+    "result": {},
+    "warnings": { "type": "array" },
+    "artifacts": { "type": "array" },
+    "error": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "fleet.local-verification-qualification.v1",
+  "project": "example-worker",
+  "startCommand": ["npx", "wrangler", "dev", "--port", "8790", "--no-bundle"],
+  "startEnv": {
+    "GIT_SHA": "fedcba9876543210fedcba9876543210fedcba98"
+  },
+  "readinessProbes": [
+    {
+      "type": "http",
+      "name": "worker-health",
+      "url": "http://127.0.0.1:8790/health",
+      "status": 200,
+      "timeoutSeconds": 10
+    },
+    {
+      "type": "log",
+      "name": "wrangler-ready",
+      "path": "wrangler-dev.log",
+      "pattern": "Ready on|Listening",
+      "timeoutSeconds": 10
+    }
+  ],
+  "timeoutSeconds": 180,
+  "pollIntervalSeconds": 2,
+  "patchSelection": {
+    "type": "http",
+    "url": "http://127.0.0.1:8790/__sha",
+    "pattern": "([0-9a-f]{40})"
+  },
+  "failureInjection": {
+    "startCommand": ["npx", "wrangler", "dev", "--port", "8791", "--no-bundle"],
+    "startEnv": {
+      "GIT_SHA": "fedcba9876543210fedcba9876543210fedcba98",
+      "BREAK_HEALTH": "1"
+    },
+    "expectNotReadyWithinSeconds": 20
+  }
+}

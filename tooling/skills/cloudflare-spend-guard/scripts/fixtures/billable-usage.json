@@ -1,0 +1,55 @@
+{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": [
+    {
+      "ChargePeriodStart": "2026-07-01T00:00:00Z",
+      "ChargePeriodEnd": "2026-07-02T00:00:00Z",
+      "BillingCurrency": "USD",
+      "ConsumedQuantity": 100000,
+      "ConsumedUnit": "Requests",
+      "BilledCost": 0,
+      "EffectiveCost": 0,
+      "x_BillableMetricId": "workers_standard_requests",
+      "x_BillableMetricName": "Workers Standard Requests",
+      "x_ProductFamilyName": "Workers",
+      "x_ZoneName": "example.com"
+    },
+    {
+      "ChargePeriodStart": "2026-07-02T00:00:00Z",
+      "ChargePeriodEnd": "2026-07-03T00:00:00Z",
+      "BillingCurrency": "USD",
+      "ConsumedQuantity": 150000,
+      "ConsumedUnit": "Requests",
+      "x_BillableMetricId": "workers_standard_requests",
+      "x_BillableMetricName": "Workers Standard Requests",
+      "x_ProductFamilyName": "Workers",
+      "x_ZoneName": "example.com"
+    },
+    {
+      "ChargePeriodStart": "2026-07-01T00:00:00Z",
+      "ChargePeriodEnd": "2026-07-03T00:00:00Z",
+      "BillingCurrency": "USD",
+      "ConsumedQuantity": 12,
+      "ConsumedUnit": "GB-month",
+      "BilledCost": 1.25,
+      "EffectiveCost": 1.25,
+      "x_BillableMetricId": "r2_storage",
+      "x_BillableMetricName": "R2 Storage",
+      "x_ProductFamilyName": "R2"
+    },
+    {
+      "ChargePeriodStart": "2026-07-01T00:00:00Z",
+      "ChargePeriodEnd": "2026-07-03T00:00:00Z",
+      "BillingCurrency": "USD",
+      "ConsumedQuantity": 4000,
+      "ConsumedUnit": "Operations",
+      "BilledCost": 0,
+      "EffectiveCost": 0,
+      "x_BillableMetricId": "r2_class_a_operations",
+      "x_BillableMetricName": "R2 Class A Operations",
+      "x_ProductFamilyName": "R2"
+    }
+  ]
+}

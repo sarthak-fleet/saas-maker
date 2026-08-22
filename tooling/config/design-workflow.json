@@ -1,0 +1,32 @@
+{
+  "$schema": "fleet.design-workflow.v1",
+  "version": 1,
+  "impeccablePackageVersion": "3.3.1",
+  "impeccableVersion": "4.0.2",
+  "lanes": {
+    "preserve": {
+      "requireBeforeEvidence": true
+    },
+    "overhaul": {
+      "minimumReferences": 2,
+      "maximumReferences": 3,
+      "minimumDirectionProbes": 2,
+      "maximumDirectionProbes": 3,
+      "acceptedDirectionDecisions": ["approved", "delegated"]
+    }
+  },
+  "qualityGate": {
+    "minimumCritiqueScore": 32,
+    "critiqueMaximum": 40,
+    "minimumAuditScore": 16,
+    "auditMaximum": 20,
+    "maximumUnresolved": {
+      "p0": 0,
+      "p1": 0
+    },
+    "requiredViewportWidths": [390, 768, 1440],
+    "acceptedOwnerDecisions": ["keep", "delegated"],
+    "detectorPosture": "advisory",
+    "requirePassingProjectCheck": true
+  }
+}

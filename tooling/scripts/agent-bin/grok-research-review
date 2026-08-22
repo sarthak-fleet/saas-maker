@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 0 ]; then
+  echo "usage: grok-research-review <question or report path>" >&2
+  exit 2
+fi
+
+if ! grok models >/dev/null 2>&1; then
+  echo "Grok is not authenticated. Run: grok login" >&2
+  exit 1
+fi
+
+exec grok \
+  --cwd /Users/assistant/Desktop/fleet \
+  --permission-mode plan \
+  --no-subagents \
+  --check \
+  --single "Act as an independent reviewer. Identify unsupported claims, missing alternatives, security or cost risks, and evidence that could reverse the conclusion. Do not modify files. Review: $*"

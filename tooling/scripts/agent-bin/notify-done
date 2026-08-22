@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BODY="${*:-Claude/Codex finished.}"
+
+"$SCRIPT_DIR/fleet-notify" emit \
+  --severity success \
+  --source terminal-agent \
+  --title "Task complete" \
+  --body "$BODY"

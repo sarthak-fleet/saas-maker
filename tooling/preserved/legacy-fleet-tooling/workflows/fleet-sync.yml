@@ -1,0 +1,42 @@
+name: Fleet Sync Guard
+
+on:
+  workflow_call:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out fleet workspace
+        uses: actions/checkout@v6
+
+      - name: Check out portfolio
+        uses: actions/checkout@v6
+        with:
+          repository: sarthakagrawal927/portfolio
+          path: portfolio
+
+      - name: Check out synchronized profile repositories
+        run: |
+          git clone --depth 1 https://github.com/sarthakagrawal927/sarthakagrawal927 sync-targets/personal-profile
+          git clone --depth 1 https://github.com/Codevetter/.github sync-targets/codevetter-profile
+          git clone --depth 1 https://github.com/PostTrainLLM/.github sync-targets/posttrainllm-profile
+          git clone --depth 1 https://github.com/HeyPace/.github sync-targets/heypace-profile
+          git clone --depth 1 https://github.com/High-Signal-App/.github sync-targets/hisignal-profile
+          git clone --depth 1 https://github.com/sass-maker/.github sync-targets/sassmaker-profile
+          git clone --depth 1 https://github.com/Significant-Hobbies/.github sync-targets/significant-hobbies-profile
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Validate fleet synchronization
+        run: node foundry/ops/scripts/sync-spotlight-products.mjs --check --strict --workspace .

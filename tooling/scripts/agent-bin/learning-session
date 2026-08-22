@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_ROOT="${FLEET_LEARNING_STATE_ROOT:-$HOME/Library/Application Support/Fleet Ops/learning-sync}"
+CATALOG="${FLEET_LEARNING_CATALOG:-$STATE_ROOT/swe-interview-prep/src/data/learning-sources.json}"
+BASE_URL="${FLEET_LEARNING_URL:-https://learn.significanthobbies.com}"
+
+usage() {
+  echo "usage: learning-session [source]" >&2
+  exit 2
+}
+
+[ "$#" -le 1 ] || usage
+
+date_key="${FLEET_LEARNING_DATE:-$(date +%Y-%m-%d)}"
+session_id="${FLEET_LEARNING_SESSION_ID:-$(date +%s)-$RANDOM}"
+source_query=""
+source_label="Balanced"
+
+if [ "$#" -eq 1 ]; then
+  requested="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  case "$requested" in
+    tinygpt) requested="posttrainllm" ;;
+    mal|anime-list) requested="mal explorer" ;;
+    swe|interview-coder) requested="swe interview prep" ;;
+  esac
+
+  if [ ! -f "$CATALOG" ]; then
+    echo "learning catalog unavailable; run sync-learning-sources first" >&2
+    exit 1
+  fi
+
+  match="$(jq -c --arg requested "$requested" '
+    [.sources[]
+      | select(.itemCount > 0)
+      | select(
+          (.label | ascii_downcase) == $requested or
+          (.id | ascii_downcase) == $requested or
+          (.id | ascii_downcase | endswith(":" + $requested))
+        )][0] // empty
+  ' "$CATALOG")"
+  if [ -z "$match" ]; then
+    echo "unknown or empty learning source: $1" >&2
+    exit 2
+  fi
+  source_id="$(jq -r '.id' <<<"$match")"
+  source_label="$(jq -r '.label' <<<"$match")"
+  source_query="?source=$(jq -rn --arg value "$source_id" '$value|@uri')"
+fi
+
+url="$BASE_URL/session/$date_key/$session_id$source_query"
+jq -n \
+  --arg url "$url" \
+  --arg source "$source_label" \
+  --arg date "$date_key" \
+  --arg sessionId "$session_id" \
+  '{url:$url, source:$source, date:$date, sessionId:$sessionId, durationMinutes:30}'

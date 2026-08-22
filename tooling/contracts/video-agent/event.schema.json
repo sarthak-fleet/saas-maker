@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fleet.video-agent-event.v1",
+  "type": "object",
+  "required": ["schema", "stage", "progress", "recordedAt"],
+  "properties": {
+    "schema": { "const": "fleet.video-agent-event.v1" },
+    "stage": { "type": "string" },
+    "progress": {},
+    "recordedAt": { "type": "string" }
+  }
+}

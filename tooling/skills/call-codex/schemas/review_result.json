@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": ["approve", "approve_with_nits", "request_changes", "reject"],
+      "description": "Overall judgment of the reviewed change"
+    },
+    "summary": {
+      "type": "string",
+      "description": "2-4 sentences: what the change does and the main basis for the verdict"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": { "type": "string", "enum": ["blocker", "major", "minor", "nit"] },
+          "file": { "type": "string", "description": "Repo-relative path, with :line if known" },
+          "issue": { "type": "string", "description": "What is wrong and why it matters" },
+          "suggestion": { "type": "string", "description": "Concrete fix, or empty if none" }
+        },
+        "required": ["severity", "file", "issue", "suggestion"],
+        "additionalProperties": false
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Behaviors changed by the diff that no test exercises. Empty if none."
+    }
+  },
+  "required": ["verdict", "summary", "findings", "coverage_gaps"],
+  "additionalProperties": false
+}

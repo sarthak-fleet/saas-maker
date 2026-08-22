@@ -1,0 +1,11 @@
+# pattern_type	pattern	reason
+endswith	ograph	reads as photography or graphics studio
+endswith	ography	same as ograph
+endswith	hub	generic SaaS slop unless compound stem is long
+exact	herbograph	herb photography confusion
+exact	graphhub	developer tool not your product
+contains	webmd	medical publishing collision vibe
+contains	healthline	publisher collision vibe
+endswith	ly	adjverb startup cliché unless premium coinage
+endswith	ify	SaaS verb cliché
+endswith	ware	legacy software vibe

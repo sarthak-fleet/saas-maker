@@ -1,0 +1,4 @@
+interface:
+  display_name: "Local Ports Cleanup"
+  short_description: "Safely inspect and clean local development ports"
+  default_prompt: "Use $local-ports-cleanup to inspect and safely clean up stale local development ports."

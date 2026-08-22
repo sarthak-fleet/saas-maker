@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fleet.video-agent-operation.v1.request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "product", "operation", "input"],
+  "properties": {
+    "schema": { "const": "fleet.video-agent-operation.v1" },
+    "product": { "enum": ["studio", "mashup", "reel-pipeline"] },
+    "operation": { "type": "string", "minLength": 1 },
+    "operationId": { "type": "string", "minLength": 1 },
+    "idempotencyKey": { "type": "string", "minLength": 1 },
+    "validateOnly": { "type": "boolean" },
+    "input": { "type": "object" }
+  }
+}

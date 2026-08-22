@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FLEET_OPS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+SOURCE_FLEET_ROOT="$(cd "$FLEET_OPS_DIR/../.." && pwd)"
+FLEET_ROOT="${FLEET_CRON_WORKSPACE_ROOT:-$SOURCE_FLEET_ROOT}"
+CRON_DIR="$FLEET_OPS_DIR/automation/codex-cron"
+JOBS_FILE="$CRON_DIR/jobs.tsv"
+LOG_DIR="$CRON_DIR/logs"
+LOCK_DIR="$CRON_DIR/locks"
+NOTIFY="$SCRIPT_DIR/fleet-notify"
+
+usage() {
+  cat <<'EOF'
+usage: run-codex-cron <job-id> [--dry-run]
+
+Runs one versioned Codex cron job from Workflows & Skills automation.
+EOF
+}
+
+if [ "$#" -lt 1 ]; then
+  usage >&2
+  exit 2
+fi
+
+JOB_ID="$1"
+DRY_RUN="${2:-}"
+if [ -n "$DRY_RUN" ] && [ "$DRY_RUN" != "--dry-run" ]; then
+  usage >&2
+  exit 2
+fi
+
+mkdir -p "$LOG_DIR" "$LOCK_DIR"
+
+job_row="$(awk -F '\t' -v id="$JOB_ID" 'NR > 1 && $1 == id { print; found=1 } END { if (!found) exit 1 }' "$JOBS_FILE")" || {
+  echo "unknown job: $JOB_ID" >&2
+  exit 1
+}
+
+IFS=$'\t' read -r id enabled cron_expr name cwd model effort prompt_file lock_minutes source execution_checkout <<<"$job_row"
+
+case "$execution_checkout" in
+  workspace)
+    if [ "${FLEET_CRON_CLEAN_MAIN_VERIFIED:-}" = "1" ]; then
+      echo "job requires workspace execution: $JOB_ID" >&2
+      exit 1
+    fi
+    ;;
+  clean-main)
+    if [ "${FLEET_CRON_CLEAN_MAIN_VERIFIED:-}" != "1" ]; then
+      echo "job requires clean-main preflight: $JOB_ID" >&2
+      exit 1
+    fi
+    ;;
+  *)
+    echo "invalid execution checkout for $JOB_ID: $execution_checkout" >&2
+    exit 1
+    ;;
+esac
+
+if [ "$cwd" = "@fleet" ]; then
+  cwd="$FLEET_ROOT"
+elif [[ "$cwd" == @fleet/* ]]; then
+  cwd="$FLEET_ROOT/${cwd#@fleet/}"
+fi
+
+if [ "$enabled" != "yes" ]; then
+  echo "job disabled: $JOB_ID" >&2
+  exit 0
+fi
+
+prompt_path="$CRON_DIR/$prompt_file"
+if [ ! -f "$prompt_path" ]; then
+  echo "missing prompt: $prompt_path" >&2
+  exit 1
+fi
+
+if [ ! -d "$cwd" ]; then
+  echo "missing cwd: $cwd" >&2
+  exit 1
+fi
+
+lock_path="$LOCK_DIR/$id.lockdir"
+log_path="$LOG_DIR/$id-$(date +%Y%m%d-%H%M%S).log"
+
+if [ -d "$lock_path" ] && find "$lock_path" -prune -mmin +"$lock_minutes" | grep -q .; then
+  rmdir "$lock_path" 2>/dev/null || {
+    echo "stale lock requires manual inspection: $lock_path" >&2
+    exit 1
+  }
+fi
+
+if ! mkdir "$lock_path" 2>/dev/null; then
+  echo "job already running: $id" | tee -a "$log_path"
+  exit 0
+fi
+trap 'rmdir "$lock_path" 2>/dev/null || true' EXIT INT TERM
+
+set +e
+{
+  echo "job: $name"
+  echo "id: $id"
+  echo "time: $(date +%Y-%m-%dT%H:%M:%S%z)"
+  echo "cwd: $cwd"
+  echo "model: $model"
+  echo "effort: $effort"
+  echo "source: $source"
+  if [ -n "${FLEET_CRON_SOURCE_SHA:-}" ]; then
+    echo "source_sha: $FLEET_CRON_SOURCE_SHA"
+  fi
+  echo
+
+  if [ "$DRY_RUN" = "--dry-run" ]; then
+    echo "dry run: would execute codex with prompt $prompt_path"
+    exit 0
+  fi
+
+  codex exec \
+    -C "$cwd" \
+    -m "$model" \
+    -s workspace-write \
+    -c "approval_policy=\"never\"" \
+    -c "model_reasoning_effort=\"$effort\"" \
+    -c "sandbox_workspace_write.network_access=true" \
+    -o "$LOG_DIR/$id-last-message.md" \
+    - < "$prompt_path"
+} 2>&1 | tee -a "$log_path"
+job_status="${PIPESTATUS[0]}"
+set -e
+printf 'exit_status: %s\n' "$job_status" >> "$log_path"
+
+if [ "$DRY_RUN" != "--dry-run" ] && [ -x "$NOTIFY" ]; then
+  if [ "$job_status" -eq 0 ]; then
+    "$NOTIFY" emit --severity success --source codex-cron --project "$id" \
+      --title "$name completed" --body "The scheduled Fleet job finished successfully." \
+      --dedupe-key "cron:$id:success:$(date +%Y-%m-%d)" >/dev/null 2>&1 || true
+  else
+    "$NOTIFY" emit --severity warning --source codex-cron --project "$id" \
+      --title "$name failed" --body "The scheduled Fleet job exited with status $job_status. Check the machine-local cron log." \
+      --dedupe-key "cron:$id:failure" >/dev/null 2>&1 || true
+  fi
+fi
+
+exit "$job_status"

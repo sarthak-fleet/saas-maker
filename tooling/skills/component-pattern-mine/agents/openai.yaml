@@ -1,0 +1,4 @@
+interface:
+  display_name: "Component Pattern Mine"
+  short_description: "Compare complete component behavior"
+  default_prompt: "Use $component-pattern-mine to compare mature patterns for this component."

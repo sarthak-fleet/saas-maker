@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fleet.local-verification-qualification.v1",
+  "title": "Local verification qualification",
+  "description": "A product repo supplies this config so the reusable workflow can verify the project starts and serves the current patch in under five minutes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "project",
+    "startCommand",
+    "readinessProbes",
+    "patchSelection"
+  ],
+  "properties": {
+    "schema": { "const": "fleet.local-verification-qualification.v1" },
+    "project": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable project identifier matching the Fleet catalog."
+    },
+    "startCommand": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Command that starts the local service. Runs from the project root."
+    },
+    "startEnv": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Optional environment variables for the start command. No secrets."
+    },
+    "readinessProbes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/probe" }
+    },
+    "timeoutSeconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 300,
+      "default": 300,
+      "description": "Hard ceiling for the readiness phase. Defaults to 300 (five minutes)."
+    },
+    "pollIntervalSeconds": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 30,
+      "default": 2,
+      "description": "Interval between probe attempts."
+    },
+    "patchSelection": { "$ref": "#/$defs/patchSelection" },
+    "failureInjection": { "$ref": "#/$defs/failureInjection" }
+  },
+  "$defs": {
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["http", "tcp", "log", "command"] },
+        "name": { "type": "string", "minLength": 1 },
+        "url": {
+          "type": "string",
+          "pattern": "^https?://127\\.0\\.0\\.1(:[0-9]+)?/",
+          "description": "HTTP probe target. Must target localhost."
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599,
+          "default": 200,
+          "description": "Expected HTTP status code."
+        },
+        "bodyPattern": {
+          "type": "string",
+          "description": "Optional regex tested against the response body."
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "TCP port to connect to."
+        },
+        "host": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "TCP host. Must be localhost."
+        },
+        "path": {
+          "type": "string",
+          "description": "Log file path for log probes, or working directory for command probes."
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Regex for log probes."
+        },
+        "command": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Command to run for command probes."
+        },
+        "expectExitCode": {
+          "type": "integer",
+          "default": 0,
+          "description": "Expected exit code for command probes."
+        },
+        "timeoutSeconds": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 10,
+          "description": "Per-attempt timeout for a single probe."
+        }
+      }
+    },
+    "patchSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["http", "log", "command"] },
+        "url": {
+          "type": "string",
+          "pattern": "^https?://127\\.0\\.0\\.1(:[0-9]+)?/",
+          "description": "HTTP endpoint that returns the running Git SHA."
+        },
+        "path": {
+          "type": "string",
+          "description": "Log file or marker file path."
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Regex with a capture group that extracts the SHA from the response body or file."
+        },
+        "command": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Command whose stdout contains the running SHA."
+        },
+        "expectSha": {
+          "type": "boolean",
+          "default": true,
+          "description": "When true, the captured value must be a 40-char hex SHA matching the current checkout."
+        }
+      }
+    },
+    "failureInjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startCommand"],
+      "properties": {
+        "startCommand": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Command that starts a deliberately broken service."
+        },
+        "startEnv": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "expectNotReadyWithinSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120,
+          "default": 30,
+          "description": "The readiness probes must stay not-ready for this long to pass."
+        }
+      }
+    }
+  }
+}

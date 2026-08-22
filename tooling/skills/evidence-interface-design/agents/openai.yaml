@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evidence Interface Design"
+  short_description: "Design trustworthy evidence and decision surfaces"
+  default_prompt: "Use $evidence-interface-design to shape this evidence-heavy report, comparison, dashboard, or calculator."
