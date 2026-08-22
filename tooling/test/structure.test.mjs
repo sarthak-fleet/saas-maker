@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import test from 'node:test';
 
 const root = resolve(import.meta.dirname, '..');
-const workflows = join(root, '.github', 'workflows');
+const workflows = resolve(root, '..', '.github', 'workflows');
 const preserved = join(root, 'preserved', 'legacy-fleet-tooling');
 const activeScripts = new Set([
   'agent-stack.sh',
