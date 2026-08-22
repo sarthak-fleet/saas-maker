@@ -47,6 +47,8 @@ describe('complete public Fleet directory', () => {
     ]);
 
     expect(page).toMatch(/data-directory-row/);
+    expect(page).toMatch(/<details/);
+    expect(page).toMatch(/<summary class="directory-summary" aria-label=/);
     expect(page).toMatch(/Search name, purpose, stack, or domain/);
     expect(page).toMatch(/First retained commit/);
     expect(page).toMatch(/Latest retained commit/);
