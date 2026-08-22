@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import { submitFeedbackToProject, submitFeedbackToUrl } from '../dist/index.mjs';
@@ -142,4 +143,27 @@ test('hosted mode sends one multipart request with the project key', async (t) =
   assert.equal(payload.source, 'widget');
   assert.deepEqual(payload.page, submission().page);
   assert.equal(requests[0].init.body.get('screenshot').name, 'screen.png');
+});
+
+test('reports the published package version to the server', async (t) => {
+  // CLIENT_VERSION is hand-maintained next to the package version, so a
+  // release that bumps one and forgets the other silently mislabels every
+  // submission's origin. Pin them together.
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  const originalFetch = globalThis.fetch;
+  let sent;
+  globalThis.fetch = async (_url, init) => {
+    sent = init.body;
+    return new Response(JSON.stringify({ id: 'fb_1' }), {
+      status: 201,
+      headers: { 'content-type': 'application/json' },
+    });
+  };
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  await submitFeedbackToProject('proj_test', submission());
+
+  assert.equal(JSON.parse(sent.get('feedback')).client_version, pkg.version);
 });
