@@ -25,6 +25,12 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-22 — Homepage and directory roles separated:** Reduced the public
+  homepage to four products in focus, one complete-directory gateway, the
+  current learning entry, and SaaS Maker's package surfaces. Removed the
+  repeated maintained/past catalogs and SaaS Maker's self-embedded portfolio
+  strip; `/projects` remains the sole complete 58-identity register, with the
+  same boundary reflected in the agent-readable homepage.
 - **2026-08-22 — Complete directory distilled:** Replaced 58 repeated,
   full-height anatomy panels with compact specimen rows. Purpose, form,
   platforms, prominent tools, and destination remain visible; public links,
@@ -112,6 +118,8 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Features (shipped)
 
+- Curated public homepage with four products in focus and a single gateway to
+  the complete register, without duplicating the 58-project directory.
 - Deterministic 58-identity public projection consumed without private Fleet
   runtime access, with deny-by-default field validation.
 - Searchable `/projects` register grouped by current, supporting/parked, and

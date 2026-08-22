@@ -106,7 +106,7 @@ const productJsonLd = {
 
 <style>
   .project {
-    width: min(92rem, calc(100% - 2rem));
+    width: var(--workshop-frame-width);
     margin: 0 auto;
     padding-bottom: 2rem;
   }
@@ -349,10 +349,6 @@ const productJsonLd = {
   }
 
   @media (max-width: 760px) {
-    .project {
-      width: min(100% - 1rem, 92rem);
-    }
-
     .project-back {
       align-items: flex-start;
       flex-direction: column;

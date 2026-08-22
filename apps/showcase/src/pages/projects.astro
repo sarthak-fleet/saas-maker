@@ -398,9 +398,17 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
   }
 
   .directory-shell {
-    width: min(92rem, calc(100% - 2rem));
+    width: var(--workshop-frame-width);
     margin-inline: auto;
     padding-bottom: 1rem;
+  }
+
+  .directory-intro,
+  .directory-controls,
+  .directory-sections,
+  .directory-empty,
+  .directory-provenance {
+    border-inline: 0.375rem solid var(--workshop-steel);
   }
 
   .directory-intro {
@@ -1015,10 +1023,6 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
   }
 
   @media (max-width: 34rem) {
-    .directory-shell {
-      width: min(100% - 1rem, 92rem);
-    }
-
     .directory-intro-copy {
       min-height: 21rem;
       padding: 1.5rem;
