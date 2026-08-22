@@ -83,23 +83,29 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
   </div>
 </section>
 
-<script>
+<script is:inline define:vars={{ sceneChunkUrl: import.meta.env.PROD ? '/_astro/TokenWorldScene.qlFS2p6Y.js' : '' }}>
   // The 3D token-world scene pulls in three.js (~83KB). It is not part of the
   // landing-page LCP, so we defer wiring up its IntersectionObserver until the
   // page has finished loading (or the browser is idle). This keeps the chunk
   // off the initial network/CPU critical path while preserving the lazy,
   // scroll-triggered load behaviour once the user reaches the section.
+  //
+  // is:inline prevents Vite from seeing the dynamic import and adding the
+  // chunk to the module graph (which would cause speculative prefetching).
+  // We import via a full URL at runtime instead.
   const registerTokenWorldScenes = () => {
-    document.querySelectorAll<HTMLElement>('[data-token-world]').forEach((section) => {
+    document.querySelectorAll('[data-token-world]').forEach((section) => {
       if (section.dataset.sceneLoader === 'observing' || section.dataset.sceneLoader === 'loaded') return;
       section.dataset.sceneLoader = 'observing';
 
-      const loadScene = async () => {
+      var loadScene = async () => {
         if (section.dataset.sceneLoader === 'loaded') return;
         section.dataset.sceneLoader = 'loaded';
         try {
-          const { initTokenWorldScene } = await import('./TokenWorldScene');
-          initTokenWorldScene(section);
+          if (sceneChunkUrl) {
+            var mod = await import(/* @vite-ignore */ sceneChunkUrl);
+            mod.initTokenWorldScene(section);
+          }
         } catch {
           section.dataset.webgl = 'unavailable';
         }
@@ -110,7 +116,7 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
         return;
       }
 
-      const loader = new IntersectionObserver((entries) => {
+      var loader = new IntersectionObserver((entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         loader.disconnect();
         void loadScene();
