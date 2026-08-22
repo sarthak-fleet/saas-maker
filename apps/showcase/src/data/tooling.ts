@@ -1,6 +1,5 @@
 // The canonical tooling catalog is built from checked-in, public source at
 // build time. It never reads Fleet-private state.
-// @ts-expect-error The shared catalog is intentionally dependency-free ESM.
 import { buildCatalog, listCapabilities } from '../../../../tooling/lib/capability-catalog.mjs';
 
 export type ToolingCapability = {
