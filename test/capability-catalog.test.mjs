@@ -21,7 +21,7 @@ test('standalone capability catalog has valid roots and execution profiles', () 
   assert.equal(catalog.generatedFrom, 'sass-maker/workflows-and-skills');
 
   const skills = catalog.items.filter((item) => item.type === 'skill');
-  assert.equal(skills.length, 45);
+  assert.equal(skills.length, 47);
   assert.equal(skills.every((skill) => skill.executionProfile), true);
   assert.equal(skills.every((skill) => skill.path.startsWith('skills/')), true);
 
@@ -31,6 +31,7 @@ test('standalone capability catalog has valid roots and execution profiles', () 
       .map((item) => item.path),
     [
       'scripts/agent-stack.sh',
+      'scripts/apply-clarity-id.sh',
       'scripts/audit.mjs',
       'scripts/check-github-actions-policy.mjs',
       'scripts/fleet-capabilities.mjs',
@@ -39,6 +40,7 @@ test('standalone capability catalog has valid roots and execution profiles', () 
       'scripts/link-project-agent-assets.sh',
       'scripts/unlink-project-agent-assets.sh',
       'scripts/validate-tooling.mjs',
+      'scripts/verify-local.mjs',
     ],
   );
   assert.equal(

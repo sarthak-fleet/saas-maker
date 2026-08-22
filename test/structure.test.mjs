@@ -8,6 +8,7 @@ const workflows = join(root, '.github', 'workflows');
 const preserved = join(root, 'preserved', 'legacy-fleet-tooling');
 const activeScripts = new Set([
   'agent-stack.sh',
+  'apply-clarity-id.sh',
   'audit.mjs',
   'campaign-manifest.mjs',
   'check-github-actions-policy.mjs',
@@ -25,6 +26,7 @@ const activeScripts = new Set([
   'link-project-agent-assets.sh',
   'unlink-project-agent-assets.sh',
   'validate-tooling.mjs',
+  'verify-local.mjs',
 ]);
 
 function files(directory) {

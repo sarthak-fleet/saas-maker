@@ -1,0 +1,70 @@
+name: Verify Local
+
+on:
+  workflow_call:
+    inputs:
+      config-path:
+        description: Path to the qualification config JSON (relative to the caller repo root)
+        required: true
+        type: string
+      node-version:
+        description: Node.js version for the verification runner
+        required: false
+        default: "22"
+        type: string
+      skip-failure-injection:
+        description: Skip the failure-injection phase
+        required: false
+        default: false
+        type: boolean
+      tooling-ref:
+        description: Git ref of sass-maker/workflows-and-skills to check out for the runner script
+        required: false
+        default: "main"
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out caller repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check out reusable verification tooling
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: sass-maker/workflows-and-skills
+          path: .fleet-verification
+          ref: ${{ inputs.tooling-ref || 'main' }}
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ inputs.node-version }}
+      - name: Validate qualification config
+        run: |
+          node .fleet-verification/scripts/verify-local.mjs \
+            --config "${{ inputs.config-path }}" \
+            --validate-only
+      - name: Run local verification qualification
+        id: verify
+        run: |
+          node .fleet-verification/scripts/verify-local.mjs \
+            --config "${{ inputs.config-path }}" \
+            --output verify-local-result.json \
+            ${{ inputs.skip-failure-injection == true && '--skip-failure-injection' || '' }}
+      - name: Display qualification result
+        if: always()
+        run: |
+          if [ -f verify-local-result.json ]; then
+            cat verify-local-result.json
+          fi
+      - name: Preserve qualification result
+        if: steps.verify.outcome != 'success'
+        run: exit 1

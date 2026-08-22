@@ -1,6 +1,6 @@
 # Workflows and Skills — PROJECT STATUS
 
-Last updated: 2026-08-21
+Last updated: 2026-08-22
 
 ## Why / What
 
@@ -33,6 +33,14 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-08-22 — Finished the cross-project sub-five-minute local verification
+  qualification: a reusable contract (`fleet.local-verification-qualification.v1`),
+  observable readiness probing (HTTP, TCP, log, command — no fixed waits),
+  failure injection, exact-patch selection checks, a reusable GitHub Actions
+  workflow, an operator script, a skill, and repeatable evidence on two
+  materially different project types (HTTP server and log-probe worker).
+  Also committed the Clarity fleet rollout skill and apply-clarity-id operator
+  script from issue #18.
 - 2026-08-21 — Added an English-language adaptation of Ian's MIT-licensed
   Xiaohei editorial-illustration skill, preserved upstream attribution, and
   exposed it through the Fleet skill installer.
@@ -81,11 +89,16 @@ owned by individual products.
 - Availability reports with status and redirect evidence.
 - Repeated header/total-response latency reports with p50 and p90.
 - Read-only pull-request validation and default-branch scheduled evidence.
-- Forty-five agent skills with validated provider-neutral execution profiles,
-  including the attributed English Xiaohei illustration adaptation.
+- Forty-seven agent skills with validated provider-neutral execution profiles,
+  including the attributed English Xiaohei illustration adaptation, the Clarity
+  fleet rollout skill, and the local-verification qualification skill.
 - Nine standalone operator entrypoints exposed through the capability catalog,
   with retired product/control-plane sources physically isolated as
   noncanonical history and still covered by shell and Node syntax validation.
+- Cross-project sub-five-minute local verification qualification with
+  observable readiness probing (HTTP, TCP, log, command), failure injection,
+  exact-patch selection checks, a reusable GitHub Actions workflow, and
+  repeatable evidence on two materially different project types.
 
 ## Work queue
 

@@ -1,0 +1,35 @@
+{
+  "schema": "fleet.local-verification-qualification.v1",
+  "project": "example-http-server",
+  "startCommand": ["node", "server.mjs"],
+  "startEnv": {
+    "PORT": "8787",
+    "GIT_SHA": "0123456789abcdef0123456789abcdef01234567"
+  },
+  "readinessProbes": [
+    {
+      "type": "http",
+      "name": "health",
+      "url": "http://127.0.0.1:8787/health",
+      "status": 200,
+      "bodyPattern": "ok",
+      "timeoutSeconds": 5
+    }
+  ],
+  "timeoutSeconds": 120,
+  "pollIntervalSeconds": 1,
+  "patchSelection": {
+    "type": "http",
+    "url": "http://127.0.0.1:8787/__sha",
+    "pattern": "([0-9a-f]{40})"
+  },
+  "failureInjection": {
+    "startCommand": ["node", "server.mjs"],
+    "startEnv": {
+      "PORT": "8788",
+      "GIT_SHA": "0123456789abcdef0123456789abcdef01234567",
+      "BREAK_HEALTH": "1"
+    },
+    "expectNotReadyWithinSeconds": 15
+  }
+}
