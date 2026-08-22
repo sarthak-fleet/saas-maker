@@ -1,6 +1,8 @@
 import { createMiddleware } from 'hono/factory';
-import { Bindings, Variables } from '../types';
 import { getDb } from '../db';
+import { sha256Hex } from '../lib/crypto';
+import { apiError } from '../lib/errors';
+import { Bindings, Variables } from '../types';
 
 const DEFAULT_LOCAL_SESSION_TOKEN = 'local-dev-session';
 
@@ -76,13 +78,48 @@ export const requireSession = createMiddleware<{ Bindings: Bindings; Variables: 
   async (c, next) => {
     const authHeader = c.req.header('Authorization');
     if (!authHeader?.startsWith('Bearer ')) {
-      return c.json({ error: 'Unauthorized' }, 401);
+      return apiError(c, 401, 'unauthorized', 'Unauthorized');
     }
 
     const userId = await resolveBearerUserId(c, authHeader.slice(7));
-    if (!userId) return c.json({ error: 'Unauthorized' }, 401);
+    if (!userId) return apiError(c, 401, 'unauthorized', 'Unauthorized');
 
     c.set('userId', userId);
+    c.set('actorKind', 'owner');
+    c.set('canWrite', true);
+    await next();
+  }
+);
+
+export const requireInboxAuth = createMiddleware<{ Bindings: Bindings; Variables: Variables }>(
+  async (c, next) => {
+    const authHeader = c.req.header('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return apiError(c, 401, 'unauthorized', 'Unauthorized');
+    }
+
+    const token = authHeader.slice(7);
+    if (token.startsWith('smk_')) {
+      const db = getDb(c.env.DB);
+      const agent = await db.getAgentTokenByHash(await sha256Hex(token));
+      if (!agent) return apiError(c, 401, 'unauthorized', 'Unauthorized');
+      const project = await db.getProjectById(agent.project_id);
+      if (!project) return apiError(c, 401, 'unauthorized', 'Unauthorized');
+      await db.touchAgentToken(agent.id);
+      c.set('userId', project.owner_id);
+      c.set('projectId', project.id);
+      c.set('project', project);
+      c.set('actorKind', 'agent');
+      c.set('canWrite', agent.can_write);
+      c.set('agentTokenId', agent.id);
+      return next();
+    }
+
+    const userId = await resolveBearerUserId(c, token);
+    if (!userId) return apiError(c, 401, 'unauthorized', 'Unauthorized');
+    c.set('userId', userId);
+    c.set('actorKind', 'owner');
+    c.set('canWrite', true);
     await next();
   }
 );
@@ -95,7 +132,7 @@ export const requireApiKeyOrSession = createMiddleware<{
   if (apiKey) {
     const db = getDb(c.env.DB);
     const project = await db.getProjectByApiKey(apiKey);
-    if (!project) return c.json({ error: 'Invalid API key' }, 401);
+    if (!project) return apiError(c, 401, 'unauthorized', 'Invalid API key');
     c.set('projectId', project.id);
     c.set('project', project);
     return next();
@@ -103,11 +140,11 @@ export const requireApiKeyOrSession = createMiddleware<{
 
   const authHeader = c.req.header('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
-    return c.json({ error: 'Unauthorized' }, 401);
+    return apiError(c, 401, 'unauthorized', 'Unauthorized');
   }
 
   const userId = await resolveBearerUserId(c, authHeader.slice(7));
-  if (!userId) return c.json({ error: 'Unauthorized' }, 401);
+  if (!userId) return apiError(c, 401, 'unauthorized', 'Unauthorized');
 
   c.set('userId', userId);
   await next();
@@ -116,11 +153,11 @@ export const requireApiKeyOrSession = createMiddleware<{
 export const requireApiKey = createMiddleware<{ Bindings: Bindings; Variables: Variables }>(
   async (c, next) => {
     const apiKey = c.req.header('X-Project-Key');
-    if (!apiKey) return c.json({ error: 'Missing X-Project-Key header' }, 401);
+    if (!apiKey) return apiError(c, 401, 'unauthorized', 'Missing X-Project-Key header');
 
     const db = getDb(c.env.DB);
     const project = await db.getProjectByApiKey(apiKey);
-    if (!project) return c.json({ error: 'Invalid API key' }, 401);
+    if (!project) return apiError(c, 401, 'unauthorized', 'Invalid API key');
 
     c.set('projectId', project.id);
     c.set('project', project);

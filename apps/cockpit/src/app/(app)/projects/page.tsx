@@ -73,7 +73,7 @@ export default async function ProjectsPage() {
           <CardHeader className="flex flex-row items-center gap-3">
             <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
             <div>
-              <CardTitle className="text-base text-destructive">Failed to load fleet</CardTitle>
+              <CardTitle className="text-base text-destructive">Failed to load projects</CardTitle>
               <CardDescription className="mt-1 text-xs font-mono break-all">
                 {error}
               </CardDescription>

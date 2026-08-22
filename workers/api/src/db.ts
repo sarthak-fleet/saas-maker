@@ -1,6 +1,10 @@
 import type {
+  AgentTokenRecord,
   AnyFeedbackStatus,
+  FeedbackPageContext,
+  FeedbackPinpoint,
   FeedbackRecord,
+  FeedbackStatusEvent,
   FeedbackType,
   FeedbackVote,
   ProjectRecord,
@@ -11,9 +15,12 @@ import type {
 type FeedbackQuery = {
   type?: FeedbackType;
   status?: AnyFeedbackStatus;
+  since?: string;
+  until?: string;
   sort?: 'newest' | 'upvotes';
   page?: number;
   limit?: number;
+  cursor?: string;
 };
 
 type ProjectInput = {
@@ -26,10 +33,23 @@ type ProjectInput = {
   git_url?: string | null;
 };
 
-type FeedbackInput = Omit<
-  FeedbackRecord,
-  'upvote_count' | 'downvote_count' | 'viewer_vote' | 'created_at'
->;
+type FeedbackInput = {
+  id: string;
+  project_id: string;
+  type: FeedbackType;
+  status: AnyFeedbackStatus;
+  title: string;
+  description: string;
+  image_url: string | null;
+  submitter_email: string;
+  submitter_name: string | null;
+  page?: FeedbackPageContext | null;
+  pinpoint?: FeedbackPinpoint | null;
+  client_version?: string | null;
+  source?: string | null;
+};
+
+export type AgentTokenRow = AgentTokenRecord & { token_hash: string; can_write_flag: number };
 
 export interface FeedbackDatabase {
   upsertUser(input: Omit<UserRecord, 'created_at'>): Promise<UserRecord>;
@@ -50,8 +70,13 @@ export interface FeedbackDatabase {
     projectId: string,
     query: FeedbackQuery,
     userId?: string
-  ): Promise<{ data: FeedbackRecord[]; total: number }>;
-  updateFeedbackStatus(id: string, status: AnyFeedbackStatus): Promise<FeedbackRecord | null>;
+  ): Promise<{ data: FeedbackRecord[]; total: number; next_cursor: string | null }>;
+  listFeedbackStatusEvents(feedbackId: string): Promise<FeedbackStatusEvent[]>;
+  updateFeedbackStatus(
+    id: string,
+    status: AnyFeedbackStatus,
+    actor: { actor_id: string; actor_kind: 'owner' | 'agent' }
+  ): Promise<FeedbackRecord | null>;
   deleteFeedback(id: string): Promise<boolean>;
   setVote(input: {
     id: string;
@@ -61,6 +86,18 @@ export interface FeedbackDatabase {
   }): Promise<UpvoteRecord>;
   removeVote(feedbackId: string, userId: string): Promise<boolean>;
   getUserVote(feedbackId: string, userId: string): Promise<FeedbackVote>;
+  createAgentToken(input: {
+    id: string;
+    project_id: string;
+    token_hash: string;
+    token_prefix: string;
+    name: string;
+    can_write: boolean;
+  }): Promise<AgentTokenRecord>;
+  listAgentTokens(projectId: string): Promise<AgentTokenRecord[]>;
+  getAgentTokenByHash(tokenHash: string): Promise<AgentTokenRow | null>;
+  touchAgentToken(id: string): Promise<void>;
+  deleteAgentToken(id: string, projectId: string): Promise<boolean>;
 }
 
 function mapRow<T>(row: Record<string, unknown> | null | undefined): T | null {
@@ -73,10 +110,66 @@ function parseViewerVote(value: unknown): FeedbackVote {
   return null;
 }
 
-function toFeedbackRecord(row: Record<string, unknown>): FeedbackRecord {
+function parsePinpoint(value: unknown): FeedbackPinpoint | null {
+  if (!value || typeof value !== 'string') return null;
+  try {
+    const parsed = JSON.parse(value) as FeedbackPinpoint;
+    if (!parsed || typeof parsed.selector !== 'string') return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function encodeCursor(createdAt: string, id: string): string {
+  return btoa(`${createdAt}|${id}`);
+}
+
+export function decodeCursor(cursor: string): { created_at: string; id: string } | null {
+  try {
+    const [created_at, id] = atob(cursor).split('|');
+    if (!created_at || !id) return null;
+    return { created_at, id };
+  } catch {
+    return null;
+  }
+}
+
+function toAgentToken(row: Record<string, unknown>): AgentTokenRecord {
   return {
-    ...(row as unknown as FeedbackRecord),
+    id: String(row.id),
+    project_id: String(row.project_id),
+    name: String(row.name),
+    can_write: Number(row.can_write) === 1,
+    token_prefix: String(row.token_prefix),
+    created_at: String(row.created_at),
+    last_used_at: row.last_used_at ? String(row.last_used_at) : null,
+  };
+}
+
+export function toFeedbackRecord(row: Record<string, unknown>): FeedbackRecord {
+  const pageUrl = typeof row.page_url === 'string' ? row.page_url : null;
+  const pageTitle = typeof row.page_title === 'string' ? row.page_title : null;
+  return {
+    id: String(row.id),
+    project_id: String(row.project_id),
+    type: row.type as FeedbackType,
+    status: row.status as AnyFeedbackStatus,
+    title: String(row.title),
+    description: String(row.description),
+    image_url: row.image_url ? String(row.image_url) : null,
+    submitter_email: row.submitter_email ? String(row.submitter_email) : '',
+    submitter_name: row.submitter_name ? String(row.submitter_name) : null,
+    upvote_count: Number(row.upvote_count ?? 0),
+    downvote_count: Number(row.downvote_count ?? 0),
     viewer_vote: parseViewerVote(row.viewer_vote),
+    page: pageUrl || pageTitle ? { url: pageUrl || '', title: pageTitle || '' } : null,
+    pinpoint: parsePinpoint(row.pinpoint_json),
+    client_version: row.client_version ? String(row.client_version) : null,
+    source: row.source ? String(row.source) : null,
+    updated_at: row.updated_at ? String(row.updated_at) : null,
+    updated_by: row.updated_by ? String(row.updated_by) : null,
+    created_at: String(row.created_at),
   };
 }
 
@@ -195,8 +288,9 @@ export function getDb(d1: D1Database): FeedbackDatabase {
       await d1
         .prepare(
           `INSERT INTO feedback
-             (id, project_id, type, status, title, description, image_url, submitter_email, submitter_name)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+             (id, project_id, type, status, title, description, image_url, submitter_email, submitter_name,
+              page_url, page_title, pinpoint_json, client_version, source)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         )
         .bind(
           input.id,
@@ -207,7 +301,12 @@ export function getDb(d1: D1Database): FeedbackDatabase {
           input.description,
           input.image_url,
           input.submitter_email,
-          input.submitter_name
+          input.submitter_name,
+          input.page?.url ?? null,
+          input.page?.title ?? null,
+          input.pinpoint ? JSON.stringify(input.pinpoint) : null,
+          input.client_version ?? null,
+          input.source ?? 'api'
         )
         .run();
       const row = await d1
@@ -226,8 +325,7 @@ export function getDb(d1: D1Database): FeedbackDatabase {
     },
 
     async listFeedback(projectId, query, userId) {
-      const { type, status, sort = 'newest', page = 1, limit = 20 } = query;
-      const offset = (page - 1) * limit;
+      const { type, status, since, until, sort = 'newest', page = 1, limit = 20, cursor } = query;
       const conditions = ['f.project_id = ?'];
       const values: unknown[] = [projectId];
       if (type) {
@@ -238,9 +336,25 @@ export function getDb(d1: D1Database): FeedbackDatabase {
         conditions.push('f.status = ?');
         values.push(status);
       }
+      if (since) {
+        conditions.push('f.created_at >= ?');
+        values.push(since);
+      }
+      if (until) {
+        conditions.push('f.created_at <= ?');
+        values.push(until);
+      }
+      const decoded = cursor ? decodeCursor(cursor) : null;
+      if (decoded) {
+        conditions.push('(f.created_at < ? OR (f.created_at = ? AND f.id < ?))');
+        values.push(decoded.created_at, decoded.created_at, decoded.id);
+      }
       const where = conditions.join(' AND ');
       const orderBy =
-        sort === 'upvotes' ? 'f.upvote_count DESC, f.created_at DESC' : 'f.created_at DESC';
+        sort === 'upvotes'
+          ? 'f.upvote_count DESC, f.created_at DESC'
+          : 'f.created_at DESC, f.id DESC';
+      const offset = decoded ? 0 : (page - 1) * limit;
       const countStatement = d1
         .prepare(`SELECT COUNT(*) AS total FROM feedback f WHERE ${where}`)
         .bind(...values);
@@ -269,14 +383,69 @@ export function getDb(d1: D1Database): FeedbackDatabase {
         countStatement.first<{ total: number }>(),
         dataStatement.all(),
       ]);
+      const data = (dataResult.results as Record<string, unknown>[]).map(toFeedbackRecord);
+      const next_cursor =
+        data.length === limit
+          ? encodeCursor(data[data.length - 1].created_at, data[data.length - 1].id)
+          : null;
       return {
-        data: (dataResult.results as Record<string, unknown>[]).map(toFeedbackRecord),
+        data,
         total: Number(countRow?.total ?? 0),
+        next_cursor,
       };
     },
 
-    async updateFeedbackStatus(id, status) {
-      await d1.prepare('UPDATE feedback SET status = ? WHERE id = ?').bind(status, id).run();
+    async listFeedbackStatusEvents(feedbackId) {
+      const { results } = await d1
+        .prepare(
+          `SELECT * FROM feedback_status_events
+           WHERE feedback_id = ?
+           ORDER BY created_at ASC`
+        )
+        .bind(feedbackId)
+        .all();
+      return (results as Record<string, unknown>[]).map((row) => ({
+        id: String(row.id),
+        feedback_id: String(row.feedback_id),
+        from_status: row.from_status ? (row.from_status as AnyFeedbackStatus) : null,
+        to_status: row.to_status as AnyFeedbackStatus,
+        actor_id: String(row.actor_id),
+        actor_kind: row.actor_kind as 'owner' | 'agent',
+        created_at: String(row.created_at),
+      }));
+    },
+
+    async updateFeedbackStatus(id, status, actor) {
+      const existing = await d1
+        .prepare('SELECT *, NULL AS viewer_vote FROM feedback WHERE id = ?')
+        .bind(id)
+        .first<Record<string, unknown>>();
+      if (!existing) return null;
+
+      await d1
+        .prepare(
+          `UPDATE feedback
+           SET status = ?, updated_at = datetime('now'), updated_by = ?
+           WHERE id = ?`
+        )
+        .bind(status, actor.actor_id, id)
+        .run();
+      await d1
+        .prepare(
+          `INSERT INTO feedback_status_events
+             (id, feedback_id, from_status, to_status, actor_id, actor_kind)
+           VALUES (?, ?, ?, ?, ?, ?)`
+        )
+        .bind(
+          crypto.randomUUID(),
+          id,
+          existing.status ?? null,
+          status,
+          actor.actor_id,
+          actor.actor_kind
+        )
+        .run();
+
       const row = await d1
         .prepare('SELECT *, NULL AS viewer_vote FROM feedback WHERE id = ?')
         .bind(id)
@@ -359,6 +528,69 @@ export function getDb(d1: D1Database): FeedbackDatabase {
         .bind(feedbackId, userId)
         .first();
       return parseViewerVote(row?.vote);
+    },
+
+    async createAgentToken(input) {
+      await d1
+        .prepare(
+          `INSERT INTO feedback_agent_tokens
+             (id, project_id, token_hash, token_prefix, name, can_write)
+           VALUES (?, ?, ?, ?, ?, ?)`
+        )
+        .bind(
+          input.id,
+          input.project_id,
+          input.token_hash,
+          input.token_prefix,
+          input.name,
+          input.can_write ? 1 : 0
+        )
+        .run();
+      const row = await d1
+        .prepare('SELECT * FROM feedback_agent_tokens WHERE id = ?')
+        .bind(input.id)
+        .first();
+      return toAgentToken(row as Record<string, unknown>);
+    },
+
+    async listAgentTokens(projectId) {
+      const { results } = await d1
+        .prepare(
+          `SELECT * FROM feedback_agent_tokens
+           WHERE project_id = ?
+           ORDER BY created_at DESC`
+        )
+        .bind(projectId)
+        .all();
+      return (results as Record<string, unknown>[]).map(toAgentToken);
+    },
+
+    async getAgentTokenByHash(tokenHash) {
+      const row = await d1
+        .prepare('SELECT * FROM feedback_agent_tokens WHERE token_hash = ?')
+        .bind(tokenHash)
+        .first<Record<string, unknown>>();
+      if (!row) return null;
+      return {
+        ...toAgentToken(row),
+        token_hash: String(row.token_hash),
+        can_write_flag: Number(row.can_write),
+      };
+    },
+
+    async touchAgentToken(id) {
+      await d1
+        .prepare(`UPDATE feedback_agent_tokens SET last_used_at = datetime('now') WHERE id = ?`)
+        .bind(id)
+        .run();
+    },
+
+    async deleteAgentToken(id, projectId) {
+      const { meta } = await d1
+        .prepare('DELETE FROM feedback_agent_tokens WHERE id = ? AND project_id = ?')
+        .bind(id, projectId)
+        .run();
+      return (meta.changes ?? 0) > 0;
     },
   };
 }

@@ -24,7 +24,10 @@ describe('Agent contract', () => {
     const body = await res.json();
     expect(body.openapi).toBe('3.1.0');
     expect(body.paths['/v1/feedback'].post).toBeDefined();
+    expect(body.paths['/v1/feedback'].get).toBeDefined();
     expect(body.paths['/v1/feedback/inbox'].get).toBeDefined();
+    expect(body.paths['/v1/projects/{id}/agent-tokens'].post).toBeDefined();
+    expect(body.components.securitySchemes.agentToken).toBeDefined();
   });
 });
 
@@ -42,7 +45,7 @@ describe('Feedback submission validation', () => {
     });
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toMatch(/X-Project-Key/i);
+    expect(body.error.message).toMatch(/X-Project-Key/i);
   });
 });
 
@@ -51,7 +54,7 @@ describe('Project routes require auth', () => {
     const res = await request('/v1/projects');
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 
   it('POST /v1/projects without auth returns 401', async () => {
@@ -62,7 +65,7 @@ describe('Project routes require auth', () => {
     });
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 
   it('PATCH /v1/projects/123 without auth returns 401', async () => {
@@ -73,23 +76,30 @@ describe('Project routes require auth', () => {
     });
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 
   it('DELETE /v1/projects/123 without auth returns 401', async () => {
     const res = await request('/v1/projects/123', { method: 'DELETE' });
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 });
 
 describe('Dashboard feedback routes require auth', () => {
+  it('GET /v1/feedback without auth returns 401', async () => {
+    const res = await request('/v1/feedback');
+    expect(res.status).toBe(401);
+    const body = await res.json();
+    expect(body.error.message).toBe('Unauthorized');
+  });
+
   it('GET /v1/feedback/inbox/123 without auth returns 401', async () => {
     const res = await request('/v1/feedback/inbox/123');
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 
   it('PATCH /v1/feedback/123 without auth returns 401', async () => {
@@ -100,14 +110,14 @@ describe('Dashboard feedback routes require auth', () => {
     });
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 
   it('GET /v1/feedback/123 without auth returns 401', async () => {
     const res = await request('/v1/feedback/123');
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toBe('Unauthorized');
+    expect(body.error.message).toBe('Unauthorized');
   });
 });
 
@@ -116,7 +126,7 @@ describe('Upload validation', () => {
     const res = await request('/v1/upload', { method: 'POST' });
     expect(res.status).toBe(401);
     const body = await res.json();
-    expect(body.error).toMatch(/X-Project-Key/i);
+    expect(body.error.message).toMatch(/X-Project-Key/i);
   });
 });
 

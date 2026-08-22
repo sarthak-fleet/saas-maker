@@ -114,7 +114,7 @@ test('turns network failures into actionable endpoint errors without retrying', 
   assert.equal(requests, 1);
 });
 
-test('hosted mode uploads an image and creates one project-scoped record', async (t) => {
+test('hosted mode sends one multipart request with the project key', async (t) => {
   const originalFetch = globalThis.fetch;
   t.after(() => {
     globalThis.fetch = originalFetch;
@@ -123,12 +123,6 @@ test('hosted mode uploads an image and creates one project-scoped record', async
   const requests = [];
   globalThis.fetch = async (url, init) => {
     requests.push({ url, init });
-    if (url.endsWith('/v1/upload')) {
-      return Response.json(
-        { url: 'https://images.sassmaker.com/feedback/screen.png' },
-        { status: 201 }
-      );
-    }
     return Response.json({ id: 'feedback_1' }, { status: 201 });
   };
 
@@ -139,12 +133,13 @@ test('hosted mode uploads an image and creates one project-scoped record', async
     'https://feedback.example/'
   );
 
-  assert.equal(requests.length, 2);
-  assert.equal(requests[0].url, 'https://feedback.example/v1/upload');
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url, 'https://feedback.example/v1/feedback');
   assert.equal(requests[0].init.headers['X-Project-Key'], 'feedback_public_example');
-  assert.equal(requests[1].url, 'https://feedback.example/v1/feedback');
-  const body = JSON.parse(requests[1].init.body);
-  assert.equal(body.submitter_email, 'person@example.com');
-  assert.equal(body.image_url, 'https://images.sassmaker.com/feedback/screen.png');
-  assert.deepEqual(body.page, submission().page);
+  assert.equal(requests[0].init.body instanceof FormData, true);
+  const payload = JSON.parse(requests[0].init.body.get('feedback'));
+  assert.equal(payload.submitter_email, 'person@example.com');
+  assert.equal(payload.source, 'widget');
+  assert.deepEqual(payload.page, submission().page);
+  assert.equal(requests[0].init.body.get('screenshot').name, 'screen.png');
 });

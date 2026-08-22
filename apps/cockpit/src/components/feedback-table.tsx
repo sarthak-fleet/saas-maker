@@ -56,8 +56,8 @@ export function FeedbackTable({ feedback, onStatusChange }: FeedbackTableProps) 
           <TableBody>
             {feedback.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
-                  No feedback items found.
+                <TableCell colSpan={5} className="h-28 text-center text-muted-foreground">
+                  No matching feedback. New submissions from the hosted widget appear here.
                 </TableCell>
               </TableRow>
             ) : (

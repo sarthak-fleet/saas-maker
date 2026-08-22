@@ -18,7 +18,7 @@ import '@saas-maker/feedback/dist/index.css';
 export function ProductFeedback() {
   return (
     <FeedbackWidget
-      projectId="pk_your_project_key"
+      projectKey="pk_your_project_key"
       userEmail="signed-in-user@example.com"
       theme="auto"
     />

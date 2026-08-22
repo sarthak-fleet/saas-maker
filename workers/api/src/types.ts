@@ -15,6 +15,9 @@ export type Variables = {
   userId?: string;
   projectId?: string;
   project?: any;
+  actorKind?: 'owner' | 'agent';
+  canWrite?: boolean;
+  agentTokenId?: string;
 };
 
 export type AppContext = Context<{ Bindings: Bindings; Variables: Variables }>;

@@ -1,8 +1,8 @@
 # @saas-maker/feedback
 
 A React feedback widget with optional screenshots and Pinpoint page-element
-context. Use SaaS Maker's hosted submission service or connect a destination
-your application already owns.
+context. The default SaaS Maker path is the hosted submission service; callback
+and URL ingestion remain explicit escape hatches.
 
 ## Install
 
@@ -10,7 +10,28 @@ your application already owns.
 pnpm add @saas-maker/feedback
 ```
 
+## Quick start: hosted service
+
+Create a project in the private feedback inbox at app.sassmaker.com, then use
+its public submission key in the browser:
+
+```tsx
+import { FeedbackWidget } from '@saas-maker/feedback'
+import '@saas-maker/feedback/dist/index.css'
+
+export function AppFeedback() {
+  return <FeedbackWidget projectKey="feedback_public_example" />
+}
+```
+
+The public key can only identify the destination project. It is not a secret
+and must not grant inbox access. The widget sends one `POST` to
+`https://api.sassmaker.com/v1/feedback` with the key in `X-Project-Key` and a
+multipart body (`feedback` JSON plus an optional `screenshot` file).
+
 ## Quick start: callback
+
+Use `onSubmit` when your product already owns storage:
 
 ```tsx
 import { FeedbackWidget } from '@saas-maker/feedback'
@@ -38,24 +59,6 @@ export function AppFeedback() {
 
 `onSubmit` may send an email, create an issue, call an authenticated API, or
 write to any system your product already uses.
-
-## Quick start: hosted service
-
-Create a project in the private feedback inbox, then use its public submission
-key in the browser:
-
-```tsx
-import { FeedbackWidget } from '@saas-maker/feedback'
-import '@saas-maker/feedback/dist/index.css'
-
-export function AppFeedback() {
-  return <FeedbackWidget projectKey="feedback_public_example" />
-}
-```
-
-The public key can only identify the destination project. It is not a secret
-and must not grant inbox access. The widget submits to `api.sassmaker.com` and
-uploads an optional screenshot before creating the feedback record.
 
 ## Quick start: ingestion URL
 
@@ -87,9 +90,10 @@ URL mode sends one `POST` with a `FormData` body:
 | `feedback` | JSON string containing the submission without `screenshot` |
 | `screenshot` | Original image file when supplied; otherwise omitted |
 
-The widget displays success only after a 2xx response. A network failure or
-non-2xx response keeps the form data available and shows an error. Requests are
-never retried automatically.
+Hosted mode uses the same multipart fields against `/v1/feedback`, plus the
+publishable `X-Project-Key` header. The widget displays success only after a 2xx
+response. A network failure or non-2xx response keeps the form data available
+and shows an error. Requests are never retried automatically.
 
 ## Payload
 
@@ -146,8 +150,8 @@ explicitly sends the form.
 ## Screenshots
 
 JPEG, PNG, GIF, and WebP files up to 5 MB can be attached. Callback mode receives
-the original `File`; URL mode uploads it in the `screenshot` multipart field.
-The package does not retain it.
+the original `File`; hosted and URL modes send it in the `screenshot` multipart
+field. The package does not retain it.
 
 ## Privacy
 
