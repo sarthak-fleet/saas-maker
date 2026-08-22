@@ -41,8 +41,17 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 - **2026-08-22 — Feedback agent contract deployed:** Applied D1 migration
   `0025` (both preserved feedback rows kept), deployed `saasmaker-api` and
   `saasmaker-dashboard` at `c5d3e845`, and attached `app.sassmaker.com` as a
-  Worker custom domain. npm publication of `@saas-maker/feedback` and the
-  Anime List consumer merge are still blocked.
+  Worker custom domain. The Anime List consumer merge is still blocked.
+  `@saas-maker/feedback` is published on npm at `0.4.0` (4 versions).
+- **2026-08-22 — Inbox sign-in is down; package docs host is missing:**
+  `saasmaker-dashboard` carries no Worker secrets, so every `/api/auth/*` route
+  returns 500 — better-auth 1.6.30 (bumped in `b9b5858a`) refuses to run on its
+  default secret instead of warning. `BETTER_AUTH_SECRET`, `AUTH_GOOGLE_ID` and
+  `AUTH_GOOGLE_SECRET` all need attaching; `pnpm deploy:cockpit` now blocks
+  while any is absent. Separately, Pages project `saas-maker-packages` does not
+  exist, so `saas-maker-packages.pages.dev` has no DNS and the feedback package
+  documentation this file and README both advertise is unreachable. The public
+  submit path, `api.sassmaker.com`, and the npm package are unaffected.
 - **2026-08-22 — Standalone catalog boundary repaired:** Repointed public
   catalog synchronization to Site Health's canonical `projects.json`, retained
   the checked-in privacy-filtered projection for runtime use, and repointed the
