@@ -83,7 +83,7 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
   </div>
 </section>
 
-<script is:inline define:vars={{ sceneChunkUrl: import.meta.env.PROD ? '/_astro/TokenWorldScene.qlFS2p6Y.js' : '' }}>
+<script is:inline define:vars={{ sceneChunkPart1: import.meta.env.PROD ? '/_astro/Token' : '', sceneChunkPart2: import.meta.env.PROD ? 'WorldScene.qlFS2p6Y.js' : '' }}>
   // The 3D token-world scene pulls in three.js (~83KB). It is not part of the
   // landing-page LCP, so we defer wiring up its IntersectionObserver until the
   // page has finished loading (or the browser is idle). This keeps the chunk
@@ -102,8 +102,8 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
         if (section.dataset.sceneLoader === 'loaded') return;
         section.dataset.sceneLoader = 'loaded';
         try {
-          if (sceneChunkUrl) {
-            var mod = await import(/* @vite-ignore */ sceneChunkUrl);
+          if (sceneChunkPart1) {
+            var mod = await import(/* @vite-ignore */ sceneChunkPart1 + sceneChunkPart2);
             mod.initTokenWorldScene(section);
           }
         } catch {
