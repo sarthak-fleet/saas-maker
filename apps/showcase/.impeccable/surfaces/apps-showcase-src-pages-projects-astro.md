@@ -14,5 +14,5 @@ related_targets: ["apps/showcase/src/pages/projects.json.ts"]
 - Content boundary: all 58 canonical identities from the privacy-safe Site Health projection; no private repositories, local paths, priorities, controls, health metrics, or operational notes.
 - Direction: extend the established workshop wall as lifecycle bays crossed by platform, technology, deployment, and history rails.
 - Memorable moment: the cobalt 58-identity pane gives way immediately to a filterable, server-rendered register.
-- Interaction: search plus group, form, and platform filters; all content remains present without JavaScript.
+- Interaction: search plus group, form, and platform filters; compact specimen rows keep the essential facts visible and use native disclosures for deployment evidence, links, and history. All content remains present without JavaScript.
 - Provenance: Git dates are explicitly first/latest retained commits, not launch or retirement claims.

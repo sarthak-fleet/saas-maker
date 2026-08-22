@@ -25,6 +25,12 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-22 — Complete directory distilled:** Replaced 58 repeated,
+  full-height anatomy panels with compact specimen rows. Purpose, form,
+  platforms, prominent tools, and destination remain visible; public links,
+  deployment evidence, and retained Git bounds use accessible native
+  disclosures. Wide layouts label columns once per lifecycle group, while
+  stacked layouts restore local labels for context.
 - **2026-08-22 — Complete Fleet directory published:** Expanded the public,
   privacy-filtered projection from the maintained subset to all 58 retained
   Fleet identities. The new `/projects` register separates current,
@@ -101,8 +107,8 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   runtime access, with deny-by-default field validation.
 - Searchable `/projects` register grouped by current, supporting/parked, and
   past work, with form-family and platform filters, mobile filter return,
-  deployment context, public links, technology labels, and retained Git-history
-  bounds.
+  compact project anatomy, prominent tools, and native disclosures for public
+  links, deployment context, and retained Git-history bounds.
 - Matching human, JSON, Markdown, sitemap, and agent-readable directory
   surfaces.
 - Feedback submission for bug, feature, and general feedback.

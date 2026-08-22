@@ -38,7 +38,7 @@ const directoryChecks = [
       const res = await fetch(`${DIRECTORY}/projects`);
       if (res.status !== 200) throw new Error(`status ${res.status}`);
       const body = await res.text();
-      const rows = body.match(/<article class="directory-row" data-directory-row/g)?.length ?? 0;
+      const rows = body.match(/<details class="directory-row" data-directory-row/g)?.length ?? 0;
       if (rows !== 58) throw new Error(`expected 58 directory rows, got ${rows}`);
       if (!body.includes('First retained commit') || !body.includes('Latest retained commit')) {
         throw new Error('missing Git-history bounds');

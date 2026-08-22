@@ -1,0 +1,59 @@
+{
+  "$schema": "fleet.design-review.v1",
+  "version": 1,
+  "project": "saas-maker",
+  "target": "/projects directory distillation",
+  "mode": "preserve",
+  "register": "product",
+  "context": {
+    "product": "apps/showcase/PRODUCT.md",
+    "design": "apps/showcase/DESIGN.md"
+  },
+  "direction": {
+    "references": [],
+    "probes": [],
+    "selected": "existing-design",
+    "approval": "not-required",
+    "before": "artifacts/design/directory-distill-before-1440.png"
+  },
+  "evidence": {
+    "screenshots": [
+      {
+        "width": 390,
+        "path": "artifacts/design/after-390.png"
+      },
+      {
+        "width": 768,
+        "path": "artifacts/design/after-768.png"
+      },
+      {
+        "width": 1440,
+        "path": "artifacts/design/after-1440.png"
+      }
+    ],
+    "projectCheck": {
+      "command": "pnpm test -- tests/showcase/directory.test.ts && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && git diff --check",
+      "status": "pass"
+    },
+    "critique": {
+      "score": 34,
+      "maximum": 40
+    },
+    "audit": {
+      "score": 16,
+      "maximum": 20
+    },
+    "unresolved": {
+      "p0": 0,
+      "p1": 0
+    },
+    "detector": {
+      "posture": "advisory",
+      "findings": []
+    }
+  },
+  "ownerFeedback": {
+    "decision": "delegated",
+    "note": "Owner requested an agent-led cleanup of the repeated directory anatomy while preserving all project facts."
+  }
+}

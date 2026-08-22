@@ -34,10 +34,8 @@ const searchableText = (project: DirectoryProject) =>
     project.name,
     project.description,
     project.form,
-    project.kind,
     ...project.platforms,
     ...project.technologies,
-    ...project.deploymentProviders,
     ...project.domains,
   ]
     .join(' ')
@@ -140,9 +138,17 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
               <p>{group.description}</p>
             </header>
 
+            <div class="directory-column-guide" aria-hidden="true">
+              <span>Project</span>
+              <span>Shape</span>
+              <span>Prominent tools</span>
+              <span>Where</span>
+              <span>Evidence</span>
+            </div>
+
             <div class="directory-rows">
               {group.projects.map((project) => (
-                <article
+                <details
                   class="directory-row"
                   data-directory-row
                   data-group={project.group}
@@ -150,84 +156,103 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
                   data-platforms={project.platforms.join('|')}
                   data-search={searchableText(project)}
                 >
-                  <div class="directory-identity">
-                    <div class="directory-row-heading">
-                      <h3>{project.name}</h3>
-                      <span>{project.kind}</span>
-                    </div>
-                    <p>{project.description}</p>
-                    <div class="directory-links" aria-label={`${project.name} public links`}>
-                      {project.domains.map((domain, index) => (
-                        <a
-                          class:list={{ 'directory-link--primary': index === 0 }}
-                          href={`https://${domain}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {domain} <span aria-hidden="true">↗</span>
-                        </a>
-                      ))}
-                      {project.repositoryUrl && (
-                        <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
-                          Source <span aria-hidden="true">↗</span>
-                        </a>
-                      )}
-                      {project.changelogUrl && (
-                        <a href={project.changelogUrl} target="_blank" rel="noopener noreferrer">
-                          Changelog <span aria-hidden="true">↗</span>
-                        </a>
-                      )}
-                      {project.roadmapUrl && (
-                        <a href={project.roadmapUrl} target="_blank" rel="noopener noreferrer">
-                          Issues <span aria-hidden="true">↗</span>
-                        </a>
-                      )}
-                      {project.domains.length === 0 && !project.repositoryUrl && (
-                        <span>No public destination</span>
-                      )}
-                    </div>
-                  </div>
+                  <summary class="directory-summary" aria-label={`Open evidence for ${project.name}`}>
+                    <h3 class="directory-identity">
+                      <span class="directory-row-heading">
+                        <span class="directory-project-name">{project.name}</span>
+                      </span>
+                      <span class="directory-identity-description">{project.description}</span>
+                    </h3>
 
-                  <dl class="directory-anatomy">
-                    <div>
-                      <dt>Form</dt>
-                      <dd>{project.form}</dd>
-                    </div>
-                    <div>
-                      <dt>Platforms</dt>
-                      <dd>{project.platforms.join(' · ')}</dd>
-                    </div>
-                    <div>
-                      <dt>Deployment</dt>
-                      <dd>
-                        <span class:list={['deployment-state', { 'deployment-state--live': project.deployed }]}>
-                          {deploymentLabel(project)}
-                        </span>
-                        {project.deploymentProviders.length > 0 && (
-                          <small>{project.deploymentProviders.join(' · ')}</small>
+                    <span class="directory-glance">
+                      <span>Shape</span>
+                      <strong>{project.form}</strong>
+                      <small>{project.platforms.join(' · ')}</small>
+                    </span>
+
+                    <span class="directory-glance directory-glance--tools">
+                      <span>Prominent tools</span>
+                      <strong>{project.technologies.join(' · ')}</strong>
+                    </span>
+
+                    <span class="directory-glance directory-glance--where">
+                      <span>Where</span>
+                      <strong>{project.domains[0] ?? deploymentLabel(project)}</strong>
+                      {project.domains[0] && <small>{deploymentLabel(project)}</small>}
+                    </span>
+
+                    <span class="directory-disclosure" aria-hidden="true">
+                      <span>Evidence</span>
+                      <svg viewBox="0 0 16 16" focusable="false">
+                        <path d="M3.5 6 8 10.5 12.5 6" />
+                      </svg>
+                    </span>
+                  </summary>
+
+                  <div class="directory-detail">
+                    <div class="directory-links-panel">
+                      <span>Public destinations</span>
+                      <div class="directory-links" aria-label={`${project.name} public links`}>
+                        {project.domains.map((domain, index) => (
+                          <a
+                            class:list={{ 'directory-link--primary': index === 0 }}
+                            href={`https://${domain}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {domain} <span aria-hidden="true">↗</span>
+                          </a>
+                        ))}
+                        {project.repositoryUrl && (
+                          <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+                            Source <span aria-hidden="true">↗</span>
+                          </a>
                         )}
-                      </dd>
+                        {project.changelogUrl && (
+                          <a href={project.changelogUrl} target="_blank" rel="noopener noreferrer">
+                            Changelog <span aria-hidden="true">↗</span>
+                          </a>
+                        )}
+                        {project.roadmapUrl && (
+                          <a href={project.roadmapUrl} target="_blank" rel="noopener noreferrer">
+                            Issues <span aria-hidden="true">↗</span>
+                          </a>
+                        )}
+                        {project.domains.length === 0 && !project.repositoryUrl && (
+                          <span>No public destination</span>
+                        )}
+                      </div>
                     </div>
-                  </dl>
 
-                  <div class="directory-stack">
-                    <span>Prominent tools</span>
-                    <ul>
-                      {project.technologies.map((technology) => <li>{technology}</li>)}
-                    </ul>
+                    <dl class="directory-evidence">
+                      <div>
+                        <dt>Catalog kind</dt>
+                        <dd>{project.kind}</dd>
+                      </div>
+                      <div>
+                        <dt>Deployment</dt>
+                        <dd>
+                          <span
+                            class:list={['deployment-state', { 'deployment-state--live': project.deployed }]}
+                          >
+                            {deploymentLabel(project)}
+                          </span>
+                          {project.deploymentProviders.length > 0 && (
+                            <small>{project.deploymentProviders.join(' · ')}</small>
+                          )}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>First retained commit</dt>
+                        <dd>{formatDate(project.firstCommitAt)}</dd>
+                      </div>
+                      <div>
+                        <dt>Latest retained commit</dt>
+                        <dd>{formatDate(project.latestCommitAt)}</dd>
+                      </div>
+                    </dl>
                   </div>
-
-                  <dl class="directory-history">
-                    <div>
-                      <dt>First retained commit</dt>
-                      <dd>{formatDate(project.firstCommitAt)}</dd>
-                    </div>
-                    <div>
-                      <dt>Latest retained commit</dt>
-                      <dd>{formatDate(project.latestCommitAt)}</dd>
-                    </div>
-                  </dl>
-                </article>
+                </details>
               ))}
             </div>
           </section>
@@ -285,10 +310,7 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
 
   if (controls && filterReturn) {
     const updateFilterReturnVisibility = () => {
-      filterReturn.classList.toggle(
-        'directory-filter-return--hidden',
-        controls.getBoundingClientRect().bottom > 0
-      );
+      filterReturn.hidden = controls.getBoundingClientRect().bottom > 0;
     };
     updateFilterReturnVisibility();
     window.addEventListener('scroll', updateFilterReturnVisibility, { passive: true });
@@ -391,7 +413,7 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
 
   .directory-intro > *,
   .directory-controls > *,
-  .directory-row > * {
+  .directory-summary > * {
     min-width: 0;
   }
 
@@ -563,10 +585,10 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
 
   .directory-section-head {
     display: grid;
-    grid-template-columns: minmax(15rem, 0.65fr) minmax(18rem, 1fr);
+    grid-template-columns: minmax(15rem, 0.55fr) minmax(18rem, 1fr);
     gap: 2rem;
-    align-items: end;
-    padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.25rem, 4vw, 3.5rem);
+    align-items: center;
+    padding: clamp(1.4rem, 2.5vw, 2rem) clamp(1.25rem, 3vw, 2.5rem);
     background: var(--workshop-seeded);
   }
 
@@ -578,7 +600,7 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
   }
 
   .directory-section-head h2 {
-    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
     font-weight: 600;
     letter-spacing: -0.04em;
     line-height: 0.95;
@@ -596,19 +618,64 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
     background: rgba(20, 21, 17, 0.32);
   }
 
-  .directory-row {
+  .directory-column-guide {
     display: grid;
-    grid-template-columns: minmax(19rem, 1.25fr) minmax(14rem, 0.72fr) minmax(12rem, 0.58fr) minmax(10rem, 0.46fr);
-    min-height: 15rem;
+    grid-template-columns: minmax(22rem, 1.35fr) minmax(9rem, 0.45fr) minmax(15rem, 0.72fr) minmax(12rem, 0.6fr) 5.5rem;
+    background: var(--workshop-steel);
+    color: #c9c4b8;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .directory-column-guide span {
+    padding: 0.65rem clamp(1rem, 1.6vw, 1.5rem);
+  }
+
+  .directory-column-guide span + span {
+    border-left: 1px solid #3b3c38;
+  }
+
+  .directory-row {
     background: var(--directory-pane);
   }
 
-  .directory-row > * {
-    padding: clamp(1.25rem, 2.5vw, 2rem);
+  .directory-summary {
+    display: grid;
+    grid-template-columns: minmax(22rem, 1.35fr) minmax(9rem, 0.45fr) minmax(15rem, 0.72fr) minmax(12rem, 0.6fr) 5.5rem;
+    align-items: stretch;
+    min-height: 8.25rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 140ms ease;
   }
 
-  .directory-row > * + * {
+  .directory-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .directory-summary:hover {
+    background: #fffdf7;
+  }
+
+  .directory-row[open] .directory-summary {
+    background: #fffdf7;
+  }
+
+  .directory-summary > * {
+    padding: clamp(1rem, 1.6vw, 1.5rem);
+  }
+
+  .directory-summary > * + * {
     border-left: 1px solid var(--directory-line);
+  }
+
+  .directory-identity {
+    display: grid;
+    align-content: center;
+    font: inherit;
+    font-weight: 400;
   }
 
   .directory-row-heading {
@@ -618,31 +685,103 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
     gap: 1rem;
   }
 
-  .directory-row-heading h3 {
-    font-size: clamp(1.55rem, 2.4vw, 2.25rem);
+  .directory-project-name {
+    font-size: clamp(1.35rem, 1.8vw, 1.85rem);
     font-weight: 600;
     letter-spacing: -0.035em;
     line-height: 1;
   }
 
-  .directory-row-heading span {
-    color: var(--workshop-muted);
-    font-size: 0.7rem;
+  .directory-identity-description {
+    display: block;
+    max-width: 58ch;
+    margin-top: 0.65rem;
+    color: #5f5d55;
+    font-size: 0.92rem;
+  }
+
+  .directory-glance {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+
+  .directory-glance--tools {
+    background: var(--workshop-seeded);
+  }
+
+  .directory-glance > span,
+  .directory-links-panel > span,
+  .directory-evidence dt {
+    color: var(--directory-quiet);
+    font-size: 0.68rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  .directory-identity > p {
-    max-width: 58ch;
-    margin-top: 1rem;
-    color: #5f5d55;
+  .directory-glance strong {
+    overflow-wrap: anywhere;
+    font-size: 0.86rem;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .directory-glance small {
+    color: var(--directory-quiet);
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .directory-disclosure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    color: var(--directory-quiet);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .directory-disclosure svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    transition: rotate 140ms ease;
+  }
+
+  .directory-row[open] .directory-disclosure svg {
+    rotate: 180deg;
+  }
+
+  .directory-detail {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.85fr) minmax(28rem, 1.15fr);
+    border-top: 1px solid var(--directory-line);
+    background: #f5f0e6;
+  }
+
+  .directory-detail > * {
+    padding: clamp(1rem, 1.8vw, 1.5rem);
+  }
+
+  .directory-detail > * + * {
+    border-left: 1px solid var(--directory-line);
   }
 
   .directory-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem 1rem;
-    margin-top: 1.5rem;
+    gap: 0.25rem 1rem;
+    margin-top: 0.65rem;
     font-size: 0.82rem;
     font-weight: 700;
   }
@@ -664,41 +803,30 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
     color: #747168;
   }
 
-  .directory-anatomy,
-  .directory-history {
+  .directory-evidence {
     display: grid;
-    align-content: start;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.25rem;
+    font-variant-numeric: tabular-nums;
   }
 
-  .directory-anatomy div,
-  .directory-history div {
+  .directory-evidence div {
     display: grid;
+    align-content: start;
     gap: 0.3rem;
   }
 
-  .directory-anatomy dt,
-  .directory-history dt,
-  .directory-stack > span {
-    color: var(--directory-quiet);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .directory-anatomy dd,
-  .directory-history dd {
+  .directory-evidence dd {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     font-weight: 600;
   }
 
-  .directory-anatomy small {
+  .directory-evidence small {
     display: block;
     margin-top: 0.35rem;
     color: var(--directory-quiet);
-    font-size: 0.76rem;
+    font-size: 0.74rem;
     font-weight: 500;
   }
 
@@ -718,31 +846,6 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
 
   .deployment-state--live::before {
     background: #1746a2;
-  }
-
-  .directory-stack {
-    background: var(--workshop-seeded);
-  }
-
-  .directory-stack ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-top: 0.75rem;
-    list-style: none;
-  }
-
-  .directory-stack li {
-    border: 1px solid rgba(20, 21, 17, 0.28);
-    border-radius: 999px;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.75rem;
-    font-weight: 650;
-  }
-
-  .directory-history {
-    background: #f5f0e6;
-    font-variant-numeric: tabular-nums;
   }
 
   .directory-empty {
@@ -820,15 +923,22 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
   }
 
   @media (max-width: 72rem) {
-    .directory-row {
-      grid-template-columns: minmax(18rem, 1.2fr) minmax(13rem, 0.8fr) minmax(13rem, 0.7fr);
+    .directory-column-guide {
+      display: none;
     }
 
-    .directory-history {
-      grid-column: 1 / -1;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .directory-summary {
+      grid-template-columns: minmax(18rem, 1.2fr) minmax(9rem, 0.55fr) minmax(13rem, 0.75fr) 4rem;
+    }
+
+    .directory-glance--where {
+      grid-column: 2 / 4;
       border-top: 1px solid var(--directory-line);
-      border-left: 0 !important;
+    }
+
+    .directory-disclosure {
+      grid-column: 4;
+      grid-row: 1 / 3;
     }
   }
 
@@ -839,9 +949,12 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .directory-intro-copy,
-    .directory-count-pane {
+    .directory-intro-copy {
       min-height: 23rem;
+    }
+
+    .directory-count-pane {
+      min-height: 18rem;
     }
 
     .directory-controls {
@@ -869,30 +982,35 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
       transition: opacity 140ms ease, translate 140ms ease;
     }
 
-    .directory-filter-return--hidden {
-      pointer-events: none;
-      opacity: 0;
-      translate: 0 0.5rem;
-    }
-
-    .directory-row {
-      grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.55fr);
+    .directory-summary {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr) minmax(0, 0.85fr) 3.75rem;
     }
 
     .directory-identity {
       grid-column: 1 / -1;
     }
 
-    .directory-anatomy {
+    .directory-glance {
       border-top: 1px solid var(--directory-line);
-      border-left: 0 !important;
     }
 
-    .directory-history {
+    .directory-glance--where {
       grid-column: auto;
+    }
+
+    .directory-disclosure {
+      grid-column: 4;
+      grid-row: 2;
+      border-top: 1px solid var(--directory-line);
+    }
+
+    .directory-detail {
       grid-template-columns: 1fr;
-      border-top: 0;
-      border-left: 1px solid var(--directory-line) !important;
+    }
+
+    .directory-detail > * + * {
+      border-top: 1px solid var(--directory-line);
+      border-left: 0;
     }
   }
 
@@ -901,9 +1019,13 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
       width: min(100% - 1rem, 92rem);
     }
 
-    .directory-intro-copy,
-    .directory-count-pane {
+    .directory-intro-copy {
       min-height: 21rem;
+      padding: 1.5rem;
+    }
+
+    .directory-count-pane {
+      min-height: 14rem;
       padding: 1.5rem;
     }
 
@@ -926,12 +1048,12 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
     }
 
     .directory-selects,
-    .directory-row,
-    .directory-history {
+    .directory-summary,
+    .directory-evidence {
       grid-template-columns: 1fr;
     }
 
-    .directory-row > * {
+    .directory-summary > * {
       grid-column: auto;
       border-top: 1px solid var(--directory-line);
       border-left: 0 !important;
@@ -939,6 +1061,24 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
 
     .directory-identity {
       border-top: 0;
+    }
+
+    .directory-glance {
+      display: grid;
+      grid-template-columns: minmax(7rem, 0.42fr) 1fr;
+      align-items: baseline;
+      gap: 0.25rem 1rem;
+    }
+
+    .directory-glance small {
+      grid-column: 2;
+    }
+
+    .directory-disclosure {
+      grid-row: auto;
+      flex-direction: row;
+      justify-content: space-between;
+      min-height: 3.25rem;
     }
 
     .directory-row-heading {
@@ -953,8 +1093,23 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .directory-filter-return {
+    .directory-filter-return,
+    .directory-summary,
+    .directory-disclosure svg {
       transition: none;
+    }
+  }
+
+  @media (min-width: 72.001rem) {
+    .directory-glance > span,
+    .directory-disclosure > span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
 </style>
