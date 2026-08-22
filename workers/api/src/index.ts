@@ -6,16 +6,37 @@ import { projects } from './routes/projects';
 import { feedback } from './routes/feedback';
 import { upload } from './routes/upload';
 import { rateLimit } from './middleware/rate-limit';
+import { openApiDocument } from './openapi';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.onError((err, c) => {
   console.error(`[${c.get('requestId') || 'unknown'}] Unhandled error:`, err.message, err.stack);
-  return c.json({ error: 'Internal server error' }, 500);
+  return c.json(
+    {
+      error: {
+        code: 'internal_error',
+        message: 'Internal server error',
+        path: c.req.path,
+      },
+    },
+    500
+  );
 });
 
 // Structured JSON for unmatched routes (Hono's default is plain text).
-app.notFound((c) => c.json({ error: 'Not found' }, 404));
+app.notFound((c) =>
+  c.json(
+    {
+      error: {
+        code: 'not_found',
+        message: `No API endpoint matches '${c.req.path}'. See https://api.sassmaker.com/openapi.json for the available endpoints.`,
+        path: c.req.path,
+      },
+    },
+    404
+  )
+);
 
 const ALLOWED_ORIGINS = new Set([
   'https://app.sassmaker.com',
@@ -53,51 +74,7 @@ app.use('*', async (c, next) => {
 
 app.get('/health', (c) => c.json({ status: 'ok' }));
 
-app.get('/openapi.json', (c) =>
-  c.json({
-    openapi: '3.1.0',
-    info: {
-      title: 'SaaS Maker Feedback API',
-      version: '1.0.0',
-      description: 'Submit feedback publicly and review it through an authenticated private inbox.',
-    },
-    servers: [{ url: 'https://api.sassmaker.com' }],
-    paths: {
-      '/v1/feedback': {
-        post: {
-          summary: 'Submit feedback',
-          security: [{ projectKey: [] }],
-          responses: { '201': { description: 'Feedback created' } },
-        },
-      },
-      '/v1/feedback/inbox': {
-        get: {
-          summary: 'List feedback across owned projects',
-          security: [{ bearerSession: [] }],
-          responses: { '200': { description: 'Newest-first feedback page' } },
-        },
-      },
-      '/v1/feedback/{id}': {
-        get: {
-          summary: 'Read one feedback item',
-          security: [{ bearerSession: [] }],
-          responses: { '200': { description: 'Feedback record' } },
-        },
-        patch: {
-          summary: 'Update feedback status',
-          security: [{ bearerSession: [] }],
-          responses: { '200': { description: 'Updated feedback record' } },
-        },
-      },
-    },
-    components: {
-      securitySchemes: {
-        projectKey: { type: 'apiKey', in: 'header', name: 'X-Project-Key' },
-        bearerSession: { type: 'http', scheme: 'bearer' },
-      },
-    },
-  })
-);
+app.get('/openapi.json', (c) => c.json(openApiDocument));
 
 app.use('/v1/*', rateLimit({ limit: 100, period: 60 }));
 

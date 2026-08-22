@@ -1,10 +1,12 @@
-import { Hono } from 'hono';
-import { Bindings, Variables } from '../types';
-import { requireSession } from '../middleware/auth';
-import { getDb } from '../db';
-import { trace, capture } from '../lib/telemetry';
-import { buildCacheKey, tryCacheMatch, withCachePut } from '../edge-cache';
 import type { ProjectRecord } from '@saas-maker/contracts';
+import { Hono } from 'hono';
+import { getDb } from '../db';
+import { buildCacheKey, tryCacheMatch, withCachePut } from '../edge-cache';
+import { randomToken, sha256Hex } from '../lib/crypto';
+import { apiError } from '../lib/errors';
+import { capture, trace } from '../lib/telemetry';
+import { requireSession } from '../middleware/auth';
+import { Bindings, type AppContext, Variables } from '../types';
 
 const projects = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 projects.use('*', requireSession);
@@ -68,11 +70,16 @@ const VALID_SOURCES = ['dashboard', 'linkchat'];
 projects.post('/', async (c) => {
   const userId = c.get('userId')!;
   const body = (await c.req.json()) as { name: string; source?: string; git_url?: string };
-  if (!body.name?.trim()) return c.json({ error: 'Project name is required' }, 400);
+  if (!body.name?.trim()) return apiError(c, 400, 'invalid_request', 'Project name is required');
 
   const source = body.source || 'dashboard';
   if (!VALID_SOURCES.includes(source)) {
-    return c.json({ error: `Invalid source. Must be one of: ${VALID_SOURCES.join(', ')}` }, 400);
+    return apiError(
+      c,
+      400,
+      'invalid_request',
+      `Invalid source. Must be one of: ${VALID_SOURCES.join(', ')}`
+    );
   }
 
   const gitUrl = body.git_url?.trim() || null;
@@ -102,7 +109,7 @@ projects.get('/by-slug/:slug', async (c) => {
   const slug = c.req.param('slug');
   const db = getDb(c.env.DB);
   const project = await db.getProjectBySlug(slug);
-  if (!project || project.owner_id !== userId) return c.json({ error: 'Not found' }, 404);
+  if (!project || project.owner_id !== userId) return apiError(c, 404, 'not_found', 'Not found');
   return c.json(toPublicProject(project));
 });
 
@@ -119,8 +126,8 @@ projects.patch('/:id', async (c) => {
 
   // Verify ownership
   const existing = await db.getProjectById(projectId);
-  if (!existing) return c.json({ error: 'Project not found' }, 404);
-  if (existing.owner_id !== userId) return c.json({ error: 'Forbidden' }, 403);
+  if (!existing) return apiError(c, 404, 'not_found', 'Project not found');
+  if (existing.owner_id !== userId) return apiError(c, 403, 'forbidden', 'Forbidden');
 
   const gitUrl = body.git_url === undefined ? undefined : body.git_url?.trim?.() || null;
 
@@ -129,7 +136,7 @@ projects.patch('/:id', async (c) => {
     readme: body.readme,
     git_url: gitUrl,
   });
-  if (!updated) return c.json({ error: 'Project not found' }, 404);
+  if (!updated) return apiError(c, 404, 'not_found', 'Project not found');
   capture({ distinctId: userId, event: 'project_updated', properties: { project_id: projectId } });
   return c.json(toPublicProject(updated));
 });
@@ -142,8 +149,8 @@ projects.delete('/:id', async (c) => {
 
   // Verify ownership
   const existing = await db.getProjectById(projectId);
-  if (!existing) return c.json({ error: 'Project not found' }, 404);
-  if (existing.owner_id !== userId) return c.json({ error: 'Forbidden' }, 403);
+  if (!existing) return apiError(c, 404, 'not_found', 'Project not found');
+  if (existing.owner_id !== userId) return apiError(c, 403, 'forbidden', 'Forbidden');
 
   await db.deleteProject(projectId);
   capture({
@@ -151,6 +158,53 @@ projects.delete('/:id', async (c) => {
     event: 'project_deleted',
     properties: { project_id: projectId, project_name: existing.name },
   });
+  return c.json({ ok: true });
+});
+
+async function ownedProject(c: AppContext, projectId: string) {
+  const db = getDb(c.env.DB);
+  const project = await db.getProjectById(projectId);
+  if (!project) return { error: apiError(c, 404, 'not_found', 'Project not found') };
+  if (project.owner_id !== c.get('userId'))
+    return { error: apiError(c, 403, 'forbidden', 'Forbidden') };
+  return { project, db };
+}
+
+projects.get('/:id/agent-tokens', async (c) => {
+  const owned = await ownedProject(c, c.req.param('id'));
+  if ('error' in owned) return owned.error;
+  return c.json({ data: await owned.db.listAgentTokens(owned.project.id) });
+});
+
+projects.post('/:id/agent-tokens', async (c) => {
+  const owned = await ownedProject(c, c.req.param('id'));
+  if ('error' in owned) return owned.error;
+  let body: { name?: string; can_write?: boolean };
+  try {
+    body = (await c.req.json()) as { name?: string; can_write?: boolean };
+  } catch {
+    return apiError(c, 400, 'invalid_request', 'Request body must be JSON');
+  }
+  const name = body.name?.trim();
+  if (!name) return apiError(c, 400, 'invalid_request', 'Token name is required');
+
+  const plaintext = randomToken('smk_');
+  const token = await owned.db.createAgentToken({
+    id: crypto.randomUUID(),
+    project_id: owned.project.id,
+    token_hash: await sha256Hex(plaintext),
+    token_prefix: plaintext.slice(0, 8),
+    name,
+    can_write: body.can_write === true,
+  });
+  return c.json({ ...token, token: plaintext }, 201);
+});
+
+projects.delete('/:id/agent-tokens/:tokenId', async (c) => {
+  const owned = await ownedProject(c, c.req.param('id'));
+  if ('error' in owned) return owned.error;
+  const deleted = await owned.db.deleteAgentToken(c.req.param('tokenId'), owned.project.id);
+  if (!deleted) return apiError(c, 404, 'not_found', 'Token not found');
   return c.json({ ok: true });
 });
 

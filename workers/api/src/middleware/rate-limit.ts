@@ -21,7 +21,16 @@ export const rateLimit = (options: { limit: number; period: number; skipPrefixes
       const { success } = await c.env.RATE_LIMITER.limit({ key });
 
       if (!success) {
-        return c.json({ error: 'Rate limit exceeded' }, 429);
+        return c.json(
+          {
+            error: {
+              code: 'rate_limited',
+              message: 'Rate limit exceeded',
+              path: c.req.path,
+            },
+          },
+          429
+        );
       }
     } catch (err) {
       console.error('Rate limiter error:', err);

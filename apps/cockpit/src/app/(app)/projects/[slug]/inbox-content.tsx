@@ -31,7 +31,7 @@ export function InboxContent({ projectId }: InboxContentProps) {
       const qs = params.toString();
       const token = await getClientToken();
       const data = await apiFetchClient<{ data: FeedbackRecord[] }>(
-        `/v1/feedback/inbox/${projectId}${qs ? `?${qs}` : ''}`,
+        `/v1/feedback?project=${encodeURIComponent(projectId)}${qs ? `&${qs}` : ''}`,
         token
       );
       setFeedback(data.data ?? []);

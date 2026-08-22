@@ -6,6 +6,12 @@ const mockDb = {
   getProjectById: vi.fn(),
   getUserById: vi.fn(),
   listFeedback: vi.fn(),
+  listFeedbackStatusEvents: vi.fn(),
+  updateFeedbackStatus: vi.fn(),
+  getFeedbackById: vi.fn(),
+  getAgentTokenByHash: vi.fn(),
+  touchAgentToken: vi.fn(),
+  listProjectsByOwner: vi.fn(),
 };
 
 vi.mock('../../workers/api/src/db', () => ({
@@ -60,7 +66,7 @@ describe('Feedback route validation with a mocked DB', () => {
     });
 
     expect(res.status).toBe(400);
-    expect((await res.json()).error).toMatch(/Title is required/i);
+    expect((await res.json()).error.message).toMatch(/Title is required/i);
     expect(mockDb.createFeedback).not.toHaveBeenCalled();
   });
 
@@ -81,6 +87,67 @@ describe('Feedback route validation with a mocked DB', () => {
     );
   });
 
+  it('POST /v1/feedback stores page and pinpoint context', async () => {
+    const res = await request('/v1/feedback', {
+      method: 'POST',
+      headers: apiKeyHeaders(),
+      body: JSON.stringify({
+        title: 'Broken CTA',
+        description: 'Cannot click save',
+        type: 'bug',
+        page: { url: 'https://product.example/settings', title: 'Settings' },
+        anchor: {
+          selector: '#save',
+          tag: 'button',
+          text: 'Save',
+          source: null,
+          url: '/settings',
+        },
+        client_version: '0.4.0',
+        source: 'widget',
+      }),
+    });
+
+    expect(res.status).toBe(201);
+    const body = await res.json();
+    expect(body.id).toBeDefined();
+    expect(body.status).toBe('new');
+    expect(body.title).toBeUndefined();
+    expect(mockDb.createFeedback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        page: { url: 'https://product.example/settings', title: 'Settings' },
+        pinpoint: expect.objectContaining({ selector: '#save', tag: 'button' }),
+        source: 'widget',
+      })
+    );
+  });
+
+  it('POST /v1/feedback accepts multipart screenshot submissions', async () => {
+    const form = new FormData();
+    form.append(
+      'feedback',
+      JSON.stringify({
+        title: 'Screenshot bug',
+        description: 'See image',
+        type: 'bug',
+      })
+    );
+    form.append('screenshot', new File(['image-bytes'], 'screen.png', { type: 'image/png' }));
+
+    const res = await request('/v1/feedback', {
+      method: 'POST',
+      headers: { 'X-Project-Key': PROJECT.api_key },
+      body: form,
+    });
+
+    expect(res.status).toBe(201);
+    expect(mockDb.createFeedback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        image_url: expect.stringMatching(/^https:\/\/images\.sassmaker\.com\/feedback\//),
+      })
+    );
+  });
+
   it('POST /v1/feedback with key but invalid type returns 400', async () => {
     const res = await request('/v1/feedback', {
       method: 'POST',
@@ -94,7 +161,7 @@ describe('Feedback route validation with a mocked DB', () => {
     });
 
     expect(res.status).toBe(400);
-    expect((await res.json()).error).toMatch(/Invalid type/i);
+    expect((await res.json()).error.message).toMatch(/Invalid type/i);
     expect(mockDb.createFeedback).not.toHaveBeenCalled();
   });
 });

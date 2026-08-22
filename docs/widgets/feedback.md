@@ -3,12 +3,15 @@ title: Feedback widget
 description: Configure the React feedback widget.
 ---
 
-FeedbackWidget accepts:
+FeedbackWidget accepts exactly one destination: hosted `projectKey`,
+`ingestionUrl`, or `onSubmit`.
 
 | Prop | Purpose |
 | --- | --- |
-| projectId | Required public project key |
-| apiBaseUrl | Optional API override; defaults to api.sassmaker.com |
+| projectKey | Public project key for the hosted SaaS Maker service |
+| apiBaseUrl | Optional API override; defaults to https://api.sassmaker.com |
+| ingestionUrl | Caller-owned multipart endpoint |
+| onSubmit | Product-owned submission callback |
 | userEmail | Pre-fill and lock the submitter email |
 | userName | Pre-fill the submitter name |
 | types | Allow bug, feature, feedback, or a subset |
@@ -23,7 +26,7 @@ the host application.
 
 ~~~tsx
 <FeedbackWidget
-  projectId="pk_example"
+  projectKey="pk_example"
   types={['bug', 'feature']}
   position="bottom-left"
   accentColor="#7c3aed"
@@ -31,4 +34,5 @@ the host application.
 />
 ~~~
 
-Screenshots accept JPEG, PNG, GIF, and WebP files up to 5 MB.
+Hosted mode sends one multipart POST to `/v1/feedback`. Screenshots accept
+JPEG, PNG, GIF, and WebP files up to 5 MB.

@@ -17,6 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
+import { CopyButton } from '@/components/copy-button';
 import type { FeedbackRecord, AnyFeedbackStatus, FeedbackStatus } from '@saas-maker/contracts';
 
 const TYPE_STYLES: Record<
@@ -97,7 +98,39 @@ export function FeedbackDetail({ item, open, onClose, onStatusChange }: Feedback
             </p>
           </div>
 
-          {/* Image */}
+          {item.page?.url ? (
+            <div className="space-y-1">
+              <h4 className="text-sm font-medium text-muted-foreground">Page</h4>
+              <p className="text-sm">{item.page.title || 'Untitled page'}</p>
+              <a
+                href={item.page.url}
+                className="break-all text-xs text-muted-foreground underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {item.page.url}
+              </a>
+            </div>
+          ) : null}
+
+          {item.pinpoint ? (
+            <div className="space-y-1">
+              <h4 className="text-sm font-medium text-muted-foreground">Pinpoint</h4>
+              <p className="text-sm">
+                {item.pinpoint.tag || 'element'}
+                {item.pinpoint.text ? `: ${item.pinpoint.text}` : ''}
+              </p>
+              <p className="break-all font-mono text-xs text-muted-foreground">
+                {item.pinpoint.selector}
+              </p>
+              {item.pinpoint.source ? (
+                <p className="break-all font-mono text-xs text-muted-foreground">
+                  {item.pinpoint.source}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+
           {item.image_url && (
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-muted-foreground">Attachment</h4>
@@ -132,7 +165,6 @@ export function FeedbackDetail({ item, open, onClose, onStatusChange }: Feedback
             </p>
           </div>
 
-          {/* Status */}
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-muted-foreground">Status</h4>
             <Select value={status} onValueChange={handleStatusChange} disabled={updating}>
@@ -147,6 +179,29 @@ export function FeedbackDetail({ item, open, onClose, onStatusChange }: Feedback
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-muted-foreground">Agent record</h4>
+            <CopyButton
+              label="Copy JSON"
+              value={JSON.stringify(
+                {
+                  id: item.id,
+                  project_id: item.project_id,
+                  type: item.type,
+                  status: item.status,
+                  title: item.title,
+                  description: item.description,
+                  page: item.page,
+                  pinpoint: item.pinpoint,
+                  image_url: item.image_url,
+                  created_at: item.created_at,
+                },
+                null,
+                2
+              )}
+            />
           </div>
         </SheetBody>
       </SheetContent>

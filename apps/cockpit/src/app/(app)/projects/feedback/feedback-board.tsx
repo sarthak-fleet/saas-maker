@@ -32,7 +32,7 @@ export function FeedbackBoard() {
         if (type !== 'all') query.set('type', type);
         if (status !== 'all') query.set('status', status);
         const result = await apiFetchClient<{ data: InboxRecord[] }>(
-          `/v1/feedback/inbox?${query.toString()}`,
+          `/v1/feedback?${query.toString()}`,
           activeToken
         );
         setFeedback(result.data ?? []);
@@ -108,6 +108,7 @@ export function FeedbackBoard() {
             <SelectItem value="in_progress">In progress</SelectItem>
             <SelectItem value="resolved">Resolved</SelectItem>
             <SelectItem value="dismissed">Dismissed</SelectItem>
+            <SelectItem value="on_roadmap">On roadmap</SelectItem>
           </SelectContent>
         </Select>
         <Button

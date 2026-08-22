@@ -25,6 +25,11 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-22 — Feedback agent contract completed in source:** Hosted
+  submission now keeps page/Pinpoint evidence, accepts one multipart request,
+  issues read-only-by-default agent tokens, and records status mutations. The
+  private inbox copies structured records for agent workflows. Production D1
+  migration, DNS, deploy, and npm publication still need explicit approval.
 - **2026-08-22 — Standalone catalog boundary repaired:** Repointed public
   catalog synchronization to Site Health's canonical `projects.json`, retained
   the checked-in privacy-filtered projection for runtime use, and repointed the
@@ -91,6 +96,9 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 - Optional screenshots and page-element anchoring.
 - Private cross-product feedback inbox with type/status filters and status controls.
 - Machine-readable OpenAPI contract for submission, inbox, detail, and status updates.
+- Project-scoped agent tokens that default to read-only.
+- Immutable status-change audit records with actor identity.
+- Page URL, Pinpoint context, and screenshots stored as original customer evidence.
 - Project-key creation and management.
 - Blume package docs plus agent/search surfaces.
 - Backend-free AI assistant links with provider-specific prompt handoff.

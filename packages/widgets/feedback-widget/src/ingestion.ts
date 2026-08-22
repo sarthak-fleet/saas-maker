@@ -49,6 +49,7 @@ export async function submitFeedbackToUrl(
 }
 
 const DEFAULT_API_BASE = 'https://api.sassmaker.com';
+const CLIENT_VERSION = '0.4.0';
 
 export async function submitFeedbackToProject(
   projectKey: string,
@@ -59,36 +60,35 @@ export async function submitFeedbackToProject(
   if (!key) throw new Error('Feedback project key cannot be empty.');
 
   const base = validateIngestionUrl(apiBaseUrl).replace(/\/$/, '');
-  let imageUrl: string | undefined;
+  const { screenshot, ...feedback } = submission;
+  const body = new FormData();
+  body.append(
+    'feedback',
+    JSON.stringify({
+      type: feedback.type,
+      title: feedback.title,
+      description: feedback.description,
+      submitter_email: feedback.email ?? '',
+      submitter_name: feedback.name,
+      page: feedback.page,
+      anchor: feedback.anchor,
+      source: 'widget',
+      client_version: CLIENT_VERSION,
+    })
+  );
+  if (screenshot) body.append('screenshot', screenshot);
 
-  if (submission.screenshot) {
-    const upload = new FormData();
-    upload.append('file', submission.screenshot);
-    const response = await fetch(`${base}/v1/upload`, {
+  let response: Response;
+  try {
+    response = await fetch(`${base}/v1/feedback`, {
       method: 'POST',
       headers: { 'X-Project-Key': key },
       credentials: 'omit',
-      body: upload,
+      body,
     });
-    if (!response.ok) throw new Error(`Feedback image upload returned HTTP ${response.status}.`);
-    const result = (await response.json()) as { url?: string };
-    imageUrl = result.url;
+  } catch (error) {
+    const detail = error instanceof Error && error.message ? `: ${error.message}` : '';
+    throw new Error(`Unable to reach the feedback service${detail}`, { cause: error });
   }
-
-  const response = await fetch(`${base}/v1/feedback`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Project-Key': key },
-    credentials: 'omit',
-    body: JSON.stringify({
-      type: submission.type,
-      title: submission.title,
-      description: submission.description,
-      submitter_email: submission.email ?? '',
-      submitter_name: submission.name,
-      image_url: imageUrl,
-      page: submission.page,
-      anchor: submission.anchor,
-    }),
-  });
   if (!response.ok) throw new Error(`Feedback service returned HTTP ${response.status}.`);
 }

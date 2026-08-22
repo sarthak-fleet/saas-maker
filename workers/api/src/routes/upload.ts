@@ -1,30 +1,19 @@
 import { Hono } from 'hono';
-import { Bindings, Variables } from '../types';
 import { requireApiKey } from '../middleware/auth';
+import { apiError } from '../lib/errors';
+import { storeScreenshot } from '../lib/screenshots';
+import { Bindings, Variables } from '../types';
 
 const upload = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-
 upload.post('/', requireApiKey, async (c) => {
   const formData = await c.req.formData();
-  const file = formData.get('file') as File | null;
+  const file = formData.get('file');
+  if (!(file instanceof File)) return apiError(c, 400, 'invalid_request', 'No file provided');
 
-  if (!file) return c.json({ error: 'No file provided' }, 400);
-  if (!ALLOWED_TYPES.includes(file.type))
-    return c.json({ error: 'Invalid file type. Allowed: jpeg, png, gif, webp' }, 400);
-  if (file.size > MAX_FILE_SIZE) return c.json({ error: 'File too large. Max 5MB' }, 400);
-
-  const ext = file.type.split('/')[1];
-  const key = `feedback/${crypto.randomUUID()}.${ext}`;
-
-  await c.env.FEEDBACK_IMAGES.put(key, file.stream(), {
-    httpMetadata: { contentType: file.type },
-  });
-
-  const imageUrl = `https://images.sassmaker.com/${key}`;
-  return c.json({ url: imageUrl }, 201);
+  const stored = await storeScreenshot(c, file);
+  if (stored instanceof Response) return stored;
+  return c.json({ url: stored }, 201);
 });
 
 export { upload };

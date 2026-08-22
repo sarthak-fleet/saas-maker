@@ -44,7 +44,7 @@ export function OnboardingFlow() {
   }
 
   if (apiKey) {
-    const example = `<FeedbackWidget projectId="${apiKey}" />`;
+    const example = `<FeedbackWidget projectKey="${apiKey}" />`;
     return (
       <Card className="mx-auto max-w-xl">
         <CardHeader>
