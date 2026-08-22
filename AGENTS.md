@@ -43,7 +43,13 @@ node --test test/*.test.mjs
 node scripts/validate-tooling.mjs
 node scripts/audit.mjs --mode availability --runs 1
 node scripts/audit.mjs --mode performance --runs 3
+node scripts/ahrefs-site-audit-health.mjs
 ```
+
+Canonical-root site audit is an operator workflow whose working path is a
+local sitemap crawl plus source actions. Keep any `AHREFS_API_KEY` runtime-only
+and fail closed without entitlement. Do not advertise the script as a
+credential-free catalog entrypoint.
 
 Use Node.js 20 or newer. The repository intentionally has no npm runtime or
 development dependencies.

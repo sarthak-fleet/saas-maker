@@ -8,6 +8,7 @@ const workflows = join(root, '.github', 'workflows');
 const preserved = join(root, 'preserved', 'legacy-fleet-tooling');
 const activeScripts = new Set([
   'agent-stack.sh',
+  'ahrefs-site-audit-health.mjs',
   'apply-clarity-id.sh',
   'audit.mjs',
   'campaign-manifest.mjs',

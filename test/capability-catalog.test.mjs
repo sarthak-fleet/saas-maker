@@ -44,6 +44,10 @@ test('standalone capability catalog has valid roots and execution profiles', () 
     ],
   );
   assert.equal(
+    catalog.items.some((item) => item.path === 'scripts/ahrefs-site-audit-health.mjs'),
+    false,
+  );
+  assert.equal(
     catalog.items.some((item) => item.path === 'scripts/ai-visibility-canary.mjs'),
     false,
   );

@@ -33,6 +33,11 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-08-22 — Restored a canonical-root site-audit operator workflow. Ahrefs
+  Health Scores stay optional and fail-closed without entitlement; the working
+  path is a local sitemap crawl that emits source actions for 4xx pages,
+  missing titles, and missing h1s. Infisical `AHREFS_API_KEY` currently returns
+  HTTP 401.
 - 2026-08-22 — Finished the cross-project sub-five-minute local verification
   qualification: a reusable contract (`fleet.local-verification-qualification.v1`),
   observable readiness probing (HTTP, TCP, log, command — no fixed waits),
@@ -99,6 +104,9 @@ owned by individual products.
   observable readiness probing (HTTP, TCP, log, command), failure injection,
   exact-patch selection checks, a reusable GitHub Actions workflow, and
   repeatable evidence on two materially different project types.
+- Canonical-root site-audit operator workflow: local sitemap crawl and
+  source-action rows for 4xx, missing titles, and missing h1s. Ahrefs Health
+  Scores remain optional and fail-closed without entitlement.
 
 ## Work queue
 

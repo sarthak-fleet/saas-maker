@@ -20,6 +20,12 @@ Run `node scripts/fleet-capabilities.mjs doctor --json` for the exact current
 catalog. Tests fail if an old Console, marketing, analytics, or Site Health
 entrypoint becomes active accidentally.
 
+Canonical-root site audit (`scripts/ahrefs-site-audit-health.mjs`) reads Site
+Health's brand catalog, crawls those roots, and emits source actions. Ahrefs
+Health Scores are optional. It is not advertised as a credential-free catalog
+entrypoint. The preserved copy under `preserved/legacy-fleet-tooling/` remains
+historical.
+
 ## Preserved, noncanonical scripts
 
 Historical product and control-plane entrypoints are physically isolated under
