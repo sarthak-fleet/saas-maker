@@ -128,31 +128,35 @@
       "latestCommitAt": "2026-08-22"
     },
     {
-      "id": "workflows-and-skills",
-      "name": "Workflows and Skills",
-      "description": "Reusable Fleet skills, workflows, and operator scripts without product runtime ownership.",
-      "kind": "platform",
-      "form": "Automation toolkit",
+      "id": "live",
+      "name": "Live",
+      "description": "The original Significant Hobbies experience, now independently owned while preserving its data and authentication boundary.",
+      "kind": "product",
+      "form": "Web app",
       "platforms": [
-        "CLI",
-        "GitHub Actions"
+        "Web"
       ],
       "technologies": [
-        "JavaScript",
-        "Shell",
-        "GitHub Actions"
+        "Next.js",
+        "TypeScript",
+        "Cloudflare Workers",
+        "D1"
       ],
       "group": "current",
       "lifecycle": "maintained",
       "deployed": true,
       "deploymentProviders": [
-        "GitHub Actions"
+        "Cloudflare Workers"
       ],
-      "domains": [],
-      "repositoryUrl": "https://github.com/sass-maker/workflows-and-skills",
-      "roadmapUrl": "https://github.com/sass-maker/workflows-and-skills/issues",
-      "firstCommitAt": "2026-07-30",
-      "latestCommitAt": "2026-08-22"
+      "domains": [
+        "live.significanthobbies.com"
+      ],
+      "url": "https://live.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/live",
+      "changelogUrl": "https://live.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/live/issues",
+      "firstCommitAt": "2026-08-21",
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "chatgpt-connections",
@@ -616,35 +620,35 @@
     {
       "id": "significanthobbies",
       "name": "Significant Hobbies",
-      "description": "A simple directory for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor.",
+      "description": "The shared Hub and backend for seven Significant Hobbies applications.",
       "kind": "product",
-      "form": "Publication",
+      "form": "Personal-app Hub",
       "platforms": [
-        "Web"
+        "Web",
+        "API",
+        "Swift package"
       ],
       "technologies": [
-        "Astro",
-        "Next.js",
+        "TypeScript",
         "Cloudflare Workers",
-        "D1"
+        "D1",
+        "Swift"
       ],
       "group": "current",
       "lifecycle": "maintained",
       "deployed": true,
       "deploymentProviders": [
-        "Cloudflare Workers",
-        "Apple App Store Connect"
+        "Cloudflare Workers"
       ],
       "domains": [
-        "significanthobbies.com",
-        "live.significanthobbies.com"
+        "significanthobbies.com"
       ],
       "url": "https://significanthobbies.com",
       "repositoryUrl": "https://github.com/Significant-Hobbies/significanthobbies",
       "changelogUrl": "https://significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/significanthobbies/issues",
-      "firstCommitAt": "2026-03-01",
-      "latestCommitAt": "2026-08-22"
+      "firstCommitAt": "2026-08-21",
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "india-standards",
@@ -902,30 +906,37 @@
       "latestCommitAt": "2026-08-22"
     },
     {
-      "id": "personal-platform",
-      "name": "Personal Platform",
-      "description": "A private shared identity and data plane for selected Significant Hobbies apps.",
-      "kind": "platform",
-      "form": "Shared API platform",
+      "id": "journal",
+      "name": "Journal",
+      "description": "A private daily journal and personal archive with an independently owned native codebase.",
+      "kind": "product",
+      "form": "iOS app",
       "platforms": [
-        "API"
+        "iOS",
+        "Web"
       ],
       "technologies": [
-        "TypeScript",
-        "Cloudflare Workers",
-        "D1"
+        "SwiftUI",
+        "Swift",
+        "XcodeGen",
+        "Astro"
       ],
       "group": "current",
       "lifecycle": "maintained",
       "deployed": true,
       "deploymentProviders": [
-        "Cloudflare Workers"
+        "Cloudflare Pages",
+        "Apple App Store Connect"
       ],
-      "domains": [],
-      "repositoryUrl": "https://github.com/Significant-Hobbies/personal-platform",
-      "roadmapUrl": "https://github.com/Significant-Hobbies/personal-platform/issues",
-      "firstCommitAt": "2026-08-21",
-      "latestCommitAt": "2026-08-22"
+      "domains": [
+        "journal.significanthobbies.com"
+      ],
+      "url": "https://journal.significanthobbies.com",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/journal",
+      "changelogUrl": "https://journal.significanthobbies.com/changelog",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/journal/issues",
+      "firstCommitAt": "2026-08-11",
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "kith",
@@ -974,16 +985,11 @@
       ],
       "group": "current",
       "lifecycle": "maintained",
-      "deployed": true,
-      "deploymentProviders": [
-        "Cloudflare Pages"
-      ],
-      "domains": [
-        "journal.significanthobbies.com"
-      ],
-      "url": "https://journal.significanthobbies.com",
+      "deployed": false,
+      "deploymentProviders": [],
+      "domains": [],
       "firstCommitAt": "2026-08-17",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "rolepatch",
@@ -1917,6 +1923,21 @@
       "pillarId": "learn"
     },
     {
+      "id": "journal",
+      "name": "Journal",
+      "description": "A private iPhone journal for daily writing, reflection, and a personal archive that stays under the owner's control.",
+      "url": "https://journal.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "in-progress",
+      "changelogUrl": "https://journal.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/journal",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/journal/issues",
+      "pillarId": "learn"
+    },
+    {
       "id": "karte",
       "name": "Karte",
       "description": "An AI link-in-bio that turns a profile into a conversation.",
@@ -1960,6 +1981,21 @@
       "repositoryUrl": "https://github.com/sass-maker/knowledge-base",
       "roadmapUrl": "https://github.com/sass-maker/knowledge-base/issues",
       "pillarId": "build"
+    },
+    {
+      "id": "live",
+      "name": "Live",
+      "description": "The long-running Significant Hobbies experience for recording, exploring, and acting on a life lived beyond passive consumption.",
+      "url": "https://live.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://live.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/live",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/live/issues",
+      "pillarId": "learn"
     },
     {
       "id": "local-ai-video-studio",
@@ -2138,7 +2174,7 @@
     {
       "id": "significanthobbies",
       "name": "Significant Hobbies",
-      "description": "A simple directory for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor.",
+      "description": "The shared Hub for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
       "url": "https://significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
