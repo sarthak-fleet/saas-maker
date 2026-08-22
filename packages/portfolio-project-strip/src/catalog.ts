@@ -3,468 +3,498 @@ import type { PortfolioProject } from './types';
 
 export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
   {
-    id: 'codevetter',
-    name: 'CodeVetter',
-    url: 'https://codevetter.com',
-    description: 'AI code review platform — desktop-first, works offline.',
-    tier: 'focus',
-    priority: 'P1',
-    category: 'product',
-    maturity: 'public-ready',
-    spotlight: true,
-    "pillarId": 'build',
-    domains: [
+    "id": "codevetter",
+    "name": "CodeVetter",
+    "url": "https://codevetter.com",
+    "description": "AI code review platform — desktop-first, works offline.",
+    "tier": "focus",
+    "priority": "P1",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": true,
+    "pillarId": "build",
+    "domains": [
       "codevetter.com"
     ]
   },
   {
-    id: 'pace',
-    name: 'HeyPace',
-    url: 'https://heypace.app',
-    description: 'Local-only macOS voice agent that can understand what is on your screen.',
-    tier: 'focus',
-    priority: 'P1',
-    category: 'product',
-    maturity: 'public-ready',
-    spotlight: true,
-    "pillarId": 'build',
-    domains: [
+    "id": "pace",
+    "name": "HeyPace",
+    "url": "https://heypace.app",
+    "description": "Local-only macOS voice agent that can understand what is on your screen.",
+    "tier": "focus",
+    "priority": "P1",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": true,
+    "pillarId": "build",
+    "domains": [
       "heypace.app"
     ]
   },
   {
-    id: 'high-signal',
-    name: 'High Signal',
-    url: 'https://highsignal.app',
-    description: 'Evidence-backed daily intelligence across technology, startups, finance, and public markets.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'public-ready',
-    spotlight: true,
-    "pillarId": 'learn',
-    domains: [
+    "id": "high-signal",
+    "name": "High Signal",
+    "url": "https://highsignal.app",
+    "description": "Evidence-backed daily intelligence across technology, startups, finance, and public markets.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": true,
+    "pillarId": "learn",
+    "domains": [
       "highsignal.app"
     ]
   },
   {
-    id: 'posttrainllm',
-    name: 'PostTrainLLM',
-    url: 'https://posttrainllm.com',
-    description: 'A local factory for training, evaluating, and running specialist language models.',
-    tier: 'focus',
-    priority: 'P1',
-    category: 'product',
-    maturity: 'public-ready',
-    spotlight: true,
-    "pillarId": 'build',
-    domains: [
+    "id": "posttrainllm",
+    "name": "PostTrainLLM",
+    "url": "https://posttrainllm.com",
+    "description": "A local factory for training, evaluating, and running specialist language models.",
+    "tier": "focus",
+    "priority": "P1",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": true,
+    "pillarId": "build",
+    "domains": [
       "posttrainllm.com"
     ]
   },
   {
-    id: 'anime-list',
-    name: 'Anime List',
-    url: 'https://anime.significanthobbies.com',
-    description: 'Anime and manga discovery with multi-axis filtering and personal watchlists.',
-    tier: 'secondary',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "anime-list",
+    "name": "Anime List",
+    "url": "https://anime.significanthobbies.com",
+    "description": "Anime and manga discovery with multi-axis filtering and personal watchlists.",
+    "tier": "secondary",
+    "priority": "P4",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "anime.significanthobbies.com"
     ]
   },
   {
-    id: 'app-health',
-    name: 'App Health',
-    url: 'https://health.sassmaker.com',
-    description: 'Privacy-first endpoint health for Node, Go, and OpenTelemetry services.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'public-ready',
-    spotlight: false,
-    "pillarId": 'visibility',
-    domains: [
+    "id": "app-health",
+    "name": "App Health",
+    "url": "https://health.sassmaker.com",
+    "description": "Privacy-first endpoint health for Node, Go, and OpenTelemetry services.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": false,
+    "pillarId": "visibility",
+    "domains": [
       "health.sassmaker.com"
     ]
   },
   {
-    id: 'calorie',
-    name: 'Calorie',
-    url: 'https://calorie.significanthobbies.com',
-    description: 'A private, local-first food, water, and weight journal with transparent timing guidance.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "calorie",
+    "name": "Calorie",
+    "url": "https://calorie.significanthobbies.com",
+    "description": "A private, local-first food, water, and weight journal with transparent timing guidance.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "calorie.significanthobbies.com"
     ]
   },
   {
-    id: 'drank',
-    name: 'Drank',
-    url: 'https://domains.sassmaker.com',
-    description: 'Domain Rating intelligence for product, SEO, and market research.',
-    tier: 'active',
-    priority: 'P4',
-    category: 'helper',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'market',
-    domains: [
+    "id": "drank",
+    "name": "Drank",
+    "url": "https://domains.sassmaker.com",
+    "description": "Domain Rating intelligence for product, SEO, and market research.",
+    "tier": "active",
+    "priority": "P4",
+    "category": "helper",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "market",
+    "domains": [
       "domains.sassmaker.com"
     ]
   },
   {
-    id: 'email-manager',
-    name: 'Email Manager',
-    url: 'https://mail.significanthobbies.com',
-    description: 'A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.',
-    tier: 'active',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "email-manager",
+    "name": "Email Manager",
+    "url": "https://mail.significanthobbies.com",
+    "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
+    "tier": "active",
+    "priority": "P4",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "mail.significanthobbies.com"
     ]
   },
   {
-    id: 'free-ai',
-    name: 'Free AI',
-    url: 'https://ai-gateway.sassmaker.com',
-    description: 'OpenAI-compatible gateway across free-tier model providers.',
-    tier: 'active',
-    priority: 'P4',
-    category: 'product',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "free-ai",
+    "name": "Free AI",
+    "url": "https://ai-gateway.sassmaker.com",
+    "description": "OpenAI-compatible gateway across free-tier model providers.",
+    "tier": "active",
+    "priority": "P4",
+    "category": "product",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "ai-gateway.sassmaker.com"
     ]
   },
   {
-    id: 'indulge',
-    name: 'Habits',
-    url: 'https://habits.significanthobbies.com',
-    description: 'A private habit practice for noticing patterns, making intentional trades, and building better defaults.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'in-progress',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "indulge",
+    "name": "Habits",
+    "url": "https://habits.significanthobbies.com",
+    "description": "A private habit practice for noticing patterns, making intentional trades, and building better defaults.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "in-progress",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "habits.significanthobbies.com"
     ]
   },
   {
-    id: 'india-standards',
-    name: 'India Standards',
-    url: 'https://india-standards.significanthobbies.com',
-    description: 'A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.',
-    tier: 'secondary',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "india-standards",
+    "name": "India Standards",
+    "url": "https://india-standards.significanthobbies.com",
+    "description": "A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.",
+    "tier": "secondary",
+    "priority": "P4",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "india-standards.significanthobbies.com"
     ]
   },
   {
-    id: 'karte',
-    name: 'Karte',
-    url: 'https://karte.cc',
-    description: 'An AI link-in-bio that turns a profile into a conversation.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'public-ready',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "journal",
+    "name": "Journal",
+    "url": "https://journal.significanthobbies.com",
+    "description": "A private iPhone journal for daily writing, reflection, and a personal archive that stays under the owner's control.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "in-progress",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
+      "journal.significanthobbies.com"
+    ]
+  },
+  {
+    "id": "karte",
+    "name": "Karte",
+    "url": "https://karte.cc",
+    "description": "An AI link-in-bio that turns a profile into a conversation.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "public-ready",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "karte.cc"
     ]
   },
   {
-    id: 'kith',
-    name: 'Kith',
-    url: 'https://kith.significanthobbies.com',
-    description: 'A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'in-progress',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "kith",
+    "name": "Kith",
+    "url": "https://kith.significanthobbies.com",
+    "description": "A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "in-progress",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "kith.significanthobbies.com"
     ]
   },
   {
-    id: 'knowledge-base',
-    name: 'Knowledge Base',
-    url: 'https://knowledgebase.sassmaker.com',
-    description: 'Private agent search over specialized corpora with ranked citations, provenance, and schema-aware retrieval.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "knowledge-base",
+    "name": "Knowledge Base",
+    "url": "https://knowledgebase.sassmaker.com",
+    "description": "Private agent search over specialized corpora with ranked citations, provenance, and schema-aware retrieval.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "knowledgebase.sassmaker.com"
     ]
   },
   {
-    id: 'local-ai-video-studio',
-    name: 'Local AI Video Studio',
-    url: 'https://local-ai-video-studio.sassmaker.com',
-    description: 'A local-first Mac studio for comparing reproducible video-effect variants before export.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "live",
+    "name": "Live",
+    "url": "https://live.significanthobbies.com",
+    "description": "The long-running Significant Hobbies experience for recording, exploring, and acting on a life lived beyond passive consumption.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
+      "live.significanthobbies.com"
+    ]
+  },
+  {
+    "id": "local-ai-video-studio",
+    "name": "Local AI Video Studio",
+    "url": "https://local-ai-video-studio.sassmaker.com",
+    "description": "A local-first Mac studio for comparing reproducible video-effect variants before export.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "local-ai-video-studio.sassmaker.com"
     ]
   },
   {
-    id: 'looptv',
-    name: 'LoopTV',
-    url: 'https://tv.significanthobbies.com',
-    description: 'A lean-back, TV-style random video player for curated channels.',
-    tier: 'secondary',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "looptv",
+    "name": "LoopTV",
+    "url": "https://tv.significanthobbies.com",
+    "description": "A lean-back, TV-style random video player for curated channels.",
+    "tier": "secondary",
+    "priority": "P4",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "tv.significanthobbies.com"
     ]
   },
   {
-    id: 'chatgpt-memory-insights',
-    name: 'Memory Map',
-    url: 'https://chatgpt.significanthobbies.com',
-    description: 'Turn a ChatGPT export into a private, browser-computed map of recurring themes, facts, and conversations.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "chatgpt-memory-insights",
+    "name": "Memory Map",
+    "url": "https://chatgpt.significanthobbies.com",
+    "description": "Turn a ChatGPT export into a private, browser-computed map of recurring themes, facts, and conversations.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "chatgpt.significanthobbies.com"
     ]
   },
   {
-    id: 'motion',
-    name: 'Motion',
-    url: 'https://motion.significanthobbies.com',
-    description: 'Use your body as the controller for an iPhone-hosted game that can mirror to a larger screen.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "motion",
+    "name": "Motion",
+    "url": "https://motion.significanthobbies.com",
+    "description": "Use your body as the controller for an iPhone-hosted game that can mirror to a larger screen.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "motion.significanthobbies.com"
     ]
   },
   {
-    id: 'agent-office',
-    name: 'Office OS',
-    url: 'https://office-os.sassmaker.com',
-    description: 'A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.',
-    tier: 'active',
-    priority: 'P1',
-    category: 'product',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "agent-office",
+    "name": "Office OS",
+    "url": "https://office-os.sassmaker.com",
+    "description": "A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.",
+    "tier": "active",
+    "priority": "P1",
+    "category": "product",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "office-os.sassmaker.com"
     ]
   },
   {
-    id: 'psi-swarm',
-    name: 'PSI Swarm',
-    url: 'https://performance.sassmaker.com',
-    description: 'Repeated Lighthouse distributions for honest website performance tracking.',
-    tier: 'active',
-    priority: 'P4',
-    category: 'helper',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'visibility',
-    domains: [
+    "id": "psi-swarm",
+    "name": "PSI Swarm",
+    "url": "https://performance.sassmaker.com",
+    "description": "Repeated Lighthouse distributions for honest website performance tracking.",
+    "tier": "active",
+    "priority": "P4",
+    "category": "helper",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "visibility",
+    "domains": [
       "performance.sassmaker.com"
     ]
   },
   {
-    id: 'reader',
-    name: 'Reader',
-    url: 'https://read.significanthobbies.com',
-    description: 'Capture, annotate, revisit, and discuss saved reading.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "reader",
+    "name": "Reader",
+    "url": "https://read.significanthobbies.com",
+    "description": "Capture, annotate, revisit, and discuss saved reading.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "read.significanthobbies.com"
     ]
   },
   {
-    id: 'research-papers',
-    name: 'Research Papers',
-    url: 'https://papers.highsignal.app',
-    description: 'Academic paper discovery and a structured research data asset.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "research-papers",
+    "name": "Research Papers",
+    "url": "https://papers.highsignal.app",
+    "description": "Academic paper discovery and a structured research data asset.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "papers.highsignal.app"
     ]
   },
   {
-    id: 'rolepatch',
-    name: 'RolePatch',
-    url: 'https://rolepatch.com',
-    description: 'AI-assisted resume tailoring, role research, and interview preparation.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "rolepatch",
+    "name": "RolePatch",
+    "url": "https://rolepatch.com",
+    "description": "AI-assisted resume tailoring, role research, and interview preparation.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "rolepatch.com"
     ]
   },
   {
-    id: 'saas-maker',
-    name: 'SaaS Maker',
-    url: 'https://sassmaker.com',
-    description: 'Software as a specialized service: a living studio of focused products built for particular problems and maintained in public.',
-    tier: 'active',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'public-ready',
-    spotlight: false,
-    "pillarId": 'build',
-    domains: [
+    "id": "saas-maker",
+    "name": "SaaS Maker",
+    "url": "https://sassmaker.com",
+    "description": "Software as a specialized service: a living studio of focused products built for particular problems and maintained in public.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
       "sassmaker.com"
     ]
   },
   {
-    id: 'sarthakagrawal-personal',
-    name: 'Sarthak Agrawal',
-    url: 'https://sarthakagrawal.dev',
-    description: 'Personal portfolio of Sarthak Agrawal — AI infrastructure and product engineer.',
-    tier: 'secondary',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'personal',
-    domains: [
+    "id": "sarthakagrawal-personal",
+    "name": "Sarthak Agrawal",
+    "url": "https://sarthakagrawal.dev",
+    "description": "Personal portfolio of Sarthak Agrawal — AI infrastructure and product engineer.",
+    "tier": "secondary",
+    "priority": "P4",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "personal",
+    "domains": [
       "sarthakagrawal.dev"
     ]
   },
   {
-    id: 'setline',
-    name: 'Setline',
-    url: 'https://setline.significanthobbies.com',
-    description: 'An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "setline",
+    "name": "Setline",
+    "url": "https://setline.significanthobbies.com",
+    "description": "An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "setline.significanthobbies.com"
     ]
   },
   {
-    id: 'significanthobbies',
-    name: 'Significant Hobbies',
-    url: 'https://significanthobbies.com',
-    description: 'A simple directory for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'public-ready',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "significanthobbies",
+    "name": "Significant Hobbies",
+    "url": "https://significanthobbies.com",
+    "description": "The shared Hub for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "public-ready",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "significanthobbies.com"
     ]
   },
   {
-    id: 'starboard',
-    name: 'Starboard',
-    url: 'https://starboard.codevetter.com',
-    description: 'Organize and semantically search your GitHub stars.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'product',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "starboard",
+    "name": "Starboard",
+    "url": "https://starboard.codevetter.com",
+    "description": "Organize and semantically search your GitHub stars.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "starboard.codevetter.com"
     ]
   },
   {
-    id: 'swe-interview-prep',
-    name: 'SWE Interview Prep',
-    url: 'https://learn.significanthobbies.com',
-    description: 'A learning OS for software-engineering interview practice.',
-    tier: 'secondary',
-    priority: 'P2',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "swe-interview-prep",
+    "name": "SWE Interview Prep",
+    "url": "https://learn.significanthobbies.com",
+    "description": "A learning OS for software-engineering interview practice.",
+    "tier": "secondary",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "learn.significanthobbies.com"
     ]
   },
   {
-    id: 'what-it-takes-to-win',
-    name: 'What It Takes to Win',
-    url: 'https://paths.significanthobbies.com',
-    description: 'Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.',
-    tier: 'secondary',
-    priority: 'P4',
-    category: 'personal',
-    maturity: 'maintained',
-    spotlight: false,
-    "pillarId": 'learn',
-    domains: [
+    "id": "what-it-takes-to-win",
+    "name": "What It Takes to Win",
+    "url": "https://paths.significanthobbies.com",
+    "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
+    "tier": "secondary",
+    "priority": "P4",
+    "category": "personal",
+    "maturity": "maintained",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
       "paths.significanthobbies.com"
     ]
-  },
+  }
 ];
