@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "showcase",
-  "target": "/ideas",
+  "target": "Ideas, Tools, and Learnings theme unification",
   "mode": "preserve",
   "register": "brand",
   "context": {
@@ -14,33 +14,33 @@
     "probes": [],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/ideas-before.png"
+    "before": "artifacts/design/interior-before-ideas-1440.png"
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/ideas-after-390.png"
+        "path": "artifacts/design/interior-after-ideas-390.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/ideas-after-768.png"
+        "path": "artifacts/design/interior-after-ideas-768.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/ideas-after-1440.png"
+        "path": "artifacts/design/interior-after-ideas-1440.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm test && pnpm typecheck && pnpm build:showcase && pnpm catalog:check-public && pnpm check:docs && git diff --check",
+      "command": "pnpm exec vitest run tests/showcase/ideas.test.ts tests/showcase/public-surface.test.ts && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && pnpm check:docs",
       "status": "pass"
     },
     "critique": {
-      "score": 34,
+      "score": 32,
       "maximum": 40
     },
     "audit": {
-      "score": 19,
+      "score": 18,
       "maximum": 20
     },
     "unresolved": {
@@ -49,11 +49,17 @@
     },
     "detector": {
       "posture": "advisory",
-      "findings": []
+      "findings": [
+        {
+          "rule": "single-font",
+          "location": "apps/showcase/src/layouts/Layout.astro:1",
+          "disposition": "intentional false positive; DESIGN.md requires Schibsted Grotesk throughout"
+        }
+      ]
     }
   },
   "ownerFeedback": {
-    "decision": "delegated",
-    "note": "Owner explicitly directed absorbing SaaS Ideas into SaaS Maker as /ideas without a standalone product identity."
+    "decision": "keep",
+    "note": "Owner approved the unified public theme and requested release."
   }
 }

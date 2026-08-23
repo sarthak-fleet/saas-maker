@@ -12,29 +12,32 @@ const sourceUrl = (path: string) =>
   title={`${TOOLING_CAPABILITIES.length} reusable tools — SaaS Maker`}
   description="The canonical public catalog of reusable Fleet agent skills, workflows, operator scripts, templates, and guides."
 >
-  <Nav />
-  <main id="main-content" class="tooling-shell">
-    <header class="tooling-intro">
-      <p class="directory-kicker">Shared capability register</p>
-      <h1>Tools that survived reuse.</h1>
-      <p>
-        Credential-free workflows, agent skills, scripts, and templates used across Fleet.
-        Product-specific automation stays with its product; every item here has one canonical source.
-      </p>
-      <div class="tooling-count" aria-label={`${TOOLING_CAPABILITIES.length} reusable capabilities`}>
-        <strong>{TOOLING_CAPABILITIES.length}</strong>
-        <span>reusable capabilities</span>
-      </div>
-    </header>
+  <div class="workshop-world interior-world tooling-world">
+    <Nav />
+    <main id="main-content" class="tooling-shell">
+      <header class="tooling-intro">
+        <div class="tooling-intro-copy">
+          <p class="directory-kicker">Shared capability register</p>
+          <h1>Tools that survived reuse.</h1>
+          <p>
+            Credential-free workflows, agent skills, scripts, and templates used across Fleet.
+            Product-specific automation stays with its product; every item here has one canonical source.
+          </p>
+        </div>
+        <div class="tooling-count" aria-label={`${TOOLING_CAPABILITIES.length} reusable capabilities`}>
+          <strong>{TOOLING_CAPABILITIES.length}</strong>
+          <span>reusable capabilities</span>
+        </div>
+      </header>
 
-    <nav class="tooling-jump" aria-label="Tool types">
+      <nav class="tooling-jump" aria-label="Tool types">
       {TOOLING_GROUPS.filter((group) => group.items.length > 0).map((group) => (
         <a href={`#${group.type}`}>{group.label} <span>{group.items.length}</span></a>
       ))}
       <a href="/tools.json">JSON <span>API</span></a>
-    </nav>
+      </nav>
 
-    <div class="tooling-groups">
+      <div class="tooling-groups">
       {TOOLING_GROUPS.filter((group) => group.items.length > 0).map((group) => (
         <section id={group.type} class="tooling-group">
           <header>
@@ -57,7 +60,8 @@ const sourceUrl = (path: string) =>
           </ol>
         </section>
       ))}
-    </div>
-  </main>
-  <Footer />
+      </div>
+    </main>
+    <Footer />
+  </div>
 </Layout>

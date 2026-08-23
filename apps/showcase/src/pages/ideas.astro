@@ -1,7 +1,7 @@
 ---
 /**
  * THESIS: Ideas are working material inside the SaaS Maker studio, not a separate product.
- * OWN-WORLD: Matte-black framing, dark workshop panes, copper signals, and Schibsted Grotesk.
+ * OWN-WORLD: Limestone workshop ground, steel mullions, clear panes, and saturated state panes.
  * STORY: Compare the scored catalog, narrow it to plausible bets, and inspect the reasoning.
  * FIRST VIEWPORT: Studio navigation, a compact identity bay, then the controls and ledger.
  * FORM: Operator ledger within the established workshop wall; preserve lane, no new visual world.
@@ -29,7 +29,8 @@ type Idea = {
   t: number;
 };
 
-const ideas = ideasData as Idea[];
+const allIdeas = ideasData as Idea[];
+const ideas = allIdeas.filter((idea) => idea.source !== 'starterstory');
 const sources = [...new Set(ideas.map((idea) => idea.source))].sort();
 const bestBetCount = ideas.filter((idea) => idea.best_bet).length;
 
@@ -72,10 +73,11 @@ function customerLabel(value: Idea['customer']): string {
 
 <Layout
   title="Ideas — scored product bets from SaaS Maker"
-  description="Compare 140 tech-heavy product ideas by money potential, fun, solo feasibility, competition, source, and customer type."
+  description={`Compare ${ideas.length} tech-heavy product ideas by money potential, fun, solo feasibility, competition, source, and customer type.`}
 >
-  <Nav />
-  <main id="main-content" class="ideas-page">
+  <div class="workshop-world interior-world ideas-world">
+    <Nav />
+    <main id="main-content" class="ideas-page">
     <header class="ideas-hero">
       <div class="ideas-identity">
         <p class="ideas-kicker">SaaS Maker / Ideas</p>
@@ -267,8 +269,9 @@ function customerLabel(value: Idea['customer']): string {
         <a href="/ideas.json">Open the complete JSON dataset <span aria-hidden="true">→</span></a>
       </div>
     </aside>
-  </main>
-  <Footer />
+    </main>
+    <Footer />
+  </div>
 </Layout>
 
 <script>
@@ -387,7 +390,7 @@ function customerLabel(value: Idea['customer']): string {
 
 <style>
   .ideas-page {
-    width: min(var(--max), calc(100% - 3rem));
+    width: var(--workshop-frame-width);
     margin-inline: auto;
     padding-bottom: clamp(5rem, 9vw, 8rem);
   }
@@ -395,19 +398,20 @@ function customerLabel(value: Idea['customer']): string {
   .ideas-hero {
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(19rem, 0.7fr);
-    gap: 0.4rem;
-    padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3.5rem);
-    border-bottom: 0.4rem solid var(--ink);
+    gap: 0.375rem;
+    padding: 0.375rem;
+    padding-top: 0;
+    background: var(--workshop-steel);
   }
 
   .ideas-identity,
   .ideas-summary {
-    border: 1px solid var(--line-strong);
+    border: 0;
     background: var(--surface);
   }
 
   .ideas-identity {
-    padding: clamp(1.75rem, 4vw, 3.5rem);
+    padding: clamp(3rem, 6vw, 6rem);
   }
 
   .ideas-kicker {
@@ -421,7 +425,7 @@ function customerLabel(value: Idea['customer']): string {
   .ideas-identity h1 {
     max-width: 10ch;
     margin-top: 1.25rem;
-    font-size: clamp(3rem, 6vw, 5.25rem);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
     font-weight: 600;
     letter-spacing: -0.04em;
     line-height: 0.96;
@@ -447,12 +451,16 @@ function customerLabel(value: Idea['customer']): string {
     flex-direction: column;
     justify-content: space-between;
     padding: 1.5rem;
-    border-bottom: 1px solid var(--line-strong);
+    border-bottom: 0.375rem solid var(--workshop-steel);
+  }
+
+  .ideas-summary > div:nth-child(2) {
+    background: var(--workshop-seeded);
   }
 
   .ideas-summary > div:last-child {
     border-bottom: 0;
-    background: var(--copper);
+    background: var(--workshop-amber);
     color: #130d08;
   }
 
@@ -476,6 +484,8 @@ function customerLabel(value: Idea['customer']): string {
   }
 
   .ideas-workbench {
+    width: min(86rem, calc(100% - 3rem));
+    margin-inline: auto;
     padding-top: clamp(4rem, 8vw, 7rem);
   }
 
@@ -696,7 +706,7 @@ function customerLabel(value: Idea['customer']): string {
   }
 
   .idea-star {
-    color: #e6a83f;
+    color: var(--workshop-oxblood);
     font-size: 1rem;
   }
 
@@ -710,8 +720,8 @@ function customerLabel(value: Idea['customer']): string {
   }
 
   .idea-score--strong {
-    background: #19382d;
-    color: #83d4ae;
+    background: var(--workshop-seeded);
+    color: var(--workshop-ink);
   }
 
   .idea-copy {
@@ -799,10 +809,11 @@ function customerLabel(value: Idea['customer']): string {
   }
 
   .ideas-method {
+    width: min(86rem, calc(100% - 3rem));
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.7fr);
     gap: clamp(2rem, 7vw, 7rem);
-    margin-top: clamp(4rem, 9vw, 8rem);
+    margin: clamp(4rem, 9vw, 8rem) auto 0;
     padding: clamp(2rem, 5vw, 4rem);
     border: 1px solid var(--line-strong);
     background: var(--surface);
@@ -846,7 +857,7 @@ function customerLabel(value: Idea['customer']): string {
 
   @media (max-width: 47.99rem) {
     .ideas-page {
-      width: min(100% - 1.5rem, var(--max));
+      width: 100%;
     }
 
     .ideas-hero,
@@ -856,11 +867,29 @@ function customerLabel(value: Idea['customer']): string {
     }
 
     .ideas-hero {
-      gap: 0;
+      gap: 0.375rem;
     }
 
     .ideas-identity h1 {
-      font-size: clamp(2.75rem, 14vw, 4.5rem);
+      margin-top: 1rem;
+      font-size: clamp(2.75rem, 13vw, 4.5rem);
+    }
+
+    .ideas-identity {
+      padding: 2.25rem 1.5rem;
+    }
+
+    .ideas-identity > p:last-child {
+      margin-top: 1.25rem;
+    }
+
+    .ideas-workbench {
+      padding-top: 2.5rem;
+    }
+
+    .ideas-intro {
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
     }
 
     .ideas-summary {
@@ -871,7 +900,7 @@ function customerLabel(value: Idea['customer']): string {
     .ideas-summary > div {
       min-height: 7rem;
       padding: 1rem;
-      border-right: 1px solid var(--line-strong);
+      border-right: 0.375rem solid var(--workshop-steel);
       border-bottom: 0;
     }
 
@@ -1004,6 +1033,11 @@ function customerLabel(value: Idea['customer']): string {
 
     .ideas-method {
       padding: 1.5rem;
+    }
+
+    .ideas-workbench,
+    .ideas-method {
+      width: min(100% - 1.5rem, 86rem);
     }
   }
 

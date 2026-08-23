@@ -36,7 +36,7 @@ const structuredData = {
 
 <!--
 THESIS: Skills should state the quality they need without choosing the provider model.
-OWN-WORLD: SaaS Maker's near-black folio, copper rules, workhorse sans, and square editorial structure.
+OWN-WORLD: SaaS Maker's limestone workshop, steel rules, saturated panes, workhorse sans, and square editorial structure.
 STORY: A personal implementation question becomes a portable execution-profile experiment with honest limits.
 FIRST VIEWPORT: The argument and author sit left; the real profile contract sits right at equal visual weight.
 FORM: Question-led split essay, the selected C composition, staged as an article rather than a product pitch.
@@ -48,8 +48,9 @@ FORM: Question-led split essay, the selected C composition, staged as an article
   publishedTime={article.publishedAt}
 >
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  <Nav />
-  <main class="learning-article" id="main-content">
+  <div class="workshop-world interior-world learning-article-world">
+    <Nav />
+    <main class="learning-article" id="main-content">
     <article>
       <header class="article-hero">
         <div class="article-intro">
@@ -299,6 +300,7 @@ FORM: Question-led split essay, the selected C composition, staged as an article
         </ul>
       </footer>
     </article>
-  </main>
-  <Footer />
+    </main>
+    <Footer />
+  </div>
 </Layout>

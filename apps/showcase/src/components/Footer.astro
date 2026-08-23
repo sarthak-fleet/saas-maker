@@ -1,5 +1,5 @@
 ---
-import { GITHUB_ORG_URL, PACKAGE_URL } from '../data/links';
+import { GITHUB_ORG_URL } from '../data/links';
 const OWNER_URL = 'https://sarthakagrawal.dev';
 const isChangelog = Astro.url.pathname.startsWith('/changelog');
 ---
@@ -13,8 +13,7 @@ const isChangelog = Astro.url.pathname.startsWith('/changelog');
     <a href="/learnings">Learnings</a>
     <a href="/privacy">Privacy</a>
     <a href="/terms">Terms</a>
-    <a href={PACKAGE_URL} target="_blank" rel="noopener noreferrer">Package</a>
-    <a href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">Public source index</a>
+    <a href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
   <p class="footer-tagline">Curious products. Real domains. Work that keeps moving.</p>
 </footer>

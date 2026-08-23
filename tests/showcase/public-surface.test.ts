@@ -35,7 +35,8 @@ describe('SaaS Maker public source boundary', () => {
     expect(routesSource).toMatch(/CORE\.flatMap/);
     expect(routesSource).toMatch(/PAGED_PRODUCTS\.map/);
     expect(navSource).toMatch(/GITHUB_ORG_URL/);
-    expect(navSource).toMatch(/Public source index/);
+    expect(navSource).toMatch(/>GitHub ↗<\/a>/);
+    expect(navSource).not.toMatch(/\/#package|Public source index/);
     expect(redirects).toMatch(/^\/p\/saas-maker \/ 301$/m);
     expect(redirects).toMatch(/^\/p\/saas-maker\.md \/index\.md 301$/m);
   });

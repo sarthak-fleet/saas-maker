@@ -43,9 +43,11 @@ specimen rows rather than cards.
 
 Product detail pages inherit the same workshop world: one clear identity pane
 shares a steel frame with a saturated canonical-product action, while public
-evidence becomes a run of specimen panes. On narrow screens, bays restack into
-one column while preserving bar thickness and reading order. Learning and legal
-pages remain quieter reading surfaces until their own redesign.
+evidence becomes a run of specimen panes. Ideas, Tools, and Learnings use the
+same limestone ground, steel mullions, clear or seeded bays, and saturated
+structural states while keeping the form each job needs: ledger, capability
+register, or reading surface. On narrow screens, bays restack into one column
+while preserving bar thickness and reading order. Legal pages remain quiet.
 
 The changelog is the workshop ledger: a clear editorial pane shares the first
 frame with one cobalt explanation pane, then dated milestones alternate seeded

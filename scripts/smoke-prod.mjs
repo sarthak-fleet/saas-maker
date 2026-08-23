@@ -58,7 +58,7 @@ const directoryChecks = [
     },
   },
   {
-    name: 'Scored ideas catalog renders 140 ideas',
+    name: 'Curated Ideas UI and complete JSON render',
     fn: async () => {
       const [pageRes, dataRes] = await Promise.all([
         fetch(`${DIRECTORY}/ideas`),
@@ -66,11 +66,23 @@ const directoryChecks = [
       ]);
       if (pageRes.status !== 200) throw new Error(`ideas status ${pageRes.status}`);
       if (dataRes.status !== 200) throw new Error(`ideas JSON status ${dataRes.status}`);
+      const page = await pageRes.text();
+      const renderedRows = page.match(/<tr\b[^>]*\bdata-idea-row\b/g)?.length ?? 0;
+      if (renderedRows !== 48) {
+        throw new Error(`expected 48 rendered ideas, got ${renderedRows}`);
+      }
+      if (page.includes('data-source="starterstory"') || page.includes('value="starterstory"')) {
+        throw new Error('Starter Story remains visible in the Ideas UI');
+      }
       const body = await dataRes.json();
       if (!Array.isArray(body) || body.length !== 140) {
         throw new Error(
           `expected 140 ideas, got ${Array.isArray(body) ? body.length : 'non-array'}`
         );
+      }
+      const starterStoryRows = body.filter((idea) => idea?.source === 'starterstory').length;
+      if (starterStoryRows !== 92) {
+        throw new Error(`expected 92 archived Starter Story ideas, got ${starterStoryRows}`);
       }
     },
   },

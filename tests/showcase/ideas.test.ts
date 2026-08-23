@@ -36,6 +36,7 @@ describe('integrated ideas catalog', () => {
     expect(page).toMatch(/data-idea-fun/);
     expect(page).toMatch(/data-idea-best/);
     expect(page).toMatch(/data-sort=/);
+    expect(page).toMatch(/source !== 'starterstory'/);
     expect(jsonRoute).toMatch(/JSON\.stringify\(ideas\)/);
     expect(nav).toMatch(/href="\/ideas"/);
     expect(routes).toMatch(/path: '\/ideas'/);

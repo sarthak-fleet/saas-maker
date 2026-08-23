@@ -24,6 +24,14 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-23 — Public interior theme unified:** Applied the homepage's
+  limestone-and-steel workshop system to Ideas, Tools, Learnings, and the
+  learning article; simplified navigation to Products, Ideas, Tools, Learnings,
+  and GitHub; and removed Package from shared navigation while retaining its
+  homepage section. The Ideas UI now omits the 92 `starterstory` entries and
+  shows 48 curated ideas, while `/ideas.json` retains all 140 source records.
+  The package remains unpublished; this release changes only the public site.
+
 - **2026-08-23 — Ideas absorbed into SaaS Maker:** Added `/ideas` as a native
   scored catalog with the preserved 140-item dataset, filters, sorting,
   responsive comparison, JSON, Markdown, sitemap, and agent discovery. Removed
@@ -146,8 +154,9 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   the complete register, without duplicating the 57-project directory.
 - Deterministic 57-identity public projection consumed without private Fleet
   runtime access, with deny-by-default field validation.
-- Native `/ideas` catalog with 140 scored ideas, decision filters, sortable
-  desktop and mobile layouts, and matching JSON and Markdown surfaces.
+- Native `/ideas` catalog with 48 UI-curated ideas, decision filters, sortable
+  desktop and mobile layouts, and complete 140-record JSON/Markdown archives;
+  `starterstory` records remain in the archives but are not rendered in the UI.
 - Searchable `/projects` register grouped by current, supporting/parked, and
   past work, with form-family and platform filters, mobile filter return,
   compact project anatomy, prominent tools, and native disclosures for public
