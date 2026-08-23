@@ -4,29 +4,45 @@ import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 const DEFAULT_LIMIT = 1_000;
+const DEFAULT_STATUS_FIELD = 'Status';
+const DEFAULT_DONE_VALUE = 'Done';
 const TOKEN_PATTERNS = [
   /\bgh[opsu]_[A-Za-z0-9_]+\b/g,
   /\bgithub_pat_[A-Za-z0-9_]+\b/g,
   /\bBearer\s+[^\s]+/gi,
 ];
+const VALUED_ARGUMENTS = ['owner', 'project', 'author', 'limit', 'status-field', 'done-value'];
 
 function usage() {
   return `Usage:
   node saas-maker/tooling/scripts/github-priority-queue.mjs \\
     --owner OWNER --project NUMBER --author LOGIN [--apply]
 
+Reconciles a GitHub Project against the author's issues in both directions:
+adds open issues that are missing, and moves items whose issue is already
+closed to the terminal status. Items that are terminal on the board while
+their issue is open are reported for human review and never changed.
+
 Options:
-  --owner OWNER     GitHub Project owner login (required)
-  --project NUMBER  GitHub Project number (required)
-  --author LOGIN    Issue author login (required)
-  --limit NUMBER    Maximum authored issues to discover (default: ${DEFAULT_LIMIT})
-  --apply           Add missing issues; without this flag the command is read-only
-  --help            Show this help
+  --owner OWNER          GitHub Project owner login (required)
+  --project NUMBER       GitHub Project number (required)
+  --author LOGIN         Issue author login (required)
+  --limit NUMBER         Maximum issues to discover per state (default: ${DEFAULT_LIMIT})
+  --status-field NAME    Single-select status field name (default: ${DEFAULT_STATUS_FIELD})
+  --done-value NAME      Terminal option name in that field (default: ${DEFAULT_DONE_VALUE})
+  --apply                Add missing issues and reconcile status; without this
+                         flag the command is read-only
+  --help                 Show this help
 `;
 }
 
 export function parseArgs(argv) {
-  const options = { apply: false, limit: DEFAULT_LIMIT };
+  const options = {
+    apply: false,
+    limit: DEFAULT_LIMIT,
+    statusField: DEFAULT_STATUS_FIELD,
+    doneValue: DEFAULT_DONE_VALUE,
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--apply') {
@@ -38,14 +54,16 @@ export function parseArgs(argv) {
       continue;
     }
     const key = argument.slice(2);
-    if (!['owner', 'project', 'author', 'limit'].includes(key)) {
+    if (!VALUED_ARGUMENTS.includes(key)) {
       throw new Error(`Unknown argument: ${argument}`);
     }
     const value = argv[index + 1];
     if (!value || value.startsWith('--')) {
       throw new Error(`Missing value for ${argument}`);
     }
-    options[key] = value;
+    if (key === 'status-field') options.statusField = value;
+    else if (key === 'done-value') options.doneValue = value;
+    else options[key] = value;
     index += 1;
   }
 
@@ -64,14 +82,17 @@ export function parseArgs(argv) {
   return options;
 }
 
-export function buildIssueSearchArgs(author, limit = DEFAULT_LIMIT) {
+export function buildIssueSearchArgs(author, limit = DEFAULT_LIMIT, state = 'open') {
+  if (!['open', 'closed'].includes(state)) {
+    throw new Error(`Unsupported issue state: ${state}`);
+  }
   return [
     'search',
     'issues',
     '--author',
     author,
     '--state',
-    'open',
+    state,
     '--limit',
     String(limit),
     '--json',
@@ -91,12 +112,7 @@ export function extractIssueUrls(payload) {
 }
 
 export function extractProjectUrls(payload) {
-  const rows = Array.isArray(payload) ? payload : payload?.items ?? [];
-  return new Set(
-    rows
-      .map((row) => row?.content?.url ?? row?.url)
-      .filter(Boolean),
-  );
+  return new Set(normalizeProjectItems(payload).map((item) => item.url));
 }
 
 function projectField(item, name) {
@@ -104,29 +120,49 @@ function projectField(item, name) {
   return item?.[name] ?? item?.[normalized] ?? item?.[normalized.replaceAll(' ', '_')];
 }
 
-export function auditProjectItems(payload) {
+export function normalizeProjectItems(payload) {
   const rows = Array.isArray(payload) ? payload : payload?.items ?? [];
+  const items = [];
+  for (const row of rows) {
+    const url = row?.content?.url ?? row?.url;
+    if (!url) continue;
+    items.push({
+      itemId: row?.id ?? '',
+      url,
+      status: String(projectField(row, 'Status') ?? ''),
+      priority: String(projectField(row, 'Priority') ?? ''),
+      reasoningComplexity: String(projectField(row, 'Reasoning complexity') ?? ''),
+      size: String(projectField(row, 'Size') ?? ''),
+      labels: (row?.labels ?? row?.content?.labels ?? []).map((label) =>
+        String(label?.name ?? label).toLowerCase(),
+      ),
+    });
+  }
+  return items;
+}
+
+export function isTerminalStatus(status, doneValue = DEFAULT_DONE_VALUE) {
+  return String(status ?? '').trim().toLowerCase() === String(doneValue).trim().toLowerCase();
+}
+
+export function auditProjectItems(payload, { doneValue = DEFAULT_DONE_VALUE } = {}) {
   const findings = {
     missingPriority: [],
     missingReasoningComplexity: [],
+    missingSize: [],
     blockedOrDeferredP0: [],
   };
 
-  for (const item of rows) {
-    const url = item?.content?.url ?? item?.url;
-    if (!url) continue;
-    const priority = projectField(item, 'Priority');
-    const reasoningComplexity = projectField(item, 'Reasoning complexity');
-    const labels = (item?.labels ?? item?.content?.labels ?? []).map((label) =>
-      String(label?.name ?? label).toLowerCase(),
-    );
-    if (!priority) findings.missingPriority.push(url);
-    if (!reasoningComplexity) findings.missingReasoningComplexity.push(url);
+  for (const item of normalizeProjectItems(payload)) {
+    if (isTerminalStatus(item.status, doneValue)) continue;
+    if (!item.priority) findings.missingPriority.push(item.url);
+    if (!item.reasoningComplexity) findings.missingReasoningComplexity.push(item.url);
+    if (!item.size) findings.missingSize.push(item.url);
     if (
-      String(priority).startsWith('P0') &&
-      (labels.includes('blocked') || labels.includes('deferred'))
+      item.priority.startsWith('P0') &&
+      (item.labels.includes('blocked') || item.labels.includes('deferred'))
     ) {
-      findings.blockedOrDeferredP0.push(url);
+      findings.blockedOrDeferredP0.push(item.url);
     }
   }
 
@@ -135,6 +171,7 @@ export function auditProjectItems(payload) {
     reviewRequired: new Set([
       ...findings.missingPriority,
       ...findings.missingReasoningComplexity,
+      ...findings.missingSize,
     ]).size,
   };
 }
@@ -147,6 +184,47 @@ export function planQueueSync(discoveredUrls, projectUrls) {
     missing,
     unchanged: discovered.length - missing.length,
   };
+}
+
+export function planStatusReconciliation(
+  payload,
+  { closedUrls = new Set(), openUrls = new Set(), doneValue = DEFAULT_DONE_VALUE } = {},
+) {
+  const toDone = [];
+  const reopened = [];
+
+  for (const item of normalizeProjectItems(payload)) {
+    const terminal = isTerminalStatus(item.status, doneValue);
+    if (closedUrls.has(item.url) && !terminal) {
+      toDone.push({ itemId: item.itemId, url: item.url, status: item.status });
+      continue;
+    }
+    if (openUrls.has(item.url) && terminal) {
+      reopened.push({ itemId: item.itemId, url: item.url });
+    }
+  }
+
+  return { toDone, reopened };
+}
+
+export function resolveStatusOption(payload, statusField, doneValue) {
+  const fields = Array.isArray(payload) ? payload : payload?.fields ?? [];
+  const field = fields.find(
+    (candidate) =>
+      String(candidate?.name ?? '').trim().toLowerCase() ===
+      String(statusField).trim().toLowerCase(),
+  );
+  if (!field) throw new Error(`Project has no field named ${statusField}`);
+  if (!Array.isArray(field.options)) {
+    throw new Error(`Field ${statusField} is not a single-select field`);
+  }
+  const option = field.options.find(
+    (candidate) =>
+      String(candidate?.name ?? '').trim().toLowerCase() ===
+      String(doneValue).trim().toLowerCase(),
+  );
+  if (!option) throw new Error(`Field ${statusField} has no option named ${doneValue}`);
+  return { fieldId: field.id, optionId: option.id };
 }
 
 function runGh(run, args) {
@@ -175,6 +253,9 @@ export function syncPriorityQueue(
   options,
   { run = spawnSync, write = (line) => console.log(line) } = {},
 ) {
+  const statusField = options.statusField ?? DEFAULT_STATUS_FIELD;
+  const doneValue = options.doneValue ?? DEFAULT_DONE_VALUE;
+
   const identity = runGh(run, ['api', 'user', '--jq', '.login']);
   if (!identity.ok) {
     throw new Error(`GitHub authentication unavailable: ${identity.stderr || 'run gh auth login'}`);
@@ -194,9 +275,15 @@ export function syncPriorityQueue(
       `GitHub Project access unavailable. Authorize it with: gh auth refresh -h github.com -s project (${project.stderr || 'project lookup failed'})`,
     );
   }
+  const projectId = parseJson(project, 'Project lookup failed')?.id;
+  if (!projectId) throw new Error('Project lookup failed: no project id returned');
 
-  const searchResult = runGh(run, buildIssueSearchArgs(options.author, options.limit));
-  const discoveredUrls = extractIssueUrls(parseJson(searchResult, 'Issue discovery failed'));
+  const openResult = runGh(run, buildIssueSearchArgs(options.author, options.limit, 'open'));
+  const discoveredUrls = extractIssueUrls(parseJson(openResult, 'Issue discovery failed'));
+  const closedResult = runGh(run, buildIssueSearchArgs(options.author, options.limit, 'closed'));
+  const closedUrls = new Set(
+    extractIssueUrls(parseJson(closedResult, 'Closed issue discovery failed')),
+  );
 
   const itemsResult = runGh(run, [
     'project',
@@ -211,11 +298,18 @@ export function syncPriorityQueue(
   ]);
   const projectItems = parseJson(itemsResult, 'Project item lookup failed');
   const projectUrls = extractProjectUrls(projectItems);
-  const audit = auditProjectItems(projectItems);
+  const audit = auditProjectItems(projectItems, { doneValue });
   const plan = planQueueSync(discoveredUrls, projectUrls);
+  const reconciliation = planStatusReconciliation(projectItems, {
+    closedUrls,
+    openUrls: new Set(plan.discovered),
+    doneValue,
+  });
 
   let added = 0;
+  let reconciled = 0;
   const failures = [];
+
   if (options.apply) {
     for (const url of plan.missing) {
       const result = runGh(run, [
@@ -232,6 +326,54 @@ export function syncPriorityQueue(
       if (result.ok) added += 1;
       else failures.push({ url, error: result.stderr || 'GitHub command failed' });
     }
+
+    if (reconciliation.toDone.length > 0) {
+      let target = null;
+      try {
+        const fields = parseJson(
+          runGh(run, [
+            'project',
+            'field-list',
+            String(options.project),
+            '--owner',
+            options.owner,
+            '--limit',
+            String(options.limit),
+            '--format',
+            'json',
+          ]),
+          'Project field lookup failed',
+        );
+        target = resolveStatusOption(fields, statusField, doneValue);
+      } catch (error) {
+        failures.push({ url: `field:${statusField}`, error: sanitizeError(error?.message ?? error) });
+      }
+
+      if (target) {
+        for (const item of reconciliation.toDone) {
+          if (!item.itemId) {
+            failures.push({ url: item.url, error: 'Project item id unavailable' });
+            continue;
+          }
+          const result = runGh(run, [
+            'project',
+            'item-edit',
+            '--id',
+            item.itemId,
+            '--project-id',
+            projectId,
+            '--field-id',
+            target.fieldId,
+            '--single-select-option-id',
+            target.optionId,
+            '--format',
+            'json',
+          ]);
+          if (result.ok) reconciled += 1;
+          else failures.push({ url: item.url, error: result.stderr || 'GitHub command failed' });
+        }
+      }
+    }
   }
 
   const summary = {
@@ -240,16 +382,26 @@ export function syncPriorityQueue(
     missing: plan.missing.length,
     added,
     unchanged: plan.unchanged,
+    closedPending: reconciliation.toDone.length,
+    reconciled,
+    reopened: reconciliation.reopened.length,
     failed: failures.length,
     reviewRequired: audit.reviewRequired + (options.apply ? added : plan.missing.length),
+    missingSize: audit.missingSize.length,
     blockedOrDeferredP0: audit.blockedOrDeferredP0.length,
   };
   write(
-    `Queue sync: mode=${summary.mode} discovered=${summary.discovered} missing=${summary.missing} added=${summary.added} unchanged=${summary.unchanged} failed=${summary.failed} review_required=${summary.reviewRequired} blocked_or_deferred_p0=${summary.blockedOrDeferredP0}`,
+    `Queue sync: mode=${summary.mode} discovered=${summary.discovered} missing=${summary.missing} added=${summary.added} unchanged=${summary.unchanged} closed_pending=${summary.closedPending} reconciled=${summary.reconciled} reopened=${summary.reopened} failed=${summary.failed} review_required=${summary.reviewRequired} missing_size=${summary.missingSize} blocked_or_deferred_p0=${summary.blockedOrDeferredP0}`,
   );
+  for (const item of reconciliation.toDone) {
+    write(`Closed issue not ${doneValue} on board: ${item.url} (${item.status || 'no status'})`);
+  }
+  for (const item of reconciliation.reopened) {
+    write(`Review ${item.url}: board says ${doneValue} but the issue is open`);
+  }
   for (const failure of failures) write(`Failed ${failure.url}: ${failure.error}`);
 
-  return { summary, failures, exitCode: failures.length > 0 ? 1 : 0 };
+  return { summary, failures, reconciliation, audit, exitCode: failures.length > 0 ? 1 : 0 };
 }
 
 function main() {

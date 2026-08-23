@@ -23,6 +23,7 @@ const activeScripts = new Set([
   'geo-observatory-record.mjs',
   'git-health.sh',
   'github-priority-queue.mjs',
+  'install-priority-queue-schedule.mjs',
   'install-skill-run-hook.mjs',
   'link-project-agent-assets.sh',
   'unlink-project-agent-assets.sh',
