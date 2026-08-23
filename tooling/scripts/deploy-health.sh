@@ -79,6 +79,16 @@ require_command() {
   fi
 }
 
+# Cloudflare answers a query for a target that was never created with a
+# specific error rather than an empty list: Pages returns code 8000007
+# ("Project not found") and Workers return code 10007 ("This Worker does not
+# exist on your account"). Reporting those as a generic "list failed" hides the
+# difference between "declared but never deployed" and "the API call broke",
+# which are opposite problems.
+cf_target_absent() {
+  grep -Eq 'code: (8000007|10007)|Project not found|does not exist on your account' "$1"
+}
+
 run_wrangler() {
   if command -v wrangler >/dev/null 2>&1; then
     wrangler "$@"
@@ -576,13 +586,21 @@ check_pages_target() {
   local deployment_url
   local build_url
 
+  local wrangler_err
+  wrangler_err="$(mktemp)"
   if ! deployments_json="$(run_wrangler pages deployment list \
     --project-name "$target_name" \
     --environment production \
-    --json 2>/dev/null)"; then
-    record "FAIL" "$repo Cloudflare Pages $target_name deployment list failed"
+    --json 2>"$wrangler_err")"; then
+    if cf_target_absent "$wrangler_err"; then
+      record "WARN" "$repo Pages $target_name is declared in the catalog but does not exist on Cloudflare"
+    else
+      record "FAIL" "$repo Cloudflare Pages $target_name deployment list failed"
+    fi
+    rm -f "$wrangler_err"
     return
   fi
+  rm -f "$wrangler_err"
 
   if [[ "$(jq 'length' <<<"$deployments_json")" -eq 0 ]]; then
     record "FAIL" "$repo Cloudflare Pages $target_name has no production deployments"
@@ -615,10 +633,18 @@ check_worker_target() {
   local active_version_id
   local deployed_sha
 
-  if ! deployments_json="$(run_wrangler deployments list --name "$target_name" --json 2>/dev/null)"; then
-    record "FAIL" "$repo Worker $target_name deployment list failed"
+  local wrangler_err
+  wrangler_err="$(mktemp)"
+  if ! deployments_json="$(run_wrangler deployments list --name "$target_name" --json 2>"$wrangler_err")"; then
+    if cf_target_absent "$wrangler_err"; then
+      record "WARN" "$repo Worker $target_name is declared in the catalog but does not exist on Cloudflare"
+    else
+      record "FAIL" "$repo Worker $target_name deployment list failed"
+    fi
+    rm -f "$wrangler_err"
     return
   fi
+  rm -f "$wrangler_err"
 
   if [[ "$(jq 'length' <<<"$deployments_json")" -eq 0 ]]; then
     record "FAIL" "$repo Worker $target_name has no deployments"
