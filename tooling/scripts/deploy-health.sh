@@ -162,6 +162,22 @@ is_local_only_project() {
   return 1
 }
 
+is_parked_project() {
+  # A parked project is paused, not broken: the owner has stopped developing it
+  # but left its Cloudflare resources running. Holding it to deploy standards
+  # produces permanent failures for work nobody intends to do. Cloudflare
+  # parity is deliberately still checked, so a parked project's live surfaces
+  # remain visible.
+  local repo="$1"
+  local relative_repo
+
+  relative_repo="${repo#"$ROOT"/}"
+  [[ -f "$TARGETS_FILE" ]] || return 1
+  jq -e --arg repo "$relative_repo" '
+    any(.projects[]?; .repo == $repo and .tier == "parked")
+  ' "$TARGETS_FILE" >/dev/null 2>&1
+}
+
 is_native_app_project() {
   # A project whose deploy source is a different repository is a native app:
   # the shipped web surface is built by a landing factory (ios-landings), and
@@ -371,6 +387,11 @@ check_github_actions() {
       continue
     fi
 
+    if is_parked_project "$repo"; then
+      record "OK" "$repo is parked; GitHub Actions not required"
+      continue
+    fi
+
     slug="$(github_slug_for_repo "$repo" || true)"
 
     if [[ -z "$slug" ]]; then
@@ -505,6 +526,11 @@ check_project_standards() {
 
     if is_native_app_project "$repo"; then
       record "OK" "$repo is a native app deployed from its landing factory; web deploy standard not required"
+      continue
+    fi
+
+    if is_parked_project "$repo"; then
+      record "OK" "$repo is parked; deploy standard not required"
       continue
     fi
 
