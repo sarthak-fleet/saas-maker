@@ -1,6 +1,6 @@
 {
   "name": "@saas-maker/feedback",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "React feedback widget with hosted or product-owned submission, screenshots, and page-element context.",
   "license": "MIT",
   "homepage": "https://www.npmjs.com/package/@saas-maker/feedback",

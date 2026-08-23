@@ -49,7 +49,7 @@ export async function submitFeedbackToUrl(
 }
 
 const DEFAULT_API_BASE = 'https://api.sassmaker.com';
-const CLIENT_VERSION = '0.4.0';
+const CLIENT_VERSION = '0.4.1';
 
 export async function submitFeedbackToProject(
   projectKey: string,
