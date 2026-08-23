@@ -265,8 +265,12 @@ project_has_worker_sha_tag() {
   local file
 
   while IFS= read -r -d '' file; do
+    # The SHA may be spelled as a shell command (`git rev-parse HEAD`) or as
+    # argv in a Node deploy script (`run('git', ['rev-parse', 'HEAD'])`), so
+    # match rev-parse followed by HEAD across quotes and commas. This does not
+    # match `rev-parse --abbrev-ref HEAD`, which yields a branch name.
     if grep -Fq -- '--tag' "$file" &&
-      grep -Eiq 'github\.sha|GITHUB_SHA|git rev-parse HEAD' "$file"; then
+      grep -Eiq 'github\.sha|GITHUB_SHA|rev-parse['"'"'",[:space:]]+HEAD' "$file"; then
       return 0
     fi
   done < <(
@@ -280,6 +284,16 @@ project_has_worker_sha_tag() {
         -not -path '*/out/*' \
         -not -path '*/build/*' \
         -print0
+      # Several projects keep the wrangler invocation in a committed deploy
+      # script rather than inline in a workflow or package.json — for example
+      # chatgpt-connections/scripts/deploy.mjs, which passes
+      # `--tag <git rev-parse HEAD>`. Scanning only workflows and package.json
+      # reported those as untagged while the Cloudflare parity check in this
+      # same run resolved their live version's SHA, so the two halves
+      # contradicted each other.
+      find "$repo/scripts" -maxdepth 2 -type f \
+        \( -name '*.mjs' -o -name '*.js' -o -name '*.ts' -o -name '*.sh' \) \
+        -print0 2>/dev/null
     }
   )
 
