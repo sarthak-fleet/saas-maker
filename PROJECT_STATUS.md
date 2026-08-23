@@ -29,7 +29,10 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   responsive comparison, JSON, Markdown, sitemap, and agent discovery. Removed
   `saas-ideas` from Site Health's canonical project identities and regenerated
   the public directory at 57 identities. The retired repository remains only
-  as source history. No deployment or DNS action ran.
+  as source history. Released feature commit `11084b6a` through Pages deployment
+  `1ea12d31-4abf-42f6-9ffe-eb117f4ae75d`; production smoke passed 4/4 and the
+  HTML, JSON, and Markdown routes were verified on `sassmaker.com`. No DNS
+  action ran.
 
 - **2026-08-23 — Redundant workspace packages removed:** Removed the private
   `@saas-maker/ui` package after switching its only consumer to the dashboard's
