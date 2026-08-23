@@ -1625,9 +1625,15 @@
       ],
       "group": "current",
       "lifecycle": "maintained",
-      "deployed": false,
-      "deploymentProviders": [],
-      "domains": [],
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "field-track.sassmaker.com"
+      ],
+      "url": "https://field-track.sassmaker.com",
+      "changelogUrl": "https://field-track.sassmaker.com/changelog",
       "firstCommitAt": "2026-08-12",
       "latestCommitAt": "2026-08-20"
     },
@@ -1851,6 +1857,19 @@
       "repositoryUrl": "https://github.com/Significant-Hobbies/email-manager",
       "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
       "pillarId": "learn"
+    },
+    {
+      "id": "field-track",
+      "name": "Field Track",
+      "description": "An interactive manager dashboard for freshness-aware field location operations, shown with clearly labeled synthetic employees and routes.",
+      "url": "https://field-track.sassmaker.com",
+      "tier": "active",
+      "category": "product",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "in-progress",
+      "changelogUrl": "https://field-track.sassmaker.com/changelog",
+      "pillarId": "build"
     },
     {
       "id": "free-ai",
