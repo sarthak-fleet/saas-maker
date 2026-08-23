@@ -162,6 +162,26 @@ is_local_only_project() {
   return 1
 }
 
+is_native_app_project() {
+  # A project whose deploy source is a different repository is a native app:
+  # the shipped web surface is built by a landing factory (ios-landings), and
+  # the repository itself holds the Swift app, released through TestFlight by
+  # hand. Such a repository is not expected to carry web CI or a deploy
+  # entrypoint, so requiring either reports a permanent false failure.
+  local repo="$1"
+  local relative_repo
+
+  relative_repo="${repo#"$ROOT"/}"
+  [[ -f "$TARGETS_FILE" ]] || return 1
+  jq -e --arg repo "$relative_repo" '
+    any(.projects[]?;
+      .repo == $repo
+      and (.sourcePath // "") != ""
+      and .sourcePath != .repo
+    )
+  ' "$TARGETS_FILE" >/dev/null 2>&1
+}
+
 is_canonical_deploy_project() {
   local repo="$1"
   local relative_repo
@@ -332,6 +352,11 @@ check_github_actions() {
       continue
     fi
 
+    if is_native_app_project "$repo"; then
+      record "OK" "$repo is a native app deployed from its landing factory; GitHub Actions not required"
+      continue
+    fi
+
     slug="$(github_slug_for_repo "$repo" || true)"
 
     if [[ -z "$slug" ]]; then
@@ -461,6 +486,11 @@ check_project_standards() {
 
     if ! is_canonical_deploy_project "$repo"; then
       record "OK" "$repo is outside canonical deploy scope; deploy standard not required"
+      continue
+    fi
+
+    if is_native_app_project "$repo"; then
+      record "OK" "$repo is a native app deployed from its landing factory; web deploy standard not required"
       continue
     fi
 

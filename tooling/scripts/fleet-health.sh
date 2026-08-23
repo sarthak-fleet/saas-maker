@@ -56,6 +56,7 @@ dirty=0
 ci_red=0
 ci_unknown=0
 ci_off=0
+ci_none=0
 total=0
 
 for project in $PROJECTS; do
@@ -102,7 +103,15 @@ for project in $PROJECTS; do
 
   # CI check via gh
   ci_state="unknown"
-  if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
+  # A repository with no workflow files has no CI to judge. Several Fleet
+  # projects are native apps released through TestFlight by hand, so this is a
+  # deliberate state rather than a broken one — report it as such instead of
+  # folding it into "unknown" alongside genuinely unclear CI.
+  if [[ -z "$(find "$dir/.github/workflows" -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \) 2>/dev/null)" ]]; then
+    ci_state="none"
+    ci_none=$((ci_none + 1))
+    notes="${notes:+$notes }no workflows"
+  elif command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
     url=$(git -C "$dir" remote get-url origin 2>/dev/null || true)
     slug=""
     case "$url" in
@@ -181,6 +190,9 @@ echo ""
 summary="Summary: $total projects — $clean clean, $dirty dirty, $ci_red CI-red, $ci_unknown CI-unknown"
 if [[ "$ci_off" -gt 0 ]]; then
   summary="$summary, $ci_off Actions-disabled"
+fi
+if [[ "$ci_none" -gt 0 ]]; then
+  summary="$summary, $ci_none no-workflows"
 fi
 echo "$summary"
 
