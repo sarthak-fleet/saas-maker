@@ -32,7 +32,7 @@
       }
     ],
     "projectCheck": {
-      "command": "pnpm catalog:validate-public && FLEET_PUBLIC_PRODUCTS_PATH=/Users/sarthak/Desktop/fleet/site-health/apps/backend/config/projects.json pnpm catalog:check-public && pnpm check:docs && pnpm lint && pnpm test && pnpm typecheck && pnpm build:widget && pnpm check:shared-packages && pnpm build:showcase && pnpm build:docs && pnpm build:cockpit && git diff --check",
+      "command": "pnpm catalog:validate-public && FLEET_PUBLIC_PRODUCTS_PATH=/Users/sarthak/Desktop/fleet/site-health/apps/backend/config/projects.json pnpm catalog:check-public && pnpm check:docs && pnpm lint && pnpm test && pnpm typecheck && pnpm build:widget && pnpm check:shared-packages && pnpm build:showcase && pnpm build:cockpit && git diff --check",
       "status": "pass"
     },
     "critique": {

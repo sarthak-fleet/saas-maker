@@ -16,8 +16,6 @@ on:
       - 'README.md'
       - 'CONTRIBUTING.md'
       - 'scripts/check-docs.mjs'
-      - 'apps/docs-blume/blume.config.ts'
-      - 'apps/docs-blume/package.json'
       - '.github/workflows/docs.yml'
   push:
     branches: [main]
@@ -29,8 +27,6 @@ on:
       - 'README.md'
       - 'CONTRIBUTING.md'
       - 'scripts/check-docs.mjs'
-      - 'apps/docs-blume/blume.config.ts'
-      - 'apps/docs-blume/package.json'
       - '.github/workflows/docs.yml'
 
 jobs:
@@ -43,20 +39,3 @@ jobs:
           node-version: '22'
       - name: Validate docs (links, required files, no empty docs)
         run: node scripts/check-docs.mjs
-
-  blume-build:
-    name: Blume build (presentation layer)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Build Blume from canonical docs/ tree
-        working-directory: apps/docs-blume
-        run: |
-          npm install
-          npm run build

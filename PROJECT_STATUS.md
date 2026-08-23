@@ -19,11 +19,17 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   `catalog/generated/public.json` before a directory release.
 - Cloudflare Workers, D1, and R2 for the feedback API and image uploads.
 - better-auth for the private inbox.
-- Blume for package documentation.
 - React as the peer runtime for @saas-maker/feedback.
 - React as the peer runtime for the AI Chat Footer and Portfolio Project Strip.
 
 ## Timeline
+
+- **2026-08-23 — Redundant workspace packages removed:** Removed the private
+  `@saas-maker/ui` package after switching its only consumer to the dashboard's
+  existing local components. Removed the duplicate Astro login overlay and use
+  the dashboard's native `/` and `/login` routes. Removed the Blume app and its
+  missing Pages target while retaining checked-in Markdown docs and link
+  validation. No deployment, migration, DNS, or npm action ran.
 
 - **2026-08-23 — Shared tooling consolidated:** Imported the complete public
   Workflows and Skills history under `tooling/`, moved reusable GitHub workflow
@@ -115,7 +121,6 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 | Surface | Purpose |
 | --- | --- |
 | sassmaker.com | Public product directory |
-| saas-maker-packages.pages.dev | Canonical Blume documentation for the feedback package |
 | api.sassmaker.com | Feedback and project-key API |
 | app.sassmaker.com | Private feedback inbox |
 | @saas-maker/feedback | Maintained public runtime package |
@@ -146,7 +151,7 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 - Immutable status-change audit records with actor identity.
 - Page URL, Pinpoint context, and screenshots stored as original customer evidence.
 - Project-key creation and management.
-- Blume package docs plus agent/search surfaces.
+- Repository-native package and service docs with link validation.
 - Backend-free AI assistant links with provider-specific prompt handoff.
 - Accessible portfolio discovery with bundled first paint and optional cached
   revalidation from sassmaker.com.

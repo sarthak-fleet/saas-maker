@@ -6,14 +6,13 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "build:next": "next build",
-    "cf:build": "opennextjs-cloudflare build && opennextjs-cloudflare populateCache local && pnpm --filter cockpit-landing-astro build && node scripts/run-overlay-astro-landing.mjs --strict",
-    "deploy": "node ../../scripts/check-worker-secrets.mjs saasmaker-dashboard BETTER_AUTH_SECRET AUTH_GOOGLE_ID AUTH_GOOGLE_SECRET && pnpm --filter @saas-maker/ui build && pnpm cf:build && wrangler deploy && node ../../scripts/smoke-prod.mjs",
+    "cf:build": "opennextjs-cloudflare build && opennextjs-cloudflare populateCache local",
+    "deploy": "node ../../scripts/check-worker-secrets.mjs saasmaker-dashboard BETTER_AUTH_SECRET AUTH_GOOGLE_ID AUTH_GOOGLE_SECRET && pnpm cf:build && wrangler deploy && node ../../scripts/smoke-prod.mjs",
     "preview": "wrangler pages dev",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@saas-maker/ui": "workspace:*",
     "better-auth": "1.6.30",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

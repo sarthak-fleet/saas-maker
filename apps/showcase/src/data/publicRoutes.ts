@@ -177,7 +177,7 @@ sassmaker.com is a static directory for maintained products. It does not require
 ## What we may collect
 
 - Cloudflare may log standard request metadata such as IP address, user agent, and path at the edge.
-- Individual products and package documentation have their own policies.
+- Individual linked products have their own policies.
 
 ## Contact
 
