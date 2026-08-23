@@ -5,6 +5,7 @@
 SaaS Maker owns only:
 
 - the public product directory;
+- the public scored ideas catalog under `/ideas`;
 - package documentation;
 - @saas-maker/feedback;
 - @saas-maker/ai-chat-footer;

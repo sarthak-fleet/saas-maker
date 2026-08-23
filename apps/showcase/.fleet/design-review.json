@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "showcase",
-  "target": "/projects public directory",
+  "target": "/ideas",
   "mode": "preserve",
   "register": "brand",
   "context": {
@@ -14,25 +14,25 @@
     "probes": [],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/before.png"
+    "before": "artifacts/design/ideas-before.png"
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/after-390.png"
+        "path": "artifacts/design/ideas-after-390.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/after-768.png"
+        "path": "artifacts/design/ideas-after-768.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/after-1440.png"
+        "path": "artifacts/design/ideas-after-1440.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:showcase && pnpm catalog:validate-public && pnpm catalog:check-public",
+      "command": "pnpm test && pnpm typecheck && pnpm build:showcase && pnpm catalog:check-public && pnpm check:docs && git diff --check",
       "status": "pass"
     },
     "critique": {
@@ -54,6 +54,6 @@
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "Owner explicitly requested the complete build and production deployment, and asked to review the finished surface at its deployed URL."
+    "note": "Owner explicitly directed absorbing SaaS Ideas into SaaS Maker as /ideas without a standalone product identity."
   }
 }

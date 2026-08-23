@@ -13,6 +13,8 @@ private Fleet state at runtime. Reusable public automation is canonical under
 ## Products
 
 - [sassmaker.com](https://sassmaker.com) — public product directory.
+- [sassmaker.com/ideas](https://sassmaker.com/ideas) — scored product-idea
+  decision ledger.
 - [sassmaker.com/tools](https://sassmaker.com/tools) — reusable skills,
   workflows, scripts, templates, and guides.
 - `@saas-maker/feedback` — React feedback widget backed by the optional hosted

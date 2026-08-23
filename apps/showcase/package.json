@@ -6,10 +6,11 @@
   "homepage": "https://sassmaker.com",
   "description": "Public SaaS Maker product directory built from Fleet's allowlisted projection.",
   "scripts": {
+    "build:ideas": "python3 ideas/build.py",
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
-    "build:showcase-only": "astro build",
+    "build": "pnpm build:ideas && astro build",
+    "build:showcase-only": "pnpm build:ideas && astro build",
     "deploy": "pnpm build && wrangler pages deploy dist --project-name saas-maker-home --branch main && node ../../scripts/smoke-prod.mjs --directory-only",
     "preview": "astro preview",
     "astro": "astro",

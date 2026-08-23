@@ -294,9 +294,7 @@
       "group": "past",
       "lifecycle": "past",
       "deployed": true,
-      "deploymentProviders": [
-        "Cloudflare Workers"
-      ],
+      "deploymentProviders": [],
       "domains": [],
       "repositoryUrl": "https://github.com/sarthakagrawal927/mobile-dev-cockpit",
       "roadmapUrl": "https://github.com/sarthakagrawal927/mobile-dev-cockpit/issues",
@@ -1236,32 +1234,6 @@
       "roadmapUrl": "https://github.com/sass-maker/mashup/issues",
       "firstCommitAt": "2026-07-25",
       "latestCommitAt": "2026-08-20"
-    },
-    {
-      "id": "saas-ideas",
-      "name": "SaaS Ideas",
-      "description": "A past public directory of software product ideas.",
-      "kind": "product",
-      "form": "Idea directory",
-      "platforms": [
-        "Web"
-      ],
-      "technologies": [
-        "JavaScript",
-        "Cloudflare Pages"
-      ],
-      "group": "past",
-      "lifecycle": "past",
-      "deployed": true,
-      "deploymentProviders": [
-        "Cloudflare Pages"
-      ],
-      "domains": [
-        "ideas.sassmaker.com"
-      ],
-      "url": "https://ideas.sassmaker.com",
-      "firstCommitAt": "2025-05-10",
-      "latestCommitAt": "2026-08-22"
     },
     {
       "id": "motion",

@@ -2,6 +2,7 @@ import publicCatalog from '../../../../catalog/generated/public.json';
 import tokenWorld from './tokenWorld.json';
 import { CHANGELOG } from './changelog';
 import { LEARNINGS } from './learnings';
+import ideas from './ideas.json';
 import { CORE } from './projects';
 import { PAGED_PRODUCTS, type RegistryProduct } from './registry';
 
@@ -146,6 +147,39 @@ function directoryMarkdown(): string {
   ].join('\n');
 }
 
+function ideasMarkdown(): string {
+  return [
+    '# SaaS Maker ideas',
+    '',
+    'A scored decision ledger of tech-heavy product ideas. This is a SaaS Maker surface, not a separate product identity.',
+    '',
+    '## Scoring',
+    '',
+    '- Fun = F + T: enjoyment plus technical challenge.',
+    '- Money = M + Feas - C: raw potential plus solo feasibility, less competition.',
+    '- The dataset is hard-filtered to T >= 7.',
+    '',
+    `- Human catalog: ${SITE_URL}/ideas`,
+    `- JSON dataset: ${SITE_URL}/ideas.json`,
+    `- Total ideas: ${ideas.length}`,
+    '',
+    '## Catalog',
+    '',
+    ...ideas.flatMap((idea, index) => [
+      `### ${index + 1}. ${idea.best_bet ? 'Best bet' : 'Idea'}`,
+      '',
+      idea.idea,
+      '',
+      `- Money: ${idea.money}`,
+      `- Fun: ${idea.fun}`,
+      `- Feasibility: ${idea.f_feas}/10${idea.f_feas_why ? ` — ${idea.f_feas_why}` : ''}`,
+      `- Customer: ${idea.customer}`,
+      `- Source: ${idea.source}`,
+      '',
+    ]),
+  ].join('\n');
+}
+
 const fixedRoutes: PublicRoute[] = [
   {
     id: 'directory',
@@ -160,6 +194,13 @@ const fixedRoutes: PublicRoute[] = [
     description: 'Complete public directory of all Fleet project identities',
     kind: 'collection',
     markdown: directoryMarkdown(),
+  },
+  {
+    id: 'ideas',
+    path: '/ideas',
+    description: 'Scored decision ledger of tech-heavy product ideas',
+    kind: 'collection',
+    markdown: ideasMarkdown(),
   },
   {
     id: 'privacy',

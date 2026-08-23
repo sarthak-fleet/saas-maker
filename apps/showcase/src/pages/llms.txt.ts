@@ -29,6 +29,7 @@ export function GET() {
     '',
     '- [Studio home](https://sassmaker.com)',
     `- [Complete project directory](https://sassmaker.com/projects): ${publicCatalog.directory.length} current, supporting, parked, and past identities`,
+    '- [Scored ideas](https://sassmaker.com/ideas): 140 tech-heavy product ideas with transparent Money, Fun, feasibility, competition, source, and customer context',
     `- [Reusable tooling](https://sassmaker.com/tools): ${TOOLING_CAPABILITIES.length} public skills, scripts, templates, and guides`,
     '- [Learnings](https://sassmaker.com/learnings): first-party notes from building products and agent workflows',
     ...LEARNINGS.map(
@@ -49,6 +50,8 @@ export function GET() {
     '',
     '- https://sassmaker.com/api/ai',
     '- https://sassmaker.com/projects.json',
+    '- https://sassmaker.com/ideas.json',
+    '- https://sassmaker.com/ideas.md',
     '- https://sassmaker.com/tools.json',
     '- https://sassmaker.com/projects.md',
     '- https://sassmaker.com/index.md',

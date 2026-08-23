@@ -21,6 +21,7 @@
       "!**/packages/cli/templates",
       "!**/openapi.json",
       "!**/design.html",
+      "!apps/showcase/ideas/data/solopreneur_ideas.json",
       "!tooling",
       "!ops/assets",
       "!apps/mobile-cockpit",

@@ -1,0 +1,1033 @@
+---
+/**
+ * THESIS: Ideas are working material inside the SaaS Maker studio, not a separate product.
+ * OWN-WORLD: Matte-black framing, dark workshop panes, copper signals, and Schibsted Grotesk.
+ * STORY: Compare the scored catalog, narrow it to plausible bets, and inspect the reasoning.
+ * FIRST VIEWPORT: Studio navigation, a compact identity bay, then the controls and ledger.
+ * FORM: Operator ledger within the established workshop wall; preserve lane, no new visual world.
+ */
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import ideasData from '../data/ideas.json';
+import Layout from '../layouts/Layout.astro';
+
+type Idea = {
+  adj: number;
+  best_bet: boolean;
+  best_bet_why: string;
+  c: number;
+  customer: 'b2b-tech' | 'dev' | 'non-dev';
+  f: number;
+  f_feas: number;
+  f_feas_why: string;
+  fun: number;
+  idea: string;
+  m: number;
+  m_eff: number;
+  money: number;
+  source: string;
+  t: number;
+};
+
+const ideas = ideasData as Idea[];
+const sources = [...new Set(ideas.map((idea) => idea.source))].sort();
+const bestBetCount = ideas.filter((idea) => idea.best_bet).length;
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function renderIdea(value: string): string {
+  return escapeHtml(value)
+    .replace(/&lt;br\s*\/?&gt;/gi, '<br />')
+    .replace(
+      /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+    )
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+function scoreTitle(idea: Idea): string {
+  return `F${idea.f} M${idea.m} T${idea.t} C${idea.c} Feas${idea.f_feas}`;
+}
+
+function ideaTitle(value: string): string {
+  const leadingTitle = value.match(/^\*\*([^*]+)\*\*/)?.[1];
+  return leadingTitle ?? value.split('.')[0] ?? value;
+}
+
+function customerLabel(value: Idea['customer']): string {
+  if (value === 'b2b-tech') return 'B2B technology';
+  if (value === 'non-dev') return 'Non-developer';
+  return 'Individual developer';
+}
+---
+
+<Layout
+  title="Ideas — scored product bets from SaaS Maker"
+  description="Compare 140 tech-heavy product ideas by money potential, fun, solo feasibility, competition, source, and customer type."
+>
+  <Nav />
+  <main id="main-content" class="ideas-page">
+    <header class="ideas-hero">
+      <div class="ideas-identity">
+        <p class="ideas-kicker">SaaS Maker / Ideas</p>
+        <h1>Scored product ideas.</h1>
+        <p>
+          A working decision ledger for tech-heavy, solo-feasible paths toward $5K MRR.
+          Compare the wedge and the tradeoffs—not just the title.
+        </p>
+      </div>
+      <dl class="ideas-summary" aria-label="Catalog summary">
+        <div>
+          <dt>Ideas</dt>
+          <dd>{ideas.length}</dd>
+        </div>
+        <div>
+          <dt>Best bets</dt>
+          <dd>{bestBetCount}</dd>
+        </div>
+        <div>
+          <dt>Dataset rule</dt>
+          <dd>Technical ≥ 7</dd>
+        </div>
+      </dl>
+    </header>
+
+    <section class="ideas-workbench" aria-labelledby="ideas-catalog-title">
+      <div class="ideas-intro">
+        <div>
+          <p class="ideas-kicker">Decision workbench</p>
+          <h2 id="ideas-catalog-title">Find the arguments worth testing.</h2>
+        </div>
+        <details>
+          <summary>How scoring works</summary>
+          <p><strong>Fun</strong> = F + T: how enjoyable and technically interesting the build is.</p>
+          <p><strong>Money</strong> = M + Feas − C: raw potential plus solo feasibility, less competition.</p>
+          <p>
+            A best bet has Fun of at least 14 or Money of at least 5, and a customer other
+            than an individual developer.
+          </p>
+        </details>
+      </div>
+
+      <form class="ideas-controls" data-ideas-controls>
+        <label class="ideas-search">
+          <span>Search the argument</span>
+          <input
+            type="search"
+            name="query"
+            placeholder="Idea, wedge, competitor…"
+            autocomplete="off"
+            data-idea-query
+          />
+        </label>
+
+        <label>
+          <span>Source</span>
+          <select name="source" data-idea-source>
+            <option value="">All sources</option>
+            {sources.map((source) => <option value={source}>{source}</option>)}
+          </select>
+        </label>
+
+        <label>
+          <span>Customer</span>
+          <select name="customer" data-idea-customer>
+            <option value="">All customers</option>
+            <option value="non-dev">Non-developer</option>
+            <option value="b2b-tech">B2B technology</option>
+            <option value="dev">Individual developer</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Minimum Money</span>
+          <input type="number" name="money" min="-10" max="20" value="-10" step="1" data-idea-money />
+        </label>
+
+        <label>
+          <span>Minimum Fun</span>
+          <input type="number" name="fun" min="0" max="20" value="0" step="1" data-idea-fun />
+        </label>
+
+        <label class="ideas-sort-mobile">
+          <span>Sort</span>
+          <select name="sort" data-idea-sort>
+            <option value="best:desc">Best bets first</option>
+            <option value="money:desc">Money, high to low</option>
+            <option value="fun:desc">Fun, high to low</option>
+            <option value="idea:asc">Idea, A–Z</option>
+            <option value="source:asc">Source, A–Z</option>
+          </select>
+        </label>
+
+        <label class="ideas-best-toggle">
+          <input type="checkbox" name="best" data-idea-best />
+          <span>Best bets only</span>
+        </label>
+
+        <div class="ideas-result-line">
+          <output data-idea-count aria-live="polite">Showing all {ideas.length} ideas</output>
+          <button type="reset" data-idea-reset>Reset</button>
+        </div>
+      </form>
+
+      <div class="ideas-table-wrap">
+        <table class="ideas-table">
+          <thead>
+            <tr>
+              <th scope="col" data-sort-heading="best" aria-sort="descending">
+                <button type="button" data-sort="best">Best</button>
+              </th>
+              <th scope="col" data-sort-heading="money">
+                <button type="button" data-sort="money">Money</button>
+              </th>
+              <th scope="col" data-sort-heading="fun">
+                <button type="button" data-sort="fun">Fun</button>
+              </th>
+              <th scope="col" data-sort-heading="idea">
+                <button type="button" data-sort="idea">Idea and wedge</button>
+              </th>
+              <th scope="col" data-sort-heading="source">
+                <button type="button" data-sort="source">Source</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody data-ideas-body>
+            {ideas.map((idea) => (
+              <tr
+                data-idea-row
+                data-best={idea.best_bet ? '1' : '0'}
+                data-money={idea.money}
+                data-fun={idea.fun}
+                data-idea={idea.idea.toLowerCase()}
+                data-source={idea.source}
+                data-customer={idea.customer}
+              >
+                <td data-label="Best bet">
+                  {idea.best_bet ? (
+                    <span class="idea-star" title={idea.best_bet_why || 'Best bet'} aria-label="Best bet">★</span>
+                  ) : (
+                    <span class="idea-dash" aria-hidden="true">—</span>
+                  )}
+                </td>
+                <td class:list={['idea-score', { 'idea-score--strong': idea.money >= 5 }]} data-label="Money" title={scoreTitle(idea)}>
+                  {idea.money}
+                </td>
+                <td class:list={['idea-score', { 'idea-score--strong': idea.fun >= 14 }]} data-label="Fun" title={scoreTitle(idea)}>
+                  {idea.fun}
+                </td>
+                <td class="idea-copy" data-label="Idea and wedge">
+                  <details class="idea-copy-disclosure" data-idea-disclosure open>
+                    <summary>{ideaTitle(idea.idea)}</summary>
+                    <div class="idea-copy-full" set:html={renderIdea(idea.idea)} />
+                    <details class="idea-reasoning">
+                      <summary>Score breakdown</summary>
+                      <p>{scoreTitle(idea)}</p>
+                      <p>{idea.f_feas_why}</p>
+                      {idea.best_bet && idea.best_bet_why ? <p>{idea.best_bet_why}</p> : null}
+                    </details>
+                  </details>
+                </td>
+                <td class="idea-context" data-label="Source · customer">
+                  <span>{idea.source}</span>
+                  <small>{customerLabel(idea.customer)}</small>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ideas-empty" data-ideas-empty hidden>
+        <strong>No ideas match this cut.</strong>
+        <p>Reset the controls to return to the complete ledger.</p>
+        <button type="button" data-empty-reset>Show all ideas</button>
+      </div>
+    </section>
+
+    <aside class="ideas-method" aria-labelledby="ideas-method-title">
+      <div>
+        <p class="ideas-kicker">Provenance</p>
+        <h2 id="ideas-method-title">Scores are prompts for judgment.</h2>
+      </div>
+      <div>
+        <p>
+          The catalog combines hand-curated ideas, prior specs, public case studies, feasibility notes,
+          competitor context, and explicit derived scores. It is decision support, not market proof.
+        </p>
+        <a href="/ideas.json">Open the complete JSON dataset <span aria-hidden="true">→</span></a>
+      </div>
+    </aside>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const controls = document.querySelector('[data-ideas-controls]');
+  const body = document.querySelector('[data-ideas-body]');
+  const rows = Array.from(document.querySelectorAll('[data-idea-row]'));
+  const query = document.querySelector('[data-idea-query]');
+  const source = document.querySelector('[data-idea-source]');
+  const customer = document.querySelector('[data-idea-customer]');
+  const minimumMoney = document.querySelector('[data-idea-money]');
+  const minimumFun = document.querySelector('[data-idea-fun]');
+  const bestOnly = document.querySelector('[data-idea-best]');
+  const mobileSort = document.querySelector('[data-idea-sort]');
+  const count = document.querySelector('[data-idea-count]');
+  const empty = document.querySelector('[data-ideas-empty]');
+  const disclosures = Array.from(document.querySelectorAll('[data-idea-disclosure]'));
+  const mobileLayout = window.matchMedia('(max-width: 47.99rem)');
+  let sortKey = 'best';
+  let sortDirection = 'desc';
+
+  function syncDisclosures() {
+    for (const disclosure of disclosures) {
+      if (mobileLayout.matches) disclosure.removeAttribute('open');
+      else disclosure.setAttribute('open', '');
+    }
+  }
+
+  function valueFor(row, key) {
+    if (key === 'best' || key === 'money' || key === 'fun') return Number(row.dataset[key]);
+    return row.dataset[key] ?? '';
+  }
+
+  function applyIdeas() {
+    if (!body || !count || !empty) return;
+    const search = query?.value.trim().toLowerCase() ?? '';
+    const minimumMoneyValue = Number(minimumMoney?.value ?? -10);
+    const minimumFunValue = Number(minimumFun?.value ?? 0);
+
+    const ordered = rows.toSorted((left, right) => {
+      const leftValue = valueFor(left, sortKey);
+      const rightValue = valueFor(right, sortKey);
+      const comparison =
+        typeof leftValue === 'number'
+          ? leftValue - rightValue
+          : String(leftValue).localeCompare(String(rightValue));
+      return sortDirection === 'desc' ? -comparison : comparison;
+    });
+
+    let visibleCount = 0;
+    for (const row of ordered) {
+      const matches =
+        (!bestOnly?.checked || row.dataset.best === '1') &&
+        (!source?.value || row.dataset.source === source.value) &&
+        (!customer?.value || row.dataset.customer === customer.value) &&
+        Number(row.dataset.money) >= minimumMoneyValue &&
+        Number(row.dataset.fun) >= minimumFunValue &&
+        (!search || row.dataset.idea?.includes(search));
+      row.hidden = !matches;
+      if (matches) visibleCount += 1;
+      body.append(row);
+    }
+
+    count.textContent =
+      visibleCount === rows.length
+        ? `Showing all ${rows.length} ideas`
+        : `Showing ${visibleCount} of ${rows.length} ideas`;
+    empty.hidden = visibleCount > 0;
+
+    document.querySelectorAll('[data-sort-heading]').forEach((heading) => {
+      if (heading.dataset.sortHeading === sortKey) {
+        heading.setAttribute('aria-sort', sortDirection === 'desc' ? 'descending' : 'ascending');
+      } else {
+        heading.removeAttribute('aria-sort');
+      }
+    });
+  }
+
+  controls?.addEventListener('input', applyIdeas);
+  controls?.addEventListener('change', applyIdeas);
+  controls?.addEventListener('reset', () => {
+    sortKey = 'best';
+    sortDirection = 'desc';
+    requestAnimationFrame(applyIdeas);
+  });
+
+  document.querySelectorAll('[data-sort]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const nextKey = button.dataset.sort;
+      if (!nextKey) return;
+      if (nextKey === sortKey) sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+      else {
+        sortKey = nextKey;
+        sortDirection = nextKey === 'idea' || nextKey === 'source' ? 'asc' : 'desc';
+      }
+      if (mobileSort) mobileSort.value = `${sortKey}:${sortDirection}`;
+      applyIdeas();
+    });
+  });
+
+  mobileSort?.addEventListener('change', () => {
+    [sortKey, sortDirection] = mobileSort.value.split(':');
+    applyIdeas();
+  });
+
+  document.querySelector('[data-empty-reset]')?.addEventListener('click', () => {
+    controls?.reset();
+    sortKey = 'best';
+    sortDirection = 'desc';
+    applyIdeas();
+    query?.focus();
+  });
+
+  syncDisclosures();
+  mobileLayout.addEventListener('change', syncDisclosures);
+</script>
+
+<style>
+  .ideas-page {
+    width: min(var(--max), calc(100% - 3rem));
+    margin-inline: auto;
+    padding-bottom: clamp(5rem, 9vw, 8rem);
+  }
+
+  .ideas-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(19rem, 0.7fr);
+    gap: 0.4rem;
+    padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3.5rem);
+    border-bottom: 0.4rem solid var(--ink);
+  }
+
+  .ideas-identity,
+  .ideas-summary {
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .ideas-identity {
+    padding: clamp(1.75rem, 4vw, 3.5rem);
+  }
+
+  .ideas-kicker {
+    color: var(--copper-hi);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ideas-identity h1 {
+    max-width: 10ch;
+    margin-top: 1.25rem;
+    font-size: clamp(3rem, 6vw, 5.25rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.96;
+    text-wrap: balance;
+  }
+
+  .ideas-identity > p:last-child {
+    max-width: 42rem;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 1.7vw, 1.25rem);
+  }
+
+  .ideas-summary {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    list-style: none;
+  }
+
+  .ideas-summary > div {
+    min-height: 8.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .ideas-summary > div:last-child {
+    border-bottom: 0;
+    background: var(--copper);
+    color: #130d08;
+  }
+
+  .ideas-summary dt {
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ideas-summary > div:last-child dt {
+    color: #130d08;
+  }
+
+  .ideas-summary dd {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .ideas-workbench {
+    padding-top: clamp(4rem, 8vw, 7rem);
+  }
+
+  .ideas-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .ideas-intro h2,
+  .ideas-method h2 {
+    max-width: 16ch;
+    margin-top: 0.75rem;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .ideas-intro details {
+    border-block: 1px solid var(--line-strong);
+  }
+
+  .ideas-intro summary {
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .ideas-intro summary::after {
+    content: '+';
+    color: var(--copper-hi);
+    font-size: 1.25rem;
+  }
+
+  .ideas-intro details[open] summary::after {
+    content: '−';
+  }
+
+  .ideas-intro details p {
+    margin-bottom: 1rem;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+  }
+
+  .ideas-controls {
+    display: grid;
+    grid-template-columns: minmax(16rem, 1.6fr) repeat(4, minmax(8rem, 0.7fr));
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .ideas-controls label {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1rem;
+    border-right: 1px solid var(--line);
+  }
+
+  .ideas-controls label > span {
+    color: var(--ink-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .ideas-controls input,
+  .ideas-controls select,
+  .ideas-controls button,
+  .ideas-empty button {
+    min-height: 2.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  .ideas-controls input,
+  .ideas-controls select {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .ideas-controls input::placeholder {
+    color: var(--ink-muted);
+  }
+
+  .ideas-best-toggle {
+    grid-column: 1 / 3;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.75rem !important;
+    cursor: pointer;
+  }
+
+  .ideas-best-toggle input {
+    width: 1.25rem;
+    min-height: 1.25rem;
+    accent-color: var(--copper-hi);
+  }
+
+  .ideas-best-toggle span {
+    color: var(--ink-soft) !important;
+    font-size: 0.8rem !important;
+  }
+
+  .ideas-sort-mobile {
+    display: none !important;
+  }
+
+  .ideas-result-line {
+    grid-column: 3 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.25rem;
+    padding: 0.75rem 1rem;
+    color: var(--ink-muted);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ideas-result-line button,
+  .ideas-empty button {
+    padding: 0.55rem 0.9rem;
+    cursor: pointer;
+    color: var(--copper-hi);
+    font-weight: 600;
+  }
+
+  .ideas-table-wrap {
+    overflow-x: auto;
+    border-inline: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .ideas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .ideas-table th,
+  .ideas-table td {
+    padding: 0.85rem 1rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  .ideas-table th:last-child,
+  .ideas-table td:last-child {
+    border-right: 0;
+  }
+
+  .ideas-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bg);
+    text-align: left;
+  }
+
+  .ideas-table th button {
+    min-height: 2.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--ink-muted);
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .ideas-table th[aria-sort] button {
+    color: var(--copper-hi);
+  }
+
+  .ideas-table th[aria-sort='ascending'] button::after {
+    content: ' ↑';
+  }
+
+  .ideas-table th[aria-sort='descending'] button::after {
+    content: ' ↓';
+  }
+
+  .ideas-table tbody tr {
+    background: var(--bg);
+    transition: background 160ms ease;
+  }
+
+  .ideas-table tbody tr[hidden] {
+    display: none !important;
+  }
+
+  .ideas-table tbody tr:hover {
+    background: var(--surface);
+  }
+
+  .ideas-table td:first-child,
+  .idea-score {
+    width: 5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .idea-star {
+    color: #e6a83f;
+    font-size: 1rem;
+  }
+
+  .idea-dash {
+    color: var(--ink-muted);
+  }
+
+  .idea-score {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .idea-score--strong {
+    background: #19382d;
+    color: #83d4ae;
+  }
+
+  .idea-copy {
+    min-width: 30rem;
+    max-width: 58rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  .idea-copy :global(strong) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .idea-copy :global(a) {
+    color: var(--copper-hi);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .idea-copy :global(code) {
+    padding: 0.08rem 0.3rem;
+    background: var(--surface);
+    color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85em;
+  }
+
+  .idea-copy-disclosure > summary {
+    display: none;
+  }
+
+  .idea-reasoning {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+  }
+
+  .idea-reasoning summary {
+    width: fit-content;
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--copper-hi);
+    font-weight: 600;
+  }
+
+  .idea-reasoning p + p {
+    margin-top: 0.4rem;
+  }
+
+  .idea-context {
+    width: 10rem;
+  }
+
+  .idea-context span,
+  .idea-context small {
+    display: block;
+  }
+
+  .idea-context span {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .idea-context small {
+    margin-top: 0.25rem;
+    color: var(--ink-muted);
+  }
+
+  .ideas-empty {
+    padding: 4rem 1.5rem;
+    border: 1px solid var(--line-strong);
+    border-top: 0;
+    text-align: center;
+  }
+
+  .ideas-empty p {
+    margin: 0.5rem 0 1.25rem;
+    color: var(--ink-muted);
+  }
+
+  .ideas-method {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.7fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    margin-top: clamp(4rem, 9vw, 8rem);
+    padding: clamp(2rem, 5vw, 4rem);
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .ideas-method > div:last-child {
+    align-self: end;
+  }
+
+  .ideas-method > div:last-child p {
+    color: var(--ink-muted);
+  }
+
+  .ideas-method a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    color: var(--copper-hi);
+    font-weight: 600;
+  }
+
+  @media (max-width: 62rem) {
+    .ideas-controls {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ideas-search {
+      grid-column: 1 / -1;
+    }
+
+    .ideas-best-toggle {
+      grid-column: 1 / 2;
+    }
+
+    .ideas-result-line {
+      grid-column: 2 / -1;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .ideas-page {
+      width: min(100% - 1.5rem, var(--max));
+    }
+
+    .ideas-hero,
+    .ideas-intro,
+    .ideas-method {
+      grid-template-columns: 1fr;
+    }
+
+    .ideas-hero {
+      gap: 0;
+    }
+
+    .ideas-identity h1 {
+      font-size: clamp(2.75rem, 14vw, 4.5rem);
+    }
+
+    .ideas-summary {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 1fr;
+    }
+
+    .ideas-summary > div {
+      min-height: 7rem;
+      padding: 1rem;
+      border-right: 1px solid var(--line-strong);
+      border-bottom: 0;
+    }
+
+    .ideas-summary > div:last-child {
+      border-right: 0;
+    }
+
+    .ideas-controls {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ideas-search,
+    .ideas-sort-mobile,
+    .ideas-result-line {
+      grid-column: 1 / -1;
+    }
+
+    .ideas-sort-mobile {
+      display: flex !important;
+    }
+
+    .ideas-best-toggle {
+      grid-column: 1 / -1;
+    }
+
+    .ideas-result-line {
+      justify-content: space-between;
+    }
+
+    .ideas-table-wrap {
+      overflow: visible;
+      border-inline: 0;
+    }
+
+    .ideas-table,
+    .ideas-table tbody {
+      display: block;
+    }
+
+    .ideas-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .ideas-table tbody {
+      padding-top: 0.75rem;
+    }
+
+    .ideas-table tbody tr {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--line-strong);
+    }
+
+    .ideas-table tbody tr:hover {
+      background: var(--bg);
+    }
+
+    .ideas-table td,
+    .ideas-table td:first-child,
+    .idea-score,
+    .idea-context {
+      width: auto;
+      padding: 0.8rem;
+      border-right: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .ideas-table td::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--ink-muted);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .idea-copy {
+      min-width: 0;
+      max-width: none;
+      grid-column: 1 / -1;
+      grid-row: 1;
+      border-right: 0 !important;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.98rem;
+    }
+
+    .idea-copy-disclosure > summary {
+      min-height: 2.75rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: var(--ink);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .idea-copy-disclosure > summary::after {
+      content: '+';
+      margin-left: auto;
+      padding-left: 1rem;
+      color: var(--copper-hi);
+      font-size: 1.2rem;
+    }
+
+    .idea-copy-disclosure[open] > summary::after {
+      content: '−';
+    }
+
+    .idea-copy-full {
+      padding-top: 0.65rem;
+    }
+
+    .idea-context {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--line);
+      border-right: 0 !important;
+      border-bottom: 0 !important;
+    }
+
+    .ideas-method {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 31rem) {
+    .ideas-controls {
+      grid-template-columns: 1fr;
+    }
+
+    .ideas-controls label,
+    .ideas-search,
+    .ideas-best-toggle,
+    .ideas-sort-mobile,
+    .ideas-result-line {
+      grid-column: 1;
+    }
+
+    .ideas-summary dd {
+      font-size: 1.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ideas-table tbody tr {
+      transition: none;
+    }
+  }
+</style>

@@ -32,27 +32,44 @@ const directoryChecks = [
     },
   },
   {
-    name: 'Complete project directory renders 58 identities',
+    name: 'Complete project directory renders 57 identities',
     fn: async () => {
       const res = await fetch(`${DIRECTORY}/projects`);
       if (res.status !== 200) throw new Error(`status ${res.status}`);
       const body = await res.text();
       const rows = body.match(/<details class="directory-row" data-directory-row/g)?.length ?? 0;
-      if (rows !== 58) throw new Error(`expected 58 directory rows, got ${rows}`);
+      if (rows !== 57) throw new Error(`expected 57 directory rows, got ${rows}`);
       if (!body.includes('First retained commit') || !body.includes('Latest retained commit')) {
         throw new Error('missing Git-history bounds');
       }
     },
   },
   {
-    name: 'Machine-readable directory exposes 58 identities',
+    name: 'Machine-readable directory exposes 57 identities',
     fn: async () => {
       const res = await fetch(`${DIRECTORY}/projects.json`);
       if (res.status !== 200) throw new Error(`status ${res.status}`);
       const body = await res.json();
-      if (!Array.isArray(body) || body.length !== 58) {
+      if (!Array.isArray(body) || body.length !== 57) {
         throw new Error(
-          `expected 58 JSON entries, got ${Array.isArray(body) ? body.length : 'non-array'}`
+          `expected 57 JSON entries, got ${Array.isArray(body) ? body.length : 'non-array'}`
+        );
+      }
+    },
+  },
+  {
+    name: 'Scored ideas catalog renders 140 ideas',
+    fn: async () => {
+      const [pageRes, dataRes] = await Promise.all([
+        fetch(`${DIRECTORY}/ideas`),
+        fetch(`${DIRECTORY}/ideas.json`),
+      ]);
+      if (pageRes.status !== 200) throw new Error(`ideas status ${pageRes.status}`);
+      if (dataRes.status !== 200) throw new Error(`ideas JSON status ${dataRes.status}`);
+      const body = await dataRes.json();
+      if (!Array.isArray(body) || body.length !== 140) {
+        throw new Error(
+          `expected 140 ideas, got ${Array.isArray(body) ? body.length : 'non-array'}`
         );
       }
     },

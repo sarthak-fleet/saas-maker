@@ -24,6 +24,13 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-23 — Ideas absorbed into SaaS Maker:** Added `/ideas` as a native
+  scored catalog with the preserved 140-item dataset, filters, sorting,
+  responsive comparison, JSON, Markdown, sitemap, and agent discovery. Removed
+  `saas-ideas` from Site Health's canonical project identities and regenerated
+  the public directory at 57 identities. The retired repository remains only
+  as source history. No deployment or DNS action ran.
+
 - **2026-08-23 — Redundant workspace packages removed:** Removed the private
   `@saas-maker/ui` package after switching its only consumer to the dashboard's
   existing local components. Removed the duplicate Astro login overlay and use
@@ -121,6 +128,7 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 | Surface | Purpose |
 | --- | --- |
 | sassmaker.com | Public product directory |
+| sassmaker.com/ideas | Scored product-idea decision ledger |
 | api.sassmaker.com | Feedback and project-key API |
 | app.sassmaker.com | Private feedback inbox |
 | @saas-maker/feedback | Maintained public runtime package |
@@ -132,9 +140,11 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 ## Features (shipped)
 
 - Curated public homepage with four products in focus and a single gateway to
-  the complete register, without duplicating the 58-project directory.
-- Deterministic 58-identity public projection consumed without private Fleet
+  the complete register, without duplicating the 57-project directory.
+- Deterministic 57-identity public projection consumed without private Fleet
   runtime access, with deny-by-default field validation.
+- Native `/ideas` catalog with 140 scored ideas, decision filters, sortable
+  desktop and mobile layouts, and matching JSON and Markdown surfaces.
 - Searchable `/projects` register grouped by current, supporting/parked, and
   past work, with form-family and platform filters, mobile filter return,
   compact project anatomy, prominent tools, and native disclosures for public
