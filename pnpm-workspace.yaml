@@ -2,11 +2,8 @@ packages:
   - 'packages/widgets/feedback-widget'
   - 'packages/ai-chat-footer'
   - 'packages/portfolio-project-strip'
-  - 'packages/ui'
   - 'apps/cockpit'
-  - 'apps/docs-blume'
   - 'apps/showcase'
-  - 'apps/cockpit/landing-astro'
   - 'workers/api'
 allowBuilds:
   core-js: true

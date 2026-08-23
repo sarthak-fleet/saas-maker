@@ -23,7 +23,9 @@ private Fleet state at runtime. Reusable public automation is canonical under
   backed by the same safe catalog as sassmaker.com.
 - `api.sassmaker.com` — Feedback and project-key API.
 - `app.sassmaker.com` — private Feedback inbox.
-- `saas-maker-packages.pages.dev` — package documentation.
+
+Package and service documentation stays in [`docs/`](docs/README.md) and the
+individual package READMEs.
 
 ## Development
 
@@ -34,7 +36,6 @@ pnpm typecheck
 pnpm check:shared-packages
 pnpm build:widget
 pnpm build:showcase
-pnpm build:docs
 pnpm build:cockpit
 ```
 

@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@saas-maker/ui';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CreateProjectDialog } from '@/components/create-project-dialog';
 import { PageHeader } from '@/components/page-header';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';

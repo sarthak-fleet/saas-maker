@@ -1,7 +1,8 @@
 # Status
 
-SaaS Maker source is being reduced to four surfaces: public directory, Blume
-package docs, feedback API/inbox, and @saas-maker/feedback.
+SaaS Maker source is reduced to three surfaces: the public directory, the
+feedback API/inbox, and the reusable packages. Package and service documentation
+is maintained as checked-in Markdown instead of a separate application.
 
 Local checks are green on `c5d3e845`. Production API is serving the agent
 contract at api.sassmaker.com. The inbox Worker is deployed and

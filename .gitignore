@@ -27,13 +27,6 @@ out/
 *.agent.log
 agent-*.log
 
-# Blume build artifacts (presentation layer; docs/ is the source of truth)
-apps/docs-blume/dist/
-apps/docs-blume/.blume/
-apps/docs-blume/.astro/
-apps/docs/dist/
-apps/docs/.astro/
-
 # Test artifacts
 test-results/
 

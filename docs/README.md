@@ -1,7 +1,8 @@
 # SaaS Maker documentation
 
-This tree is the source for saas-maker-packages.pages.dev. Blume is the only
-presentation layer.
+This checked-in Markdown tree is the package and service documentation source.
+It is validated directly with `pnpm check:docs`; there is no separate docs app
+or deployment.
 
 The public documentation covers @saas-maker/feedback, its project keys, and its
 small HTTP API. Private portfolio operations belong to Site Health; reusable

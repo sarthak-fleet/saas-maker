@@ -5,7 +5,7 @@
 SaaS Maker owns only:
 
 - the public product directory;
-- Blume package documentation;
+- package documentation;
 - @saas-maker/feedback;
 - @saas-maker/ai-chat-footer;
 - @saas-maker/portfolio-project-strip;
@@ -31,7 +31,6 @@ pnpm typecheck
 pnpm build:widget
 pnpm check:shared-packages
 pnpm build:showcase
-pnpm build:docs
 pnpm build:cockpit
 pnpm catalog:check-public
 pnpm check:docs

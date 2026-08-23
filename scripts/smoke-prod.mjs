@@ -19,7 +19,6 @@
 const API = process.env.SAAS_MAKER_API ?? 'https://api.sassmaker.com';
 const APP = process.env.SAAS_MAKER_APP ?? 'https://app.sassmaker.com';
 const DIRECTORY = process.env.SAAS_MAKER_DIRECTORY ?? 'https://sassmaker.com';
-const DOCS = process.env.SAAS_MAKER_DOCS ?? 'https://saas-maker-packages.pages.dev';
 const DIRECTORY_ONLY = process.argv.includes('--directory-only');
 
 const directoryChecks = [
@@ -61,15 +60,6 @@ const directoryChecks = [
 ];
 
 const productChecks = [
-  {
-    name: 'Package docs render',
-    fn: async () => {
-      const res = await fetch(DOCS);
-      if (res.status !== 200) throw new Error(`status ${res.status}`);
-      const body = await res.text();
-      if (!body.includes('SaaS Maker Packages')) throw new Error('missing package docs identity');
-    },
-  },
   {
     name: 'API /health returns ok',
     fn: async () => {

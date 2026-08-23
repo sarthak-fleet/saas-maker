@@ -17,11 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * The Worker wrapper serves Astro for anonymous GET `/` requests and redirects
- * requests with a session cookie straight to the feedback inbox. This route remains the
- * server-side fallback when a request reaches OpenNext directly.
- */
+/** Route authenticated users to the inbox and everyone else to sign-in. */
 export default async function HomePage() {
   const requestHeaders = await headers();
   if (isLocalAuthBypassEnabled(requestHeaders.get('host'))) {
