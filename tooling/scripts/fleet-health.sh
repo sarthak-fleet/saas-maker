@@ -55,6 +55,7 @@ clean=0
 dirty=0
 ci_red=0
 ci_unknown=0
+ci_off=0
 total=0
 
 for project in $PROJECTS; do
@@ -111,36 +112,49 @@ for project in $PROJECTS; do
     slug="${slug%.git}"
 
     if [[ -n "$slug" ]]; then
-      # Judge repository CI from pushes to main. Scheduled data refreshes are
-      # operational signals and must not replace the product's current CI state.
-      ci_record=$(gh run list -R "$slug" --branch main --event push --limit 1 \
-        --json conclusion,headSha --jq '.[0] | [.conclusion // "none", .headSha // ""] | @tsv' \
-        2>/dev/null || true)
-      read -r conclusion ci_sha <<< "$ci_record"
-      main_sha=$(git -C "$dir" rev-parse origin/main 2>/dev/null || true)
-      if [[ -n "$ci_sha" && -n "$main_sha" && "$ci_sha" != "$main_sha" ]]; then
-        ci_state="unknown"
-        ci_unknown=$((ci_unknown + 1))
-        notes="${notes:+$notes }CI stale"
+      # A repository with Actions switched off has no CI state to judge.
+      # Report that plainly rather than counting it as unknown: otherwise a
+      # deliberately disabled repository looks identical to one whose CI is
+      # silently broken. Note that workflow_dispatch against a disabled
+      # repository strands a run in `queued` that cannot be cancelled (HTTP
+      # 500) or deleted (HTTP 403), which is how this state usually surfaces.
+      actions_enabled=$(gh api "repos/$slug/actions/permissions" --jq '.enabled' 2>/dev/null || true)
+      if [[ "$actions_enabled" == "false" ]]; then
+        ci_state="off"
+        ci_off=$((ci_off + 1))
+        notes="${notes:+$notes }Actions disabled"
       else
-        case "$conclusion" in
-          success) ci_state="green" ;;
-          failure|timed_out|action_required|startup_failure)
-            ci_state="red"
-            ci_red=$((ci_red + 1))
-            notes="${notes:+$notes }CI failing"
-            ;;
-          cancelled)
-            ci_state="unknown"
-            ci_unknown=$((ci_unknown + 1))
-            notes="${notes:+$notes }CI cancelled"
-            ;;
-          none|"")
-            ci_state="unknown"
-            ci_unknown=$((ci_unknown + 1))
-            ;;
-          *) ci_state="$conclusion" ;;
-        esac
+        # Judge repository CI from pushes to main. Scheduled data refreshes are
+        # operational signals and must not replace the product's current CI state.
+        ci_record=$(gh run list -R "$slug" --branch main --event push --limit 1 \
+          --json conclusion,headSha --jq '.[0] | [.conclusion // "none", .headSha // ""] | @tsv' \
+          2>/dev/null || true)
+        read -r conclusion ci_sha <<< "$ci_record"
+        main_sha=$(git -C "$dir" rev-parse origin/main 2>/dev/null || true)
+        if [[ -n "$ci_sha" && -n "$main_sha" && "$ci_sha" != "$main_sha" ]]; then
+          ci_state="unknown"
+          ci_unknown=$((ci_unknown + 1))
+          notes="${notes:+$notes }CI stale"
+        else
+          case "$conclusion" in
+            success) ci_state="green" ;;
+            failure|timed_out|action_required|startup_failure)
+              ci_state="red"
+              ci_red=$((ci_red + 1))
+              notes="${notes:+$notes }CI failing"
+              ;;
+            cancelled)
+              ci_state="unknown"
+              ci_unknown=$((ci_unknown + 1))
+              notes="${notes:+$notes }CI cancelled"
+              ;;
+            none|"")
+              ci_state="unknown"
+              ci_unknown=$((ci_unknown + 1))
+              ;;
+            *) ci_state="$conclusion" ;;
+          esac
+        fi
       fi
     else
       ci_unknown=$((ci_unknown + 1))
@@ -164,7 +178,11 @@ for project in $PROJECTS; do
 done
 
 echo ""
-echo "Summary: $total projects — $clean clean, $dirty dirty, $ci_red CI-red, $ci_unknown CI-unknown"
+summary="Summary: $total projects — $clean clean, $dirty dirty, $ci_red CI-red, $ci_unknown CI-unknown"
+if [[ "$ci_off" -gt 0 ]]; then
+  summary="$summary, $ci_off Actions-disabled"
+fi
+echo "$summary"
 
 if [[ $ci_red -gt 0 ]]; then
   exit 1

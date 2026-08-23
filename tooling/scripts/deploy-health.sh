@@ -339,6 +339,15 @@ check_github_actions() {
       continue
     fi
 
+    # A repository with Actions switched off has no CI evidence to compare, and
+    # any stranded workflow_dispatch run on it cannot be cancelled (HTTP 500)
+    # or deleted (HTTP 403). Report the state rather than a stale-run failure.
+    actions_enabled="$(gh api "repos/$slug/actions/permissions" --jq '.enabled' 2>/dev/null || true)"
+    if [[ "$actions_enabled" == "false" ]]; then
+      record "OK" "$repo has Actions disabled; CI state is not tracked"
+      continue
+    fi
+
     head_sha="$(origin_main_sha "$repo" || true)"
 
     if [[ -z "$head_sha" ]]; then
