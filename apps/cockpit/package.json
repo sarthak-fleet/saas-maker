@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "build:next": "next build",
     "cf:build": "opennextjs-cloudflare build && opennextjs-cloudflare populateCache local",
-    "deploy": "node ../../scripts/check-worker-secrets.mjs saasmaker-dashboard BETTER_AUTH_SECRET AUTH_GOOGLE_ID AUTH_GOOGLE_SECRET && pnpm cf:build && wrangler deploy && node ../../scripts/smoke-prod.mjs",
+    "deploy": "node ../../scripts/check-worker-secrets.mjs saasmaker-dashboard BETTER_AUTH_SECRET AUTH_GOOGLE_ID AUTH_GOOGLE_SECRET && pnpm cf:build && wrangler deploy --tag \"$(git rev-parse HEAD)\" && node ../../scripts/smoke-prod.mjs",
     "preview": "wrangler pages dev",
     "start": "next start",
     "typecheck": "tsc --noEmit"
