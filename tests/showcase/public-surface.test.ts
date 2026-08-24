@@ -1,11 +1,28 @@
 import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
+import { GET as getAIChatFooterScript } from '../../apps/showcase/src/pages/ai-chat-footer.js';
 
 async function readShowcase(relativePath: string) {
   return readFile(new URL(`../../apps/showcase/${relativePath}`, import.meta.url), 'utf8');
 }
 
 describe('SaaS Maker public source boundary', () => {
+  it('serves the backend-free AI footer loader cross-origin', async () => {
+    const response = getAIChatFooterScript();
+    const source = await response.text();
+
+    expect(response.headers.get('access-control-allow-origin')).toBe('*');
+    expect(response.headers.get('content-type')).toBe('text/javascript; charset=utf-8');
+    expect(source).toMatch(/customElements\.define\('ai-chat-footer'/);
+    expect(source).toMatch(/Chat with us through AI/);
+    expect(source).toMatch(/dataset\.aiProvider/);
+    expect(source).toMatch(/customElements\.define\('fleet-footer-extension'/);
+    expect(source).toMatch(/strip\.setAttribute\('integrated'/);
+    expect(source).toMatch(/grid-template-columns: minmax\(17rem, \.42fr\) minmax\(0, 1fr\)/);
+    expect(source).not.toMatch(/analytics|localStorage|credential/i);
+    expect(() => new Function(source)).not.toThrow();
+  });
+
   it('exposes the canonical standalone source without exposing Fleet', async () => {
     const [links, registrySource, projectsSource, routesSource, navSource, redirects, catalog] =
       await Promise.all([
@@ -89,7 +106,8 @@ describe('SaaS Maker public source boundary', () => {
     expect(fleet).toMatch(/<h2 id="learning-title"/);
     expect(fleet).not.toMatch(/ACTIVE_GROUPS|PAST_PROJECTS|catalog-row|archive-wall/);
     expect(fleet).not.toMatch(/project identities|accounted for once/);
-    expect(layout).not.toMatch(/src="https:\/\/sassmaker\.com\/project-strip\.js"/);
+    expect(layout).toMatch(/src="https:\/\/sassmaker\.com\/project-strip\.js"/);
+    expect(layout).toMatch(/src="https:\/\/sassmaker\.com\/ai-chat-footer\.js"/);
     expect(routes).toMatch(/# Products in focus/);
     expect(routes).toMatch(/# Complete directory/);
     expect(routes).toMatch(/CORE\.flatMap/);

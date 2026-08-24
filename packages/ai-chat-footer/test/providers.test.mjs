@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { AI_CHAT_FOOTER_TAG, normalizeProviderIds } from '../dist/browser/element.mjs';
 import { DEFAULT_PROVIDERS, getProviderUrl } from '../dist/index.mjs';
 
 test('DEFAULT_PROVIDERS lists all five providers in order', () => {
@@ -48,4 +49,12 @@ test('special characters are URL-encoded', () => {
   const prompt = 'hello & goodbye = 100%';
   const url = new URL(getProviderUrl('claude', prompt));
   assert.equal(url.searchParams.get('q'), prompt);
+});
+
+test('browser entrypoint is safe to import without a DOM', () => {
+  assert.equal(AI_CHAT_FOOTER_TAG, 'ai-chat-footer');
+});
+
+test('browser entrypoint filters and de-duplicates provider attributes', () => {
+  assert.deepEqual(normalizeProviderIds('chatgpt,claude,chatgpt,invalid'), ['chatgpt', 'claude']);
 });

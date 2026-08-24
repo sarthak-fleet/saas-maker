@@ -2,7 +2,12 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { PORTFOLIO_PROJECT_STRIP_TAG } from '../dist/browser/element.mjs';
 import { normalizeProjects, PortfolioProjectStrip, withReferralSource } from '../dist/index.mjs';
+
+test('browser entrypoint is safe to import without a DOM', () => {
+  assert.equal(PORTFOLIO_PROJECT_STRIP_TAG, 'portfolio-project-strip');
+});
 
 test('normalizes valid projects and removes duplicate ids', () => {
   assert.deepEqual(

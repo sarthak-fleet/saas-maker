@@ -1,11 +1,11 @@
 # `@saas-maker/ai-chat-footer`
 
-Backend-free React footer widget that lets visitors ask Claude, ChatGPT, Gemini,
+Backend-free React and browser-native footer widget that lets visitors ask Claude, ChatGPT, Gemini,
 Perplexity, or Grok about your product. Each icon opens the visitor's chosen AI
 assistant in a new tab with a pre-filled prompt.
 
 - No backend, no API keys, no analytics, no cookies.
-- Inline SVG icons — no icon fonts or image assets.
+- React uses inline SVG icons; the browser element uses labelled text marks.
 - Customizable prompt, label, provider set, theme, and styling.
 
 ## Install
@@ -13,6 +13,40 @@ assistant in a new tab with a pre-filled prompt.
 ```bash
 pnpm add @saas-maker/ai-chat-footer
 ```
+
+## Browser-native integration
+
+Astro, static HTML, and other non-React consumers can load the package's
+custom-element entrypoint:
+
+```html
+<script type="module" src="/vendor/ai-chat-footer/element.js"></script>
+<ai-chat-footer
+  product-name="Acme"
+  product-url="https://acme.com"
+></ai-chat-footer>
+```
+
+Bundler-based consumers can import `@saas-maker/ai-chat-footer/browser`.
+Supported attributes are `product-name`, `product-url`, `label`, `prompt`,
+`providers`, and `theme`. The browser entrypoint remains backend-free and uses
+the same provider URLs and default prompt contract as the React component.
+
+### Fleet hosted integration
+
+Fleet product pages should load the project strip first and the AI loader
+second:
+
+```html
+<script src="https://sassmaker.com/project-strip.js" data-project="acme" defer></script>
+<script src="https://sassmaker.com/ai-chat-footer.js" data-name="Acme" defer></script>
+```
+
+The AI loader detects `portfolio-project-strip` and moves both widgets into one
+`fleet-footer-extension`. A product's authored footer remains untouched above
+that compact extension. Do not add a second local AI footer or wrap either
+widget in another full-height footer. Set `data-compose="false"` on the AI
+loader only when a consumer deliberately owns a different composition.
 
 Import the component and its CSS:
 

@@ -25,6 +25,27 @@ export function FooterStrip() {
 }
 ```
 
+## Browser-native integration
+
+Astro, static HTML, and non-React consumers can load the custom-element
+entrypoint:
+
+```html
+<script type="module" src="/vendor/portfolio-project-strip/element.js"></script>
+<portfolio-project-strip current-project="codevetter"></portfolio-project-strip>
+```
+
+Bundler-based consumers can import
+`@saas-maker/portfolio-project-strip/browser`. The browser element accepts
+`current-project`, `catalog-url`, `label`, `theme`, and `speed`. It renders the
+bundled public catalog immediately and keeps it when the bounded background
+refresh fails.
+
+For Fleet's hosted footer composition, load this strip before
+`https://sassmaker.com/ai-chat-footer.js`. The AI loader combines both custom
+elements into a single compact extension beneath any product-owned footer, so
+consumer pages should not add an additional wrapper footer around them.
+
 The JSON endpoint returns the public project catalog: `{ id, name, url,
 description, tier, priority, category, maturity, spotlight, pillarId,
 domains }`. URLs must be absolute HTTP(S) URLs. You can also pass `projects`

@@ -1,37 +1,11 @@
 import { type CSSProperties, useEffect, useId, useMemo, useState } from 'react';
 import { DEFAULT_PROJECTS } from './catalog';
+import { normalizeProjects, withReferralSource } from './core';
 import type { PortfolioProject, PortfolioProjectStripProps } from './types';
 import './index.css';
 
 const REQUEST_TIMEOUT_MS = 800;
 export const DEFAULT_CATALOG_URL = 'https://sassmaker.com/projects.json';
-
-function isProject(value: unknown): value is PortfolioProject {
-  if (!value || typeof value !== 'object') return false;
-  const project = value as Partial<PortfolioProject>;
-  try {
-    const url = new URL(project.url ?? '');
-    return (
-      typeof project.id === 'string' &&
-      project.id.length > 0 &&
-      typeof project.name === 'string' &&
-      project.name.length > 0 &&
-      (url.protocol === 'http:' || url.protocol === 'https:')
-    );
-  } catch {
-    return false;
-  }
-}
-
-export function normalizeProjects(value: unknown): PortfolioProject[] {
-  if (!Array.isArray(value)) return [];
-  const seen = new Set<string>();
-  return value.filter(isProject).filter((project) => {
-    if (seen.has(project.id)) return false;
-    seen.add(project.id);
-    return true;
-  });
-}
 
 async function fetchCatalog(url: string, signal: AbortSignal): Promise<PortfolioProject[]> {
   const response = await fetch(url, {
@@ -41,17 +15,6 @@ async function fetchCatalog(url: string, signal: AbortSignal): Promise<Portfolio
   });
   if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
   return normalizeProjects(await response.json());
-}
-
-export function withReferralSource(url: string, currentProjectId?: string): string {
-  if (!currentProjectId) return url;
-  try {
-    const destination = new URL(url);
-    destination.searchParams.set('ref', currentProjectId);
-    return destination.toString();
-  } catch {
-    return url;
-  }
 }
 
 function transformOffsetX(transform: string): number {

@@ -32,27 +32,27 @@ const directoryChecks = [
     },
   },
   {
-    name: 'Complete project directory renders 57 identities',
+    name: 'Complete project directory renders 55 identities',
     fn: async () => {
       const res = await fetch(`${DIRECTORY}/projects`);
       if (res.status !== 200) throw new Error(`status ${res.status}`);
       const body = await res.text();
       const rows = body.match(/<details class="directory-row" data-directory-row/g)?.length ?? 0;
-      if (rows !== 57) throw new Error(`expected 57 directory rows, got ${rows}`);
+      if (rows !== 55) throw new Error(`expected 55 directory rows, got ${rows}`);
       if (!body.includes('First retained commit') || !body.includes('Latest retained commit')) {
         throw new Error('missing Git-history bounds');
       }
     },
   },
   {
-    name: 'Machine-readable directory exposes 57 identities',
+    name: 'Machine-readable directory exposes 55 identities',
     fn: async () => {
       const res = await fetch(`${DIRECTORY}/projects.json`);
       if (res.status !== 200) throw new Error(`status ${res.status}`);
       const body = await res.json();
-      if (!Array.isArray(body) || body.length !== 57) {
+      if (!Array.isArray(body) || body.length !== 55) {
         throw new Error(
-          `expected 57 JSON entries, got ${Array.isArray(body) ? body.length : 'non-array'}`
+          `expected 55 JSON entries, got ${Array.isArray(body) ? body.length : 'non-array'}`
         );
       }
     },

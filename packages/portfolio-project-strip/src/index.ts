@@ -1,8 +1,7 @@
 export { DEFAULT_PROJECTS } from './catalog';
+export { normalizeProjects, withReferralSource } from './core';
 export {
   DEFAULT_CATALOG_URL,
-  normalizeProjects,
   PortfolioProjectStrip,
-  withReferralSource,
 } from './PortfolioProjectStrip';
 export type { PortfolioProject, PortfolioProjectStripProps, PortfolioTheme } from './types';

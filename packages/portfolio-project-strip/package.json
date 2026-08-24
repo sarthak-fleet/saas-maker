@@ -25,11 +25,15 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
+    "./browser": {
+      "types": "./dist/browser/element.d.mts",
+      "import": "./dist/browser/element.mjs"
+    },
     "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
     "catalog:generate": "node scripts/generate-catalog.mjs",
-    "build": "tsup src/index.ts --format esm,cjs --dts --external react --external react-dom",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react --external react-dom && tsup src/element.ts --format esm --dts --out-dir dist/browser",
     "typecheck": "tsc --noEmit",
     "typecheck:contracts": "tsc -p tsconfig.test.json",
     "lint": "biome check .",

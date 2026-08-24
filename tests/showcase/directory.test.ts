@@ -7,7 +7,7 @@ async function readRepository(relativePath: string) {
 }
 
 describe('complete public Fleet directory', () => {
-  it('projects all 57 identities exactly once with privacy-safe anatomy', async () => {
+  it('projects all 55 identities exactly once with privacy-safe anatomy', async () => {
     const catalog = JSON.parse(await readRepository('catalog/generated/public.json'));
     const ids = catalog.directory.map((project: { id: string }) => project.id);
     const counts = (catalog.directory as Array<{ group: string }>).reduce<Record<string, number>>(
@@ -19,11 +19,11 @@ describe('complete public Fleet directory', () => {
     );
 
     expect(catalog.schemaVersion).toBe(3);
-    expect(catalog.directory).toHaveLength(57);
-    expect(new Set(ids).size).toBe(57);
+    expect(catalog.directory).toHaveLength(55);
+    expect(new Set(ids).size).toBe(55);
     expect(counts.current).toBe(32);
     expect(counts.supporting).toBe(11);
-    expect(counts.past).toBe(14);
+    expect(counts.past).toBe(12);
 
     for (const project of catalog.directory) {
       expect(project.name).toBeTruthy();
@@ -62,12 +62,7 @@ describe('complete public Fleet directory', () => {
   });
 
   it('keeps established web identities discoverable through the public form families', () => {
-    for (const projectId of [
-      'significanthobbies',
-      'veg-protein-food',
-      'truehire',
-      'today-little-log',
-    ]) {
+    for (const projectId of ['significanthobbies', 'veg-protein-food', 'truehire']) {
       const project = DIRECTORY_PROJECTS.find((candidate) => candidate.id === projectId);
       expect(project).toBeDefined();
       expect(directoryFormFamilies(project!)).toContain('Web');

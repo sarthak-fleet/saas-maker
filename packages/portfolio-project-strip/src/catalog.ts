@@ -138,6 +138,21 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     ]
   },
   {
+    "id": "field-track",
+    "name": "Field Track",
+    "url": "https://field-track.sassmaker.com",
+    "description": "An interactive manager dashboard for freshness-aware field location operations, shown with clearly labeled synthetic employees and routes.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "in-progress",
+    "spotlight": false,
+    "pillarId": "build",
+    "domains": [
+      "field-track.sassmaker.com"
+    ]
+  },
+  {
     "id": "free-ai",
     "name": "Free AI",
     "url": "https://ai-gateway.sassmaker.com",

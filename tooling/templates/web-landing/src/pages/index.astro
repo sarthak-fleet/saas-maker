@@ -1,0 +1,67 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { site } from '../site.config';
+---
+<SiteLayout>
+  <header class="shell nav">
+    <a class="brand" href="/">{site.name}</a>
+    <nav aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a class="nav-action" href={site.primary.href}>{site.primary.label}</a>
+    </nav>
+  </header>
+
+  <main id="content">
+    <section class="shell hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">{site.eyebrow}</p>
+        <h1 id="hero-title">{site.headline}</h1>
+        <p class="lede">{site.lede}</p>
+        <div class="actions">
+          <a class="button" href={site.primary.href}>{site.primary.label} <span aria-hidden="true">→</span></a>
+          {site.secondary ? <a class="text-link" href={site.secondary.href}>{site.secondary.label}</a> : null}
+        </div>
+      </div>
+
+      <article class="artifact" aria-label={site.artifact.label}>
+        <div class="artifact-head">
+          <span>{site.artifact.label}</span>
+          <span aria-hidden="true">●</span>
+        </div>
+        <div class="artifact-body">
+          <p class="artifact-title">{site.artifact.title}</p>
+          <p class="artifact-input">{site.artifact.input}</p>
+          <p class="artifact-output">{site.artifact.output}</p>
+          <ul>{site.artifact.meta.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </article>
+    </section>
+
+    <section id="how" class="shell capabilities" aria-labelledby="capabilities-title">
+      <div class="section-head">
+        <p>What it does</p>
+        <h2 id="capabilities-title">Enough detail to make the decision.</h2>
+      </div>
+      <ol>
+        {site.capabilities.map((capability) => (
+          <li>
+            <span>{capability.label}</span>
+            <div><h3>{capability.title}</h3><p>{capability.copy}</p></div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <aside class="shell boundary">
+      <h2>{site.boundary.title}</h2>
+      <p>{site.boundary.copy}</p>
+    </aside>
+  </main>
+
+  <footer class="shell site-footer">
+    <p>{site.footer.note}</p>
+    <nav aria-label="Footer">
+      {site.footer.links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+  </footer>
+</SiteLayout>

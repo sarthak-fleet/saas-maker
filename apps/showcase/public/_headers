@@ -27,6 +27,12 @@
   Content-Type: text/javascript; charset=utf-8
   X-Content-Type-Options: nosniff
 
+/ai-chat-footer.js
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=60, s-maxage=300, stale-while-revalidate=86400
+  Content-Type: text/javascript; charset=utf-8
+  X-Content-Type-Options: nosniff
+
 # Astro emits hash-stable bundles under /_astro/.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable

@@ -8,7 +8,7 @@ web
 
 ## Users
 
-React product teams embedding a compact portfolio link surface, and visitors
+React and browser-native product teams embedding a compact portfolio link surface, and visitors
 who reach the end of one product and want to discover related work without
 leaving the current page flow.
 
@@ -26,9 +26,10 @@ crawlable first render without operating a service or waiting on a request.
 
 ## Operating Context
 
-The strip is embedded near a product footer. Consumers import the React
-component and its stylesheet, identify the current project, and may override
-its project list, accessible label, theme, speed, or catalog URL.
+The strip is embedded near a product footer. React consumers import the
+component and its stylesheet; Astro and static consumers use the browser-native
+custom element. Both identify the current project and may override the
+accessible label, theme, speed, or catalog URL.
 
 ## Capabilities and Constraints
 

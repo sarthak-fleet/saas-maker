@@ -151,8 +151,8 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 ## Features (shipped)
 
 - Curated public homepage with four products in focus and a single gateway to
-  the complete register, without duplicating the 57-project directory.
-- Deterministic 57-identity public projection consumed without private Fleet
+  the complete register, without duplicating the 55-project directory.
+- Deterministic 55-identity public projection consumed without private Fleet
   runtime access, with deny-by-default field validation.
 - Native `/ideas` catalog with 48 UI-curated ideas, decision filters, sortable
   desktop and mobile layouts, and complete 140-record JSON/Markdown archives;

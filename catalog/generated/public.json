@@ -38,7 +38,7 @@
       "changelogUrl": "https://codevetter.com/changelog",
       "roadmapUrl": "https://github.com/Codevetter/codevetter/issues",
       "firstCommitAt": "2025-11-30",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "pace",
@@ -70,7 +70,7 @@
       "changelogUrl": "https://heypace.app/changelog",
       "roadmapUrl": "https://github.com/HeyPace/pace/issues",
       "firstCommitAt": "2026-07-13",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "posttrainllm",
@@ -102,7 +102,7 @@
       "changelogUrl": "https://posttrainllm.com/changelog",
       "roadmapUrl": "https://github.com/PostTrainLLM/posttrainllm/issues",
       "firstCommitAt": "2026-05-21",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "site-health",
@@ -246,7 +246,7 @@
       "repositoryUrl": "https://github.com/sass-maker/gitstat",
       "roadmapUrl": "https://github.com/sass-maker/gitstat/issues",
       "firstCommitAt": "2026-08-21",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "reel-pipeline",
@@ -275,7 +275,7 @@
       "repositoryUrl": "https://github.com/sass-maker/reel-pipeline",
       "roadmapUrl": "https://github.com/sass-maker/reel-pipeline/issues",
       "firstCommitAt": "2026-05-28",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "mobile-dev-cockpit",
@@ -293,7 +293,7 @@
       ],
       "group": "past",
       "lifecycle": "past",
-      "deployed": true,
+      "deployed": false,
       "deploymentProviders": [],
       "domains": [],
       "repositoryUrl": "https://github.com/sarthakagrawal927/mobile-dev-cockpit",
@@ -362,7 +362,7 @@
       "changelogUrl": "https://mail.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
       "firstCommitAt": "2026-02-24",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "chatgpt-memory-insights",
@@ -392,7 +392,7 @@
       "changelogUrl": "https://chatgpt.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights/issues",
       "firstCommitAt": "2026-07-28",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "free-ai",
@@ -424,7 +424,7 @@
       "changelogUrl": "https://ai-gateway.sassmaker.com/changelog",
       "roadmapUrl": "https://github.com/sass-maker/free-ai/issues",
       "firstCommitAt": "2026-02-15",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "psi-swarm",
@@ -488,7 +488,7 @@
       "changelogUrl": "https://highsignal.app/changelog",
       "roadmapUrl": "https://github.com/High-Signal-App/high-signal/issues",
       "firstCommitAt": "2026-04-25",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "everythingrated",
@@ -518,7 +518,7 @@
       "repositoryUrl": "https://github.com/High-Signal-App/everythingrated",
       "roadmapUrl": "https://github.com/High-Signal-App/everythingrated/issues",
       "firstCommitAt": "2026-04-26",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "research-papers",
@@ -549,7 +549,7 @@
       "changelogUrl": "https://papers.highsignal.app/changelog",
       "roadmapUrl": "https://github.com/High-Signal-App/research-papers/issues",
       "firstCommitAt": "2026-05-30",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "materia",
@@ -579,7 +579,7 @@
       "repositoryUrl": "https://github.com/Significant-Hobbies/materia",
       "roadmapUrl": "https://github.com/Significant-Hobbies/materia/issues",
       "firstCommitAt": "2026-06-21",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "knowledge-base",
@@ -613,7 +613,7 @@
       "changelogUrl": "https://knowledgebase.sassmaker.com/changelog",
       "roadmapUrl": "https://github.com/sass-maker/knowledge-base/issues",
       "firstCommitAt": "2026-05-27",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "significanthobbies",
@@ -679,7 +679,7 @@
       "changelogUrl": "https://india-standards.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/india-standards/issues",
       "firstCommitAt": "2026-07-27",
-      "latestCommitAt": "2026-08-21"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "anime-list",
@@ -712,7 +712,7 @@
       "changelogUrl": "https://anime.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/anime-list/issues",
       "firstCommitAt": "2025-02-16",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "chess",
@@ -774,7 +774,7 @@
       "changelogUrl": "https://tv.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/looptv/issues",
       "firstCommitAt": "2026-04-04",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "reader",
@@ -806,7 +806,7 @@
       "changelogUrl": "https://read.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/reader/issues",
       "firstCommitAt": "2025-11-16",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "swe-interview-prep",
@@ -837,7 +837,7 @@
       "changelogUrl": "https://learn.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/swe-interview-prep/issues",
       "firstCommitAt": "2026-02-08",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "calorie",
@@ -1019,7 +1019,7 @@
       "changelogUrl": "https://rolepatch.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/rolepatch/issues",
       "firstCommitAt": "2026-02-23",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "karte",
@@ -1052,7 +1052,7 @@
       "changelogUrl": "https://karte.cc/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/karte/issues",
       "firstCommitAt": "2026-03-05",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "starboard",
@@ -1084,7 +1084,7 @@
       "changelogUrl": "https://starboard.codevetter.com/changelog",
       "roadmapUrl": "https://github.com/Codevetter/starboard/issues",
       "firstCommitAt": "2026-02-22",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "ai-game",
@@ -1115,7 +1115,7 @@
       "repositoryUrl": "https://github.com/sarthakagrawal927/aliveville",
       "roadmapUrl": "https://github.com/sarthakagrawal927/aliveville/issues",
       "firstCommitAt": "2026-05-03",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "protein-index",
@@ -1146,7 +1146,7 @@
       "repositoryUrl": "https://github.com/Significant-Hobbies/protein-index-resilience",
       "roadmapUrl": "https://github.com/Significant-Hobbies/protein-index-resilience/issues",
       "firstCommitAt": "2026-07-15",
-      "latestCommitAt": "2026-07-25"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "veg-protein-food",
@@ -1174,7 +1174,7 @@
       "repositoryUrl": "https://github.com/Significant-Hobbies/veg-protein-food",
       "roadmapUrl": "https://github.com/Significant-Hobbies/veg-protein-food/issues",
       "firstCommitAt": "2026-08-15",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "app-health",
@@ -1207,7 +1207,7 @@
       "changelogUrl": "https://health.sassmaker.com/changelog",
       "roadmapUrl": "https://github.com/sass-maker/app-health/issues",
       "firstCommitAt": "2026-07-20",
-      "latestCommitAt": "2026-08-21"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "mashup",
@@ -1266,7 +1266,7 @@
       "changelogUrl": "https://motion.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/motion/issues",
       "firstCommitAt": "2026-08-17",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "truehire",
@@ -1291,35 +1291,7 @@
       "repositoryUrl": "https://github.com/sarthakagrawal927/truehire",
       "roadmapUrl": "https://github.com/sarthakagrawal927/truehire/issues",
       "firstCommitAt": "2026-04-24",
-      "latestCommitAt": "2026-07-20"
-    },
-    {
-      "id": "today-little-log",
-      "name": "Today Little Log",
-      "description": "A small daily logging experiment later folded into other work.",
-      "kind": "experiment",
-      "form": "Personal PWA",
-      "platforms": [
-        "Web",
-        "Mobile"
-      ],
-      "technologies": [
-        "React",
-        "Vite",
-        "TypeScript",
-        "Cloudflare"
-      ],
-      "group": "past",
-      "lifecycle": "past",
-      "deployed": false,
-      "deploymentProviders": [
-        "Cloudflare Pages"
-      ],
-      "domains": [],
-      "repositoryUrl": "https://github.com/sarthakagrawal927/today-little-log",
-      "roadmapUrl": "https://github.com/sarthakagrawal927/today-little-log/issues",
-      "firstCommitAt": "2025-12-03",
-      "latestCommitAt": "2026-07-03"
+      "latestCommitAt": "2026-08-02"
     },
     {
       "id": "open-historia",
@@ -1349,7 +1321,7 @@
       "repositoryUrl": "https://github.com/sarthakagrawal927/open-historia",
       "roadmapUrl": "https://github.com/sarthakagrawal927/open-historia/issues",
       "firstCommitAt": "2026-02-08",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "companion-robot",
@@ -1377,28 +1349,6 @@
       "roadmapUrl": "https://github.com/HeyPace/companion-robot/issues",
       "firstCommitAt": "2026-06-25",
       "latestCommitAt": "2026-07-17"
-    },
-    {
-      "id": "elves-hq",
-      "name": "Elves HQ",
-      "description": "A past collaborative-agent interface experiment retained for reference.",
-      "kind": "experiment",
-      "form": "Web experiment",
-      "platforms": [
-        "Web"
-      ],
-      "technologies": [
-        "React",
-        "Vite",
-        "TypeScript"
-      ],
-      "group": "past",
-      "lifecycle": "past",
-      "deployed": false,
-      "deploymentProviders": [],
-      "domains": [],
-      "firstCommitAt": "2026-07-06",
-      "latestCommitAt": "2026-07-25"
     },
     {
       "id": "forecast-lab",
@@ -1454,7 +1404,7 @@
       "repositoryUrl": "https://github.com/sarthakagrawal927/web-playables",
       "roadmapUrl": "https://github.com/sarthakagrawal927/web-playables/issues",
       "firstCommitAt": "2026-07-10",
-      "latestCommitAt": "2026-08-22"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "what-it-takes-to-win",
@@ -1484,7 +1434,7 @@
       "changelogUrl": "https://paths.significanthobbies.com/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win/issues",
       "firstCommitAt": "2026-07-21",
-      "latestCommitAt": "2026-08-21"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "sarthakagrawal-personal",
@@ -1544,7 +1494,7 @@
       ],
       "url": "https://office-os.sassmaker.com",
       "firstCommitAt": "2026-08-09",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "indulge",
@@ -1604,7 +1554,7 @@
       ],
       "url": "https://local-ai-video-studio.sassmaker.com",
       "firstCommitAt": "2026-08-09",
-      "latestCommitAt": "2026-08-21"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "field-track",
@@ -1664,7 +1614,7 @@
       ],
       "url": "https://reddit-insights.highsignal.app",
       "firstCommitAt": "2026-08-07",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-23"
     },
     {
       "id": "verified-bases",
@@ -1686,8 +1636,10 @@
         "Cloudflare Workers"
       ],
       "domains": [],
-      "firstCommitAt": null,
-      "latestCommitAt": null
+      "repositoryUrl": "https://github.com/sass-maker/verified-bases",
+      "roadmapUrl": "https://github.com/sass-maker/verified-bases/issues",
+      "firstCommitAt": "2026-06-16",
+      "latestCommitAt": "2026-07-18"
     },
     {
       "id": "anchor",
@@ -2279,13 +2231,6 @@
       "description": "Searchable protein and nutrition reference.",
       "lifecycle": "past",
       "repositoryUrl": "https://github.com/Significant-Hobbies/protein-index-resilience"
-    },
-    {
-      "id": "today-little-log",
-      "name": "Today Little Log",
-      "description": "A small daily logging experiment later folded into other work.",
-      "lifecycle": "past",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/today-little-log"
     },
     {
       "id": "truehire",

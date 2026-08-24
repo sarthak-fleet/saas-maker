@@ -39,6 +39,7 @@ const source = String.raw`(() => {
       --portfolio-strip-muted: #a8a29e;
       --portfolio-strip-border: #30302f;
     }
+    :host([integrated]) { border-block: 0; background: transparent; }
     *, *::before, *::after { box-sizing: border-box; }
     .inner { position: relative; display: flex; min-height: 2.75rem; align-items: center; padding: 0 1rem; }
     a:focus-visible { outline: 2px solid var(--portfolio-strip-focus); outline-offset: 2px; }
