@@ -21,7 +21,6 @@ fi
 FILES=(
   "saas-maker/tooling/templates/clarity-snippet.html"
   "codevetter/apps/landing-page-astro/src/layouts/Layout.astro"
-  "indulge/src/layouts/SiteLayout.astro"
   "posttrainllm/browser/src/layouts/Default.astro"
   "reddit-insights/scripts/build-pages.mjs"
   "significanthobbies/src/app/layout.tsx"

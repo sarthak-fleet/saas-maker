@@ -63,6 +63,21 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     ]
   },
   {
+    "id": "anchor",
+    "name": "Anchor",
+    "url": "https://anchor.significanthobbies.com",
+    "description": "A local-first day planner and focus timer for Mac, iPhone, and Apple Watch that explains the gap between the schedule you planned and the day you lived.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "personal",
+    "maturity": "in-progress",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
+      "anchor.significanthobbies.com"
+    ]
+  },
+  {
     "id": "anime-list",
     "name": "Anime List",
     "url": "https://anime.significanthobbies.com",
@@ -165,21 +180,6 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "pillarId": "build",
     "domains": [
       "ai-gateway.sassmaker.com"
-    ]
-  },
-  {
-    "id": "indulge",
-    "name": "Habits",
-    "url": "https://habits.significanthobbies.com",
-    "description": "A private habit practice for noticing patterns, making intentional trades, and building better defaults.",
-    "tier": "active",
-    "priority": "P2",
-    "category": "personal",
-    "maturity": "in-progress",
-    "spotlight": false,
-    "pillarId": "learn",
-    "domains": [
-      "habits.significanthobbies.com"
     ]
   },
   {
@@ -456,7 +456,7 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "id": "significanthobbies",
     "name": "Significant Hobbies",
     "url": "https://significanthobbies.com",
-    "description": "The shared Hub for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
+    "description": "The shared Hub for Live, Journal, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
     "tier": "secondary",
     "priority": "P2",
     "category": "personal",

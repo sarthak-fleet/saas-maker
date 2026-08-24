@@ -1497,36 +1497,6 @@
       "latestCommitAt": "2026-08-23"
     },
     {
-      "id": "indulge",
-      "name": "Habits / Indulge",
-      "description": "A retired behavior-change app whose illustrated onboarding and non-moralizing replacement loop now live in Anchor; public and Apple identities remain for compatibility.",
-      "kind": "product",
-      "form": "iOS app",
-      "platforms": [
-        "iOS",
-        "Web"
-      ],
-      "technologies": [
-        "SwiftUI",
-        "Astro",
-        "Cloudflare Pages"
-      ],
-      "group": "past",
-      "lifecycle": "past",
-      "deployed": true,
-      "deploymentProviders": [
-        "Cloudflare Pages",
-        "Apple App Store Connect"
-      ],
-      "domains": [
-        "habits.significanthobbies.com",
-        "indulge.significanthobbies.com"
-      ],
-      "url": "https://habits.significanthobbies.com",
-      "firstCommitAt": "2026-08-17",
-      "latestCommitAt": "2026-08-23"
-    },
-    {
       "id": "local-ai-video-studio",
       "name": "Local AI Video Studio",
       "description": "A local-first Mac studio for comparing reproducible video-effect variants before export.",
