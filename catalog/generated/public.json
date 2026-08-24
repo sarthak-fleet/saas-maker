@@ -507,6 +507,38 @@
       "latestCommitAt": "2026-08-23"
     },
     {
+      "id": "on-record",
+      "name": "High Signal Podcasts",
+      "description": "A source-backed index of what notable people said on podcasts, including books and tools they use.",
+      "makerNote": "I’m building High Signal Podcasts to extract useful insights, recommendations, and emerging technology signals from top podcasts without listening to every episode.",
+      "kind": "product",
+      "form": "Podcast intelligence web app",
+      "platforms": [
+        "Web",
+        "API"
+      ],
+      "technologies": [
+        "Astro",
+        "Hono",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "current",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "podcasts.highsignal.app"
+      ],
+      "url": "https://podcasts.highsignal.app",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/on-record",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/on-record/issues",
+      "firstCommitAt": "2026-08-24",
+      "latestCommitAt": "2026-08-25"
+    },
+    {
       "id": "everythingrated",
       "name": "EverythingRated",
       "description": "A general-purpose rating and comparison experiment.",
