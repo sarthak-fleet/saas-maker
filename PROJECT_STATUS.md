@@ -24,6 +24,14 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-24 — Public project profiles expanded:** Added one generated HTML
+  and Markdown profile for each of the 53 non-directory identities, while SaaS
+  Maker remains canonical at `/`. Every profile leads with a reviewed
+  first-person maker note, then exposes privacy-safe product anatomy and public
+  evidence. `/projects`, sitemap, JSON, and agent discovery share the same
+  schema-v4 projection. `/p/saas-maker` redirects remain intact. No deployment
+  or npm publication ran.
+
 - **2026-08-23 — Public interior theme unified:** Applied the homepage's
   limestone-and-steel workshop system to Ideas, Tools, Learnings, and the
   learning article; simplified navigation to Products, Ideas, Tools, Learnings,
@@ -151,9 +159,12 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 ## Features (shipped)
 
 - Curated public homepage with four products in focus and a single gateway to
-  the complete register, without duplicating the 55-project directory.
-- Deterministic 55-identity public projection consumed without private Fleet
+  the complete register, without duplicating the 54-project directory.
+- Deterministic 54-identity public projection consumed without private Fleet
   runtime access, with deny-by-default field validation.
+- Expanded project profiles with a reviewed first-person maker note, public
+  anatomy, canonical destinations, public repository evidence, matching
+  Markdown, and honest local-only/no-public-destination states.
 - Native `/ideas` catalog with 48 UI-curated ideas, decision filters, sortable
   desktop and mobile layouts, and complete 140-record JSON/Markdown archives;
   `starterstory` records remain in the archives but are not rendered in the UI.

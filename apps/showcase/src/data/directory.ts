@@ -6,6 +6,7 @@ export interface DirectoryProject {
   id: string;
   name: string;
   description: string;
+  makerNote: string;
   kind: 'product' | 'platform' | 'experiment';
   form: string;
   platforms: string[];

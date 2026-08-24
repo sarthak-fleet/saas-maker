@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "generatedFrom": [
     "site-health/apps/backend/config/projects.json"
   ],
@@ -9,6 +9,7 @@
       "id": "codevetter",
       "name": "CodeVetter",
       "description": "AI code review platform — desktop-first, works offline.",
+      "makerNote": "I built CodeVetter to make reviewing AI-generated code rigorous without giving up a local-first workflow.",
       "kind": "product",
       "form": "Desktop app",
       "platforms": [
@@ -44,6 +45,7 @@
       "id": "pace",
       "name": "HeyPace",
       "description": "Local-only macOS voice agent that can understand what is on your screen.",
+      "makerNote": "I wanted a fast, privacy-first Mac assistant that could understand what is on my screen while keeping the work local.",
       "kind": "product",
       "form": "macOS app",
       "platforms": [
@@ -76,6 +78,7 @@
       "id": "posttrainllm",
       "name": "PostTrainLLM",
       "description": "A local factory for training, evaluating, and running specialist language models.",
+      "makerNote": "I use PostTrainLLM to explore local model training and turn those experiments into repeatable recipes for specialist models.",
       "kind": "product",
       "form": "Research platform",
       "platforms": [
@@ -108,6 +111,7 @@
       "id": "site-health",
       "name": "Site Health",
       "description": "A local portfolio dashboard for domains, performance, search, and AI visibility evidence.",
+      "makerNote": "I built Site Health because I needed one clear view of Fleet’s domains, performance, search visibility, and AI visibility.",
       "kind": "platform",
       "form": "Local dashboard",
       "platforms": [
@@ -131,6 +135,7 @@
       "id": "live",
       "name": "Live",
       "description": "The original Significant Hobbies experience, now independently owned while preserving its data and authentication boundary.",
+      "makerNote": "I wanted a product that helps people live more intentionally through goals, possibilities, and things worth anticipating.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -162,6 +167,7 @@
       "id": "chatgpt-connections",
       "name": "ChatGPT Connections",
       "description": "A read-only MCP gateway that exposes selected public Fleet data to ChatGPT connections.",
+      "makerNote": "I had many projects but no solid way to connect them to ChatGPT, so I built a selective gateway for that.",
       "kind": "platform",
       "form": "MCP service",
       "platforms": [
@@ -189,6 +195,7 @@
       "id": "saas-maker",
       "name": "SaaS Maker",
       "description": "Software as a specialized service: a living studio of focused products built for particular problems and maintained in public.",
+      "makerNote": "I use SaaS Maker as the public home for Fleet and as a workshop for reusable feedback, workflow, and automation tools.",
       "kind": "product",
       "form": "Web directory and service",
       "platforms": [
@@ -222,6 +229,7 @@
       "id": "gitstat",
       "name": "GitStat",
       "description": "A GitHub analytics dashboard for contribution history, code churn, collaboration, and AI-assisted work.",
+      "makerNote": "I built GitStat to understand how my time and code churn are distributed across a large collection of repositories.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -252,6 +260,7 @@
       "id": "reel-pipeline",
       "name": "Reel Pipeline",
       "description": "A cost-bounded pipeline for planning, producing, and retaining short-form video artifacts.",
+      "makerNote": "I wanted to automate the repetitive work of making and publishing useful product videos.",
       "kind": "product",
       "form": "Video pipeline",
       "platforms": [
@@ -281,6 +290,7 @@
       "id": "mobile-dev-cockpit",
       "name": "Mobile Dev Cockpit",
       "description": "A parked mobile supervision client retained for possible future reactivation.",
+      "makerNote": "I explored whether development work running on a desktop could be supervised clearly from a phone.",
       "kind": "product",
       "form": "Mobile app",
       "platforms": [
@@ -305,6 +315,7 @@
       "id": "drank",
       "name": "Drank",
       "description": "Domain Rating intelligence for product, SEO, and market research.",
+      "makerNote": "I built DRank when domain-rating data became accessible enough to track the strength of my own domains over time.",
       "kind": "product",
       "form": "Web tool",
       "platforms": [
@@ -336,6 +347,7 @@
       "id": "email-manager",
       "name": "Email Manager",
       "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
+      "makerNote": "Gmail did not help me see who was filling my inbox, so I built a clearer way to understand volume and unsubscribe.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -368,6 +380,7 @@
       "id": "chatgpt-memory-insights",
       "name": "Memory Map",
       "description": "Turn a ChatGPT export into a private, browser-computed map of recurring themes, facts, and conversations.",
+      "makerNote": "I wanted to learn what my exported AI conversations reveal about my themes, emotions, memory, and personal change.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -398,6 +411,7 @@
       "id": "free-ai",
       "name": "Free AI",
       "description": "OpenAI-compatible gateway across free-tier model providers.",
+      "makerNote": "I built Free AI to make genuinely useful free model capacity easier to discover and use through one resilient interface.",
       "kind": "platform",
       "form": "API gateway",
       "platforms": [
@@ -430,6 +444,7 @@
       "id": "psi-swarm",
       "name": "PSI Swarm",
       "description": "Repeated Lighthouse distributions for honest website performance tracking.",
+      "makerNote": "I wanted repeatable evidence of how my products perform under real Lighthouse conditions, not a single flattering test.",
       "kind": "platform",
       "form": "Performance platform",
       "platforms": [
@@ -462,6 +477,7 @@
       "id": "high-signal",
       "name": "High Signal",
       "description": "Evidence-backed daily intelligence across technology, startups, finance, and public markets.",
+      "makerNote": "I built High Signal to combine scattered news and data sources and extract the signals that are actually useful.",
       "kind": "product",
       "form": "Intelligence web app",
       "platforms": [
@@ -494,6 +510,7 @@
       "id": "everythingrated",
       "name": "EverythingRated",
       "description": "A general-purpose rating and comparison experiment.",
+      "makerNote": "I have long wanted a place where people can make lists and rate anything, while recognizing that its social loop needs real care.",
       "kind": "experiment",
       "form": "Ratings experiment",
       "platforms": [
@@ -524,6 +541,7 @@
       "id": "research-papers",
       "name": "Research Papers",
       "description": "Academic paper discovery and a structured research data asset.",
+      "makerNote": "I wanted one large, searchable research library where retrieval could help me understand what already exists in a market.",
       "kind": "product",
       "form": "Research library",
       "platforms": [
@@ -555,6 +573,7 @@
       "id": "materia",
       "name": "Materia",
       "description": "Evidence-graded remedy reference organized by body system.",
+      "makerNote": "I want to make anatomy explorable and connect body concerns to clear, evidence-based information about treatments and remedies.",
       "kind": "experiment",
       "form": "Interactive experiment",
       "platforms": [
@@ -585,6 +604,7 @@
       "id": "knowledge-base",
       "name": "Knowledge Base",
       "description": "Private agent search over specialized corpora with ranked citations, provenance, and schema-aware retrieval.",
+      "makerNote": "I built Knowledge Base as the private, cited retrieval layer that other Fleet applications can rely on.",
       "kind": "platform",
       "form": "Knowledge platform",
       "platforms": [
@@ -619,6 +639,7 @@
       "id": "significanthobbies",
       "name": "Significant Hobbies",
       "description": "The shared Hub and backend for six maintained Significant Hobbies applications, plus retained compatibility data domains.",
+      "makerNote": "I wanted one Hub for my maintained personal apps while letting every app keep ownership of its own data.",
       "kind": "product",
       "form": "Personal-app Hub",
       "platforms": [
@@ -652,6 +673,7 @@
       "id": "india-standards",
       "name": "India Standards",
       "description": "A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.",
+      "makerNote": "I wanted official data to provide a more grounded answer to how a person is doing in the Indian context.",
       "kind": "product",
       "form": "Reference web app",
       "platforms": [
@@ -685,6 +707,7 @@
       "id": "anime-list",
       "name": "Anime List",
       "description": "Anime and manga discovery with multi-axis filtering and personal watchlists.",
+      "makerNote": "I wanted better anime filtering and discovery than the standard catalog experience, with a watchlist that works for me.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -718,6 +741,7 @@
       "id": "chess",
       "name": "Chess Coach",
       "description": "Browser chess against Stockfish with optional AI move coaching.",
+      "makerNote": "I built Chess to explore whether a local AI agent could become a practical, patient partner for improving my game.",
       "kind": "experiment",
       "form": "Web game",
       "platforms": [
@@ -748,6 +772,7 @@
       "id": "looptv",
       "name": "LoopTV",
       "description": "A lean-back, TV-style random video player for curated channels.",
+      "makerNote": "I wanted a more controlled and curated way to watch YouTube, shaped like television rather than an endless feed.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -780,6 +805,7 @@
       "id": "reader",
       "name": "Reader",
       "description": "Capture, annotate, revisit, and discuss saved reading.",
+      "makerNote": "I wanted any article or PDF to become a focused reading and research surface instead of another forgotten browser tab.",
       "kind": "product",
       "form": "Reading web app",
       "platforms": [
@@ -812,6 +838,7 @@
       "id": "swe-interview-prep",
       "name": "SWE Interview Prep",
       "description": "A learning OS for software-engineering interview practice.",
+      "makerNote": "I built this as a learning-by-doing system that combines Pomodoro, Feynman, retrieval practice, and practical roadmaps.",
       "kind": "product",
       "form": "Learning web app",
       "platforms": [
@@ -843,6 +870,7 @@
       "id": "calorie",
       "name": "Calorie",
       "description": "A private, local-first food, water, and weight journal with transparent timing guidance.",
+      "makerNote": "I wanted one personal system for weight loss that connects food logging, fasting, exercise timing, and daily performance.",
       "kind": "product",
       "form": "iOS app",
       "platforms": [
@@ -876,6 +904,7 @@
       "id": "setline",
       "name": "Setline",
       "description": "An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.",
+      "makerNote": "I built Setline to make workouts easier to execute one set at a time, with timing and performance kept accurate.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -907,6 +936,7 @@
       "id": "journal",
       "name": "Journal",
       "description": "A private daily journal and personal archive with an independently owned native codebase.",
+      "makerNote": "I believe journaling is an important habit, so I wanted a durable journal that fits naturally inside the Hub.",
       "kind": "product",
       "form": "iOS app",
       "platforms": [
@@ -940,6 +970,7 @@
       "id": "kith",
       "name": "Kith",
       "description": "A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.",
+      "makerNote": "I wanted a beautiful personal relationship-memory app that helps me stay more thoughtful about the people in my life.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -971,6 +1002,7 @@
       "id": "ios-landings",
       "name": "iOS landings",
       "description": "Shared Astro factory that builds separate static sites for Significant Hobbies iOS apps.",
+      "makerNote": "I built one reusable landing-page engine so each native Significant Hobbies app does not need to reinvent its public home.",
       "kind": "platform",
       "form": "Landing-site factory",
       "platforms": [
@@ -993,6 +1025,7 @@
       "id": "rolepatch",
       "name": "RolePatch",
       "description": "AI-assisted resume tailoring, role research, and interview preparation.",
+      "makerNote": "I wanted a focused way to tailor a resume and its supporting material to the actual job description.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -1025,6 +1058,7 @@
       "id": "karte",
       "name": "Karte",
       "description": "An AI link-in-bio that turns a profile into a conversation.",
+      "makerNote": "I wanted a link-in-bio surface that could grow into something more personal: a greeting card, profile, and small agent.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -1058,6 +1092,7 @@
       "id": "starboard",
       "name": "Starboard",
       "description": "Organize and semantically search your GitHub stars.",
+      "makerNote": "GitHub Stars stopped working for me at scale, so I built a better personal interface for exploring what I had saved.",
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -1090,6 +1125,7 @@
       "id": "ai-game",
       "name": "AliveVille",
       "description": "Persistent AI world and multi-agent simulation experiments.",
+      "makerNote": "I wanted to create a long-running world where AI characters remember, form grudges, make choices, and live through open-ended conflict.",
       "kind": "experiment",
       "form": "Web game",
       "platforms": [
@@ -1121,6 +1157,7 @@
       "id": "protein-index",
       "name": "Protein Index",
       "description": "Searchable protein and nutrition reference.",
+      "makerNote": "I wanted a clear catalog for comparing the protein products available in India, despite the difficulty of reliable data.",
       "kind": "experiment",
       "form": "Data API and web app",
       "platforms": [
@@ -1152,6 +1189,7 @@
       "id": "veg-protein-food",
       "name": "Recipe Index",
       "description": "A searchable directory of vegetarian protein foods and practical nutrition comparisons.",
+      "makerNote": "I wanted a practical collection of higher-protein recipes that works with ingredients people actually use in Indian kitchens.",
       "kind": "experiment",
       "form": "Food directory",
       "platforms": [
@@ -1180,6 +1218,7 @@
       "id": "app-health",
       "name": "App Health",
       "description": "Privacy-first endpoint health for Node, Go, and OpenTelemetry services.",
+      "makerNote": "I built App Health because checking Sentry, PostHog, Slack, and cloud consoles separately made basic product health too fragmented.",
       "kind": "product",
       "form": "Monitoring service",
       "platforms": [
@@ -1213,6 +1252,7 @@
       "id": "mashup",
       "name": "Mashup",
       "description": "A local-first tool that turns owned media archives into inspectable multi-clip edits.",
+      "makerNote": "I wanted a creator’s archive to become coherent topic-specific compilations instead of a pile of isolated clips.",
       "kind": "experiment",
       "form": "Local media tool",
       "platforms": [
@@ -1239,6 +1279,7 @@
       "id": "motion",
       "name": "Motion",
       "description": "Use your body as the controller for an iPhone-hosted game that can mirror to a larger screen.",
+      "makerNote": "I wanted body movement captured by a phone to become playful games on a television—and a workout without feeling like one.",
       "kind": "product",
       "form": "iOS game",
       "platforms": [
@@ -1272,6 +1313,7 @@
       "id": "truehire",
       "name": "TrueHire",
       "description": "Earlier resume and hiring workflow superseded by RolePatch.",
+      "makerNote": "I explored whether candidates could be ranked more transparently using verified evidence from their public GitHub work.",
       "kind": "experiment",
       "form": "Hiring experiment",
       "platforms": [
@@ -1297,6 +1339,7 @@
       "id": "open-historia",
       "name": "Open Historia",
       "description": "Interactive historical storytelling and world simulation.",
+      "makerNote": "I wanted a local, credit-free version of an AI grand-strategy game where long-form memory could make countries feel alive.",
       "kind": "experiment",
       "form": "Strategy web game",
       "platforms": [
@@ -1327,6 +1370,7 @@
       "id": "companion-robot",
       "name": "Companion Robot",
       "description": "Earlier companion robotics and embodied-agent exploration.",
+      "makerNote": "I am keeping this as a future exploration of what a genuinely useful embodied AI companion could become.",
       "kind": "experiment",
       "form": "Hardware experiment",
       "platforms": [
@@ -1354,6 +1398,7 @@
       "id": "forecast-lab",
       "name": "Forecast Lab",
       "description": "Forecasting experiments and evaluation tooling.",
+      "makerNote": "I wanted to learn forecasting by modeling how regional, temporal, and behavioral signals shape commerce demand.",
       "kind": "experiment",
       "form": "Research toolkit",
       "platforms": [
@@ -1380,6 +1425,7 @@
       "id": "web-playables",
       "name": "Web Playables",
       "description": "Small browser-playable game experiments.",
+      "makerNote": "I built this laboratory to understand how idle and HTML-based games are designed, shipped, and distributed.",
       "kind": "experiment",
       "form": "Game collection",
       "platforms": [
@@ -1410,6 +1456,7 @@
       "id": "what-it-takes-to-win",
       "name": "What It Takes to Win",
       "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
+      "makerNote": "I wanted to study the real advantages behind success and replace unhelpful comparison with evidence-based understanding.",
       "kind": "product",
       "form": "Research publication",
       "platforms": [
@@ -1440,6 +1487,7 @@
       "id": "sarthakagrawal-personal",
       "name": "Sarthak Agrawal",
       "description": "Personal portfolio of Sarthak Agrawal — AI infrastructure and product engineer.",
+      "makerNote": "I maintain a personal website because I need one durable, accurate public record of my work and professional identity.",
       "kind": "product",
       "form": "Portfolio website",
       "platforms": [
@@ -1471,6 +1519,7 @@
       "id": "agent-office",
       "name": "Office OS",
       "description": "A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.",
+      "makerNote": "I wanted to explore a company where humans and non-coding agents each own outcomes and keep working toward them over time.",
       "kind": "product",
       "form": "macOS app",
       "platforms": [
@@ -1500,6 +1549,7 @@
       "id": "local-ai-video-studio",
       "name": "Local AI Video Studio",
       "description": "A local-first Mac studio for comparing reproducible video-effect variants before export.",
+      "makerNote": "I wanted editing intent to choose efficient local video tools before defaulting to expensive generative video.",
       "kind": "experiment",
       "form": "macOS app",
       "platforms": [
@@ -1530,6 +1580,7 @@
       "id": "field-track",
       "name": "Field Track",
       "description": "A private field-location system for managed Android devices and team-scoped route review.",
+      "makerNote": "I started Field Track for my father: an employee-controlled way to share field location only when work requires it.",
       "kind": "product",
       "form": "Android app and dashboard",
       "platforms": [
@@ -1561,6 +1612,7 @@
       "id": "reddit-insights",
       "name": "Reddit Insights",
       "description": "A bounded research collector for subreddit evidence and recurring insight snapshots.",
+      "makerNote": "I wanted to understand how the signals and emotions inside a subreddit change over time, even though historical data is difficult to obtain.",
       "kind": "experiment",
       "form": "Research collector",
       "platforms": [
@@ -1590,6 +1642,7 @@
       "id": "verified-bases",
       "name": "Verified Bases",
       "description": "A retained research-data identity with no retained local Git history or standalone public destination.",
+      "makerNote": "I explored whether the native codebases I already build could become inexpensive, verified templates for other makers.",
       "kind": "experiment",
       "form": "Research dataset",
       "platforms": [
@@ -1615,6 +1668,7 @@
       "id": "anchor",
       "name": "Anchor",
       "description": "A local-first day planner and focus timer for Mac, iPhone, and Apple Watch that explains the gap between the schedule you planned and the day you lived.",
+      "makerNote": "I wanted a realistic daily planner that could help me follow the day and explain why the lived plan diverged from the intended one.",
       "kind": "product",
       "form": "Apple app",
       "platforms": [

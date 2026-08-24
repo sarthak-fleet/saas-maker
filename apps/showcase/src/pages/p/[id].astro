@@ -2,42 +2,82 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import { PAGED_PRODUCTS, type RegistryProduct } from '../../data/registry';
+import { DIRECTORY_PROJECTS, type DirectoryProject } from '../../data/directory';
 
 export function getStaticPaths() {
-  return PAGED_PRODUCTS.map((product) => ({
+  return DIRECTORY_PROJECTS.filter((product) => product.id !== 'saas-maker').map((product) => ({
     params: { id: product.id },
     props: { product },
   }));
 }
 
 interface Props {
-  product: RegistryProduct;
+  product: DirectoryProject;
 }
 
 const { product } = Astro.props as Props;
-const links = product.productLinks ?? [];
-const progressLinks = links.filter((link) => ['Changelog', 'Roadmap', 'Source'].includes(link.title));
-const host = product.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const profileUrl = `https://sassmaker.com/p/${product.id}`;
+const publicLinks = [
+  ...(product.changelogUrl
+    ? [{ title: 'Changelog', url: product.changelogUrl, description: 'Product-owned release history' }]
+    : []),
+  ...(product.roadmapUrl
+    ? [{ title: 'Issues', url: product.roadmapUrl, description: 'Open work in GitHub Issues' }]
+    : []),
+  ...(product.repositoryUrl
+    ? [{ title: 'Source', url: product.repositoryUrl, description: 'Canonical public repository' }]
+    : []),
+];
+const primaryUrl = product.url ?? product.repositoryUrl;
+const primaryHost = primaryUrl?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const primaryLabel = product.url ? 'Open product' : product.repositoryUrl ? 'Open source' : 'Public status';
+const groupLabel = {
+  current: 'Current work',
+  supporting: 'Supporting work',
+  past: 'Past project',
+}[product.group];
+const deploymentLabel = product.deployed
+  ? product.group === 'past'
+    ? 'Live archive'
+    : 'Deployed'
+  : product.lifecycle === 'local-only' || product.platforms.includes('Local')
+    ? 'Local only'
+    : 'Not deployed';
+const formatDate = (date: string | null) =>
+  date
+    ? new Intl.DateTimeFormat('en', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(`${date}T00:00:00Z`))
+    : 'Not retained';
+const hasPublicEvidence = publicLinks.length > 0;
 const productJsonLd = {
   '@context': 'https://schema.org',
-  '@type': product.schemaType ?? 'SoftwareApplication',
+  '@type': 'SoftwareApplication',
   name: product.name,
-  url: product.url,
-  description: product.summary,
-  ...(product.sameAs ? { sameAs: product.sameAs } : {}),
-  ...(product.applicationCategory ? { applicationCategory: product.applicationCategory } : {}),
+  url: profileUrl,
+  description: product.description,
+  ...(primaryUrl || product.repositoryUrl
+    ? {
+        sameAs: [primaryUrl, product.repositoryUrl].filter(
+          (value, index, values): value is string => Boolean(value) && values.indexOf(value) === index
+        ),
+      }
+    : {}),
+  applicationCategory: product.form,
 };
 ---
 
-<Layout title={`${product.name} — SaaS Maker directory`} description={product.summary}>
+<Layout title={`${product.name} — SaaS Maker directory`} description={product.description}>
   <script type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
   <!--
-  THESIS: A product detail should feel like stepping closer to the workshop wall, not leaving it for a generic dark profile.
-  OWN-WORLD: Limestone daylight, black steel mullions, clear and seeded panes, with one cobalt action pane and one amber evidence pane.
-  STORY: Identify the product, open its canonical home, inspect maintained public evidence, then return to the full catalog.
+  THESIS: A project detail should reveal the maker's reason before it inventories the machinery, never collapse into an operations dossier.
+  OWN-WORLD: Limestone daylight, black steel mullions, clear and seeded panes, with cobalt action, oxblood rationale, and amber evidence panes.
+  STORY: Identify the project, understand why it exists, inspect its public anatomy and evidence, then return to the complete register.
   FIRST VIEWPORT: A slim directory rail sits above one large identity pane and one saturated canonical-product action.
-  FORM: Product specimen elevation, owner-delegated extension of the established monumental-wall direction.
+  FORM: Product specimen elevation, owner-approved preserve-lane extension of the established monumental-wall direction.
   -->
   <div class="workshop-world">
     <Nav />
@@ -45,34 +85,73 @@ const productJsonLd = {
     <main class="project" id="main-content">
       <div class="project-wall">
         <div class="project-back">
-          <a href="/#products">← All products</a>
-          <span>{product.stack ?? 'product'} · maintained</span>
+          <a href="/projects">← Complete register</a>
+          <span>{product.kind} · {groupLabel}</span>
         </div>
 
         <header class="project-hero">
           <div class="project-identity">
             <p class="project-folio">SaaS Maker directory</p>
             <h1>{product.name}</h1>
-            <p class="project-summary">{product.summary}</p>
+            <p class="project-summary">{product.description}</p>
           </div>
-          <a class="project-primary" href={product.url} target="_blank" rel="noopener noreferrer">
-            <span>Open product</span>
-            <strong>{host}</strong>
-            <span class="project-primary-arrow" aria-hidden="true">↗</span>
-          </a>
+          {primaryUrl ? (
+            <a class="project-primary" href={primaryUrl} target="_blank" rel="noopener noreferrer">
+              <span>{primaryLabel}</span>
+              <strong>{primaryHost}</strong>
+              <span class="project-primary-arrow" aria-hidden="true">↗</span>
+            </a>
+          ) : (
+            <div class="project-primary project-primary--quiet">
+              <span>Availability</span>
+              <strong>{deploymentLabel === 'Local only' ? 'Maintained local tool' : 'Profile only'}</strong>
+              <span>No public destination</span>
+            </div>
+          )}
         </header>
+
+        <section class="project-why" aria-labelledby="why-title">
+          <div class="project-why-title">
+            <p class="project-folio">Maker note</p>
+            <h2 id="why-title">Why I made this.</h2>
+          </div>
+          <blockquote>{product.makerNote}</blockquote>
+        </section>
+
+        <section class="project-anatomy" aria-labelledby="anatomy-title">
+          <header>
+            <p class="project-folio">Public anatomy</p>
+            <h2 id="anatomy-title">What it is made of.</h2>
+          </header>
+          <dl>
+            <div><dt>Form</dt><dd>{product.form}</dd></div>
+            <div><dt>Platforms</dt><dd>{product.platforms.join(' · ')}</dd></div>
+            <div><dt>Prominent tools</dt><dd>{product.technologies.join(' · ')}</dd></div>
+            <div>
+              <dt>Deployment</dt>
+              <dd>{deploymentLabel}</dd>
+              {product.deploymentProviders.length > 0 && <small>{product.deploymentProviders.join(' · ')}</small>}
+            </div>
+            <div><dt>First retained commit</dt><dd>{formatDate(product.firstCommitAt)}</dd></div>
+            <div><dt>Latest retained commit</dt><dd>{formatDate(product.latestCommitAt)}</dd></div>
+          </dl>
+        </section>
 
         <section class="project-progress" aria-labelledby="progress-title">
           <div class="project-section-head">
-            <p class="project-folio">Maintained evidence</p>
-            <h2 id="progress-title">Follow the work.</h2>
-            <p>Public evidence, directly from the product’s canonical repository.</p>
+            <p class="project-folio">{hasPublicEvidence ? 'Maintained evidence' : 'Public boundary'}</p>
+            <h2 id="progress-title">{hasPublicEvidence ? 'Follow the work.' : 'Private by design.'}</h2>
+            <p>
+              {hasPublicEvidence
+                ? 'Public destinations and repository evidence, when this project publishes them.'
+                : 'The project can be understood here without exposing private or local source.'}
+            </p>
           </div>
 
           <div class="project-evidence">
-            {progressLinks.length > 0 ? (
+            {publicLinks.length > 0 ? (
               <ul>
-                {progressLinks.map((link) => (
+                {publicLinks.map((link) => (
                   <li>
                     <a href={link.url} target="_blank" rel="noopener noreferrer">
                       <span>{link.title}</span>
@@ -84,7 +163,8 @@ const productJsonLd = {
               </ul>
             ) : (
               <p class="project-empty">
-                This product has a public home, but no separate repository links are published here.
+                This project does not publish repository evidence. Its reviewed rationale and
+                public anatomy remain available on this profile.
               </p>
             )}
           </div>
@@ -92,9 +172,8 @@ const productJsonLd = {
 
         <section class="project-boundary">
           <p>
-            This directory page points to {product.name}’s canonical home. Public
-            changelog, roadmap, and source links come from the product’s maintained
-            metadata when they are available.
+            Every fact here comes from the project’s reviewed public record. Private work and
+            operational controls stay private.
           </p>
         </section>
       </div>
@@ -127,7 +206,7 @@ const productJsonLd = {
     padding: 0.75rem 1.25rem;
     border-bottom: 0.375rem solid var(--workshop-steel);
     background: var(--workshop-seeded);
-    color: var(--workshop-muted);
+    color: #494842;
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -229,6 +308,101 @@ const productJsonLd = {
     box-shadow: inset 0 0 0 0.25rem rgba(255, 255, 255, 0.48);
   }
 
+  .project-primary--quiet {
+    background: var(--workshop-seeded);
+    color: var(--workshop-ink);
+  }
+
+  .project-why,
+  .project-anatomy {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.55fr) minmax(0, 1.45fr);
+    gap: 0.375rem;
+    border-bottom: 0.375rem solid var(--workshop-steel);
+    background: var(--workshop-steel);
+  }
+
+  .project-why-title,
+  .project-anatomy > header {
+    min-height: 25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .project-why-title {
+    background: var(--workshop-oxblood);
+    color: #fff;
+  }
+
+  .project-why h2,
+  .project-anatomy h2 {
+    max-width: 9ch;
+    margin-top: 1.25rem;
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .project-why blockquote {
+    min-height: 25rem;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: clamp(2.5rem, 7vw, 7rem);
+    background: #f8f4ea;
+    color: var(--workshop-ink);
+    font-size: clamp(1.8rem, 3.3vw, 3.6rem);
+    font-weight: 540;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+    text-wrap: pretty;
+  }
+
+  .project-anatomy > header {
+    background: var(--workshop-seeded);
+    color: var(--workshop-ink);
+  }
+
+  .project-anatomy dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(20, 21, 17, 0.2);
+  }
+
+  .project-anatomy dl > div {
+    min-height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: #f8f4ea;
+  }
+
+  .project-anatomy dt {
+    color: var(--workshop-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .project-anatomy dd {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .project-anatomy small {
+    color: var(--workshop-muted);
+  }
+
   .project-progress {
     display: grid;
     grid-template-columns: minmax(20rem, 0.65fr) minmax(0, 1.35fr);
@@ -259,7 +433,7 @@ const productJsonLd = {
   .project-section-head > p:last-child {
     max-width: 36ch;
     margin-top: 1.5rem;
-    color: #463513;
+    color: var(--workshop-ink);
   }
 
   .project-evidence {
@@ -339,6 +513,8 @@ const productJsonLd = {
 
   @media (max-width: 900px) {
     .project-hero,
+    .project-why,
+    .project-anatomy,
     .project-progress {
       grid-template-columns: 1fr;
     }
@@ -356,7 +532,7 @@ const productJsonLd = {
     }
 
     .project-identity {
-      min-height: min(36rem, calc(100svh - 8rem));
+      min-height: min(30rem, calc(100svh - 8rem));
       padding: 2.5rem 1.5rem;
     }
 
@@ -372,8 +548,27 @@ const productJsonLd = {
     }
 
     .project-section-head {
-      min-height: 23rem;
+      min-height: 17rem;
       padding: 2.5rem 1.5rem;
+    }
+
+    .project-why-title,
+    .project-anatomy > header {
+      min-height: 14rem;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .project-why blockquote {
+      min-height: 16rem;
+      padding: 3rem 1.5rem;
+    }
+
+    .project-anatomy dl {
+      grid-template-columns: 1fr;
+    }
+
+    .project-anatomy dl > div {
+      min-height: 7.5rem;
     }
 
     .project-progress li a {

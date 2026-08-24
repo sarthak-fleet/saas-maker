@@ -1384,6 +1384,7 @@ a {
   overflow-x: clip;
   background: var(--workshop-ground);
   color: var(--workshop-ink);
+  color-scheme: light;
 }
 
 .interior-world {
@@ -2293,6 +2294,17 @@ a {
 
   .workshop-world .footer {
     padding-inline: 0.5rem;
+  }
+}
+
+@media (max-width: 440px) {
+  .workshop-world .brand-name {
+    display: none;
+  }
+
+  .workshop-world .nav-links {
+    gap: 0.5rem;
+    font-size: 0.75rem;
   }
 }
 

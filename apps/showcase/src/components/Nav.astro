@@ -2,7 +2,8 @@
 import { GITHUB_ORG_URL } from '../data/links';
 
 const isLearnings = Astro.url.pathname.startsWith('/learnings');
-const isProjects = Astro.url.pathname.startsWith('/projects');
+const isProjects =
+  Astro.url.pathname.startsWith('/projects') || Astro.url.pathname.startsWith('/p/');
 const isIdeas = Astro.url.pathname.startsWith('/ideas');
 const isTools = Astro.url.pathname.startsWith('/tools');
 ---

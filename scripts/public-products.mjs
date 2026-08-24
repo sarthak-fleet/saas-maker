@@ -19,6 +19,7 @@ const DIRECTORY_FIELDS = new Set([
   'id',
   'name',
   'description',
+  'makerNote',
   'kind',
   'form',
   'platforms',
@@ -123,6 +124,7 @@ export function buildPublicProducts(catalog) {
       id: project.id,
       name: project.public?.name ?? project.name,
       description: metadata.description ?? project.public?.description,
+      makerNote: metadata.makerNote,
       kind: project.portfolio.kind,
       form: metadata.form,
       platforms: metadata.platforms,
@@ -149,6 +151,7 @@ export function buildPublicProducts(catalog) {
       'id',
       'name',
       'description',
+      'makerNote',
       'kind',
       'form',
       'platforms',
@@ -179,7 +182,7 @@ export function buildPublicProducts(catalog) {
   pastProjects.sort((left, right) => left.name.localeCompare(right.name));
 
   const projection = {
-    schemaVersion: 3,
+    schemaVersion: 4,
     generatedFrom: ['site-health/apps/backend/config/projects.json'],
     historySemantics: catalog.publicDirectory.historySemantics,
     directory,

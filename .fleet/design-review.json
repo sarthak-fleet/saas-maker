@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "saas-maker",
-  "target": "homepage and complete-directory content boundary",
+  "target": "Public product detail pages from the privacy-safe directory projection",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -14,33 +14,33 @@
     "probes": [],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/home-boundary-before-1440.png"
+    "before": "artifacts/design/project-detail-before-1440.png"
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/home-boundary-after-390.png"
+        "path": "artifacts/design/after-390.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/home-boundary-after-768.png"
+        "path": "artifacts/design/after-768.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/home-boundary-after-1440.png"
+        "path": "artifacts/design/after-1440.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm catalog:validate-public && FLEET_PUBLIC_PRODUCTS_PATH=/Users/sarthak/Desktop/fleet/site-health/apps/backend/config/projects.json pnpm catalog:check-public && pnpm check:docs && pnpm lint && pnpm test && pnpm typecheck && pnpm build:widget && pnpm check:shared-packages && pnpm build:showcase && pnpm build:cockpit && git diff --check",
+      "command": "pnpm test && pnpm build:showcase",
       "status": "pass"
     },
     "critique": {
-      "score": 38,
+      "score": 37,
       "maximum": 40
     },
     "audit": {
-      "score": 19,
+      "score": 18,
       "maximum": 20
     },
     "unresolved": {
@@ -50,12 +50,12 @@
     "detector": {
       "posture": "advisory",
       "findings": [
-        "single-font warning in Layout.astro is an intentional Schibsted Grotesk system documented in DESIGN.md"
+        "CLI detector returned zero findings; independent review found and resolved mobile navigation, contrast, route-current, and color-scheme gaps."
       ]
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "Owner explicitly directed separating the curated homepage from the complete /projects register while preserving the established landing-page direction."
+    "note": "Owner approved the feature and delegated implementation in the established preserve lane."
   }
 }

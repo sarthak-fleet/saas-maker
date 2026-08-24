@@ -50,7 +50,8 @@ describe('SaaS Maker public source boundary', () => {
     );
     expect(projectsSource).toMatch(/\['personal-website', 'saas-maker'\]\.includes\(product\.id\)/);
     expect(routesSource).toMatch(/CORE\.flatMap/);
-    expect(routesSource).toMatch(/PAGED_PRODUCTS\.map/);
+    expect(routesSource).toMatch(/DIRECTORY_PROJECTS\.filter/);
+    expect(routesSource).toMatch(/product\.makerNote/);
     expect(navSource).toMatch(/GITHUB_ORG_URL/);
     expect(navSource).toMatch(/>GitHub ↗<\/a>/);
     expect(navSource).not.toMatch(/\/#package|Public source index/);
@@ -114,5 +115,22 @@ describe('SaaS Maker public source boundary', () => {
     expect(routes).not.toMatch(/publicCatalog\.pastProjects\.flatMap/);
     expect(projects).toMatch(/throw new Error\(`Homepage spotlight is missing/);
     expect(projects).not.toMatch(/ACTIVE_GROUPS|PAST_PROJECTS/);
+  });
+
+  it('publishes one expanded profile and Markdown route for every non-directory identity', async () => {
+    const [detailPage, routesSource, catalogSource] = await Promise.all([
+      readShowcase('src/pages/p/[id].astro'),
+      readShowcase('src/data/publicRoutes.ts'),
+      readFile(new URL('../../catalog/generated/public.json', import.meta.url), 'utf8'),
+    ]);
+    const catalog = JSON.parse(catalogSource);
+
+    expect(catalog.directory).toHaveLength(54);
+    expect(detailPage).toMatch(/DIRECTORY_PROJECTS\.filter/);
+    expect(detailPage).toMatch(/Why I made this\./);
+    expect(detailPage).toMatch(/Public anatomy/);
+    expect(detailPage).toMatch(/product\.makerNote/);
+    expect(routesSource).toMatch(/path: `\/p\/\$\{product\.id\}`/);
+    expect(routesSource).toMatch(/This profile is generated from reviewed public facts/);
   });
 });

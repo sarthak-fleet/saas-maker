@@ -4,7 +4,7 @@ import { CHANGELOG } from './changelog';
 import { LEARNINGS } from './learnings';
 import ideas from './ideas.json';
 import { CORE } from './projects';
-import { PAGED_PRODUCTS, type RegistryProduct } from './registry';
+import { DIRECTORY_PROJECTS, type DirectoryProject } from './directory';
 
 export type PublicRoute = {
   id: string;
@@ -16,27 +16,41 @@ export type PublicRoute = {
 
 const SITE_URL = 'https://sassmaker.com';
 
-function productMarkdown(product: RegistryProduct): string {
+function productMarkdown(product: DirectoryProject): string {
   const lines = [
     `# ${product.name}`,
     '',
-    product.summary,
+    product.description,
     '',
-    '## Canonical product',
+    '## Why I made this',
     '',
-    product.url,
+    product.makerNote,
+    '',
+    '## Public anatomy',
+    '',
+    `- Form: ${product.form}`,
+    `- Platforms: ${product.platforms.join(', ')}`,
+    `- Prominent tools: ${product.technologies.join(', ')}`,
+    `- Deployment: ${product.deployed ? 'deployed' : 'not deployed'}`,
+    ...(product.deploymentProviders.length > 0
+      ? [`- Providers: ${product.deploymentProviders.join(', ')}`]
+      : []),
+    `- First retained commit: ${product.firstCommitAt ?? 'not retained'}`,
+    `- Latest retained commit: ${product.latestCommitAt ?? 'not retained'}`,
     '',
   ];
-  const links = product.productLinks ?? [];
+  const links = [
+    ...product.domains.map((domain) => ({ title: domain, url: `https://${domain}` })),
+    ...(product.changelogUrl ? [{ title: 'Changelog', url: product.changelogUrl }] : []),
+    ...(product.roadmapUrl ? [{ title: 'Issues', url: product.roadmapUrl }] : []),
+    ...(product.repositoryUrl ? [{ title: 'Source', url: product.repositoryUrl }] : []),
+  ];
 
   if (links.length > 0) {
     lines.push(
       '## Public evidence',
       '',
-      ...links.map((link) => {
-        const description = link.description ? ` — ${link.description}` : '';
-        return `- [${link.title}](${link.url})${description}`;
-      }),
+      ...links.map((link) => `- [${link.title}](${link.url})`),
       ''
     );
   }
@@ -44,7 +58,7 @@ function productMarkdown(product: RegistryProduct): string {
   lines.push(
     '## Directory boundary',
     '',
-    `This SaaS Maker directory page points to ${product.name}'s canonical home. Product behavior and release evidence remain owned by the linked product and repository.`,
+    `This profile is generated from reviewed public facts. Private work and operations stay private.`,
     ''
   );
   return lines.join('\n');
@@ -121,6 +135,9 @@ function directoryMarkdown(): string {
         '',
         project.description,
         '',
+        `> ${project.makerNote}`,
+        '',
+        `- Project note: ${SITE_URL}${project.id === 'saas-maker' ? '/' : `/p/${project.id}`}`,
         `- Form: ${project.form}`,
         `- Platforms: ${project.platforms.join(', ')}`,
         `- Uses: ${project.technologies.join(', ')}`,
@@ -301,10 +318,12 @@ const learningRoutes: PublicRoute[] = LEARNINGS.map((learning) => ({
   markdown: learning.markdown,
 }));
 
-const productRoutes: PublicRoute[] = PAGED_PRODUCTS.map((product) => ({
+const productRoutes: PublicRoute[] = DIRECTORY_PROJECTS.filter(
+  (product) => product.id !== 'saas-maker'
+).map((product) => ({
   id: `product-${product.id}`,
   path: `/p/${product.id}`,
-  description: product.summary,
+  description: product.description,
   kind: 'profile',
   markdown: productMarkdown(product),
 }));

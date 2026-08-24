@@ -13,6 +13,8 @@ private Fleet state at runtime. Reusable public automation is canonical under
 ## Products
 
 - [sassmaker.com](https://sassmaker.com) — public product directory.
+- [sassmaker.com/projects](https://sassmaker.com/projects) — complete 54-project
+  register with expanded human and Markdown profiles for each identity.
 - [sassmaker.com/ideas](https://sassmaker.com/ideas) — scored product-idea
   decision ledger.
 - [sassmaker.com/tools](https://sassmaker.com/tools) — reusable skills,

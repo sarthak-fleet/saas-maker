@@ -32,6 +32,7 @@ const DIRECTORY_FIELDS = new Set([
   'id',
   'name',
   'description',
+  'makerNote',
   'kind',
   'form',
   'platforms',
@@ -71,7 +72,7 @@ function assertNoPrivateData(value, trail = 'projection') {
 }
 
 function validateProjection(parsed, sourcePath) {
-  if (![1, 2, 3].includes(parsed.schemaVersion) || !Array.isArray(parsed.products)) {
+  if (![1, 2, 3, 4].includes(parsed.schemaVersion) || !Array.isArray(parsed.products)) {
     throw new Error(`Unsupported Fleet public projection: ${sourcePath}`);
   }
 
@@ -101,7 +102,7 @@ function validateProjection(parsed, sourcePath) {
           throw new Error(`${project.id ?? 'unknown'}: unsupported directory field ${key}`);
         }
       }
-      for (const key of ['id', 'name', 'description', 'form', 'group', 'lifecycle']) {
+      for (const key of ['id', 'name', 'description', 'makerNote', 'form', 'group', 'lifecycle']) {
         if (!project[key]) throw new Error(`${project.id ?? 'unknown'}: missing directory ${key}`);
       }
       if (directoryIds.has(project.id)) {

@@ -33,6 +33,7 @@ const searchableText = (project: DirectoryProject) =>
   [
     project.name,
     project.description,
+    project.makerNote,
     project.form,
     ...project.platforms,
     ...project.technologies,
@@ -44,6 +45,8 @@ const searchableText = (project: DirectoryProject) =>
 const currentCount = DIRECTORY_GROUPS.find((group) => group.id === 'current')?.projects.length ?? 0;
 const supportingCount = DIRECTORY_GROUPS.find((group) => group.id === 'supporting')?.projects.length ?? 0;
 const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.projects.length ?? 0;
+const projectProfilePath = (project: DirectoryProject) =>
+  project.id === 'saas-maker' ? '/' : `/p/${project.id}`;
 ---
 
 <Layout
@@ -53,7 +56,7 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
   <!--
   THESIS: A complete portfolio is clearest as a working register, not a promotional card grid.
   OWN-WORLD: Limestone panes, matte-black mullions, seeded metadata bays, and one cobalt index pane extend the SaaS Maker workshop wall.
-  STORY: Understand the 55-project boundary, narrow it by form or platform, then inspect purpose, deployment, public links, stack, and Git span.
+  STORY: Understand the 54-project boundary, narrow it by form or platform, then inspect purpose, maker rationale, public links, stack, and Git span.
   FIRST VIEWPORT: A wide identity pane and cobalt count pane sit above a black filter rail; the first current-project rows begin without a marketing detour.
   FORM: Lifecycle bays crossed by platform and technology rails; fourth grounded structure, seed 2aaa2e62.
   -->
@@ -193,6 +196,9 @@ const pastCount = DIRECTORY_GROUPS.find((group) => group.id === 'past')?.project
                     <div class="directory-links-panel">
                       <span>Public destinations</span>
                       <div class="directory-links" aria-label={`${project.name} public links`}>
+                        <a class="directory-link--profile" href={projectProfilePath(project)}>
+                          Why I made this <span aria-hidden="true">→</span>
+                        </a>
                         {project.domains.map((domain, index) => (
                           <a
                             class:list={{ 'directory-link--primary': index === 0 }}
