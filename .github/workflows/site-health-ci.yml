@@ -21,8 +21,11 @@ jobs:
           node-version: "22"
           cache: pnpm
           cache-dependency-path: |
+            pnpm-lock.yaml
             apps/web/pnpm-lock.yaml
             apps/backend/packages/ai-visibility/pnpm-lock.yaml
+      - name: Install Site Health root dependencies
+        run: pnpm install --frozen-lockfile
       - name: Install Site Health web dependencies
         working-directory: apps/web
         run: pnpm install --frozen-lockfile
