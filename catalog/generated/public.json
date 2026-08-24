@@ -618,7 +618,7 @@
     {
       "id": "significanthobbies",
       "name": "Significant Hobbies",
-      "description": "The shared Hub and backend for seven Significant Hobbies applications.",
+      "description": "The shared Hub and backend for six maintained Significant Hobbies applications, plus retained compatibility data domains.",
       "kind": "product",
       "form": "Personal-app Hub",
       "platforms": [
@@ -1498,8 +1498,8 @@
     },
     {
       "id": "indulge",
-      "name": "Habits",
-      "description": "A private habit practice for noticing patterns, making intentional trades, and building better defaults.",
+      "name": "Habits / Indulge",
+      "description": "A retired behavior-change app whose illustrated onboarding and non-moralizing replacement loop now live in Anchor; public and Apple identities remain for compatibility.",
       "kind": "product",
       "form": "iOS app",
       "platforms": [
@@ -1511,8 +1511,8 @@
         "Astro",
         "Cloudflare Pages"
       ],
-      "group": "current",
-      "lifecycle": "maintained",
+      "group": "past",
+      "lifecycle": "past",
       "deployed": true,
       "deploymentProviders": [
         "Cloudflare Pages",
@@ -1644,7 +1644,7 @@
     {
       "id": "anchor",
       "name": "Anchor",
-      "description": "A local-first focus timer for Mac, iPhone and Apple Watch that parks distractions instead of losing the session, and shows what actually costs you your focus.",
+      "description": "A local-first day planner and focus timer for Mac, iPhone, and Apple Watch that explains the gap between the schedule you planned and the day you lived.",
       "kind": "product",
       "form": "Apple app",
       "platforms": [
@@ -1660,7 +1660,7 @@
         "Foundation Models"
       ],
       "group": "current",
-      "lifecycle": "local-only",
+      "lifecycle": "maintained",
       "deployed": true,
       "deploymentProviders": [
         "Cloudflare Pages",
@@ -1670,6 +1670,7 @@
         "anchor.significanthobbies.com"
       ],
       "url": "https://anchor.significanthobbies.com",
+      "changelogUrl": "https://anchor.significanthobbies.com/changelog",
       "firstCommitAt": "2026-08-16",
       "latestCommitAt": "2026-08-23"
     }
@@ -1734,6 +1735,19 @@
       "repositoryUrl": "https://github.com/PostTrainLLM/posttrainllm",
       "roadmapUrl": "https://github.com/PostTrainLLM/posttrainllm/issues",
       "pillarId": "build"
+    },
+    {
+      "id": "anchor",
+      "name": "Anchor",
+      "description": "A local-first day planner and focus timer for Mac, iPhone, and Apple Watch that explains the gap between the schedule you planned and the day you lived.",
+      "url": "https://anchor.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "in-progress",
+      "changelogUrl": "https://anchor.significanthobbies.com/changelog",
+      "pillarId": "learn"
     },
     {
       "id": "anime-list",
@@ -1837,18 +1851,6 @@
       "repositoryUrl": "https://github.com/sass-maker/free-ai",
       "roadmapUrl": "https://github.com/sass-maker/free-ai/issues",
       "pillarId": "build"
-    },
-    {
-      "id": "indulge",
-      "name": "Habits",
-      "description": "A private habit practice for noticing patterns, making intentional trades, and building better defaults.",
-      "url": "https://habits.significanthobbies.com",
-      "tier": "active",
-      "category": "personal",
-      "priority": "P2",
-      "spotlight": false,
-      "maturity": "in-progress",
-      "pillarId": "learn"
     },
     {
       "id": "india-standards",
@@ -2117,7 +2119,7 @@
     {
       "id": "significanthobbies",
       "name": "Significant Hobbies",
-      "description": "The shared Hub for Live, Journal, Habits, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
+      "description": "The shared Hub for Live, Journal, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
       "url": "https://significanthobbies.com",
       "tier": "secondary",
       "category": "personal",
