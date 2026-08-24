@@ -7,7 +7,7 @@ async function readRepository(relativePath: string) {
 }
 
 describe('complete public Fleet directory', () => {
-  it('projects all 54 identities exactly once with privacy-safe anatomy', async () => {
+  it('projects all 55 identities exactly once with privacy-safe anatomy', async () => {
     const catalog = JSON.parse(await readRepository('catalog/generated/public.json'));
     const ids = catalog.directory.map((project: { id: string }) => project.id);
     const counts = (catalog.directory as Array<{ group: string }>).reduce<Record<string, number>>(
@@ -19,9 +19,9 @@ describe('complete public Fleet directory', () => {
     );
 
     expect(catalog.schemaVersion).toBe(4);
-    expect(catalog.directory).toHaveLength(54);
-    expect(new Set(ids).size).toBe(54);
-    expect(counts.current).toBe(31);
+    expect(catalog.directory).toHaveLength(55);
+    expect(new Set(ids).size).toBe(55);
+    expect(counts.current).toBe(32);
     expect(counts.supporting).toBe(11);
     expect(counts.past).toBe(12);
 
