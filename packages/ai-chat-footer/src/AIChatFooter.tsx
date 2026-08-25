@@ -32,7 +32,7 @@ export function AIChatFooter({
   companyUrl,
   prompt,
   providers = DEFAULT_PROVIDERS,
-  label = `Ask AI about ${companyName}`,
+  label = `Explore ${companyName} with AI`,
   theme = 'auto',
   className = '',
 }: AIChatFooterProps) {
@@ -46,7 +46,16 @@ export function AIChatFooter({
       role="region"
       aria-label="Ask AI about this product"
     >
-      <div className="ai-chat-footer__label">{label}</div>
+      <div className="ai-chat-footer__eyebrow" aria-hidden="true">
+        <svg viewBox="0 0 16 16" focusable="false">
+          <path d="M8 1.5c.35 3.65 2.85 6.15 6.5 6.5-3.65.35-6.15 2.85-6.5 6.5C7.65 10.85 5.15 8.35 1.5 8 5.15 7.65 7.65 5.15 8 1.5Z" />
+        </svg>
+        <span>AI shortcut</span>
+      </div>
+      <h2 className="ai-chat-footer__label">{label}</h2>
+      <p className="ai-chat-footer__description">
+        Open a focused question in the assistant you already use.
+      </p>
       <ul className="ai-chat-footer__icons">
         {providers.map((id) => {
           const config = registry[id];
@@ -63,8 +72,10 @@ export function AIChatFooter({
                 className="ai-chat-footer__link"
                 aria-label={actionLabel}
               >
-                <config.Icon className="ai-chat-footer__icon" />
-                <span className="ai-chat-footer__sr-only">{actionLabel}</span>
+                <span className="ai-chat-footer__mark" aria-hidden="true">
+                  <config.Icon className="ai-chat-footer__icon" />
+                </span>
+                <span>{config.name}</span>
               </a>
             </li>
           );

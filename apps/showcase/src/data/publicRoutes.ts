@@ -5,6 +5,7 @@ import { LEARNINGS } from './learnings';
 import ideas from './ideas.json';
 import { CORE } from './projects';
 import { DIRECTORY_PROJECTS, type DirectoryProject } from './directory';
+import { STUDIO_PROFILE } from './studio';
 
 export type PublicRoute = {
   id: string;
@@ -78,7 +79,18 @@ function homeMarkdown(): string {
   return [
     '# SaaS Maker',
     '',
-    'Software as a specialized service: a living studio of focused products, generated from Fleet’s privacy-checked public projection.',
+    STUDIO_PROFILE.oneLine,
+    '',
+    `Founded and built by [${STUDIO_PROFILE.owner.name}](${STUDIO_PROFILE.owner.url}).`,
+    '',
+    '## Studio thesis',
+    '',
+    STUDIO_PROFILE.thesis,
+    '',
+    `> ${STUDIO_PROFILE.ownerVoice}`,
+    '',
+    `- Human page: ${SITE_URL}/studio`,
+    `- Markdown: ${SITE_URL}/studio.md`,
     '',
     '## Tokens Spent for the World',
     '',
@@ -116,6 +128,56 @@ function homeMarkdown(): string {
     '@saas-maker/feedback is a React widget for bugs, feature requests, screenshots, and page-specific feedback.',
     '',
     `- Package overview: ${SITE_URL}/#package`,
+  ].join('\n');
+}
+
+function studioMarkdown(): string {
+  return [
+    `# ${STUDIO_PROFILE.name} studio thesis`,
+    '',
+    STUDIO_PROFILE.oneLine,
+    '',
+    `Founder and builder: [${STUDIO_PROFILE.owner.name}](${STUDIO_PROFILE.owner.url})`,
+    '',
+    '## Why the studio exists',
+    '',
+    STUDIO_PROFILE.thesis,
+    '',
+    '## The owner’s position on AI',
+    '',
+    `> ${STUDIO_PROFILE.ownerVoice}`,
+    '',
+    STUDIO_PROFILE.aiPosition,
+    '',
+    '## Operating principles',
+    '',
+    ...STUDIO_PROFILE.principles.flatMap((principle) => [
+      `### ${principle.title}`,
+      '',
+      principle.summary,
+      '',
+    ]),
+    '## Representative work',
+    '',
+    ...STUDIO_PROFILE.representativeWork.flatMap((project) => [
+      `### ${project.name}`,
+      '',
+      project.description,
+      '',
+      project.studioSignal,
+      '',
+      `- Why it was made: ${project.makerNote}`,
+      `- SaaS Maker profile: ${project.profileUrl}`,
+      ...(project.destinationUrl ? [`- Product: ${project.destinationUrl}`] : []),
+      ...(project.repositoryUrl ? [`- Source: ${project.repositoryUrl}`] : []),
+      '',
+    ]),
+    '## Boundaries',
+    '',
+    ...STUDIO_PROFILE.boundaries.map((boundary) => `- ${boundary}`),
+    '',
+    `- Complete project register: ${SITE_URL}/projects`,
+    `- Machine-readable studio and project catalog: ${SITE_URL}/api/ai`,
   ].join('\n');
 }
 
@@ -204,6 +266,13 @@ const fixedRoutes: PublicRoute[] = [
     description: 'Software as a specialized service: a living studio of focused products',
     kind: 'collection',
     markdown: homeMarkdown(),
+  },
+  {
+    id: 'studio',
+    path: '/studio',
+    description: STUDIO_PROFILE.oneLine,
+    kind: 'static',
+    markdown: studioMarkdown(),
   },
   {
     id: 'projects',

@@ -1,0 +1,509 @@
+---
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import { STUDIO_PROFILE } from '../data/studio';
+import Layout from '../layouts/Layout.astro';
+
+const tones = ['cobalt', 'seeded', 'amber', 'oxblood'];
+const localProfilePath = (url: string) => new URL(url).pathname;
+---
+
+<Layout title={`${STUDIO_PROFILE.name} — studio thesis`} description={STUDIO_PROFILE.oneLine}>
+  <!--
+  THESIS: The studio earns an identity through its choices, not through institutional scale.
+  OWN-WORLD: The existing workshop wall becomes a manifesto elevation: one clear identity bay, one cobalt AI-position bay, a numbered principle rail, and four proof panes.
+  STORY: Understand who runs the studio, learn its stance on AI and product judgment, see the operating principles, then inspect representative work and the complete accountable register.
+  FIRST VIEWPORT: A large founder-led statement shares one steel frame with the owner's explicit position on AI.
+  FORM: Workshop manifesto; preserve lane; no new visual language.
+  -->
+  <div class="workshop-world interior-world studio-world">
+    <Nav />
+    <main id="main-content" class="studio-shell">
+      <header class="studio-manifesto">
+        <div class="studio-manifesto-copy">
+          <p class="studio-kicker">{STUDIO_PROFILE.eyebrow}</p>
+          <h1>{STUDIO_PROFILE.headline}</h1>
+          <p class="studio-manifesto-intro">{STUDIO_PROFILE.oneLine}</p>
+          <div class="studio-maker-line">
+            <span>Built by</span>
+            <a href={STUDIO_PROFILE.owner.url} target="_blank" rel="noopener noreferrer">
+              {STUDIO_PROFILE.owner.name} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <blockquote class="studio-ai-position">
+          <p class="studio-kicker">Position on AI</p>
+          <p>{STUDIO_PROFILE.ownerVoice}</p>
+          <footer>
+            <span aria-hidden="true"></span>
+            {STUDIO_PROFILE.owner.name}, {STUDIO_PROFILE.owner.role.toLowerCase()}
+          </footer>
+        </blockquote>
+      </header>
+
+      <section class="studio-proof" aria-labelledby="studio-proof-title">
+        <header>
+          <div>
+            <p class="studio-kicker">Representative work</p>
+            <h2 id="studio-proof-title">The thesis, made visible.</h2>
+          </div>
+          <p>
+            Four products show the range. The complete directory remains the honest inventory.
+          </p>
+        </header>
+        <ol>
+          {STUDIO_PROFILE.representativeWork.map((project, index) => (
+            <li class={`studio-proof-pane studio-proof-pane--${tones[index]}`}>
+              <article>
+                <span class="studio-proof-index">0{index + 1}</span>
+                <h3>{project.name}</h3>
+                <p>{project.description}</p>
+                <strong>{project.studioSignal}</strong>
+                <nav class="studio-proof-actions" aria-label={`${project.name} evidence`}>
+                  <a href={localProfilePath(project.profileUrl)}>Studio note</a>
+                  {project.destinationUrl && (
+                    <a href={project.destinationUrl} target="_blank" rel="noopener noreferrer">
+                      Product <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                  {project.repositoryUrl && (
+                    <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+                      Source <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                </nav>
+              </article>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="studio-thesis" aria-labelledby="studio-thesis-title">
+        <div>
+          <p class="studio-kicker">The thesis</p>
+          <h2 id="studio-thesis-title">The studio has a point of view.</h2>
+        </div>
+        <div class="studio-thesis-copy">
+          <p>{STUDIO_PROFILE.thesis}</p>
+          <p>{STUDIO_PROFILE.aiPosition}</p>
+        </div>
+      </section>
+
+      <section class="studio-principles" aria-labelledby="studio-principles-title">
+        <header>
+          <p class="studio-kicker">How work earns its place</p>
+          <h2 id="studio-principles-title">Four operating principles.</h2>
+        </header>
+        <ol>
+          {STUDIO_PROFILE.principles.map((principle, index) => (
+            <li>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <h3>{principle.title}</h3>
+              <p>{principle.summary}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="studio-boundary" aria-labelledby="studio-boundary-title">
+        <div>
+          <p class="studio-kicker">The boundary</p>
+          <h2 id="studio-boundary-title">A studio, not a mythology.</h2>
+        </div>
+        <div>
+          <ul>
+            {STUDIO_PROFILE.boundaries.map((boundary) => <li>{boundary}</li>)}
+          </ul>
+          <div class="studio-boundary-actions">
+            <a href="/projects">Open the complete project register <span aria-hidden="true">→</span></a>
+            <a href="mailto:team@sassmaker.com?subject=External%20project%20proposal">
+              Propose a serious build <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .studio-shell {
+    width: var(--workshop-frame-width);
+    margin-inline: auto;
+    padding-bottom: 1rem;
+  }
+
+  .studio-manifesto,
+  .studio-thesis,
+  .studio-principles,
+  .studio-proof,
+  .studio-boundary {
+    border-inline: 0.375rem solid var(--workshop-steel);
+  }
+
+  .studio-manifesto {
+    display: grid;
+    grid-template-columns: minmax(0, 1.16fr) minmax(24rem, 0.84fr);
+    gap: 0.375rem;
+    min-height: min(42rem, calc(100svh - 4.75rem));
+    background: var(--workshop-steel);
+  }
+
+  .studio-manifesto-copy,
+  .studio-ai-position {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    padding: clamp(2.5rem, 6vw, 6.5rem);
+  }
+
+  .studio-manifesto-copy {
+    background: var(--workshop-pane);
+  }
+
+  .studio-manifesto h1 {
+    max-width: 10ch;
+    margin-top: clamp(2rem, 6vh, 4.5rem);
+    font-size: clamp(3.6rem, 6.8vw, 7rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  .studio-manifesto-intro {
+    max-width: 47rem;
+    margin-top: clamp(2rem, 4vh, 3rem);
+    color: var(--workshop-muted);
+    font-size: clamp(1.08rem, 1.5vw, 1.35rem);
+  }
+
+  .studio-maker-line {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: auto;
+    padding-top: 3rem;
+    color: var(--workshop-muted);
+    font-size: 0.85rem;
+  }
+
+  .studio-maker-line a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    color: var(--workshop-ink);
+    font-weight: 700;
+    text-underline-offset: 0.24em;
+  }
+
+  .studio-ai-position {
+    background: var(--workshop-cobalt);
+    color: #fff;
+  }
+
+  .studio-ai-position > p:nth-child(2) {
+    margin-top: auto;
+    padding-block: 4rem;
+    font-size: clamp(1.7rem, 3vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.06;
+  }
+
+  .studio-ai-position footer {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.82rem;
+  }
+
+  .studio-ai-position footer span {
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  .studio-thesis,
+  .studio-boundary {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.28fr);
+    gap: 0.375rem;
+    margin-top: 0.375rem;
+    background: var(--workshop-steel);
+  }
+
+  .studio-thesis > *,
+  .studio-boundary > * {
+    padding: clamp(2.5rem, 5vw, 5rem);
+    background: var(--workshop-pane);
+  }
+
+  .studio-thesis > div:first-child {
+    background: var(--workshop-amber);
+  }
+
+  .studio-thesis h2,
+  .studio-boundary h2,
+  .studio-principles h2,
+  .studio-proof h2 {
+    max-width: 12ch;
+    margin-top: 1.25rem;
+    font-size: clamp(2.4rem, 4.5vw, 4.8rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
+  .studio-thesis-copy {
+    display: grid;
+    align-content: center;
+    gap: 1.5rem;
+  }
+
+  .studio-thesis-copy p {
+    max-width: 65ch;
+    color: var(--workshop-muted);
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  }
+
+  .studio-principles,
+  .studio-proof {
+    margin-top: 0.375rem;
+  }
+
+  .studio-principles > header,
+  .studio-proof > header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(3rem, 7vw, 6rem);
+    background: var(--workshop-pane);
+  }
+
+  .studio-principles ol,
+  .studio-proof ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0.375rem 0 0;
+    background: var(--workshop-steel);
+    list-style: none;
+  }
+
+  .studio-principles li {
+    min-height: 24rem;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--workshop-seeded);
+  }
+
+  .studio-principles li:nth-child(even) {
+    background: var(--workshop-pane);
+  }
+
+  .studio-principles li > span,
+  .studio-proof-index {
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .studio-principles h3 {
+    margin-top: auto;
+    font-size: clamp(1.45rem, 2.1vw, 2.1rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .studio-principles li p {
+    margin-top: 1rem;
+    color: var(--workshop-muted);
+    font-size: 1rem;
+  }
+
+  .studio-principles li:nth-child(odd) p {
+    color: #57554e;
+  }
+
+  .studio-proof > header > p {
+    max-width: 39ch;
+    color: var(--workshop-muted);
+    font-size: 1rem;
+  }
+
+  .studio-proof-pane article {
+    min-height: 30rem;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .studio-proof-pane h3 {
+    margin-top: auto;
+    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .studio-proof-pane p {
+    margin-top: 0.85rem;
+    font-size: 1rem;
+    opacity: 0.82;
+  }
+
+  .studio-proof-pane strong {
+    margin-top: 1.5rem;
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  .studio-proof-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-top: 2.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .studio-proof-actions a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: underline;
+    text-underline-offset: 0.24em;
+    transition: opacity 160ms ease;
+  }
+
+  .studio-proof-actions a:hover,
+  .studio-proof-actions a:focus-visible {
+    opacity: 0.64;
+  }
+
+  .studio-proof-pane--cobalt {
+    background: var(--workshop-cobalt);
+    color: #fff;
+  }
+
+  .studio-proof-pane--seeded {
+    background: var(--workshop-seeded);
+    color: var(--workshop-ink);
+  }
+
+  .studio-proof-pane--amber {
+    background: var(--workshop-amber);
+    color: #17130c;
+  }
+
+  .studio-proof-pane--oxblood {
+    background: var(--workshop-oxblood);
+    color: #fff;
+  }
+
+  .studio-boundary > div:first-child {
+    background: var(--workshop-seeded);
+  }
+
+  .studio-boundary ul {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 65ch;
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--workshop-muted);
+    font-size: 1rem;
+  }
+
+  .studio-boundary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .studio-boundary-actions a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    text-underline-offset: 0.25em;
+  }
+
+  @media (max-width: 68rem) {
+    .studio-manifesto,
+    .studio-thesis,
+    .studio-boundary {
+      grid-template-columns: 1fr;
+    }
+
+    .studio-principles ol,
+    .studio-proof ol {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .studio-manifesto-copy,
+    .studio-ai-position {
+      min-height: 34rem;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .studio-manifesto-copy,
+    .studio-ai-position {
+      min-height: 25rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .studio-manifesto h1 {
+      font-size: clamp(3.1rem, 15vw, 4.8rem);
+    }
+
+    .studio-ai-position > p:nth-child(2) {
+      padding-block: 3rem;
+    }
+
+    .studio-thesis > *,
+    .studio-boundary > *,
+    .studio-principles > header,
+    .studio-proof > header {
+      padding: 3rem 1.5rem;
+    }
+
+    .studio-principles > header,
+    .studio-proof > header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .studio-principles ol,
+    .studio-proof ol {
+      grid-template-columns: 1fr;
+    }
+
+    .studio-principles li {
+      min-height: 14rem;
+    }
+
+    .studio-proof-pane article {
+      min-height: 20rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .studio-proof-pane a {
+      transition: none;
+    }
+  }
+</style>

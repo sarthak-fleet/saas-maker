@@ -3,6 +3,7 @@ import tokenWorld from '../../data/tokenWorld.json';
 import { PACKAGE_URL } from '../../data/links';
 import { LEARNINGS } from '../../data/learnings';
 import { TOOLING_CAPABILITIES } from '../../data/tooling';
+import { STUDIO_PROFILE } from '../../data/studio';
 import { markdownPath, PUBLIC_ROUTES, publicRouteUrl } from '../../data/publicRoutes';
 export const prerender = true;
 export function GET() {
@@ -19,6 +20,11 @@ export function GET() {
         markdown: { suffix: '.md', negotiation: false },
         canonical: 'https://sassmaker.com',
         sourceOfTruth: 'SaaS Maker privacy-checked public product catalog',
+        studio: {
+          ...STUDIO_PROFILE,
+          page: 'https://sassmaker.com/studio',
+          markdown: 'https://sassmaker.com/studio.md',
+        },
         surfaces: PUBLIC_ROUTES.map((route) => ({
           id: route.id,
           url: publicRouteUrl(route),

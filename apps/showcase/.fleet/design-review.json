@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "showcase",
-  "target": "Ideas, Tools, and Learnings theme unification",
+  "target": "Canonical studio identity and agent-facing studio page",
   "mode": "preserve",
   "register": "brand",
   "context": {
@@ -14,29 +14,29 @@
     "probes": [],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/interior-before-ideas-1440.png"
+    "before": "artifacts/design/studio-before-1440.png"
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/interior-after-ideas-390.png"
+        "path": "artifacts/design/studio-after-390.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/interior-after-ideas-768.png"
+        "path": "artifacts/design/studio-after-768.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/interior-after-ideas-1440.png"
+        "path": "artifacts/design/studio-after-1440.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm exec vitest run tests/showcase/ideas.test.ts tests/showcase/public-surface.test.ts && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && pnpm check:docs",
+      "command": "pnpm test && pnpm check:docs && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && git diff --check",
       "status": "pass"
     },
     "critique": {
-      "score": 32,
+      "score": 34,
       "maximum": 40
     },
     "audit": {
@@ -50,16 +50,12 @@
     "detector": {
       "posture": "advisory",
       "findings": [
-        {
-          "rule": "single-font",
-          "location": "apps/showcase/src/layouts/Layout.astro:1",
-          "disposition": "intentional false positive; DESIGN.md requires Schibsted Grotesk throughout"
-        }
+        "Browser overlay reported 8 advisory patterns before polish: 2 low-contrast seeded-pane paragraphs and unconstrained line measures were fixed; monumental hero scale and display leading were reviewed as intentional workshop-language false positives."
       ]
     }
   },
   "ownerFeedback": {
-    "decision": "keep",
-    "note": "Owner approved the unified public theme and requested release."
+    "decision": "delegated",
+    "note": "Owner approved issue #78 and delegated the preserve-lane studio identity implementation."
   }
 }

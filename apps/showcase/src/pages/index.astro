@@ -7,13 +7,14 @@ import Fleet from '../components/Fleet.astro';
 import Spec from '../components/Spec.astro';
 import Commission from '../components/Commission.astro';
 import Footer from '../components/Footer.astro';
+import { STUDIO_PROFILE } from '../data/studio';
 
 // Public product directory plus the one published SaaS Maker package.
 ---
 
 <Layout
   title="SaaS Maker — a public product studio"
-  description="A public studio for focused software, current learning, and reusable product packages by Sarthak Agrawal."
+  description={STUDIO_PROFILE.oneLine}
 >
   <!--
   THESIS: A maintained portfolio should feel like a workshop wall, not a startup card grid.

@@ -14,11 +14,13 @@ describe('SaaS Maker public source boundary', () => {
     expect(response.headers.get('access-control-allow-origin')).toBe('*');
     expect(response.headers.get('content-type')).toBe('text/javascript; charset=utf-8');
     expect(source).toMatch(/customElements\.define\('ai-chat-footer'/);
-    expect(source).toMatch(/Chat with us through AI/);
+    expect(source).toMatch(/Explore .+ with AI/);
+    expect(source).toMatch(/createProviderIcon/);
+    expect(source).toMatch(/More from the studio/);
     expect(source).toMatch(/dataset\.aiProvider/);
     expect(source).toMatch(/customElements\.define\('fleet-footer-extension'/);
     expect(source).toMatch(/strip\.setAttribute\('integrated'/);
-    expect(source).toMatch(/grid-template-columns: minmax\(17rem, \.42fr\) minmax\(0, 1fr\)/);
+    expect(source).toMatch(/grid-template-columns: minmax\(21rem, \.72fr\) minmax\(0, 1\.28fr\)/);
     expect(source).not.toMatch(/analytics|localStorage|credential/i);
     expect(() => new Function(source)).not.toThrow();
   });

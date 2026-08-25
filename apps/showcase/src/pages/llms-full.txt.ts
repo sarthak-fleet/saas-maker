@@ -1,5 +1,6 @@
 import publicCatalog from '../../../../catalog/generated/public.json';
 import { LEARNINGS } from '../data/learnings';
+import { STUDIO_PROFILE } from '../data/studio';
 export const prerender = true;
 export function GET() {
   const projects = publicCatalog.directory.flatMap((project) => {
@@ -20,6 +21,18 @@ export function GET() {
   });
   const body = [
     '# SaaS Maker — full product index',
+    '',
+    STUDIO_PROFILE.oneLine,
+    '',
+    `Founder and builder: ${STUDIO_PROFILE.owner.name} (${STUDIO_PROFILE.owner.url})`,
+    '',
+    '## Studio thesis',
+    '',
+    STUDIO_PROFILE.thesis,
+    '',
+    `> ${STUDIO_PROFILE.ownerVoice}`,
+    '',
+    `Full studio page: https://sassmaker.com/studio.md`,
     '',
     'Generated from the checked-in Fleet public projection. Configuration and links do not imply fresh production verification.',
     '',

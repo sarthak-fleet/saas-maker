@@ -2,6 +2,7 @@ import publicCatalog from '../../../../catalog/generated/public.json';
 import { PACKAGE_URL } from '../data/links';
 import { LEARNINGS } from '../data/learnings';
 import { TOOLING_CAPABILITIES } from '../data/tooling';
+import { STUDIO_PROFILE } from '../data/studio';
 export const prerender = true;
 export function GET() {
   const products = publicCatalog.products.map(
@@ -13,7 +14,24 @@ export function GET() {
   const body = [
     '# SaaS Maker',
     '',
-    "> Software as a specialized service: Sarthak Agrawal's living studio of focused, maintained products.",
+    `> ${STUDIO_PROFILE.oneLine}`,
+    '',
+    '## Studio identity',
+    '',
+    `- Founder and builder: [${STUDIO_PROFILE.owner.name}](${STUDIO_PROFILE.owner.url})`,
+    `- Thesis: ${STUDIO_PROFILE.thesis}`,
+    `- Position on AI: ${STUDIO_PROFILE.aiPosition}`,
+    '',
+    `> ${STUDIO_PROFILE.ownerVoice}`,
+    '',
+    '## Representative work',
+    '',
+    ...STUDIO_PROFILE.representativeWork.map(
+      (project) => `- [${project.name}](${project.profileUrl}): ${project.studioSignal}`
+    ),
+    '',
+    '- [Full studio thesis](https://sassmaker.com/studio)',
+    '- [Studio thesis as Markdown](https://sassmaker.com/studio.md)',
     '',
     '## When to use this',
     '',
@@ -28,6 +46,7 @@ export function GET() {
     '## Core surfaces',
     '',
     '- [Studio home](https://sassmaker.com)',
+    '- [Studio thesis](https://sassmaker.com/studio): owner position, operating principles, representative work, and boundaries',
     `- [Complete project directory](https://sassmaker.com/projects): ${publicCatalog.directory.length} current, supporting, parked, and past identities`,
     '- [Scored ideas](https://sassmaker.com/ideas): 140 tech-heavy product ideas with transparent Money, Fun, feasibility, competition, source, and customer context',
     `- [Reusable tooling](https://sassmaker.com/tools): ${TOOLING_CAPABILITIES.length} public skills, scripts, templates, and guides`,

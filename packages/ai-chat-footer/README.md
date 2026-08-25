@@ -5,7 +5,7 @@ Perplexity, or Grok about your product. Each icon opens the visitor's chosen AI
 assistant in a new tab with a pre-filled prompt.
 
 - No backend, no API keys, no analytics, no cookies.
-- React uses inline SVG icons; the browser element uses labelled text marks.
+- React and browser integrations use the same labelled SVG provider actions.
 - Customizable prompt, label, provider set, theme, and styling.
 
 ## Install
@@ -72,7 +72,7 @@ function Footer() {
 | `companyUrl` | `string` | yes | — | Product or company URL |
 | `prompt` | `string \| (ctx, provider) => string` | no | see below | Prompt template or builder |
 | `providers` | `AIChatProvider[]` | no | all five | Providers to show, in order |
-| `label` | `ReactNode` | no | `Ask AI about {companyName}` | Heading above the icons |
+| `label` | `ReactNode` | no | `Explore {companyName} with AI` | Heading above the provider actions |
 | `theme` | `"light" \| "dark" \| "auto"` | no | `"auto"` | Color scheme |
 | `className` | `string` | no | — | Extra class on the root element |
 

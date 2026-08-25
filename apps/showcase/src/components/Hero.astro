@@ -1,5 +1,6 @@
 ---
 import { CORE } from '../data/projects';
+import { STUDIO_PROFILE } from '../data/studio';
 
 const PANE_TONES = ['cobalt', 'seeded', 'amber', 'oxblood'];
 ---
@@ -8,12 +9,12 @@ const PANE_TONES = ['cobalt', 'seeded', 'amber', 'oxblood'];
   <div class="studio-hero-scene" aria-hidden="true"></div>
 
   <div class="studio-hero-copy glass-pane">
-    <p class="studio-kicker">Software as a specialized service</p>
-    <h1 id="studio-title">A living index of things I build.</h1>
-    <p class="studio-intro">
-      Four products in focus, with the complete portfolio accounted for in one
-      separate register.
-    </p>
+    <p class="studio-kicker">{STUDIO_PROFILE.eyebrow}</p>
+    <h1 id="studio-title">{STUDIO_PROFILE.headline}</h1>
+    <p class="studio-intro">{STUDIO_PROFILE.oneLine}</p>
+    <a class="studio-thesis-link" href="/studio">
+      Read the studio thesis <span aria-hidden="true">→</span>
+    </a>
     <p class="studio-status">
       <span aria-hidden="true"></span>
       Built in public. Kept current.

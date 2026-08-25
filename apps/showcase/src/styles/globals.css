@@ -1513,6 +1513,18 @@ a {
   font-size: clamp(1.05rem, 1.5vw, 1.3rem);
 }
 
+.studio-thesis-link {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  margin-top: 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-underline-offset: 0.25em;
+}
+
 .studio-status {
   display: flex;
   align-items: center;
