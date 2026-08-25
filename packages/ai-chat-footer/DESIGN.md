@@ -10,15 +10,16 @@ visitor's preferred assistant easy to recognize and open.
 
 1. A framed sparkle mark and semantic heading name the product-specific action.
 2. One sentence explains what will happen.
-3. Labelled provider buttons present equal choices with 44px touch targets.
+3. Compact provider artwork buttons present equal choices with 44px touch targets.
 
-Provider actions use accurate provider symbols in a consistent framed-icon
-treatment alongside visible names. Never substitute generic geometry, initials,
-or lookalike marks. Provider colour stays inside the icon tile; labels, borders,
-and surfaces inherit the host so the shared component does not become a
-competing brand.
-Wide layouts keep the action copy and provider choices on one row. Narrow
-layouts use two columns and let an unpaired final provider span both.
+Provider actions use publisher-supplied artwork files without permanent text.
+Provider names remain available to assistive technology and native tooltips.
+Never redraw, recolour, trace, or substitute generic geometry, initials, or
+lookalike marks. Provider colour stays inside its original artwork; labels,
+borders, and surfaces inherit the host so the shared component does not become
+a competing brand. Wide layouts keep the action copy and provider choices on
+one row. Narrow layouts keep the five compact controls together beneath the
+copy instead of expanding them into cards.
 
 ## Host integration
 
@@ -33,7 +34,7 @@ project tickers, or a second navigation layer beneath the host footer.
 ## Accessibility and motion
 
 - Use a labelled region and semantic heading.
-- Keep provider names visible and provider icons decorative.
+- Give every icon-only provider action an accessible name and tooltip.
 - Preserve visible keyboard focus and external-link semantics.
 - Keep every provider action at least 44px tall.
 - Respect reduced-motion preferences for the dock's subtle hover response.

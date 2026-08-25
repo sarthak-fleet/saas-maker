@@ -75,11 +75,9 @@ export function AIChatFooter({
                 className="ai-chat-footer__link"
                 aria-label={actionLabel}
                 data-ai-provider={id}
+                title={config.name}
               >
-                <span className="ai-chat-footer__mark" aria-hidden="true">
-                  <config.Icon className="ai-chat-footer__icon" />
-                </span>
-                <span>{config.name}</span>
+                <config.Icon className="ai-chat-footer__icon" />
               </a>
             </li>
           );

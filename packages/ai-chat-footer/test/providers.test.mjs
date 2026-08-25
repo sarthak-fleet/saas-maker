@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -61,7 +62,7 @@ test('browser entrypoint filters and de-duplicates provider attributes', () => {
   assert.deepEqual(normalizeProviderIds('chatgpt,claude,chatgpt,invalid'), ['chatgpt', 'claude']);
 });
 
-test('React footer keeps every provider name visible beside an icon', () => {
+test('React footer uses compact icon-only actions with accessible provider names', () => {
   const markup = renderToStaticMarkup(
     createElement(AIChatFooter, {
       companyName: 'Acme',
@@ -70,7 +71,9 @@ test('React footer keeps every provider name visible beside an icon', () => {
   );
 
   for (const name of ['Claude', 'ChatGPT', 'Gemini', 'Perplexity', 'Grok']) {
-    assert.match(markup, new RegExp(`>${name}</span></a>`));
+    assert.match(markup, new RegExp(`title="${name}"`));
+    assert.match(markup, new RegExp(`aria-label="Ask ${name} about Acme`));
+    assert.doesNotMatch(markup, new RegExp(`>${name}<`));
   }
   for (const provider of DEFAULT_PROVIDERS) {
     assert.match(markup, new RegExp(`data-ai-provider="${provider}"`));
@@ -79,7 +82,7 @@ test('React footer keeps every provider name visible beside an icon', () => {
   assert.match(markup, /ai-chat-footer__signal/);
 });
 
-test('React footer renders recognizable provider brand geometry', () => {
+test('React footer embeds publisher-supplied provider artwork', () => {
   const markup = renderToStaticMarkup(
     createElement(AIChatFooter, {
       companyName: 'Acme',
@@ -87,9 +90,28 @@ test('React footer renders recognizable provider brand geometry', () => {
     })
   );
 
-  assert.match(markup, /m4\.7144 15\.9555/, 'Claude must use the Claude burst');
-  assert.match(markup, /rotate\(300 1203 1203\)/, 'ChatGPT must use the six-part knot');
-  assert.match(markup, /M11\.04 19\.32/, 'Gemini must use the four-point sparkle');
-  assert.match(markup, /M22\.3977 7\.0896/, 'Perplexity must use the woven monogram');
-  assert.match(markup, /M210\.484 312\.759/, 'Grok must use the Grok slash mark');
+  assert.equal((markup.match(/<img class="ai-chat-footer__icon"/g) ?? []).length, 5);
+  assert.ok(
+    (markup.match(/src="data:image\/jpeg;base64,/g) ?? []).length >= 5,
+    'each provider must render its bundled source artwork'
+  );
+  assert.doesNotMatch(markup, /ChatGPT icon|Claude icon|provider brand geometry/);
 });
+
+test('browser entrypoint bundles all five provider artwork files', async () => {
+  const bundle = await readFile(new URL('../dist/browser/element.mjs', import.meta.url), 'utf8');
+
+  assert.equal((bundle.match(/data:image\/jpeg;base64,/g) ?? []).length, 5);
+  assert.match(bundle, /createProviderLogo/);
+  assert.doesNotMatch(bundle, /createProviderIcon/);
+});
+
+for (const provider of DEFAULT_PROVIDERS) {
+  test(`${provider} source artwork is a retained JPEG asset`, async () => {
+    const artwork = await readFile(
+      new URL(`../src/assets/provider-logos/${provider}.jpg`, import.meta.url)
+    );
+    assert.deepEqual([...artwork.subarray(0, 3)], [0xff, 0xd8, 0xff]);
+    assert.ok(artwork.byteLength > 3000);
+  });
+}

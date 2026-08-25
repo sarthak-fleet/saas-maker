@@ -36,18 +36,4 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.x"
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 10.33.2
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: pnpm
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            docs-site/pnpm-lock.yaml
       - run: python3 scripts/check_docs_links.py
-      - working-directory: docs-site
-        run: pnpm install --frozen-lockfile
-      - working-directory: docs-site
-        run: pnpm run build

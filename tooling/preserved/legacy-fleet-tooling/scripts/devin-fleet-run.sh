@@ -37,7 +37,7 @@
 set -eo pipefail
 
 # AGENTS.md "Out Of Fleet" — excluded from fleet-wide sweeps unless asked.
-OUT_OF_FLEET="open-historia today-little-log truehire companion-robot device-net-test forecast-lab elves-hq saas-maker-ci-fix"
+OUT_OF_FLEET="open-historia truehire companion-robot device-net-test forecast-lab saas-maker-ci-fix"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FLEET_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"

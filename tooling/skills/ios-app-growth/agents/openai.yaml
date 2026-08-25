@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS App Growth"
+  short_description: "Plan and evaluate paid iOS app growth"
+  default_prompt: "Use $ios-app-growth to audit my iOS subscription funnel and design a measured acquisition experiment."

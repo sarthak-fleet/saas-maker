@@ -1,11 +1,13 @@
 # `@saas-maker/ai-chat-footer`
 
 Backend-free React and browser-native footer widget that lets visitors ask Claude, ChatGPT, Gemini,
-Perplexity, or Grok about your product. Each icon opens the visitor's chosen AI
+Perplexity, or Grok about your product. Each provider action opens the visitor's chosen AI
 assistant in a new tab with a pre-filled prompt.
 
 - No backend, no API keys, no analytics, no cookies.
-- React and browser integrations use the same labelled SVG provider actions.
+- React and browser integrations bundle the same publisher-supplied provider artwork.
+- Provider artwork is served from the package, with no third-party image requests.
+- Provider names stay available through accessible labels and native tooltips.
 - Customizable prompt, label, provider set, theme, and styling.
 
 ## Install
@@ -127,8 +129,8 @@ control:
 ```css
 .ai-chat-footer {
   --ai-chat-footer-icon-size: 2rem;
-  --ai-chat-footer-icon-color: #555;
-  --ai-chat-footer-icon-hover: #000;
+  --ai-chat-footer-focus: #000;
+  --ai-chat-footer-surface: #f5f5f5;
 }
 ```
 

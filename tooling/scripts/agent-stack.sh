@@ -13,6 +13,7 @@ EXPOSED_FLEET_SKILLS=(
   fleet-deploy-parity
   fleet-ops
   ian-xiaohei-illustrations
+  ios-app-growth
   code-cleanup
   local-ports-cleanup
   mobile-task-control

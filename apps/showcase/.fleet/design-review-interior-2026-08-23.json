@@ -1,0 +1,65 @@
+{
+  "$schema": "fleet.design-review.v1",
+  "version": 1,
+  "project": "showcase",
+  "target": "Ideas, Tools, and Learnings theme unification",
+  "mode": "preserve",
+  "register": "brand",
+  "context": {
+    "product": "PRODUCT.md",
+    "design": "DESIGN.md"
+  },
+  "direction": {
+    "references": [],
+    "probes": [],
+    "selected": "existing-design",
+    "approval": "not-required",
+    "before": "artifacts/design/interior-before-ideas-1440.png"
+  },
+  "evidence": {
+    "screenshots": [
+      {
+        "width": 390,
+        "path": "artifacts/design/interior-after-ideas-390.png"
+      },
+      {
+        "width": 768,
+        "path": "artifacts/design/interior-after-ideas-768.png"
+      },
+      {
+        "width": 1440,
+        "path": "artifacts/design/interior-after-ideas-1440.png"
+      }
+    ],
+    "projectCheck": {
+      "command": "pnpm exec vitest run tests/showcase/ideas.test.ts tests/showcase/public-surface.test.ts && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && pnpm check:docs",
+      "status": "pass"
+    },
+    "critique": {
+      "score": 32,
+      "maximum": 40
+    },
+    "audit": {
+      "score": 18,
+      "maximum": 20
+    },
+    "unresolved": {
+      "p0": 0,
+      "p1": 0
+    },
+    "detector": {
+      "posture": "advisory",
+      "findings": [
+        {
+          "rule": "single-font",
+          "location": "apps/showcase/src/layouts/Layout.astro:1",
+          "disposition": "intentional false positive; DESIGN.md requires Schibsted Grotesk throughout"
+        }
+      ]
+    }
+  },
+  "ownerFeedback": {
+    "decision": "keep",
+    "note": "Owner approved the unified public theme and requested release."
+  }
+}

@@ -14,8 +14,8 @@ extension below their own authored footer.
 ## Product contract
 
 - Keep the product name and the AI action explicit.
-- Show provider names alongside recognizable marks; never rely on icon-only or
-  letter-only controls.
+- Use publisher-supplied artwork as the visible provider control. Keep provider
+  names in accessible labels and tooltips instead of permanent text.
 - Open a pre-filled prompt in the selected provider without API keys, storage,
   analytics, authentication, or a SaaS Maker backend.
 - Preserve the host product's footer, color, typography, and runtime boundary.
