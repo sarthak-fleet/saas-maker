@@ -24,6 +24,18 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-25 — Shared AI footer simplified and released:** Replaced the
+  studio discovery rail and project ticker with a compact, host-neutral utility
+  dock. Kept visible labels and 44px actions, added recognisable colour to all
+  five provider icons, and made each action open a pre-filled AI conversation
+  in a new tab. The hosted loader now removes the legacy project strip by
+  default while retaining `data-compose="false"` as a migration escape hatch,
+  and the shared landing template loads only the AI footer. Released feature
+  commit `0bc7aed1` through Pages deployment
+  `b7be0170-45b8-4878-a614-3fd446dd1c6c`; exact-SHA CI passed, production smoke
+  passed 4/4, and cache-busted live checks confirmed the new loader contract.
+  The shared package source changed but no npm package publication ran.
+
 - **2026-08-25 — Studio identity and shared public footer released:** Published
   the canonical founder-led studio thesis at `/studio` with matching Markdown,
   homepage, `llms.txt`, `/api/ai`, metadata, and distinct Person, Organization,
