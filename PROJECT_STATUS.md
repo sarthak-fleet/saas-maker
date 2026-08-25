@@ -24,6 +24,19 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-25 — Studio identity and shared public footer released:** Published
+  the canonical founder-led studio thesis at `/studio` with matching Markdown,
+  homepage, `llms.txt`, `/api/ai`, metadata, and distinct Person, Organization,
+  and WebSite JSON-LD projections. Moved representative product evidence ahead
+  of the operating principles, exposed direct product and source links, aligned
+  expanded project evidence to the directory column grid, and replaced the
+  letter-mark AI footer with labelled provider icons and a structured studio
+  discovery rail. Released feature commit `99bfbf26` through Pages deployment
+  `62dccdc0-d6e0-4b54-9779-00d0a3fb6e83`; production smoke passed 4/4, live
+  visual checks passed at 390/768/1440 with no overflow or console errors, and
+  the agent-index audit passed S-tier at 100%. The shared package source changed
+  but no npm package publication ran.
+
 - **2026-08-24 — Public project profiles expanded:** Added one generated HTML
   and Markdown profile for each of the 53 non-directory identities, while SaaS
   Maker remains canonical at `/`. Every profile leads with a reviewed
@@ -158,6 +171,9 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Features (shipped)
 
+- Canonical `/studio` identity with a personal position on AI, representative
+  catalog-backed work, honest studio boundaries, selective commission path,
+  matching Markdown/API projections, and entity-correct structured data.
 - Curated public homepage with four products in focus and a single gateway to
   the complete register, without duplicating the 54-project directory.
 - Deterministic 54-identity public projection consumed without private Fleet
