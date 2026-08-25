@@ -28,4 +28,3 @@ jobs:
       - run: pnpm run build:cli
       - run: pnpm run build:web
       - run: pnpm run docs:check
-      - run: pnpm run docs:build
