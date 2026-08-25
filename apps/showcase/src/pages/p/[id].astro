@@ -16,6 +16,13 @@ interface Props {
 }
 
 const { product } = Astro.props as Props;
+const repositoryMatch = product.repositoryUrl?.match(
+  /^https:\/\/github\.com\/([a-z\d](?:[a-z\d-]*[a-z\d])?)\/([a-z\d._-]+?)(?:\.git)?\/?$/i
+);
+const repositorySlug = repositoryMatch ? `${repositoryMatch[1]}/${repositoryMatch[2]}` : null;
+const issuePagesOrigin = import.meta.env.DEV
+  ? 'http://localhost:8787'
+  : 'https://issues.sarthakagrawal.dev';
 const profileUrl = `https://sassmaker.com/p/${product.id}`;
 const publicLinks = [
   ...(product.changelogUrl
@@ -169,6 +176,36 @@ const productJsonLd = {
             )}
           </div>
         </section>
+
+        {repositorySlug && (
+          <section class="project-issues" aria-labelledby="issues-title">
+            <div class="project-issues-title">
+              <p class="project-folio">Repository publication</p>
+              <h2 id="issues-title">Read the issues.</h2>
+              <p>
+                Public issues become a browsable, read-only record here. Open the source issue on
+                GitHub to comment, react, or follow the work.
+              </p>
+            </div>
+            <div class="project-issues-embed">
+              <script
+                is:inline
+                data-astro-rerun
+                async
+                src={`${issuePagesOrigin}/embed.js?v=20260826-2`}
+                data-repo={repositorySlug}
+                data-theme="light"
+                data-density="comfortable"
+                data-variant="minimal"
+                data-accent="#c9820d"
+              ></script>
+              <p class="project-issues-fallback">
+                The embedded reader is loading or unavailable.
+                <a href={`${product.repositoryUrl}/issues`}>Read the issues on GitHub.</a>
+              </p>
+            </div>
+          </section>
+        )}
 
         <section class="project-boundary">
           <p>
@@ -507,6 +544,61 @@ const productJsonLd = {
     font-size: 1rem;
   }
 
+  .project-issues {
+    display: grid;
+    grid-template-columns: minmax(20rem, 0.65fr) minmax(0, 1.35fr);
+    gap: 0.375rem;
+    border-top: 0.375rem solid var(--workshop-steel);
+    background: var(--workshop-steel);
+  }
+
+  .project-issues-title {
+    min-height: 25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    background: var(--workshop-amber);
+    color: var(--workshop-steel);
+  }
+
+  .project-issues-title h2 {
+    max-width: 8ch;
+    margin-top: 1.25rem;
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .project-issues-title > p:last-child {
+    max-width: 36ch;
+    margin-top: 1.5rem;
+    color: var(--workshop-steel);
+  }
+
+  .project-issues-embed {
+    min-width: 0;
+    min-height: 30rem;
+    align-self: stretch;
+    background: var(--workshop-seeded);
+  }
+
+  .project-issues-fallback {
+    min-height: 30rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: var(--workshop-muted);
+    text-align: center;
+  }
+
+  .project-issues-embed:has([data-issue-pages-embed]) > .project-issues-fallback {
+    display: none;
+  }
+
   .project-boundary p {
     max-width: 68ch;
   }
@@ -515,7 +607,8 @@ const productJsonLd = {
     .project-hero,
     .project-why,
     .project-anatomy,
-    .project-progress {
+    .project-progress,
+    .project-issues {
       grid-template-columns: 1fr;
     }
 
@@ -548,6 +641,11 @@ const productJsonLd = {
     }
 
     .project-section-head {
+      min-height: 17rem;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .project-issues-title {
       min-height: 17rem;
       padding: 2.5rem 1.5rem;
     }

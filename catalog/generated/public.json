@@ -206,7 +206,8 @@
         "Astro",
         "React",
         "Cloudflare",
-        "D1"
+        "D1",
+        "IssuePages"
       ],
       "group": "current",
       "lifecycle": "maintained",
@@ -536,6 +537,38 @@
       "repositoryUrl": "https://github.com/Significant-Hobbies/on-record",
       "roadmapUrl": "https://github.com/Significant-Hobbies/on-record/issues",
       "firstCommitAt": "2026-08-24",
+      "latestCommitAt": "2026-08-25"
+    },
+    {
+      "id": "issue-pages",
+      "name": "IssuePages",
+      "description": "A public website where a GitHub issue becomes a readable, searchable page.",
+      "makerNote": "I wanted publishing a public page to be as simple as opening a GitHub issue.",
+      "kind": "experiment",
+      "form": "Issue-backed publishing website",
+      "platforms": [
+        "Web",
+        "GitHub"
+      ],
+      "technologies": [
+        "Hono",
+        "TypeScript",
+        "Cloudflare Workers",
+        "D1"
+      ],
+      "group": "supporting",
+      "lifecycle": "maintained",
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "issues.sarthakagrawal.dev"
+      ],
+      "url": "https://issues.sarthakagrawal.dev",
+      "repositoryUrl": "https://github.com/sarthakagrawal927/issue-pages",
+      "roadmapUrl": "https://github.com/sarthakagrawal927/issue-pages/issues",
+      "firstCommitAt": "2026-08-25",
       "latestCommitAt": "2026-08-25"
     },
     {
@@ -1528,8 +1561,8 @@
       "technologies": [
         "Astro",
         "React",
-        "TypeScript",
-        "Cloudflare Pages"
+        "Cloudflare Pages",
+        "IssuePages"
       ],
       "group": "supporting",
       "lifecycle": "maintained",

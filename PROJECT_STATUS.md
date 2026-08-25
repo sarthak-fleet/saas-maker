@@ -24,6 +24,11 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-08-26 — Repository publication dogfood:** Extended public
+  project profiles with a lazy, read-only IssuePages publication when the
+  privacy-safe catalog exposes a validated public GitHub repository. Profiles
+  without public source remain unchanged. The rollout is tracked in GitHub issue
+  #79.
 - **2026-08-25 — Shared AI footer simplified and released:** Replaced the
   studio discovery rail and project ticker with a compact, host-neutral utility
   dock. Kept visible labels and 44px actions, added recognisable colour to all

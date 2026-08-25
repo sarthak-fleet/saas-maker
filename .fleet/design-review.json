@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "saas-maker",
-  "target": "Public product detail pages from the privacy-safe directory projection",
+  "target": "IssuePages repository publication on public product detail pages",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -36,11 +36,11 @@
       "status": "pass"
     },
     "critique": {
-      "score": 37,
+      "score": 40,
       "maximum": 40
     },
     "audit": {
-      "score": 18,
+      "score": 20,
       "maximum": 20
     },
     "unresolved": {
@@ -50,7 +50,7 @@
     "detector": {
       "posture": "advisory",
       "findings": [
-        "CLI detector returned zero findings; independent review found and resolved mobile navigation, contrast, route-current, and color-scheme gaps."
+        "The detector returned zero findings. Independent review resolved hierarchy, contrast, touch-target, layout-shift, and runtime-fallback findings; blocked-script fallback evidence is captured in artifacts/design/fallback-390.png."
       ]
     }
   },
