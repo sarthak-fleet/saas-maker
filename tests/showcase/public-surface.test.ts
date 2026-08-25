@@ -17,6 +17,11 @@ describe('SaaS Maker public source boundary', () => {
     expect(source).toMatch(/Explore .+ with AI/);
     expect(source).toMatch(/createProviderIcon/);
     expect(source).toMatch(/dataset\.aiProvider/);
+    expect(source).toMatch(/m4\.7144 15\.9555/);
+    expect(source).toMatch(/rotate\(.+1203 1203/);
+    expect(source).toMatch(/M11\.04 19\.32/);
+    expect(source).toMatch(/M22\.3977 7\.0896/);
+    expect(source).toMatch(/M210\.484 312\.759/);
     expect(source).toMatch(/strip && script\.dataset\.compose !== 'false'/);
     expect(source).not.toMatch(/More from SaaS Maker|fleet-footer-extension|View all projects/);
     expect(source).not.toMatch(/analytics|localStorage|credential/i);

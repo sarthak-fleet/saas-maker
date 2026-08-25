@@ -78,3 +78,18 @@ test('React footer keeps every provider name visible beside an icon', () => {
   assert.equal((markup.match(/class="ai-chat-footer__icon"/g) ?? []).length, 5);
   assert.match(markup, /ai-chat-footer__signal/);
 });
+
+test('React footer renders recognizable provider brand geometry', () => {
+  const markup = renderToStaticMarkup(
+    createElement(AIChatFooter, {
+      companyName: 'Acme',
+      companyUrl: 'https://example.com',
+    })
+  );
+
+  assert.match(markup, /m4\.7144 15\.9555/, 'Claude must use the Claude burst');
+  assert.match(markup, /rotate\(300 1203 1203\)/, 'ChatGPT must use the six-part knot');
+  assert.match(markup, /M11\.04 19\.32/, 'Gemini must use the four-point sparkle');
+  assert.match(markup, /M22\.3977 7\.0896/, 'Perplexity must use the woven monogram');
+  assert.match(markup, /M210\.484 312\.759/, 'Grok must use the Grok slash mark');
+});

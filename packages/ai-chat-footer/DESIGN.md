@@ -12,9 +12,11 @@ visitor's preferred assistant easy to recognize and open.
 2. One sentence explains what will happen.
 3. Labelled provider buttons present equal choices with 44px touch targets.
 
-Provider actions use a consistent framed-icon treatment and visible names.
-Provider colour stays inside the icon tile; labels, borders, and surfaces
-inherit the host so the shared component does not become a competing brand.
+Provider actions use accurate provider symbols in a consistent framed-icon
+treatment alongside visible names. Never substitute generic geometry, initials,
+or lookalike marks. Provider colour stays inside the icon tile; labels, borders,
+and surfaces inherit the host so the shared component does not become a
+competing brand.
 Wide layouts keep the action copy and provider choices on one row. Narrow
 layouts use two columns and let an unpaired final provider span both.
 

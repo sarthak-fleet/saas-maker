@@ -131,7 +131,8 @@
 }
 
 .ai-chat-footer__link[data-ai-provider="grok"] .ai-chat-footer__mark {
-  --ai-chat-footer-provider: #8b8b91;
+  --ai-chat-footer-provider: #ffffff;
+  background: #111111;
 }
 
 .ai-chat-footer[data-theme="dark"] {
