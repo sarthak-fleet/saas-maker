@@ -2,7 +2,7 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "ai-chat-footer",
-  "target": "AI chat footer structure and iconography",
+  "target": "Shared host-neutral AI utility dock",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -32,11 +32,11 @@
       }
     ],
     "projectCheck": {
-      "command": "pnpm test && pnpm check:shared-packages && pnpm build:showcase",
+      "command": "pnpm test && pnpm --dir packages/ai-chat-footer check && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase",
       "status": "pass"
     },
     "critique": {
-      "score": 35,
+      "score": 38,
       "maximum": 40
     },
     "audit": {
@@ -53,7 +53,7 @@
     }
   },
   "ownerFeedback": {
-    "decision": "delegated",
-    "note": "Owner delegated a preserve-mode repair after identifying the footer structure, missing icons, and directory alignment as defects."
+    "decision": "keep",
+    "note": "Owner approved deployment of the compact utility dock direction: colourful provider icons, no SaaS Maker promotion, and no project ticker."
   }
 }

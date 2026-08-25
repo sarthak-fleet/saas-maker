@@ -2,20 +2,21 @@
 
 ## Direction
 
-The footer is a compact utility panel, not a second product hero. It should
-read as two deliberate groups when composed: an AI shortcut first and a quiet
-"More from the studio" discovery strip second.
+The footer is a compact utility dock, not a second product hero or a portfolio
+navigation surface. It has one job: explain the AI handoff and make the
+visitor's preferred assistant easy to recognize and open.
 
 ## Hierarchy
 
-1. A small AI-shortcut eyebrow establishes the role.
-2. A semantic heading names the product-specific action.
-3. One sentence explains what will happen.
-4. Labelled provider buttons present equal choices with 44px touch targets.
+1. A framed sparkle mark and semantic heading name the product-specific action.
+2. One sentence explains what will happen.
+3. Labelled provider buttons present equal choices with 44px touch targets.
 
 Provider actions use a consistent framed-icon treatment and visible names.
-Wide layouts use a deliberate three-plus-two composition. Narrow layouts use
-two columns and center an unpaired final provider.
+Provider colour stays inside the icon tile; labels, borders, and surfaces
+inherit the host so the shared component does not become a competing brand.
+Wide layouts keep the action copy and provider choices on one row. Narrow
+layouts use two columns and let an unpaired final provider span both.
 
 ## Host integration
 
@@ -23,9 +24,9 @@ Inherit the host's text color and typography. Use `currentColor`, subtle mixed
 borders and surfaces, and a configurable focus color. Do not introduce a new
 brand palette, full-height footer, background image, or decorative animation.
 
-The composed extension uses one vertical split on wide screens and stacks the
-AI block above project discovery at 760px and below. It must not create page
-overflow at 390, 768, or 1440 pixels.
+The dock uses a single vertical rhythm at every width and must not create page
+overflow at 390, 768, or 1440 pixels. It must not add studio promotion,
+project tickers, or a second navigation layer beneath the host footer.
 
 ## Accessibility and motion
 
@@ -33,4 +34,4 @@ overflow at 390, 768, or 1440 pixels.
 - Keep provider names visible and provider icons decorative.
 - Preserve visible keyboard focus and external-link semantics.
 - Keep every provider action at least 44px tall.
-- Respect the project strip's reduced-motion, touch, and keyboard behavior.
+- Respect reduced-motion preferences for the dock's subtle hover response.

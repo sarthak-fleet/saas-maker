@@ -20,12 +20,12 @@ const source = `(() => {
       for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, value);
       svg.append(node);
     };
-    if (provider === 'claude') add('path', { d: 'M12 2l2.5 7h7l-5.7 4.2 2.2 7-6-4.5-6 4.5 2.2-7L2.5 9h7L12 2z', fill: 'currentColor' });
+    if (provider === 'claude') add('path', { d: 'M12 3v18M3 12h18M5.65 5.65l12.7 12.7M18.35 5.65l-12.7 12.7', fill: 'none', stroke: 'currentColor', 'stroke-width': '2.4', 'stroke-linecap': 'round' });
     if (provider === 'chatgpt') {
       add('path', { d: 'M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z', fill: 'none', stroke: 'currentColor', 'stroke-width': '2' });
       add('circle', { cx: '12', cy: '12', r: '3', fill: 'none', stroke: 'currentColor', 'stroke-width': '2' });
     }
-    if (provider === 'gemini') add('path', { d: 'M12 2l3 7.5h7.5l-6 4.5 2.25 7.5-6.75-5-6.75 5 2.25-7.5-6-4.5H9L12 2z', fill: 'currentColor' });
+    if (provider === 'gemini') add('path', { d: 'M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81', fill: 'currentColor' });
     if (provider === 'perplexity') {
       add('circle', { cx: '12', cy: '12', r: '9', fill: 'none', stroke: 'currentColor', 'stroke-width': '2' });
       add('circle', { cx: '12', cy: '12', r: '4', fill: 'currentColor' });
@@ -57,44 +57,54 @@ const source = `(() => {
 
       const style = document.createElement('style');
       style.textContent = \`
-        :host { --ai-footer-muted: color-mix(in srgb, currentColor 62%, transparent); --ai-footer-border: color-mix(in srgb, currentColor 18%, transparent); --ai-footer-focus: #2563eb; display: block; color: inherit; background: transparent; font: inherit; }
+        :host { --ai-footer-muted: color-mix(in srgb, currentColor 62%, transparent); --ai-footer-border: color-mix(in srgb, currentColor 18%, transparent); --ai-footer-control: color-mix(in srgb, currentColor 4%, transparent); --ai-footer-focus: #2563eb; display: block; color: inherit; background: transparent; font: inherit; }
         :host([theme='light']) { color-scheme: light; }
         :host([theme='dark']) { color-scheme: dark; }
         * { box-sizing: border-box; }
-        aside { display: grid; align-content: center; min-height: 11rem; padding: 1.5rem var(--ai-footer-edge, 1rem); border-block-start: 1px solid var(--ai-footer-border); }
-        :host([integrated]) aside { height: 100%; padding: 1.25rem var(--ai-footer-edge, 1.25rem); border-block-start: 0; }
+        aside { display: grid; grid-template-columns: minmax(13rem, .72fr) minmax(0, 1.28fr); align-items: center; gap: clamp(1.25rem, 3vw, 3rem); padding: 1.25rem var(--ai-footer-edge, 1.25rem); border-block-start: 1px solid var(--ai-footer-border); }
+        :host([integrated]) aside { border-block-start: 0; }
         p { margin: 0; }
-        .eyebrow { display: flex; align-items: center; gap: .4rem; color: var(--ai-footer-muted); font-size: .64rem; font-weight: 750; letter-spacing: .1em; line-height: 1; text-transform: uppercase; }
-        .eyebrow svg { width: .9rem; height: .9rem; fill: none; stroke: currentColor; stroke-width: 1.6; }
-        .title { margin: .55rem 0 0; font-size: clamp(1rem, 1.4vw, 1.2rem); font-weight: 720; letter-spacing: -.025em; line-height: 1.2; }
-        .description { max-width: 36rem; margin-top: .35rem; color: var(--ai-footer-muted); font-size: .74rem; line-height: 1.45; }
-        ul { display: grid; grid-template-columns: repeat(3, max-content); gap: .45rem; margin: 1rem 0 0; padding: 0; list-style: none; }
-        a { display: inline-flex; width: 100%; min-height: 2.75rem; align-items: center; gap: .5rem; padding: .35rem .72rem .35rem .35rem; border: 1px solid var(--ai-footer-border); border-radius: .65rem; color: inherit; font-size: .72rem; font-weight: 680; text-decoration: none; transition: background-color 140ms ease, border-color 140ms ease; }
-        a:hover { background: color-mix(in srgb, currentColor 7%, transparent); }
+        .intro { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); align-items: start; gap: .8rem; }
+        .signal { display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border: 1px solid var(--ai-footer-border); border-radius: .75rem; background: var(--ai-footer-control); }
+        .signal svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
+        .title { margin: 0; font-size: clamp(1rem, 1.4vw, 1.15rem); font-weight: 720; letter-spacing: -.025em; line-height: 1.2; }
+        .description { max-width: 36rem; margin-top: .3rem; color: var(--ai-footer-muted); font-size: .78rem; line-height: 1.45; }
+        ul { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+        a { display: inline-flex; width: 100%; min-height: 2.75rem; align-items: center; gap: .45rem; padding: .45rem .7rem .45rem .5rem; border: 1px solid var(--ai-footer-border); border-radius: .75rem; background: var(--ai-footer-control); color: inherit; font-size: .75rem; font-weight: 680; text-decoration: none; transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease; }
+        a:hover { border-color: color-mix(in srgb, currentColor 28%, transparent); background: color-mix(in srgb, currentColor 8%, transparent); transform: translateY(-1px); }
         a:focus-visible { outline: 2px solid var(--ai-footer-focus); outline-offset: 2px; }
-        .mark { display: grid; width: 1.95rem; height: 1.95rem; place-items: center; border-radius: .45rem; background: color-mix(in srgb, currentColor 8%, transparent); }
-        .mark svg { width: 1.05rem; height: 1.05rem; }
-        @media (max-width: 1000px) { ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } li:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - .225rem); justify-self: center; } }
-        @media (max-width: 480px) { aside { min-height: 0; } }
+        .mark { --provider-color: currentColor; display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border-radius: .5rem; background: color-mix(in srgb, var(--provider-color) 16%, transparent); color: var(--provider-color); }
+        a[data-ai-provider='claude'] .mark { --provider-color: #d97757; }
+        a[data-ai-provider='chatgpt'] .mark { --provider-color: #10a37f; }
+        a[data-ai-provider='gemini'] .mark { --provider-color: #8e75b2; }
+        a[data-ai-provider='perplexity'] .mark { --provider-color: #1fb8cd; }
+        a[data-ai-provider='grok'] .mark { --provider-color: #8b8b91; }
+        .mark svg { width: 1rem; height: 1rem; }
+        @media (max-width: 1000px) { aside { grid-template-columns: minmax(0, 1fr); gap: 1rem; } ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; } li:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - .25rem); justify-self: center; } li:last-child:nth-child(odd) a { justify-content: center; } }
+        @media (prefers-reduced-motion: reduce) { a { transition: background-color 150ms ease, border-color 150ms ease; } a:hover { transform: none; } }
       \`;
 
       const aside = document.createElement('aside');
       aside.setAttribute('aria-label', 'Chat with AI about this product');
-      const eyebrow = document.createElement('p');
-      eyebrow.className = 'eyebrow';
+      const intro = document.createElement('div');
+      intro.className = 'intro';
+      const signal = document.createElement('span');
+      signal.className = 'signal';
+      signal.setAttribute('aria-hidden', 'true');
       const sparkle = document.createElementNS(SVG_NS, 'svg');
       sparkle.setAttribute('viewBox', '0 0 16 16');
       sparkle.setAttribute('aria-hidden', 'true');
       const sparklePath = document.createElementNS(SVG_NS, 'path');
       sparklePath.setAttribute('d', 'M8 1.5c.35 3.65 2.85 6.15 6.5 6.5-3.65.35-6.15 2.85-6.5 6.5C7.65 10.85 5.15 8.35 1.5 8 5.15 7.65 7.65 5.15 8 1.5Z');
       sparkle.append(sparklePath);
-      eyebrow.append(sparkle, document.createTextNode('AI shortcut'));
+      signal.append(sparkle);
+      const copy = document.createElement('div');
       const heading = document.createElement('h2');
       heading.className = 'title';
       heading.textContent = label;
       const description = document.createElement('p');
       description.className = 'description';
-      description.textContent = 'Open a focused question in the assistant you already use.';
+      description.textContent = 'Open a pre-filled question in a new tab with the assistant you already use.';
       const list = document.createElement('ul');
       for (const [id, providerName, buildUrl] of PROVIDERS) {
         if (!allowed.has(id)) continue;
@@ -104,7 +114,7 @@ const source = `(() => {
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.dataset.aiProvider = id;
-        link.setAttribute('aria-label', 'Ask ' + providerName + ' about ' + name);
+        link.setAttribute('aria-label', 'Ask ' + providerName + ' about ' + name + ' (opens in a new tab)');
         const icon = document.createElement('span');
         icon.className = 'mark';
         icon.setAttribute('aria-hidden', 'true');
@@ -113,71 +123,14 @@ const source = `(() => {
         item.append(link);
         list.append(item);
       }
-      aside.append(eyebrow, heading, description, list);
+      copy.append(heading, description);
+      intro.append(signal, copy);
+      aside.append(intro, list);
       root.append(style, aside);
     }
   }
 
   if (!customElements.get('ai-chat-footer')) customElements.define('ai-chat-footer', AIChatFooter);
-
-  class FleetFooterExtension extends HTMLElement {
-    connectedCallback() {
-      if (this.shadowRoot) return;
-      const root = this.attachShadow({ mode: 'open' });
-      const style = document.createElement('style');
-      style.textContent = \`
-        :host {
-          --fleet-footer-border: color-mix(in srgb, currentColor 16%, transparent);
-          --fleet-footer-surface: color-mix(in srgb, currentColor 3%, transparent);
-          display: block;
-          width: 100%;
-          color: inherit;
-          background: var(--fleet-footer-surface);
-          border-block-start: 1px solid var(--fleet-footer-border);
-          font: inherit;
-        }
-        * { box-sizing: border-box; }
-        aside { display: grid; grid-template-columns: minmax(21rem, .72fr) minmax(0, 1.28fr); align-items: stretch; }
-        .ai { min-width: 0; border-inline-end: 1px solid var(--fleet-footer-border); }
-        .projects { display: grid; min-width: 0; align-content: center; }
-        .projects-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem var(--fleet-footer-edge, 1rem) 0; }
-        .projects-head span { color: color-mix(in srgb, currentColor 62%, transparent); font-size: .64rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
-        .projects-head a { min-height: 2.75rem; display: inline-flex; align-items: center; color: inherit; font-size: .72rem; font-weight: 680; text-underline-offset: .22em; }
-        .projects-head a:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
-        ::slotted(*) { min-width: 0; }
-        @media (max-width: 760px) {
-          aside { grid-template-columns: minmax(0, 1fr); }
-          .ai { border-inline-end: 0; border-block-end: 1px solid var(--fleet-footer-border); }
-        }
-      \`;
-      const region = document.createElement('aside');
-      region.setAttribute('aria-label', 'Explore this product and more from the Fleet');
-      const ai = document.createElement('div');
-      ai.className = 'ai';
-      const aiSlot = document.createElement('slot');
-      aiSlot.name = 'ai';
-      ai.append(aiSlot);
-      const projects = document.createElement('div');
-      projects.className = 'projects';
-      const projectsHead = document.createElement('div');
-      projectsHead.className = 'projects-head';
-      const projectsLabel = document.createElement('span');
-      projectsLabel.textContent = 'More from the studio';
-      const projectsLink = document.createElement('a');
-      projectsLink.href = 'https://sassmaker.com/projects';
-      projectsLink.textContent = 'View all projects ↗';
-      projectsHead.append(projectsLabel, projectsLink);
-      const projectsSlot = document.createElement('slot');
-      projectsSlot.name = 'projects';
-      projects.append(projectsHead, projectsSlot);
-      region.append(ai, projects);
-      root.append(style, region);
-    }
-  }
-
-  if (!customElements.get('fleet-footer-extension')) {
-    customElements.define('fleet-footer-extension', FleetFooterExtension);
-  }
 
   const script = document.currentScript;
   const mount = () => {
@@ -189,17 +142,8 @@ const source = `(() => {
       if (script.dataset[attribute]) footer.setAttribute(attribute, script.dataset[attribute]);
     }
     const strip = document.querySelector('portfolio-project-strip');
-    if (!strip || script.dataset.compose === 'false') {
-      if (!footer.isConnected) document.body.append(footer);
-      return;
-    }
-    const extension = document.querySelector('fleet-footer-extension') || document.createElement('fleet-footer-extension');
-    footer.setAttribute('integrated', '');
-    footer.slot = 'ai';
-    strip.setAttribute('integrated', '');
-    strip.slot = 'projects';
-    extension.append(footer, strip);
-    if (!extension.isConnected) document.body.append(extension);
+    if (strip && script.dataset.compose !== 'false') strip.remove();
+    if (!footer.isConnected) document.body.append(footer);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
   else mount();

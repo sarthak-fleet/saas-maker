@@ -19,8 +19,8 @@ extension below their own authored footer.
 - Open a pre-filled prompt in the selected provider without API keys, storage,
   analytics, authentication, or a SaaS Maker backend.
 - Preserve the host product's footer, color, typography, and runtime boundary.
-- Compose with the portfolio project strip when both loaders are present, while
-  keeping product discovery secondary to the AI action.
+- Stay focused on the AI handoff. Portfolio discovery and studio navigation
+  remain separate components owned by the host product.
 
 ## Non-goals
 

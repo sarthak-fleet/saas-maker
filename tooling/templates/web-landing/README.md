@@ -10,8 +10,7 @@ The template is deliberately small:
 - a real or clearly labelled illustrative product artifact;
 - three concrete capabilities instead of a generic feature wall;
 - an explicit product boundary;
-- a product-owned footer followed by one compact Fleet extension containing
-  both the project strip and Ask AI.
+- a product-owned footer followed by one compact Ask AI utility dock.
 
 Copy it into a product repo as `landing-astro/`, then replace every example
 field in `src/site.config.ts`. Product repositories own their copies and stay
@@ -31,8 +30,7 @@ pnpm build
    boundaries before changing the landing page.
 2. A dashboard may be the proof artifact. Do not replace a working app with a
    marketing-only shell.
-3. Keep a product's authored footer. Load the Fleet project strip before the
-   AI footer loader; the loader composes both into one extension below it.
+3. Keep a product's authored footer, then load the AI footer once below it.
 4. Do not invent screenshots, customers, usage numbers, availability, or
    integrations.
 5. Validate the first view and footer at 390, 768, and 1440 pixels.
@@ -40,5 +38,5 @@ pnpm build
 ## Shape, not sameness
 
 The reusable part is the information hierarchy, accessibility floor, spacing
-system, and footer composition. Typography, color, artifact, voice, and
+system, and bottom-dock behavior. Typography, color, artifact, voice, and
 section order should continue to belong to the product.

@@ -34,19 +34,19 @@ the same provider URLs and default prompt contract as the React component.
 
 ### Fleet hosted integration
 
-Fleet product pages should load the project strip first and the AI loader
-second:
+Fleet product pages should load the AI footer once, after their authored
+footer:
 
 ```html
-<script src="https://sassmaker.com/project-strip.js" data-project="acme" defer></script>
 <script src="https://sassmaker.com/ai-chat-footer.js" data-name="Acme" defer></script>
 ```
 
-The AI loader detects `portfolio-project-strip` and moves both widgets into one
-`fleet-footer-extension`. A product's authored footer remains untouched above
-that compact extension. Do not add a second local AI footer or wrap either
-widget in another full-height footer. Set `data-compose="false"` on the AI
-loader only when a consumer deliberately owns a different composition.
+The loader appends one host-neutral utility dock. A product's authored footer
+remains untouched above it. Do not add a second local AI footer or wrap the
+widget in another full-height footer. The hosted loader removes the legacy
+portfolio strip when both old loaders are still present; set
+`data-compose="false"` temporarily only while migrating a host that deliberately
+keeps its independent strip.
 
 Import the component and its CSS:
 

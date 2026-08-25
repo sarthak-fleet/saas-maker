@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import { AI_CHAT_FOOTER_TAG, normalizeProviderIds } from '../dist/browser/element.mjs';
-import { DEFAULT_PROVIDERS, getProviderUrl } from '../dist/index.mjs';
+import { AIChatFooter, DEFAULT_PROVIDERS, getProviderUrl } from '../dist/index.mjs';
 
 test('DEFAULT_PROVIDERS lists all five providers in order', () => {
   assert.deepEqual(DEFAULT_PROVIDERS, ['claude', 'chatgpt', 'gemini', 'perplexity', 'grok']);
@@ -57,4 +59,22 @@ test('browser entrypoint is safe to import without a DOM', () => {
 
 test('browser entrypoint filters and de-duplicates provider attributes', () => {
   assert.deepEqual(normalizeProviderIds('chatgpt,claude,chatgpt,invalid'), ['chatgpt', 'claude']);
+});
+
+test('React footer keeps every provider name visible beside an icon', () => {
+  const markup = renderToStaticMarkup(
+    createElement(AIChatFooter, {
+      companyName: 'Acme',
+      companyUrl: 'https://example.com',
+    })
+  );
+
+  for (const name of ['Claude', 'ChatGPT', 'Gemini', 'Perplexity', 'Grok']) {
+    assert.match(markup, new RegExp(`>${name}</span></a>`));
+  }
+  for (const provider of DEFAULT_PROVIDERS) {
+    assert.match(markup, new RegExp(`data-ai-provider="${provider}"`));
+  }
+  assert.equal((markup.match(/class="ai-chat-footer__icon"/g) ?? []).length, 5);
+  assert.match(markup, /ai-chat-footer__signal/);
 });

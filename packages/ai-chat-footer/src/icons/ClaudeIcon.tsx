@@ -3,12 +3,15 @@ export function ClaudeIcon({ className }: { className?: string }) {
     <svg
       className={className}
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
       <title>Claude icon</title>
-      <path d="M12 2l2.5 7h7l-5.7 4.2 2.2 7-6-4.5-6 4.5 2.2-7L2.5 9h7L12 2z" />
+      <path d="M12 3v18M3 12h18M5.65 5.65l12.7 12.7M18.35 5.65l-12.7 12.7" />
     </svg>
   );
 }

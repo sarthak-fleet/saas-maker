@@ -26,8 +26,11 @@ function createProviderIcon(provider: AIChatProvider): SVGSVGElement {
 
   if (provider === 'claude') {
     add('path', {
-      d: 'M12 2l2.5 7h7l-5.7 4.2 2.2 7-6-4.5-6 4.5 2.2-7L2.5 9h7L12 2z',
-      fill: 'currentColor',
+      d: 'M12 3v18M3 12h18M5.65 5.65l12.7 12.7M18.35 5.65l-12.7 12.7',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2.4',
+      'stroke-linecap': 'round',
     });
   }
   if (provider === 'chatgpt') {
@@ -48,7 +51,7 @@ function createProviderIcon(provider: AIChatProvider): SVGSVGElement {
   }
   if (provider === 'gemini') {
     add('path', {
-      d: 'M12 2l3 7.5h7.5l-6 4.5 2.25 7.5-6.75-5-6.75 5 2.25-7.5-6-4.5H9L12 2z',
+      d: 'M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81',
       fill: 'currentColor',
     });
   }
@@ -145,6 +148,7 @@ export function registerAIChatFooter(): void {
           --ai-footer-muted: color-mix(in srgb, currentColor 62%, transparent);
           --ai-footer-border: color-mix(in srgb, currentColor 18%, transparent);
           --ai-footer-surface: transparent;
+          --ai-footer-control: color-mix(in srgb, currentColor 4%, transparent);
           --ai-footer-focus: #2563eb;
           display: block;
           color: var(--ai-footer-text);
@@ -153,21 +157,28 @@ export function registerAIChatFooter(): void {
         }
         :host([theme='light']) { color-scheme: light; }
         :host([theme='dark']) { color-scheme: dark; }
-        .footer { display: grid; align-content: center; min-height: 11rem; padding: 1.5rem var(--ai-footer-edge, 1rem); border-block-start: 1px solid var(--ai-footer-border); }
-        :host([integrated]) .footer { height: 100%; padding: 1.25rem var(--ai-footer-edge, 1.25rem); border-block-start: 0; }
+        * { box-sizing: border-box; }
+        .footer { display: grid; grid-template-columns: minmax(13rem, .72fr) minmax(0, 1.28fr); align-items: center; gap: clamp(1.25rem, 3vw, 3rem); padding: 1.25rem var(--ai-footer-edge, 1.25rem); border-block-start: 1px solid var(--ai-footer-border); }
+        :host([integrated]) .footer { border-block-start: 0; }
         p { margin: 0; }
-        .eyebrow { display: flex; align-items: center; gap: .4rem; color: var(--ai-footer-muted); font-size: .64rem; font-weight: 750; letter-spacing: .1em; line-height: 1; text-transform: uppercase; }
-        .eyebrow svg { width: .9rem; height: .9rem; fill: none; stroke: currentColor; stroke-width: 1.6; }
-        .label { margin: .55rem 0 0; font-size: clamp(1rem, 1.4vw, 1.2rem); font-weight: 720; letter-spacing: -.025em; line-height: 1.2; }
-        .description { max-width: 36rem; margin-top: .35rem; color: var(--ai-footer-muted); font-size: .74rem; line-height: 1.45; }
-        ul { display: grid; grid-template-columns: repeat(3, max-content); gap: .45rem; margin: 1rem 0 0; padding: 0; list-style: none; }
-        a { display: inline-flex; width: 100%; min-height: 2.75rem; align-items: center; gap: .5rem; padding: .35rem .72rem .35rem .35rem; border: 1px solid var(--ai-footer-border); border-radius: .65rem; color: inherit; font-size: .72rem; font-weight: 680; text-decoration: none; transition: background-color 140ms ease, border-color 140ms ease; }
-        a:hover { background: color-mix(in srgb, currentColor 7%, transparent); }
+        .intro { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); align-items: start; gap: .8rem; }
+        .signal { display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border: 1px solid var(--ai-footer-border); border-radius: .75rem; background: var(--ai-footer-control); }
+        .signal svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
+        .label { margin: 0; font-size: clamp(1rem, 1.4vw, 1.15rem); font-weight: 720; letter-spacing: -.025em; line-height: 1.2; }
+        .description { max-width: 36rem; margin-top: .3rem; color: var(--ai-footer-muted); font-size: .78rem; line-height: 1.45; }
+        ul { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+        a { display: inline-flex; width: 100%; min-height: 2.75rem; align-items: center; gap: .45rem; padding: .45rem .7rem .45rem .5rem; border: 1px solid var(--ai-footer-border); border-radius: .75rem; background: var(--ai-footer-control); color: inherit; font-size: .75rem; font-weight: 680; text-decoration: none; transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease; }
+        a:hover { border-color: color-mix(in srgb, currentColor 28%, transparent); background: color-mix(in srgb, currentColor 8%, transparent); transform: translateY(-1px); }
         a:focus-visible { outline: 2px solid var(--ai-footer-focus); outline-offset: 2px; }
-        .mark { display: grid; width: 1.95rem; height: 1.95rem; place-items: center; border-radius: .45rem; background: color-mix(in srgb, currentColor 8%, transparent); }
-        .mark svg { width: 1.05rem; height: 1.05rem; }
-        @media (max-width: 1000px) { ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } li:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - .225rem); justify-self: center; } }
-        @media (max-width: 480px) { .footer { min-height: 0; } }
+        .mark { --provider-color: currentColor; display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border-radius: .5rem; background: color-mix(in srgb, var(--provider-color) 16%, transparent); color: var(--provider-color); }
+        a[data-ai-provider='claude'] .mark { --provider-color: #d97757; }
+        a[data-ai-provider='chatgpt'] .mark { --provider-color: #10a37f; }
+        a[data-ai-provider='gemini'] .mark { --provider-color: #8e75b2; }
+        a[data-ai-provider='perplexity'] .mark { --provider-color: #1fb8cd; }
+        a[data-ai-provider='grok'] .mark { --provider-color: #8b8b91; }
+        .mark svg { width: 1rem; height: 1rem; }
+        @media (max-width: 1000px) { .footer { grid-template-columns: minmax(0, 1fr); gap: 1rem; } ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; } li:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - .25rem); justify-self: center; } li:last-child:nth-child(odd) a { justify-content: center; } }
+        @media (prefers-reduced-motion: reduce) { a { transition: background-color 150ms ease, border-color 150ms ease; } a:hover { transform: none; } }
       `;
 
       const region = document.createElement('aside');
@@ -175,20 +186,25 @@ export function registerAIChatFooter(): void {
       region.setAttribute('aria-label', 'Ask AI about this product');
       if (theme) region.dataset.theme = theme;
 
-      const eyebrow = document.createElement('p');
-      eyebrow.className = 'eyebrow';
-      eyebrow.append(createSparkleIcon(), document.createTextNode('AI shortcut'));
-      region.append(eyebrow);
+      const intro = document.createElement('div');
+      intro.className = 'intro';
+      const signal = document.createElement('span');
+      signal.className = 'signal';
+      signal.setAttribute('aria-hidden', 'true');
+      signal.append(createSparkleIcon());
+      const copy = document.createElement('div');
 
       const heading = document.createElement('h2');
       heading.className = 'label';
       heading.textContent = label;
-      region.append(heading);
 
       const description = document.createElement('p');
       description.className = 'description';
-      description.textContent = 'Open a focused question in the assistant you already use.';
-      region.append(description);
+      description.textContent =
+        'Open a pre-filled question in a new tab with the assistant you already use.';
+      copy.append(heading, description);
+      intro.append(signal, copy);
+      region.append(intro);
 
       const list = document.createElement('ul');
       for (const provider of providers) {
@@ -198,7 +214,10 @@ export function registerAIChatFooter(): void {
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.dataset.aiProvider = provider;
-        link.setAttribute('aria-label', `Ask ${PROVIDER_NAMES[provider]} about ${companyName}`);
+        link.setAttribute(
+          'aria-label',
+          `Ask ${PROVIDER_NAMES[provider]} about ${companyName} (opens in a new tab)`
+        );
 
         const mark = document.createElement('span');
         mark.className = 'mark';

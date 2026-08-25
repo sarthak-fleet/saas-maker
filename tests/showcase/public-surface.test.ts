@@ -16,11 +16,9 @@ describe('SaaS Maker public source boundary', () => {
     expect(source).toMatch(/customElements\.define\('ai-chat-footer'/);
     expect(source).toMatch(/Explore .+ with AI/);
     expect(source).toMatch(/createProviderIcon/);
-    expect(source).toMatch(/More from the studio/);
     expect(source).toMatch(/dataset\.aiProvider/);
-    expect(source).toMatch(/customElements\.define\('fleet-footer-extension'/);
-    expect(source).toMatch(/strip\.setAttribute\('integrated'/);
-    expect(source).toMatch(/grid-template-columns: minmax\(21rem, \.72fr\) minmax\(0, 1\.28fr\)/);
+    expect(source).toMatch(/strip && script\.dataset\.compose !== 'false'/);
+    expect(source).not.toMatch(/More from SaaS Maker|fleet-footer-extension|View all projects/);
     expect(source).not.toMatch(/analytics|localStorage|credential/i);
     expect(() => new Function(source)).not.toThrow();
   });
@@ -109,7 +107,7 @@ describe('SaaS Maker public source boundary', () => {
     expect(fleet).toMatch(/<h2 id="learning-title"/);
     expect(fleet).not.toMatch(/ACTIVE_GROUPS|PAST_PROJECTS|catalog-row|archive-wall/);
     expect(fleet).not.toMatch(/project identities|accounted for once/);
-    expect(layout).toMatch(/src="https:\/\/sassmaker\.com\/project-strip\.js"/);
+    expect(layout).not.toMatch(/project-strip\.js/);
     expect(layout).toMatch(/src="https:\/\/sassmaker\.com\/ai-chat-footer\.js"/);
     expect(routes).toMatch(/# Products in focus/);
     expect(routes).toMatch(/# Complete directory/);

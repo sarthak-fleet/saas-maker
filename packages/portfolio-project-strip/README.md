@@ -41,10 +41,8 @@ Bundler-based consumers can import
 bundled public catalog immediately and keeps it when the bounded background
 refresh fails.
 
-For Fleet's hosted footer composition, load this strip before
-`https://sassmaker.com/ai-chat-footer.js`. The AI loader combines both custom
-elements into a single compact extension beneath any product-owned footer, so
-consumer pages should not add an additional wrapper footer around them.
+The project strip is a standalone, opt-in discovery component. The hosted AI
+footer no longer composes it into the shared bottom dock.
 
 The JSON endpoint returns the public project catalog: `{ id, name, url,
 description, tier, priority, category, maturity, spotlight, pillarId,
