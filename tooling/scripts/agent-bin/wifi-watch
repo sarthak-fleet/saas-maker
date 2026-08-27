@@ -6,9 +6,49 @@ TUNNEL_PLIST="$HOME/Library/LaunchAgents/com.assistant.wifi-watch-tunnel.plist"
 SERVER_LABEL="gui/$(id -u)/com.assistant.wifi-watch-server"
 TUNNEL_LABEL="gui/$(id -u)/com.assistant.wifi-watch-tunnel"
 LOCAL_URL="http://127.0.0.1:7088"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TOOLING_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+APP_DIR="$TOOLING_DIR/apps/wifi-watch"
+
+install_server_plist() {
+  local node_bin
+  node_bin="${WIFI_WATCH_NODE_BIN:-$(command -v node)}"
+  mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
+  cat >"$SERVER_PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.assistant.wifi-watch-server</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>$node_bin</string>
+    <string>$APP_DIR/server.mjs</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>$APP_DIR</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOST</key><string>127.0.0.1</string>
+    <key>PORT</key><string>7088</string>
+    <key>WIFI_INTERFACE</key><string>${WIFI_INTERFACE:-en0}</string>
+  </dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key>
+  <string>$HOME/Library/Logs/wifi-watch-server.log</string>
+  <key>StandardErrorPath</key>
+  <string>$HOME/Library/Logs/wifi-watch-server.err.log</string>
+</dict>
+</plist>
+EOF
+}
 
 load_server() {
-  launchctl bootstrap "gui/$(id -u)" "$SERVER_PLIST" 2>/dev/null || true
+  install_server_plist
+  launchctl bootout "$SERVER_LABEL" 2>/dev/null || true
+  launchctl bootstrap "gui/$(id -u)" "$SERVER_PLIST"
   launchctl kickstart -k "$SERVER_LABEL"
 }
 

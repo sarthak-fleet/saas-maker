@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wi-Fi Watch</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Server Mac network monitor</p>
+          <h1>Wi-Fi Watch</h1>
+        </div>
+        <div id="badge" class="badge">Checking</div>
+      </section>
+
+      <section class="grid">
+        <article class="panel status-panel">
+          <div class="panel-head">
+            <h2>Network Health</h2>
+            <span id="checkedAt">-</span>
+          </div>
+          <div class="hero-number">
+            <strong id="probeSpeed">-</strong>
+            <span>Mbps usable bandwidth</span>
+          </div>
+          <div class="signal" id="signal">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <dl class="facts">
+            <div><dt>Interface</dt><dd id="interfaceName">-</dd></div>
+            <div><dt>IP</dt><dd id="ip">-</dd></div>
+            <div><dt>SSID</dt><dd id="ssid">Unavailable</dd></div>
+            <div><dt>Last bandwidth restored</dt><dd id="lastRestored">-</dd></div>
+            <div><dt>Last reconnect</dt><dd id="lastReconnect">-</dd></div>
+            <div><dt>Last issue</dt><dd id="lastIssue">-</dd></div>
+          </dl>
+          <div id="portal" class="portal hidden">
+            <div>
+              <strong>Captive portal detected</strong>
+              <p id="portalReason">A login page may be required before bandwidth works.</p>
+            </div>
+            <a id="portalLink" href="#" target="_blank" rel="noreferrer">Open</a>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Speed Test</h2>
+            <button id="runSpeed">Run</button>
+          </div>
+          <div class="speed-grid">
+            <div><strong id="download">-</strong><span>Download Mbps</span></div>
+            <div><strong id="upload">-</strong><span>Upload Mbps</span></div>
+            <div><strong id="latency">-</strong><span>Base RTT ms</span></div>
+          </div>
+          <p id="speedMeta" class="muted">Runs Apple networkQuality from this Mac.</p>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Recent Events</h2>
+          <span id="eventCount">0</span>
+        </div>
+        <ol id="events" class="events"></ol>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
