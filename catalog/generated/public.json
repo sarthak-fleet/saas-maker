@@ -534,9 +534,10 @@
       ],
       "url": "https://podcasts.highsignal.app",
       "repositoryUrl": "https://github.com/Significant-Hobbies/on-record",
+      "changelogUrl": "https://podcasts.highsignal.app/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/on-record/issues",
       "firstCommitAt": "2026-08-24",
-      "latestCommitAt": "2026-08-25"
+      "latestCommitAt": "2026-08-28"
     },
     {
       "id": "issue-pages",
@@ -1939,6 +1940,21 @@
       "repositoryUrl": "https://github.com/sass-maker/free-ai",
       "roadmapUrl": "https://github.com/sass-maker/free-ai/issues",
       "pillarId": "build"
+    },
+    {
+      "id": "on-record",
+      "name": "High Signal Podcasts",
+      "description": "Source-backed podcast intelligence with attributable claims and recommendations linked to the original episode.",
+      "url": "https://podcasts.highsignal.app",
+      "tier": "active",
+      "category": "product",
+      "priority": "P2",
+      "spotlight": false,
+      "maturity": "public-ready",
+      "changelogUrl": "https://podcasts.highsignal.app/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/on-record",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/on-record/issues",
+      "pillarId": "learn"
     },
     {
       "id": "india-standards",
