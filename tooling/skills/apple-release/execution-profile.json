@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "frontier", "reasoning": "high" },
+  "minimum": { "intelligence": "balanced", "reasoning": "high" },
+  "degradation": "deny",
+  "rationale": "Release actions are outward-facing and hard to reverse: App Store Connect uploads, TestFlight distribution, App Review submission, notarization, and stapling, all driven against real signing identities and credentials that must never be printed or copied. The skill is gate-based and keeps distribution channels and receipts separate. Degradation is denied rather than asked because a weaker model driving a signing or submission flow can take an irreversible action before anyone reviews it."
+}
