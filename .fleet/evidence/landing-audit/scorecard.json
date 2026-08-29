@@ -1,0 +1,90 @@
+{
+  "$schema": "fleet.landing-audit.scorecard.v1",
+  "project": "saas-maker",
+  "priority": "P2",
+  "candidate": "http://127.0.0.1:4177/",
+  "productionChanged": false,
+  "checkedAt": "2026-08-28",
+  "purpose": {
+    "score": 97,
+    "minimum": 85,
+    "p0": 0,
+    "p1": 0,
+    "note": "The first viewport now identifies SaaS Maker as Fleet's public product directory and shared workshop, names the reusable packages, skills, templates, and feedback layer, shows representative products, and leads directly to the complete directory. Paid commissions are explicitly described as individually scoped rather than instant checkout."
+  },
+  "design": {
+    "score": 96,
+    "minimum": 88,
+    "p0": 0,
+    "p1": 0,
+    "note": "The glazier-workshop system is visually distinctive, responsive, content-led, and substantially above the shared-template ceiling without sacrificing legibility or navigation."
+  },
+  "seo": {
+    "score": 100,
+    "pagesAudited": 65,
+    "homepageChecksPassed": 17,
+    "homepageChecksFailed": 0,
+    "localCanonicalWarning": "The local audit correctly warned that the localhost URL is not the production canonical; the canonical sitemap itself is valid.",
+    "linkGraph": {
+      "sitemapPages": 65,
+      "crawledPages": 65,
+      "discoveredInternal": 68,
+      "errors": 0,
+      "redirects": 0,
+      "orphanCandidates": 0
+    },
+    "note": "The reusable tooling catalog is now represented consistently at /tools, /tools.md, /tools.json, in the sitemap, and in the agent catalog."
+  },
+  "geo": {
+    "score": 100,
+    "productionTier": "S",
+    "productionScore": 100,
+    "note": "Production passes llms.txt, /api/ai, homepage Markdown, robots AI policy, sitemap, JSON-LD, route Markdown coverage, and catalog-integrity checks. The candidate preserves and expands that contract."
+  },
+  "performance": {
+    "score": 99,
+    "successfulCoverageRuns": 4,
+    "weightedLcpMs": 919,
+    "weightedCls": 0.037,
+    "weightedTbtMs": 0,
+    "profiles": {
+      "mobileSlowScore": 98,
+      "mobileSlowLcpMs": 2420,
+      "mobileMidScore": 100,
+      "mobileMidLcpMs": 1200,
+      "mobileFastScore": 100,
+      "mobileFastLcpMs": 528,
+      "desktopScore": 100,
+      "desktopLcpMs": 443
+    },
+    "note": "A preceding two-run-per-profile swarm also completed all eight Lighthouse measurements with the same shape, but its global PSI Swarm history database failed after measurement because the installed native SQLite ABI is stale. The no-save coverage rerun exited cleanly. Ahrefs and CrUX lookups were intentionally disabled for local iteration."
+  },
+  "verification": {
+    "lighthouseMobile": {
+      "width": 412,
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "agenticBrowsing": 100
+    },
+    "astroBuild": "65 pages built",
+    "showcaseTypecheck": "pass",
+    "biome": "208 files checked; zero errors and four informational notices outside the audited landing changes",
+    "vitest": "43/43 repository tests and 15/15 focused showcase tests",
+    "footer": {
+      "askAi": "pass",
+      "projectStrip": "pass"
+    },
+    "runtimeErrors": 0,
+    "responsiveEvidence": [
+      "Mobile Lighthouse render at 412x823 inspected in-browser",
+      "../../../artifacts/design/landing-audit/final-p2-768.png",
+      "../../../artifacts/design/landing-audit/final-p2-1440.png"
+    ]
+  },
+  "limitations": [
+    "No deploy, DNS change, package publication, migration, or production configuration change was performed.",
+    "The global PSI Swarm history persistence binary needs a separate toolchain rebuild; no product code depends on it."
+  ]
+}
