@@ -51,6 +51,7 @@ node scripts/audit.mjs --mode availability --runs 1
 node scripts/audit.mjs --mode performance --runs 3
 node scripts/ahrefs-site-audit-health.mjs
 node scripts/ai-client-audit.mjs --check
+node scripts/clarity-audit.mjs --check
 ```
 
 `ai-client-audit.mjs` reports, per supplied project, how that project calls a
@@ -59,6 +60,17 @@ standard in [`config/ai-client-standard.json`](config/ai-client-standard.json)
 is still unratified, so drift is reported and never enforced. The project list
 is an input; no private catalog is committed here. See
 [`docs/ai-client-standard.md`](docs/ai-client-standard.md).
+
+`clarity-audit.mjs` reads the Microsoft Clarity receipt in
+[`config/clarity-projects.json`](config/clarity-projects.json) — which Clarity
+project belongs to which Fleet product, and which file wires it — and fails on
+one project claimed by two products, the retired fleet-wide shared project, and
+a claim that is not actually present in the file it names. A finding carrying a
+dated `violation` record is reported rather than failed, because its fix lives
+in another repository; once that fix lands the record goes stale and the audit
+fails until the receipt is updated. `--strict` fails on every finding. The
+receipt records decisions that have been made, not the private catalog, and
+`--omit-private` keeps non-public repositories out of a committed report.
 
 `ahrefs-site-audit-health.mjs` reads the sibling Site Health brand catalog
 and crawls each root. Ahrefs Health Scores are optional and fail closed
