@@ -5,6 +5,8 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
+import { validateStandard } from './ai-client-audit.mjs';
+
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillsRoot = join(repositoryRoot, 'skills');
 const scriptsRoot = join(repositoryRoot, 'scripts');
@@ -114,16 +116,39 @@ function validateScripts() {
   return { node: nodeScripts.length, shell: shellScripts.length };
 }
 
+function validateAiClientStandard() {
+  const path = join(repositoryRoot, 'config', 'ai-client-standard.json');
+  if (!existsSync(path)) {
+    failures.push('config/ai-client-standard.json: missing');
+    return 0;
+  }
+  let standard;
+  try {
+    standard = JSON.parse(readFileSync(path, 'utf8'));
+  } catch (error) {
+    failures.push(`config/ai-client-standard.json: ${error.message}`);
+    return 0;
+  }
+  for (const problem of validateStandard(standard).problems) {
+    failures.push(`config/ai-client-standard.json: ${problem}`);
+  }
+  return standard.exceptions?.length ?? 0;
+}
+
 if (!statSync(skillsRoot).isDirectory() || !statSync(scriptsRoot).isDirectory()) {
   throw new Error('skills/ and scripts/ must both exist');
 }
 
 const skillCount = validateSkills();
 const scriptCounts = validateScripts();
+const aiClientExceptions = validateAiClientStandard();
 
 if (failures.length > 0) {
   console.error(failures.map((failure) => `- ${failure}`).join('\n'));
   process.exit(1);
 }
 
-console.log(`Validated ${skillCount} skills, ${scriptCounts.node} Node scripts, and ${scriptCounts.shell} shell scripts.`);
+console.log(
+  `Validated ${skillCount} skills, ${scriptCounts.node} Node scripts, ${scriptCounts.shell} shell scripts, `
+  + `and the AI client standard with ${aiClientExceptions} dated exception(s).`,
+);

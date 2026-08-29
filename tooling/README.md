@@ -50,7 +50,15 @@ node scripts/validate-tooling.mjs
 node scripts/audit.mjs --mode availability --runs 1
 node scripts/audit.mjs --mode performance --runs 3
 node scripts/ahrefs-site-audit-health.mjs
+node scripts/ai-client-audit.mjs --check
 ```
+
+`ai-client-audit.mjs` reports, per supplied project, how that project calls a
+hosted model and whether it matches the candidate canonical client. The
+standard in [`config/ai-client-standard.json`](config/ai-client-standard.json)
+is still unratified, so drift is reported and never enforced. The project list
+is an input; no private catalog is committed here. See
+[`docs/ai-client-standard.md`](docs/ai-client-standard.md).
 
 `ahrefs-site-audit-health.mjs` reads the sibling Site Health brand catalog
 and crawls each root. Ahrefs Health Scores are optional and fail closed

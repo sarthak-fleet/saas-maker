@@ -1,0 +1,7 @@
+{
+  "name": "drifted-project-worker",
+  "private": true,
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^2.0.41"
+  }
+}

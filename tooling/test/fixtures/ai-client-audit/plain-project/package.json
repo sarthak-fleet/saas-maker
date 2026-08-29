@@ -1,0 +1,7 @@
+{
+  "name": "plain-project",
+  "private": true,
+  "dependencies": {
+    "astro": "5.14.1"
+  }
+}

@@ -1,0 +1,1440 @@
+{
+  "schemaVersion": 1,
+  "schema": "fleet.ai-client-audit.v1",
+  "generatedAt": "2026-08-29T12:44:23.625Z",
+  "standard": {
+    "status": "unratified",
+    "ratifiedAt": null,
+    "option": "vercel-ai-sdk",
+    "packages": {
+      "ai": "6.0.168",
+      "@ai-sdk/openai-compatible": "2.0.41"
+    },
+    "issue": "https://github.com/sass-maker/saas-maker/issues/61"
+  },
+  "advisory": true,
+  "summary": {
+    "projects": 56,
+    "scanned": 56,
+    "compliant": 3,
+    "drifted": 1,
+    "hand-rolled": 19,
+    "exception": 2,
+    "not-applicable": 31
+  },
+  "patterns": {
+    "none": 31,
+    "raw-http": 19,
+    "provider-sdk": 2,
+    "vercel-ai-sdk": 4
+  },
+  "warnings": [],
+  "blocking": [],
+  "followUps": [
+    {
+      "id": "rolepatch-pin-convergence",
+      "repository": "rolepatch",
+      "note": "rolepatch declares ai ^6.0.97 and @ai-sdk/openai-compatible ^2.0.41 as ranges rather than the pinned canonical versions. Converging it is a change in another repository and is deliberately out of scope for the audit PR; it is blocked on ratification of the canonical option.",
+      "blockedOn": "ratification"
+    },
+    {
+      "id": "stale-next-standalone-copy",
+      "repository": "rolepatch",
+      "note": "A vendored .next/standalone/package.json restates the dependency set. The audit skips .next, node_modules, and dist so the stale copy never reaches a verdict.",
+      "blockedOn": "none"
+    }
+  ],
+  "withheld": {
+    "projects": 7,
+    "byVerdict": {
+      "compliant": 0,
+      "drifted": 0,
+      "hand-rolled": 0,
+      "exception": 0,
+      "not-applicable": 7
+    },
+    "note": "Projects with a non-public repository are counted in the summary but not identified in this report."
+  },
+  "results": [
+    {
+      "id": "ai-game",
+      "name": "AliveVille",
+      "repo": "aliveville",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 252,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "anime-list",
+      "name": "Anime List",
+      "repo": "anime-list",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 194,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "app-health",
+      "name": "App Health",
+      "repo": "app-health",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 6,
+        "filesScanned": 89,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "calorie",
+      "name": "Calorie",
+      "repo": "calorie",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 72,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "chatgpt-connections",
+      "name": "ChatGPT Connections",
+      "repo": "chatgpt-connections",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 34,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "chatgpt-memory-insights",
+      "name": "Memory Map",
+      "repo": "chatgpt-memory-insights",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 43,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "chess",
+      "name": "Chess",
+      "repo": "chess",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 22,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "codevetter",
+      "name": "CodeVetter",
+      "repo": "codevetter",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 4,
+        "filesScanned": 854,
+        "truncated": false,
+        "gatewayHostFiles": 2,
+        "providerHostFiles": 9,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 12,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 1,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 2 source file(s).",
+        "Calls a provider API host directly in 9 source file(s), bypassing the gateway.",
+        "Builds an OpenAI-compatible request path in 12 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "companion-robot",
+      "name": "Companion Robot",
+      "repo": "companion-robot",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 0,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "drank",
+      "name": "Drank",
+      "repo": "drank",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 46,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 2,
+        "completionsPathFiles": 2,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s).",
+        "References a gateway environment name in 2 source file(s).",
+        "Builds an OpenAI-compatible request path in 2 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "email-manager",
+      "name": "Email Manager",
+      "repo": "email-manager",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 104,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "everythingrated",
+      "name": "EverythingRated",
+      "repo": "everythingrated",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 104,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "forecast-lab",
+      "name": "Forecast Lab",
+      "repo": "forecast-lab",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 60,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "free-ai",
+      "name": "Free AI",
+      "repo": "free-ai",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "exception",
+      "pattern": "provider-sdk",
+      "declared": [
+        {
+          "package": "openai",
+          "version": "6.34.0",
+          "kind": "provider-sdk",
+          "manifest": "examples/node-openai-sdk/package.json"
+        },
+        {
+          "package": "openai",
+          "version": "6.49.0",
+          "kind": "provider-sdk",
+          "manifest": "package.json"
+        }
+      ],
+      "evidence": {
+        "manifests": 4,
+        "filesScanned": 143,
+        "truncated": false,
+        "gatewayHostFiles": 16,
+        "providerHostFiles": 9,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 25,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 4,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Dated exception recorded 2026-08-29: The gateway itself. It is the OpenAI-compatible endpoint every other project calls, so it must talk to upstream providers directly. Another product owns this repository; issue #61 treats it as read-only."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "gitstat",
+      "name": "GitStat",
+      "repo": "gitstat",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 30,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "high-signal",
+      "name": "High Signal",
+      "repo": "high-signal",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 7,
+        "filesScanned": 522,
+        "truncated": false,
+        "gatewayHostFiles": 4,
+        "providerHostFiles": 2,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 2,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 4 source file(s).",
+        "Calls a provider API host directly in 2 source file(s), bypassing the gateway.",
+        "Builds an OpenAI-compatible request path in 2 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "india-standards",
+      "name": "India Standards",
+      "repo": "india-standards",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 37,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "issue-pages",
+      "name": "IssuePages",
+      "repo": "issue-pages",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 141,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 1,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Calls a provider API host directly in 1 source file(s), bypassing the gateway."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "journal",
+      "name": "Journal",
+      "repo": "journal",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 0,
+        "filesScanned": 17,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "karte",
+      "name": "Karte",
+      "repo": "karte",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "compliant",
+      "pattern": "vercel-ai-sdk",
+      "declared": [
+        {
+          "package": "@ai-sdk/openai-compatible",
+          "version": "2.0.41",
+          "kind": "canonical",
+          "manifest": "package.json"
+        },
+        {
+          "package": "ai",
+          "version": "6.0.168",
+          "kind": "canonical",
+          "manifest": "package.json"
+        }
+      ],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 341,
+        "truncated": false,
+        "gatewayHostFiles": 2,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 1,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Declares the canonical packages at the pinned versions."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "kith",
+      "name": "Kith",
+      "repo": "kith",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 0,
+        "filesScanned": 19,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "knowledge-base",
+      "name": "Knowledge Base",
+      "repo": "knowledge-base",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 4,
+        "filesScanned": 151,
+        "truncated": false,
+        "gatewayHostFiles": 3,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 6,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 3 source file(s).",
+        "Builds an OpenAI-compatible request path in 6 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "live",
+      "name": "Live",
+      "repo": "live",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 422,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "looptv",
+      "name": "LoopTV",
+      "repo": "looptv",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 141,
+        "truncated": false,
+        "gatewayHostFiles": 2,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 2,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 2 source file(s).",
+        "Builds an OpenAI-compatible request path in 2 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "mashup",
+      "name": "Mashup",
+      "repo": "mashup",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 101,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 3,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s).",
+        "Builds an OpenAI-compatible request path in 3 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "materia",
+      "name": "Materia",
+      "repo": "materia",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 65,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "mobile-dev-cockpit",
+      "name": "Mobile Dev Cockpit",
+      "repo": "mobile-dev-cockpit",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 5,
+        "filesScanned": 59,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "motion",
+      "name": "Motion",
+      "repo": "motion",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 59,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "on-record",
+      "name": "High Signal Podcasts",
+      "repo": "on-record",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 4,
+        "filesScanned": 126,
+        "truncated": false,
+        "gatewayHostFiles": 2,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 2 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "open-historia",
+      "name": "Open Historia",
+      "repo": "open-historia",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "provider-sdk",
+      "declared": [
+        {
+          "package": "@anthropic-ai/sdk",
+          "version": "^0.91.0",
+          "kind": "provider-sdk",
+          "manifest": "package.json"
+        },
+        {
+          "package": "@google/generative-ai",
+          "version": "^0.24.1",
+          "kind": "provider-sdk",
+          "manifest": "package.json"
+        },
+        {
+          "package": "openai",
+          "version": "^6.34.0",
+          "kind": "provider-sdk",
+          "manifest": "package.json"
+        }
+      ],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 91,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 3,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 1,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Calls providers through their own SDKs: @anthropic-ai/sdk@^0.91.0, @google/generative-ai@^0.24.1, openai@^6.34.0",
+        "References a gateway environment name in 3 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "pace",
+      "name": "HeyPace",
+      "repo": "pace",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 704,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 3,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 24,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Calls a provider API host directly in 3 source file(s), bypassing the gateway.",
+        "Builds an OpenAI-compatible request path in 24 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "posttrainllm",
+      "name": "PostTrainLLM",
+      "repo": "posttrainllm",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "exception",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 760,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 1,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 47,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Dated exception recorded 2026-08-29: The product trains and runs its own in-browser model. Its only hosted-model call is a Python evaluation harness pointed at OpenAI-compatible endpoints, and a JavaScript client package cannot apply there, so convergence would be meaningless."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "protein-index",
+      "name": "Protein Index",
+      "repo": "protein-index",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 104,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "psi-swarm",
+      "name": "PSI Swarm",
+      "repo": "psi-swarm",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 58,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 1,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Calls a provider API host directly in 1 source file(s), bypassing the gateway."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "reader",
+      "name": "Reader",
+      "repo": "reader",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "compliant",
+      "pattern": "vercel-ai-sdk",
+      "declared": [
+        {
+          "package": "@ai-sdk/openai-compatible",
+          "version": "2.0.41",
+          "kind": "canonical",
+          "manifest": "package.json"
+        },
+        {
+          "package": "@ai-sdk/react",
+          "version": "3.0.86",
+          "kind": "canonical",
+          "manifest": "package.json"
+        },
+        {
+          "package": "ai",
+          "version": "6.0.168",
+          "kind": "canonical",
+          "manifest": "package.json"
+        }
+      ],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 195,
+        "truncated": false,
+        "gatewayHostFiles": 2,
+        "providerHostFiles": 1,
+        "gatewayEnvFiles": 3,
+        "completionsPathFiles": 1,
+        "canonicalImportFiles": 6,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Declares the canonical packages at the pinned versions."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "reel-pipeline",
+      "name": "Reel Pipeline",
+      "repo": "reel-pipeline",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 307,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 1,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s).",
+        "Builds an OpenAI-compatible request path in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "research-papers",
+      "name": "Research Papers",
+      "repo": "research-papers",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 127,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 1,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Builds an OpenAI-compatible request path in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "rolepatch",
+      "name": "RolePatch",
+      "repo": "rolepatch",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "drifted",
+      "pattern": "vercel-ai-sdk",
+      "declared": [
+        {
+          "package": "@ai-sdk/openai-compatible",
+          "version": "^2.0.41",
+          "kind": "canonical",
+          "manifest": "package.json"
+        },
+        {
+          "package": "ai",
+          "version": "^6.0.97",
+          "kind": "canonical",
+          "manifest": "package.json"
+        }
+      ],
+      "evidence": {
+        "manifests": 3,
+        "filesScanned": 296,
+        "truncated": false,
+        "gatewayHostFiles": 3,
+        "providerHostFiles": 2,
+        "gatewayEnvFiles": 3,
+        "completionsPathFiles": 1,
+        "canonicalImportFiles": 9,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "@ai-sdk/openai-compatible declares ^2.0.41, canonical pin is 2.0.41",
+        "ai declares ^6.0.97, canonical pin is 6.0.168"
+      ],
+      "blocking": []
+    },
+    {
+      "id": "saas-maker",
+      "name": "SaaS Maker",
+      "repo": "saas-maker",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 10,
+        "filesScanned": 454,
+        "truncated": false,
+        "gatewayHostFiles": 3,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 1,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 3 source file(s).",
+        "Builds an OpenAI-compatible request path in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "sarthakagrawal-personal",
+      "name": "Sarthak Agrawal",
+      "repo": "portfolio",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 43,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "setline",
+      "name": "Setline",
+      "repo": "setline",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 48,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "significanthobbies",
+      "name": "Significant Hobbies",
+      "repo": "significanthobbies",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 391,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "starboard",
+      "name": "Starboard",
+      "repo": "starboard",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 237,
+        "truncated": false,
+        "gatewayHostFiles": 1,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 10,
+        "completionsPathFiles": 2,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "References the gateway host in 1 source file(s).",
+        "References a gateway environment name in 10 source file(s).",
+        "Builds an OpenAI-compatible request path in 2 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "swe-interview-prep",
+      "name": "SWE Interview Prep",
+      "repo": "swe-interview-prep",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "compliant",
+      "pattern": "vercel-ai-sdk",
+      "declared": [
+        {
+          "package": "@ai-sdk/openai-compatible",
+          "version": "2.0.41",
+          "kind": "canonical",
+          "manifest": "package.json"
+        },
+        {
+          "package": "ai",
+          "version": "6.0.168",
+          "kind": "canonical",
+          "manifest": "package.json"
+        }
+      ],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 406,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 3,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 2,
+        "canonicalImportFiles": 2,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Declares the canonical packages at the pinned versions."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "truehire",
+      "name": "TrueHire",
+      "repo": "truehire",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "hand-rolled",
+      "pattern": "raw-http",
+      "declared": [],
+      "evidence": {
+        "manifests": 6,
+        "filesScanned": 186,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 1,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "Builds an OpenAI-compatible request path in 1 source file(s)."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "veg-protein-food",
+      "name": "Recipe Index",
+      "repo": "recipe-dashboard",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 12,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "verified-bases",
+      "name": "Verified Bases",
+      "repo": "verified-bases",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 2,
+        "filesScanned": 42,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "web-playables",
+      "name": "Web Playables",
+      "repo": "web-playables",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 4,
+        "filesScanned": 36,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "name": "What It Takes to Win",
+      "repo": "what-it-takes-to-win",
+      "visibility": "public",
+      "scanned": true,
+      "verdict": "not-applicable",
+      "pattern": "none",
+      "declared": [],
+      "evidence": {
+        "manifests": 1,
+        "filesScanned": 71,
+        "truncated": false,
+        "gatewayHostFiles": 0,
+        "providerHostFiles": 0,
+        "gatewayEnvFiles": 0,
+        "completionsPathFiles": 0,
+        "canonicalImportFiles": 0,
+        "providerSdkImportFiles": 0,
+        "credentialLiteralSuspected": false
+      },
+      "reasons": [
+        "No hosted-model dependency and no model call site found in source."
+      ],
+      "blocking": []
+    }
+  ]
+}

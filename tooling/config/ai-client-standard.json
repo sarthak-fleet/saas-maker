@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "status": "unratified",
+  "ratifiedAt": null,
+  "recommendedBy": "tooling/docs/ai-client-standard.md",
+  "issue": "https://github.com/sass-maker/saas-maker/issues/61",
+  "canonical": {
+    "option": "vercel-ai-sdk",
+    "packages": {
+      "ai": "6.0.168",
+      "@ai-sdk/openai-compatible": "2.0.41"
+    },
+    "companionPackages": {
+      "@ai-sdk/react": "3.0.86"
+    },
+    "upgradeCadence": "monthly-review, pinned exact, one converging bump per cadence",
+    "baseUrlEnv": "AI_GATEWAY_BASE_URL"
+  },
+  "gateway": {
+    "host": "ai-gateway.sassmaker.com",
+    "openAiCompatiblePaths": [
+      "/v1/chat/completions",
+      "/v1/responses",
+      "/v1/embeddings",
+      "/v1/messages",
+      "/v1/models"
+    ],
+    "retiredHosts": []
+  },
+  "detection": {
+    "canonicalPackages": ["ai", "@ai-sdk/openai-compatible", "@ai-sdk/react"],
+    "providerSdkPackages": [
+      "openai",
+      "@openai/agents",
+      "@anthropic-ai/sdk",
+      "@google/generative-ai",
+      "@google/genai",
+      "anthropic",
+      "cohere-ai",
+      "groq-sdk",
+      "@mistralai/mistralai",
+      "replicate",
+      "together-ai"
+    ],
+    "providerApiHosts": [
+      "api.openai.com",
+      "api.anthropic.com",
+      "generativelanguage.googleapis.com",
+      "openrouter.ai",
+      "api.groq.com",
+      "api.mistral.ai",
+      "api.together.xyz",
+      "api.deepseek.com",
+      "api.cohere.ai",
+      "api.perplexity.ai",
+      "api.x.ai"
+    ],
+    "scanIgnorePaths": ["tooling/test/fixtures/ai-client-audit"],
+    "gatewayEnvNames": [
+      "AI_GATEWAY_URL",
+      "AI_GATEWAY_BASE_URL",
+      "AI_GATEWAY_TOKEN",
+      "AI_GATEWAY_KEY",
+      "AI_GATEWAY_API_KEY",
+      "FREE_AI_GATEWAY_URL",
+      "SASS_MAKER_AI_GATEWAY"
+    ]
+  },
+  "exceptions": [
+    {
+      "project": "free-ai",
+      "verdict": "exception",
+      "recordedAt": "2026-08-29",
+      "reason": "The gateway itself. It is the OpenAI-compatible endpoint every other project calls, so it must talk to upstream providers directly. Another product owns this repository; issue #61 treats it as read-only.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "posttrainllm",
+      "verdict": "exception",
+      "recordedAt": "2026-08-29",
+      "reason": "The product trains and runs its own in-browser model. Its only hosted-model call is a Python evaluation harness pointed at OpenAI-compatible endpoints, and a JavaScript client package cannot apply there, so convergence would be meaningless.",
+      "reviewBy": "2027-02-28"
+    }
+  ],
+  "followUps": [
+    {
+      "id": "rolepatch-pin-convergence",
+      "repository": "rolepatch",
+      "note": "rolepatch declares ai ^6.0.97 and @ai-sdk/openai-compatible ^2.0.41 as ranges rather than the pinned canonical versions. Converging it is a change in another repository and is deliberately out of scope for the audit PR; it is blocked on ratification of the canonical option.",
+      "blockedOn": "ratification"
+    },
+    {
+      "id": "stale-next-standalone-copy",
+      "repository": "rolepatch",
+      "note": "A vendored .next/standalone/package.json restates the dependency set. The audit skips .next, node_modules, and dist so the stale copy never reaches a verdict.",
+      "blockedOn": "none"
+    }
+  ]
+}
