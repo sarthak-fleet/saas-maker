@@ -1742,9 +1742,14 @@
       ],
       "group": "past",
       "lifecycle": "past",
-      "deployed": false,
-      "deploymentProviders": [],
-      "domains": [],
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Workers"
+      ],
+      "domains": [
+        "truehire.rolepatch.com"
+      ],
+      "url": "https://truehire.rolepatch.com",
       "repositoryUrl": "https://github.com/sarthakagrawal927/truehire",
       "roadmapUrl": "https://github.com/sarthakagrawal927/truehire/issues",
       "firstCommitAt": "2026-04-24",
