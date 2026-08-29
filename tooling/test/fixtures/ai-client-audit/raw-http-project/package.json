@@ -1,0 +1,7 @@
+{
+  "name": "raw-http-project",
+  "private": true,
+  "dependencies": {
+    "hono": "4.6.3"
+  }
+}

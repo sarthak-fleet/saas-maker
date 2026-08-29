@@ -9,6 +9,7 @@ const preserved = join(root, 'preserved', 'legacy-fleet-tooling');
 const activeScripts = new Set([
   'agent-stack.sh',
   'ahrefs-site-audit-health.mjs',
+  'ai-client-audit.mjs',
   'apply-clarity-id.sh',
   'audit.mjs',
   'campaign-manifest.mjs',

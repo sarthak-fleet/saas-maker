@@ -1,0 +1,7 @@
+{
+  "name": "provider-sdk-project",
+  "private": true,
+  "dependencies": {
+    "openai": "6.49.0"
+  }
+}

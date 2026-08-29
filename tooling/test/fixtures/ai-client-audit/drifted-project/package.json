@@ -1,0 +1,7 @@
+{
+  "name": "drifted-project",
+  "private": true,
+  "dependencies": {
+    "ai": "^6.0.97"
+  }
+}
