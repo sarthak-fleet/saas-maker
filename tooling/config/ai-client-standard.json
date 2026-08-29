@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "unratified",
-  "ratifiedAt": null,
+  "status": "ratified",
+  "ratifiedAt": "2026-08-29",
   "recommendedBy": "tooling/docs/ai-client-standard.md",
   "issue": "https://github.com/sass-maker/saas-maker/issues/61",
   "canonical": {
@@ -28,7 +28,11 @@
     "retiredHosts": []
   },
   "detection": {
-    "canonicalPackages": ["ai", "@ai-sdk/openai-compatible", "@ai-sdk/react"],
+    "canonicalPackages": [
+      "ai",
+      "@ai-sdk/openai-compatible",
+      "@ai-sdk/react"
+    ],
     "providerSdkPackages": [
       "openai",
       "@openai/agents",
@@ -55,7 +59,9 @@
       "api.perplexity.ai",
       "api.x.ai"
     ],
-    "scanIgnorePaths": ["tooling/test/fixtures/ai-client-audit"],
+    "scanIgnorePaths": [
+      "tooling/test/fixtures/ai-client-audit"
+    ],
     "gatewayEnvNames": [
       "AI_GATEWAY_URL",
       "AI_GATEWAY_BASE_URL",
@@ -95,5 +101,7 @@
       "note": "A vendored .next/standalone/package.json restates the dependency set. The audit skips .next, node_modules, and dist so the stale copy never reaches a verdict.",
       "blockedOn": "none"
     }
-  ]
+  ],
+  "ratifiedBy": "owner decision on https://github.com/sass-maker/saas-maker/issues/61",
+  "ratifiedDecision": "Every Fleet project that calls a hosted model goes through the free-ai gateway (ai-gateway.sassmaker.com) via its OpenAI-compatible paths. In JavaScript and TypeScript the client is the Vercel AI SDK at the pinned canonical versions. Runtimes without a JavaScript client still target the gateway; only the client library differs. Calling a provider API host directly is non-compliant regardless of which client library is used."
 }

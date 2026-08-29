@@ -1,10 +1,21 @@
-# The canonical model-calling client — recommendation, not yet a rule
+# The canonical model-calling client — ratified
 
-**Status: recommendation, pending owner ratification.** Nothing here is
-enforced. `config/ai-client-standard.json` carries `"status": "unratified"` and
-`"ratifiedAt": null`, and the audit reports drift against it without failing any
-build. Picking the architecture is an owner decision; this document supplies the
-measurement and the trade-offs so that decision can be made on evidence.
+**Status: ratified 2026-08-29 by the owner on issue #61.**
+`config/ai-client-standard.json` carries `"status": "ratified"`.
+
+The rule: **every Fleet project that calls a hosted model goes through the
+free-ai gateway** (`ai-gateway.sassmaker.com`) via its OpenAI-compatible paths.
+In JavaScript and TypeScript the client is the Vercel AI SDK at the pinned
+canonical versions. Runtimes without a JavaScript client still target the
+gateway; only the client library differs. **Calling a provider API host directly
+is non-compliant regardless of which client library is used** — that is the gap
+the audit found in ten projects, including all three that were otherwise
+"compliant" on packages alone.
+
+Drift is still *reported rather than failed*, deliberately: 19 projects are
+hand-rolled today, and reddening `tooling:check` on known debt would train
+everyone to ignore it. Blocking findings remain narrow — a credential literal in
+tracked source, or a reference to a retired gateway host.
 
 Tracked by [issue #61](https://github.com/sass-maker/saas-maker/issues/61).
 
@@ -140,8 +151,9 @@ date. Two stand today:
 
 - **`rolepatch` pin convergence.** It declares `ai@^6.0.97` and
   `@ai-sdk/openai-compatible@^2.0.41` as ranges rather than exact pins. That is
-  a change in another repository and it is blocked on ratification — converging
-  onto an unratified pin would be enforcing a decision nobody has made.
+  a change in another repository, so it stays out of this repo's diff. It is
+  unblocked now that the standard is ratified and should be converged in
+  `rolepatch` itself.
 - **The stale `.next/standalone` copy in `rolepatch`** restates the dependency
   set from a build. The audit skips `.next`, so it never reaches a verdict and
   needs no cleanup to keep the report honest.

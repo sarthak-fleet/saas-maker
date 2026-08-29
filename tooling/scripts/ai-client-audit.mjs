@@ -782,7 +782,13 @@ function renderText(report, { compact = false } = {}) {
     lines.push('', 'Blocking:');
     for (const entry of report.blocking) lines.push(`  - [${entry.code}] ${entry.message}`);
   } else {
-    lines.push('', 'No blocking findings. Drift is advisory until the standard is ratified.');
+    lines.push(
+      '',
+      report.advisory
+        ? 'No blocking findings. Drift is advisory until the standard is ratified.'
+        : 'No blocking findings. The standard is ratified; drift is a real gap to close, '
+          + 'but it is reported rather than failed so the gate does not redden on known debt.'
+    );
   }
   return lines.join('\n');
 }
