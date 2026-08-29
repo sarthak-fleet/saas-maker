@@ -3,6 +3,7 @@
   "version": 1,
   "project": "replace-with-project-id",
   "target": "replace-with-reviewed-surface",
+  "surfaceMode": "operate",
   "mode": "preserve",
   "register": "product",
   "context": {
@@ -14,7 +15,31 @@
     "probes": [],
     "selected": "existing-design",
     "approval": "not-required",
-    "before": "artifacts/design/before.png"
+    "before": "artifacts/design/before.png",
+    "library": {
+      "strategy": "upstream-first",
+      "primary": "tailwind-plus",
+      "sources": [],
+      "runtime": "none",
+      "customReplacement": {
+        "used": false,
+        "authorization": "not-required",
+        "reason": ""
+      }
+    },
+    "contract": {
+      "purpose": "",
+      "purposeSource": "",
+      "canonicalPurpose": "",
+      "purposeAlignment": "match",
+      "driftNote": "",
+      "audience": "",
+      "job": "",
+      "thesis": "",
+      "system": "",
+      "signature": "",
+      "risk": ""
+    }
   },
   "evidence": {
     "screenshots": [
@@ -50,10 +75,32 @@
     "detector": {
       "posture": "advisory",
       "findings": []
+    },
+    "comprehension": {
+      "status": "not-applicable",
+      "reviewer": "",
+      "answers": {
+        "product": "",
+        "audience": "",
+        "value": "",
+        "mechanism": "",
+        "proof": "",
+        "nextAction": ""
+      },
+      "purposeScore": {
+        "product": 0,
+        "audience": 0,
+        "value": 0,
+        "mechanism": 0,
+        "proof": 0,
+        "nextAction": 0,
+        "total": 0
+      },
+      "mismatches": []
     }
   },
   "ownerFeedback": {
-    "decision": "pending",
-    "note": ""
+    "decision": "agent-selected",
+    "note": "The agent selected the direction; no owner approval was required."
   }
 }

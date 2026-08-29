@@ -29,6 +29,12 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <slot />
     <script
       is:inline
+      src="https://sassmaker.com/project-strip.js"
+      data-project={site.projectId}
+      defer
+    ></script>
+    <script
+      is:inline
       src="https://sassmaker.com/ai-chat-footer.js"
       data-name={site.name}
       defer

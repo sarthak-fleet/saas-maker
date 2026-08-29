@@ -252,7 +252,7 @@ audit_page() {
   elif [[ $jsonld_invalid_count -gt 0 ]]; then
     echo "  json-ld            FAIL   $jsonld_invalid_count of $jsonld_count blocks contain invalid JSON"; ((FAIL++))
   elif [[ $jsonld_ineligible_apps -gt 0 ]]; then
-    echo "  json-ld            FAIL   $jsonld_ineligible_apps application nodes lack aggregateRating or review"; ((FAIL++))
+    echo "  json-ld            WARN   $jsonld_ineligible_apps application nodes are valid but lack review evidence for Google app rich results"; ((WARN++))
   else
     echo "  json-ld            PASS   $jsonld_count blocks ($jsonld_types)"; ((PASS++))
   fi

@@ -1,6 +1,6 @@
 .ai-chat-footer {
   --ai-chat-footer-text: inherit;
-  --ai-chat-footer-muted: color-mix(in srgb, currentColor 62%, transparent);
+  --ai-chat-footer-muted: color-mix(in srgb, currentColor 72%, transparent);
   --ai-chat-footer-bg: transparent;
   --ai-chat-footer-surface: color-mix(in srgb, currentColor 4%, transparent);
   --ai-chat-footer-border: color-mix(in srgb, currentColor 16%, transparent);

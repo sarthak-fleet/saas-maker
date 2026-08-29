@@ -26,6 +26,7 @@ const PUBLIC_FIELDS = new Set([
   'changelogUrl',
   'roadmapUrl',
   'pillarId',
+  'purposeContract',
 ]);
 const REQUIRED_FIELDS = ['id', 'name', 'description', 'url'];
 const DIRECTORY_FIELDS = new Set([
@@ -33,6 +34,7 @@ const DIRECTORY_FIELDS = new Set([
   'name',
   'description',
   'makerNote',
+  'purposeContract',
   'kind',
   'form',
   'platforms',
@@ -72,7 +74,7 @@ function assertNoPrivateData(value, trail = 'projection') {
 }
 
 function validateProjection(parsed, sourcePath) {
-  if (![1, 2, 3, 4].includes(parsed.schemaVersion) || !Array.isArray(parsed.products)) {
+  if (![1, 2, 3, 4, 5].includes(parsed.schemaVersion) || !Array.isArray(parsed.products)) {
     throw new Error(`Unsupported Fleet public projection: ${sourcePath}`);
   }
 
@@ -109,9 +111,27 @@ function validateProjection(parsed, sourcePath) {
         throw new Error(`public directory ids must be unique: ${project.id}`);
       }
       directoryIds.add(project.id);
+      if (project.id !== 'ios-landings')
+        validatePurposeContract(project.purposeContract, project.id);
     }
   }
   assertNoPrivateData(parsed);
+}
+
+function validatePurposeContract(contract, projectId) {
+  const fields = ['purpose', 'audience', 'outcome', 'mechanism', 'proof', 'nextAction'];
+  if (!contract || typeof contract !== 'object' || Array.isArray(contract)) {
+    throw new Error(`${projectId}: missing purpose contract`);
+  }
+  const unsupported = Object.keys(contract).filter((key) => !fields.includes(key));
+  if (unsupported.length > 0) {
+    throw new Error(`${projectId}: unsupported purpose contract field ${unsupported[0]}`);
+  }
+  for (const field of fields) {
+    if (typeof contract[field] !== 'string' || contract[field].trim().length < 8) {
+      throw new Error(`${projectId}: missing purpose contract ${field}`);
+    }
+  }
 }
 
 if (process.argv.includes('--validate')) {

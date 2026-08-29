@@ -12,14 +12,23 @@ const PRODUCT_FIELDS = new Set([
   'changelogUrl',
   'roadmapUrl',
   'pillarId',
+  'purposeContract',
 ]);
 
-const PAST_PROJECT_FIELDS = new Set(['id', 'name', 'description', 'lifecycle', 'repositoryUrl']);
+const PAST_PROJECT_FIELDS = new Set([
+  'id',
+  'name',
+  'description',
+  'lifecycle',
+  'repositoryUrl',
+  'purposeContract',
+]);
 const DIRECTORY_FIELDS = new Set([
   'id',
   'name',
   'description',
   'makerNote',
+  'purposeContract',
   'kind',
   'form',
   'platforms',
@@ -76,6 +85,7 @@ export function buildPublicProducts(catalog) {
             }
           : {}),
         pillarId: metadata.pillarId,
+        purposeContract: directoryMetadata[project.id].purposeContract,
       };
       if (metadata.repositoryUrl && project.repositoryVisibility !== 'public') {
         throw new Error(
@@ -101,6 +111,7 @@ export function buildPublicProducts(catalog) {
         description: metadata.description,
         lifecycle: 'past',
         repositoryUrl: metadata.repositoryUrl,
+        purposeContract: directoryMetadata[project.id].purposeContract,
       };
       assertShape(output, PAST_PROJECT_FIELDS, ['id', 'name', 'description', 'repositoryUrl']);
       pastProjects.push(output);
@@ -125,6 +136,7 @@ export function buildPublicProducts(catalog) {
       name: project.public?.name ?? project.name,
       description: metadata.description ?? project.public?.description,
       makerNote: metadata.makerNote,
+      ...(metadata.purposeContract ? { purposeContract: metadata.purposeContract } : {}),
       kind: project.portfolio.kind,
       form: metadata.form,
       platforms: metadata.platforms,
@@ -182,7 +194,7 @@ export function buildPublicProducts(catalog) {
   pastProjects.sort((left, right) => left.name.localeCompare(right.name));
 
   const projection = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     generatedFrom: ['site-health/apps/backend/config/projects.json'],
     historySemantics: catalog.publicDirectory.historySemantics,
     directory,

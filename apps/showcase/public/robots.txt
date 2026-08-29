@@ -1,8 +1,21 @@
 User-agent: *
 Allow: /
-Sitemap: https://sassmaker.com/sitemap.xml
 # Agent indexing
+Allow: /.well-known/ai-catalog.json
 Allow: /llms.txt
 Allow: /index.md
 Allow: /api/ai
 Allow: /llms-full.txt
+Sitemap: https://sassmaker.com/sitemap.xml
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /

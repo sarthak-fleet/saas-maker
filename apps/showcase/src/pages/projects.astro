@@ -34,6 +34,7 @@ const searchableText = (project: DirectoryProject) =>
     project.name,
     project.description,
     project.makerNote,
+    ...Object.values(project.purposeContract ?? {}),
     project.form,
     ...project.platforms,
     ...project.technologies,
@@ -164,7 +165,9 @@ const projectProfilePath = (project: DirectoryProject) =>
                       <span class="directory-row-heading">
                         <span class="directory-project-name">{project.name}</span>
                       </span>
-                      <span class="directory-identity-description">{project.description}</span>
+                      <span class="directory-identity-description">
+                        {project.purposeContract?.purpose ?? project.description}
+                      </span>
                     </h3>
 
                     <span class="directory-glance">

@@ -22,8 +22,12 @@ describe('SaaS Maker public source boundary', () => {
     expect(source.match(/data:image\/jpeg;base64,/g)).toHaveLength(5);
     expect(source).toMatch(/document\.createElement\('img'\)/);
     expect(source).not.toMatch(/createProviderIcon|CHATGPT_SEGMENT|provider-color/);
-    expect(source).toMatch(/strip && script\.dataset\.compose !== 'false'/);
-    expect(source).not.toMatch(/More from SaaS Maker|fleet-footer-extension|View all projects/);
+    expect(source).toMatch(/More from the studio/);
+    expect(source).toMatch(/customElements\.define\('fleet-footer-extension'/);
+    expect(source).toMatch(/strip\.setAttribute\('integrated'/);
+    expect(source).toMatch(/footer\.slot = 'ai'/);
+    expect(source).toMatch(/strip\.slot = 'projects'/);
+    expect(source).not.toMatch(/strip\.remove\(\)/);
     expect(source).not.toMatch(/analytics|localStorage|credential/i);
     expect(() => new Function(source)).not.toThrow();
   });
@@ -106,14 +110,15 @@ describe('SaaS Maker public source boundary', () => {
     ]);
 
     expect(home).toMatch(/<Hero \/>/);
-    expect(home).toMatch(/SaaS Maker — a public product studio/);
+    expect(home).toMatch(/SaaS Maker — Fleet products and shared tooling/);
     expect(fleet).toMatch(/DIRECTORY_COUNT/);
     expect(fleet).toMatch(/Open the complete directory/);
     expect(fleet).toMatch(/<h2 id="learning-title"/);
     expect(fleet).not.toMatch(/ACTIVE_GROUPS|PAST_PROJECTS|catalog-row|archive-wall/);
     expect(fleet).not.toMatch(/project identities|accounted for once/);
-    expect(layout).not.toMatch(/project-strip\.js/);
-    expect(layout).toMatch(/src="https:\/\/sassmaker\.com\/ai-chat-footer\.js"/);
+    expect(layout).toMatch(/src="\/project-strip\.js"/);
+    expect(layout).toMatch(/data-project="saas-maker"/);
+    expect(layout).toMatch(/src="\/ai-chat-footer\.js"/);
     expect(routes).toMatch(/# Products in focus/);
     expect(routes).toMatch(/# Complete directory/);
     expect(routes).toMatch(/CORE\.flatMap/);
@@ -135,6 +140,8 @@ describe('SaaS Maker public source boundary', () => {
     expect(detailPage).toMatch(/Why I made this\./);
     expect(detailPage).toMatch(/Public anatomy/);
     expect(detailPage).toMatch(/product\.makerNote/);
+    expect(detailPage).toMatch(/product\.purposeContract/);
+    expect(routesSource).toMatch(/Product contract/);
     expect(routesSource).toMatch(/path: `\/p\/\$\{product\.id\}`/);
     expect(routesSource).toMatch(/This profile is generated from reviewed public facts/);
   });

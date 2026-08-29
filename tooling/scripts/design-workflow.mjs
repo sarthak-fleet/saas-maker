@@ -26,9 +26,13 @@ try {
     const mode = args.mode;
     const register = args.register;
     const target = args.target;
+    const surfaceMode = args['surface-mode'];
     if (!['preserve', 'overhaul'].includes(mode)) throw new Error('--mode must be preserve or overhaul');
     if (!['brand', 'product'].includes(register)) throw new Error('--register must be brand or product');
     if (!target) throw new Error('--target is required');
+    if (!['persuade', 'operate', 'read', 'experience'].includes(surfaceMode)) {
+      throw new Error('--surface-mode must be persuade, operate, read, or experience');
+    }
 
     const destination = path.join(projectRoot, '.fleet/design-review.json');
     await mkdir(path.dirname(destination), { recursive: true });
@@ -39,11 +43,16 @@ try {
     const receipt = JSON.parse(await readFile(destination, 'utf8'));
     receipt.project = path.basename(projectRoot);
     receipt.target = target;
+    receipt.surfaceMode = surfaceMode;
     receipt.mode = mode;
     receipt.register = register;
-    receipt.direction.approval = mode === 'preserve' ? 'not-required' : 'pending';
+    receipt.direction.approval = mode === 'preserve' ? 'not-required' : 'agent-selected';
+    if (mode === 'preserve') {
+      receipt.direction.library.primary = 'existing-project-system';
+      receipt.direction.library.runtime = 'existing';
+    }
     if (mode === 'overhaul') {
-      receipt.direction.selected = '';
+      receipt.direction.selected = 'agent-selected';
       receipt.direction.before = '';
     }
     await writeFile(destination, `${JSON.stringify(receipt, null, 2)}\n`);
@@ -66,6 +75,8 @@ try {
       detectorPosture: policy.qualityGate.detectorPosture,
       minimumCritiqueScore: policy.qualityGate.minimumCritiqueScore,
       minimumAuditScore: policy.qualityGate.minimumAuditScore,
+      minimumPurposeScore: policy.purposeGate.minimumScore,
+      purposeScorePosture: policy.purposeGate.visualScorePosture,
     }, args.json);
   } else {
     throw new Error('usage: design-workflow.mjs <create|check|self-check> [options]');

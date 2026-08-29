@@ -67,6 +67,7 @@ export function GET() {
     '',
     '## Machine surfaces',
     '',
+    '- https://sassmaker.com/.well-known/ai-catalog.json',
     '- https://sassmaker.com/api/ai',
     '- https://sassmaker.com/projects.json',
     '- https://sassmaker.com/ideas.json',

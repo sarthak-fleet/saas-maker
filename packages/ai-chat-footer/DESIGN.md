@@ -2,9 +2,9 @@
 
 ## Direction
 
-The footer is a compact utility dock, not a second product hero or a portfolio
-navigation surface. It has one job: explain the AI handoff and make the
-visitor's preferred assistant easy to recognize and open.
+The footer is a compact utility dock, not a second product hero. When the
+portfolio strip is present, both surfaces form one restrained extension below
+the product's authored footer: Ask AI first, project discovery second.
 
 ## Hierarchy
 
@@ -27,9 +27,9 @@ Inherit the host's text color and typography. Use `currentColor`, subtle mixed
 borders and surfaces, and a configurable focus color. Do not introduce a new
 brand palette, full-height footer, background image, or decorative animation.
 
-The dock uses a single vertical rhythm at every width and must not create page
-overflow at 390, 768, or 1440 pixels. It must not add studio promotion,
-project tickers, or a second navigation layer beneath the host footer.
+The composed extension uses one split row on wide screens and stacks the AI
+dock above project discovery at 760px and below. It must not create page
+overflow at 390, 768, or 1440 pixels or become a second full-height footer.
 
 ## Accessibility and motion
 

@@ -6,6 +6,7 @@ import ideas from './ideas.json';
 import { CORE } from './projects';
 import { DIRECTORY_PROJECTS, type DirectoryProject } from './directory';
 import { STUDIO_PROFILE } from './studio';
+import { TOOLING_CAPABILITIES, TOOLING_GROUPS } from './tooling';
 
 export type PublicRoute = {
   id: string;
@@ -27,6 +28,20 @@ function productMarkdown(product: DirectoryProject): string {
     '',
     product.makerNote,
     '',
+    ...(product.purposeContract
+      ? [
+          '## Product contract',
+          '',
+          product.purposeContract.purpose,
+          '',
+          `- Audience: ${product.purposeContract.audience}`,
+          `- Outcome: ${product.purposeContract.outcome}`,
+          `- Mechanism: ${product.purposeContract.mechanism}`,
+          `- Proof: ${product.purposeContract.proof}`,
+          `- Next action: ${product.purposeContract.nextAction}`,
+          '',
+        ]
+      : []),
     '## Public anatomy',
     '',
     `- Form: ${product.form}`,
@@ -259,6 +274,32 @@ function ideasMarkdown(): string {
   ].join('\n');
 }
 
+function toolsMarkdown(): string {
+  return [
+    '# SaaS Maker reusable tools',
+    '',
+    'The canonical public register of credential-free Fleet workflows, agent skills, scripts, templates, and guides that have earned reuse across projects.',
+    '',
+    `- Human catalog: ${SITE_URL}/tools`,
+    `- JSON catalog: ${SITE_URL}/tools.json`,
+    `- Total reusable capabilities: ${TOOLING_CAPABILITIES.length}`,
+    '',
+    ...TOOLING_GROUPS.filter((group) => group.items.length > 0).flatMap((group) => [
+      `## ${group.label}`,
+      '',
+      ...group.items.flatMap((item) => [
+        `### ${item.name}`,
+        '',
+        item.summary,
+        '',
+        `- Capability ID: ${item.id}`,
+        `- Source: https://github.com/sass-maker/saas-maker/blob/main/tooling/${item.path}`,
+        '',
+      ]),
+    ]),
+  ].join('\n');
+}
+
 const fixedRoutes: PublicRoute[] = [
   {
     id: 'directory',
@@ -287,6 +328,13 @@ const fixedRoutes: PublicRoute[] = [
     description: 'Scored decision ledger of tech-heavy product ideas',
     kind: 'collection',
     markdown: ideasMarkdown(),
+  },
+  {
+    id: 'tools',
+    path: '/tools',
+    description: 'Canonical public catalog of reusable Fleet capabilities',
+    kind: 'collection',
+    markdown: toolsMarkdown(),
   },
   {
     id: 'privacy',

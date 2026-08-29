@@ -9,10 +9,11 @@ metadata:
 
 Subskill of `site-health` — invoked directly or via the parent router.
 
-Run a consistent on-page SEO audit against any URL or list of URLs.
-Covers the checks that matter for search engines and AI crawlers alike:
-meta tags, structured data, sitemap coverage, heading hierarchy, image
-alt text, and SSR leak detection.
+Run a consistent on-page and link-graph SEO audit against any URL or list of
+URLs. Covers the checks that matter for search engines and AI crawlers alike:
+meta tags, structured data, sitemap coverage, heading hierarchy, image alt
+text, SSR leak detection, real internal HTTP targets, redirecting links,
+orphan candidates, and optional external-link health.
 
 ## When to use
 
@@ -70,6 +71,35 @@ robots.txt parse, sitemap-vs-canonical coverage):
 bash skills/seo-audit/scripts/seo-audit.sh https://vaultwealth.com/ --site https://vaultwealth.com
 ```
 
+### Ahrefs-style link graph
+
+The page audit's `broken-links` row only detects malformed or unrendered hrefs.
+It is not an HTTP crawl. Before declaring a site clean, run the link-graph gate:
+
+```bash
+node scripts/link-graph-audit.mjs \
+  --sitemap https://example.com/sitemap.xml \
+  --external
+```
+
+For an undeployed local artifact whose canonicals and sitemap still use the
+production domain:
+
+```bash
+node scripts/link-graph-audit.mjs \
+  --sitemap https://example.com/sitemap.xml \
+  --canonical-origin https://example.com \
+  --local-origin http://127.0.0.1:4173 \
+  --external
+```
+
+This fails on internal 4xx/network errors, links that redirect, external
+4xx/network errors, external redirects, or unreadable sitemaps. Orphan
+candidates are reported separately: they are linked HTML pages missing from
+the sitemap and require a deliberate include/exclude decision. HTTP 429 is
+reported as externally unverified rather than falsely labelled dead; rerun it
+at lower concurrency or verify it through the provider's canonical surface.
+
 ## What it checks
 
 ### Per-page checks (every URL)
@@ -84,13 +114,13 @@ bash skills/seo-audit/scripts/seo-audit.sh https://vaultwealth.com/ --site https
 | **og:image** | Open Graph image | Present, valid URL |
 | **twitter:card** | Twitter card type | Present (`summary` or `summary_large_image`) |
 | **hreflang** | Alternate language tags | Present on multi-language sites; bidirectional; has `x-default` |
-| **json-ld** | Structured data blocks | At least one valid JSON-LD block; application rich-result markup includes `aggregateRating` or `review` |
+| **json-ld** | Structured data blocks | At least one valid JSON-LD block; application markup without genuine `aggregateRating` or `review` evidence gets a rich-result eligibility warning, never an incentive to invent reviews |
 | **h1** | Primary heading | Exactly one `<h1>`, non-empty text |
 | **h2** | Section headings | Present (not zero); no skipped levels (no `<h4>` without `<h3>`) |
 | **img-alt** | Image accessibility | All `<img>` tags have non-empty `alt` |
 | **word-count** | Text content volume | Above 300 words (thin-content floor) |
 | **ssr-leak** | Unrendered template literals | No `${`, `{{`, `<%=` in served HTML |
-| **broken-internal-links** | Internal href integrity | No hrefs containing template placeholders or empty hash |
+| **href-integrity** | Rendered href syntax | No hrefs containing template placeholders or empty hash |
 
 ### Site-level checks (with `--site`)
 
@@ -99,6 +129,9 @@ bash skills/seo-audit/scripts/seo-audit.sh https://vaultwealth.com/ --site https
 | **robots.txt** | Exists and is parseable | 200, has `User-agent` directives |
 | **sitemap** | Sitemap referenced in robots.txt | `Sitemap:` directive present, URL resolves |
 | **sitemap-coverage** | Canonical URLs in sitemap | All audited page URLs appear in sitemap |
+| **internal-http** | Discovered internal link targets | All resolve directly with 2xx; no 3xx or 4xx |
+| **orphan-candidates** | Linked HTML pages absent from sitemap | Every candidate is intentionally excluded or added |
+| **external-http** | External anchor targets when `--external` is used | All resolve directly with 2xx |
 
 ## Output
 
@@ -178,4 +211,5 @@ output.
 | **agent-ready** | AI crawler discoverability (robots.txt AI rules, sitemap, llms.txt, MCP) |
 | **seo-audit** | On-page SEO (meta, structured data, headings, alt, hreflang, SSR leaks) |
 
-Run all three before launching or deploying a marketing surface.
+Run all three before launching or deploying a marketing surface. A green
+on-page report without the link-graph result is not a complete SEO audit.

@@ -6,7 +6,7 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "id": "codevetter",
     "name": "CodeVetter",
     "url": "https://codevetter.com",
-    "description": "AI code review platform — desktop-first, works offline.",
+    "description": "Execution-backed verification for AI-written software changes — local-first and inspectable.",
     "tier": "focus",
     "priority": "P1",
     "category": "product",

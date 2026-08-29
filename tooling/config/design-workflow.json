@@ -8,11 +8,11 @@
       "requireBeforeEvidence": true
     },
     "overhaul": {
-      "minimumReferences": 2,
+      "minimumReferences": 0,
       "maximumReferences": 3,
-      "minimumDirectionProbes": 2,
+      "minimumDirectionProbes": 0,
       "maximumDirectionProbes": 3,
-      "acceptedDirectionDecisions": ["approved", "delegated"]
+      "acceptedDirectionDecisions": ["agent-selected", "approved", "delegated"]
     }
   },
   "qualityGate": {
@@ -25,8 +25,21 @@
       "p1": 0
     },
     "requiredViewportWidths": [390, 768, 1440],
-    "acceptedOwnerDecisions": ["keep", "delegated"],
+    "acceptedOwnerDecisions": ["agent-selected", "keep", "delegated"],
     "detectorPosture": "advisory",
     "requirePassingProjectCheck": true
+  },
+  "purposeGate": {
+    "minimumScore": 85,
+    "maximumScore": 100,
+    "fieldWeights": {
+      "product": 25,
+      "audience": 15,
+      "value": 15,
+      "mechanism": 15,
+      "proof": 15,
+      "nextAction": 15
+    },
+    "visualScorePosture": "separate-noncompensating"
   }
 }

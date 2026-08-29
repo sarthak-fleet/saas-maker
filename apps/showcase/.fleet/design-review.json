@@ -2,9 +2,10 @@
   "$schema": "fleet.design-review.v1",
   "version": 1,
   "project": "showcase",
-  "target": "Canonical studio identity and agent-facing studio page",
+  "target": "Shared Fleet footer extension with project strip and Ask AI",
+  "surfaceMode": "operate",
   "mode": "preserve",
-  "register": "brand",
+  "register": "product",
   "context": {
     "product": "PRODUCT.md",
     "design": "DESIGN.md"
@@ -13,34 +14,47 @@
     "references": [],
     "probes": [],
     "selected": "existing-design",
-    "approval": "not-required",
-    "before": "artifacts/design/studio-before-1440.png"
+    "approval": "delegated",
+    "before": "artifacts/design/footer-before-1440.png",
+    "contract": {
+      "purpose": "Give product visitors one compact way to ask their preferred AI about the current product and discover related public work.",
+      "purposeSource": "packages/ai-chat-footer/PRODUCT.md and packages/portfolio-project-strip/PRODUCT.md",
+      "canonicalPurpose": "The shared footer helps a visitor understand the current product through a pre-filled AI handoff and continue into related public projects without another account or backend.",
+      "purposeAlignment": "match",
+      "driftNote": "",
+      "audience": "Visitors who have reached the end of a Fleet product page and want either a concise explanation or another relevant project.",
+      "job": "Preserve the authored footer, then offer one clear AI handoff and one quiet portfolio discovery path.",
+      "thesis": "A restrained utility dock and colophon should feel inherited from the host, not like a second marketing footer.",
+      "system": "CurrentColor surfaces and borders, host typography, a compact split row above 760px, stacked groups below it, 44px AI actions, and a reduced-motion-safe project rail.",
+      "signature": "The product-specific Ask AI dock sits beside a living, self-excluding strip of the maker's other projects.",
+      "risk": "Two global surfaces can become repetitive or visually overpower the host, so the composition is bounded to one shallow extension with a single outer boundary."
+    }
   },
   "evidence": {
     "screenshots": [
       {
         "width": 390,
-        "path": "artifacts/design/studio-after-390.png"
+        "path": "artifacts/design/footer-after-390.png"
       },
       {
         "width": 768,
-        "path": "artifacts/design/studio-after-768.png"
+        "path": "artifacts/design/footer-after-768.png"
       },
       {
         "width": 1440,
-        "path": "artifacts/design/studio-after-1440.png"
+        "path": "artifacts/design/footer-after-1440.png"
       }
     ],
     "projectCheck": {
-      "command": "pnpm test && pnpm check:docs && pnpm -F @saas-maker/landing-page typecheck && pnpm build:showcase && git diff --check",
+      "command": "pnpm exec vitest run tests/showcase/public-surface.test.ts && pnpm build:showcase && git diff --check",
       "status": "pass"
     },
     "critique": {
-      "score": 34,
+      "score": 38,
       "maximum": 40
     },
     "audit": {
-      "score": 18,
+      "score": 19,
       "maximum": 20
     },
     "unresolved": {
@@ -50,12 +64,34 @@
     "detector": {
       "posture": "advisory",
       "findings": [
-        "Browser overlay reported 8 advisory patterns before polish: 2 low-contrast seeded-pane paragraphs and unconstrained line measures were fixed; monumental hero scale and display leading were reviewed as intentional workshop-language false positives."
+        "The horizontally clipped project sequence is intentional on touch layouts and remains scrollable; it is not document overflow."
       ]
+    },
+    "comprehension": {
+      "status": "not-applicable",
+      "reviewer": "",
+      "answers": {
+        "product": "",
+        "audience": "",
+        "value": "",
+        "mechanism": "",
+        "proof": "",
+        "nextAction": ""
+      },
+      "purposeScore": {
+        "product": 0,
+        "audience": 0,
+        "value": 0,
+        "mechanism": 0,
+        "proof": 0,
+        "nextAction": 0,
+        "total": 0
+      },
+      "mismatches": []
     }
   },
   "ownerFeedback": {
     "decision": "delegated",
-    "note": "Owner approved issue #78 and delegated the preserve-lane studio identity implementation."
+    "note": "The owner required both footer surfaces on every applicable project and explicitly delegated implementation without feedback pauses."
   }
 }

@@ -1,6 +1,6 @@
 ---
 name: design-inspiration
-description: Research, compare, and visualize attributable design directions for web interfaces. Use for landing pages, product surfaces, dashboards, component families, interaction languages, multiple UI concepts, compact brand-direction boards, or Fleet overhaul evidence, including temporary code probes when static evidence cannot show interaction or responsive behavior. Produces transferable principles and design-workflow receipt inputs without copying another product's brand, content, assets, or proprietary implementation.
+description: Use explicitly when external design references, comparative visual directions, or a requested brand-direction board are needed for a Fleet project. Produces attributable principles and design-workflow evidence without copying another product's brand, content, assets, or proprietary implementation. It does not own UI implementation or completion.
 ---
 
 # Design inspiration

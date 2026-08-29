@@ -2,11 +2,21 @@ import publicCatalog from '../../../../catalog/generated/public.json';
 
 export type DirectoryGroupId = 'current' | 'supporting' | 'past';
 
+export interface PurposeContract {
+  purpose: string;
+  audience: string;
+  outcome: string;
+  mechanism: string;
+  proof: string;
+  nextAction: string;
+}
+
 export interface DirectoryProject {
   id: string;
   name: string;
   description: string;
   makerNote: string;
+  purposeContract?: PurposeContract;
   kind: 'product' | 'platform' | 'experiment';
   form: string;
   platforms: string[];

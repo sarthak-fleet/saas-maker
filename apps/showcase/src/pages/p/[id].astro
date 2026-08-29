@@ -60,12 +60,13 @@ const formatDate = (date: string | null) =>
       }).format(new Date(`${date}T00:00:00Z`))
     : 'Not retained';
 const hasPublicEvidence = publicLinks.length > 0;
+const productSummary = product.purposeContract?.purpose ?? product.description;
 const productJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: product.name,
   url: profileUrl,
-  description: product.description,
+  description: productSummary,
   ...(primaryUrl || product.repositoryUrl
     ? {
         sameAs: [primaryUrl, product.repositoryUrl].filter(
@@ -77,7 +78,7 @@ const productJsonLd = {
 };
 ---
 
-<Layout title={`${product.name} — SaaS Maker directory`} description={product.description}>
+<Layout title={`${product.name} — SaaS Maker directory`} description={productSummary}>
   <script type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
   <!--
   THESIS: A project detail should reveal the maker's reason before it inventories the machinery, never collapse into an operations dossier.
@@ -100,7 +101,7 @@ const productJsonLd = {
           <div class="project-identity">
             <p class="project-folio">SaaS Maker directory</p>
             <h1>{product.name}</h1>
-            <p class="project-summary">{product.description}</p>
+            <p class="project-summary">{productSummary}</p>
           </div>
           {primaryUrl ? (
             <a class="project-primary" href={primaryUrl} target="_blank" rel="noopener noreferrer">
@@ -124,6 +125,23 @@ const productJsonLd = {
           </div>
           <blockquote>{product.makerNote}</blockquote>
         </section>
+
+        {product.purposeContract && (
+          <section class="project-contract" aria-labelledby="contract-title">
+            <header>
+              <p class="project-folio">Product contract</p>
+              <h2 id="contract-title">What this product promises.</h2>
+              <p>{product.purposeContract.purpose}</p>
+            </header>
+            <dl>
+              <div><dt>For</dt><dd>{product.purposeContract.audience}</dd></div>
+              <div><dt>Outcome</dt><dd>{product.purposeContract.outcome}</dd></div>
+              <div><dt>How</dt><dd>{product.purposeContract.mechanism}</dd></div>
+              <div><dt>Proof</dt><dd>{product.purposeContract.proof}</dd></div>
+              <div class="project-contract-action"><dt>Next action</dt><dd>{product.purposeContract.nextAction}</dd></div>
+            </dl>
+          </section>
+        )}
 
         <section class="project-anatomy" aria-labelledby="anatomy-title">
           <header>
@@ -351,6 +369,7 @@ const productJsonLd = {
   }
 
   .project-why,
+  .project-contract,
   .project-anatomy {
     display: grid;
     grid-template-columns: minmax(18rem, 0.55fr) minmax(0, 1.45fr);
@@ -360,6 +379,7 @@ const productJsonLd = {
   }
 
   .project-why-title,
+  .project-contract > header,
   .project-anatomy > header {
     min-height: 25rem;
     display: flex;
@@ -374,6 +394,7 @@ const productJsonLd = {
   }
 
   .project-why h2,
+  .project-contract h2,
   .project-anatomy h2 {
     max-width: 9ch;
     margin-top: 1.25rem;
@@ -402,6 +423,56 @@ const productJsonLd = {
   .project-anatomy > header {
     background: var(--workshop-seeded);
     color: var(--workshop-ink);
+  }
+
+  .project-contract > header {
+    background: var(--workshop-cobalt);
+    color: #fff;
+  }
+
+  .project-contract > header > p:last-child {
+    max-width: 34rem;
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .project-contract dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(20, 21, 17, 0.2);
+  }
+
+  .project-contract dl > div {
+    min-height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: #f8f4ea;
+  }
+
+  .project-contract .project-contract-action {
+    grid-column: 1 / -1;
+    min-height: 8rem;
+    background: var(--workshop-amber);
+  }
+
+  .project-contract dt {
+    color: var(--workshop-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .project-contract dd {
+    margin: 0;
+    font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+    font-weight: 650;
+    line-height: 1.25;
   }
 
   .project-anatomy dl {
@@ -606,6 +677,7 @@ const productJsonLd = {
   @media (max-width: 900px) {
     .project-hero,
     .project-why,
+    .project-contract,
     .project-anatomy,
     .project-progress,
     .project-issues {
@@ -651,6 +723,7 @@ const productJsonLd = {
     }
 
     .project-why-title,
+    .project-contract > header,
     .project-anatomy > header {
       min-height: 14rem;
       padding: 2.5rem 1.5rem;
@@ -661,12 +734,18 @@ const productJsonLd = {
       padding: 3rem 1.5rem;
     }
 
+    .project-contract dl,
     .project-anatomy dl {
       grid-template-columns: 1fr;
     }
 
+    .project-contract dl > div,
     .project-anatomy dl > div {
       min-height: 7.5rem;
+    }
+
+    .project-contract .project-contract-action {
+      grid-column: auto;
     }
 
     .project-progress li a {

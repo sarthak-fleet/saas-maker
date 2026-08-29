@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 import { GET as getAgentCatalog } from '../../apps/showcase/src/pages/api/ai';
+import { GET as getAiCatalog } from '../../apps/showcase/src/pages/.well-known/ai-catalog.json';
 import { GET as getHomeMarkdown } from '../../apps/showcase/src/pages/index.md';
 import { GET as getLlms } from '../../apps/showcase/src/pages/llms.txt';
 import { PUBLIC_ROUTES } from '../../apps/showcase/src/data/publicRoutes';
@@ -67,6 +68,27 @@ describe('canonical SaaS Maker studio identity', () => {
     );
   });
 
+  it('publishes a valid discovery catalog for the public directory and shared tooling', async () => {
+    const catalog = await getAiCatalog().json();
+
+    expect(catalog.specVersion).toBe('1.0');
+    expect(catalog.host.identifier).toBe('did:web:sassmaker.com');
+    expect(catalog.entries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          identifier: 'urn:air:sassmaker.com:catalog:public-directory',
+          displayName: 'SaaS Maker public directory',
+          url: 'https://sassmaker.com/api/ai',
+        }),
+        expect.objectContaining({
+          identifier: 'urn:air:sassmaker.com:tooling:capabilities',
+          displayName: 'SaaS Maker reusable tooling catalog',
+          url: 'https://sassmaker.com/tools.json',
+        }),
+      ])
+    );
+  });
+
   it('publishes distinct, linked Person, studio, and WebSite entities', () => {
     const graph = STUDIO_JSON_LD['@graph'];
     const person = graph.find((node) => node['@type'] === 'Person');
@@ -92,7 +114,7 @@ describe('canonical SaaS Maker studio identity', () => {
     expect(studioPage).toMatch(/STUDIO_PROFILE\.representativeWork/);
     expect(studioPage).toMatch(/project\.destinationUrl/);
     expect(studioPage).toMatch(/project\.repositoryUrl/);
-    expect(hero).toMatch(/href="\/studio"/);
+    expect(hero).toMatch(/href="\/projects"/);
     expect(hero).toMatch(/STUDIO_PROFILE\.headline/);
     expect(layout).toMatch(/JSON\.stringify\(STUDIO_JSON_LD\)/);
     expect(layout).not.toMatch(/sassmaker\.com\/#app/);

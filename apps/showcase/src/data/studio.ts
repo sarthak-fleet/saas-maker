@@ -75,12 +75,12 @@ export const STUDIO_PROFILE: StudioProfile = {
     role: 'Founder and builder',
     url: 'https://sarthakagrawal.dev',
   },
-  eyebrow: 'Founder-led product studio',
-  headline: 'Focused software. Built as a body of work.',
+  eyebrow: 'Public directory · shared workshop',
+  headline: 'The products. And the tools behind them.',
   oneLine:
-    'A founder-led product studio for focused software, built around particular problems and maintained as a body of work.',
+    'SaaS Maker is the public directory for Fleet products and the reusable packages, skills, templates, and feedback layer that help them ship.',
   thesis:
-    'SaaS Maker turns narrow, persistent problems into products with clear boundaries, public evidence, and a reason to keep improving.',
+    'SaaS Maker keeps the public product inventory inspectable and publishes the shared workshop used across it, without becoming the private Fleet control plane.',
   ownerVoice:
     'I use AI as material, infrastructure, and a collaborator—but not as the identity of the work. The studio is about choosing useful problems, building the right product around them, and maintaining what earns its place.',
   aiPosition:

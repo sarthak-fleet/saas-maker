@@ -57,7 +57,7 @@ const source = `(() => {
 
       const style = document.createElement('style');
       style.textContent = \`
-        :host { --ai-footer-muted: color-mix(in srgb, currentColor 62%, transparent); --ai-footer-border: color-mix(in srgb, currentColor 18%, transparent); --ai-footer-control: color-mix(in srgb, currentColor 4%, transparent); --ai-footer-focus: #2563eb; display: block; color: inherit; background: transparent; font: inherit; }
+        :host { --ai-footer-muted: color-mix(in srgb, currentColor 72%, transparent); --ai-footer-border: color-mix(in srgb, currentColor 18%, transparent); --ai-footer-control: color-mix(in srgb, currentColor 4%, transparent); --ai-footer-focus: #2563eb; display: block; color: inherit; background: transparent; font: inherit; }
         :host([theme='light']) { color-scheme: light; }
         :host([theme='dark']) { color-scheme: dark; }
         * { box-sizing: border-box; }
@@ -123,6 +123,67 @@ const source = `(() => {
 
   if (!customElements.get('ai-chat-footer')) customElements.define('ai-chat-footer', AIChatFooter);
 
+  class FleetFooterExtension extends HTMLElement {
+    connectedCallback() {
+      if (this.shadowRoot) return;
+      const root = this.attachShadow({ mode: 'open' });
+      const style = document.createElement('style');
+      style.textContent = \`
+        :host {
+          --fleet-footer-border: color-mix(in srgb, currentColor 16%, transparent);
+          --fleet-footer-surface: color-mix(in srgb, currentColor 3%, transparent);
+          display: block;
+          width: 100%;
+          border-block-start: 1px solid var(--fleet-footer-border);
+          background: var(--fleet-footer-surface);
+          color: inherit;
+          font: inherit;
+        }
+        * { box-sizing: border-box; }
+        .extension { display: grid; grid-template-columns: minmax(21rem, .72fr) minmax(0, 1.28fr); align-items: stretch; }
+        .ai { min-width: 0; border-inline-end: 1px solid var(--fleet-footer-border); }
+        .projects { display: grid; min-width: 0; align-content: center; }
+        .projects-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem var(--fleet-footer-edge, 1rem) 0; }
+        .projects-head span { color: color-mix(in srgb, currentColor 72%, transparent); font-size: .64rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+        .projects-head a { display: inline-flex; min-height: 2.75rem; align-items: center; color: inherit; font-size: .72rem; font-weight: 680; text-underline-offset: .22em; }
+        .projects-head a:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        ::slotted(*) { min-width: 0; }
+        @media (max-width: 760px) {
+          .extension { grid-template-columns: minmax(0, 1fr); }
+          .ai { border-inline-end: 0; border-block-end: 1px solid var(--fleet-footer-border); }
+        }
+      \`;
+      const region = document.createElement('div');
+      region.className = 'extension';
+      region.setAttribute('role', 'region');
+      region.setAttribute('aria-label', 'Explore this product and more from the studio');
+      const ai = document.createElement('div');
+      ai.className = 'ai';
+      const aiSlot = document.createElement('slot');
+      aiSlot.name = 'ai';
+      ai.append(aiSlot);
+      const projects = document.createElement('div');
+      projects.className = 'projects';
+      const projectsHead = document.createElement('div');
+      projectsHead.className = 'projects-head';
+      const projectsLabel = document.createElement('span');
+      projectsLabel.textContent = 'More from the studio';
+      const projectsLink = document.createElement('a');
+      projectsLink.href = 'https://sassmaker.com/projects';
+      projectsLink.textContent = 'View all projects ↗';
+      projectsHead.append(projectsLabel, projectsLink);
+      const projectsSlot = document.createElement('slot');
+      projectsSlot.name = 'projects';
+      projects.append(projectsHead, projectsSlot);
+      region.append(ai, projects);
+      root.append(style, region);
+    }
+  }
+
+  if (!customElements.get('fleet-footer-extension')) {
+    customElements.define('fleet-footer-extension', FleetFooterExtension);
+  }
+
   const script = document.currentScript;
   const mount = () => {
     if (!script || script.dataset.auto === 'false') return;
@@ -133,8 +194,17 @@ const source = `(() => {
       if (script.dataset[attribute]) footer.setAttribute(attribute, script.dataset[attribute]);
     }
     const strip = document.querySelector('portfolio-project-strip');
-    if (strip && script.dataset.compose !== 'false') strip.remove();
-    if (!footer.isConnected) document.body.append(footer);
+    if (!strip || script.dataset.compose === 'false') {
+      if (!footer.isConnected) document.body.append(footer);
+      return;
+    }
+    const extension = document.querySelector('fleet-footer-extension') || document.createElement('fleet-footer-extension');
+    footer.setAttribute('integrated', '');
+    footer.slot = 'ai';
+    strip.setAttribute('integrated', '');
+    strip.slot = 'projects';
+    extension.append(footer, strip);
+    if (!extension.isConnected) document.body.append(extension);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
   else mount();

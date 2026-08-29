@@ -1,36 +1,27 @@
 ---
 name: design-engineering
-description: Route focused UI and design-engineering work through Fleet's existing skills. Use for new UI, multiple design directions, brand boards, component extraction, Tailwind class cleanup, dark-mode UI or raster variants, responsive adaptation, semantic markup from screenshots, visual-reference research, component pattern mining, web 3D, creative effects, or evidence-heavy interfaces. Complements design-workflow, Impeccable, and imagegen without replacing their craft or completion gates.
+description: "Use explicitly for isolated design-engineering mechanics that do not need end-to-end visual direction: Tailwind canonicalization, semantic markup reconstruction, or routing a specialized 3D, effects, component-pattern, or evidence-interface task. Meaningful UI implementation and visual direction belong to design-workflow."
 ---
 
 # Design engineering
 
-Route the request to the smallest existing workflow. Read only the selected
-skill or Impeccable playbook and its directly relevant references.
+This is an explicit specialist helper, not the default design entry point. Route
+only the isolated mechanical or specialist task requested. For meaningful UI
+implementation, stop and use `../design-workflow/SKILL.md` as the sole design
+authority.
 
-## Routing
+## Allowed scope
 
-| Primary job | Route |
-|---|---|
-| Shape or build new UI | `../design-workflow/SKILL.md`, then Impeccable `shape` or ordinary new-work |
-| Generate or compare multiple design directions | `../design-inspiration/SKILL.md`; use Impeccable `live` only for variants of a selected element on a running surface |
-| Create a compact visual brand direction | `../design-inspiration/SKILL.md`, then imagegen only when the user requests a board |
-| Extract repeated UI into reusable components or tokens | `../design-workflow/SKILL.md`, then Impeccable `extract` |
-| Sort, deduplicate, or resolve Tailwind classes | Follow **Canonicalize Tailwind** below |
-| Add or repair dark-mode UI | `../design-workflow/SKILL.md`, then Impeccable `colorize` |
-| Adapt a raster asset for dark mode | `../design-workflow/SKILL.md`, then imagegen with the source asset |
-| Adapt UI across phone, tablet, and desktop | `../design-workflow/SKILL.md`, then Impeccable `adapt` |
-| Reconstruct semantic markup from a screenshot, mockup, or wireframe | Follow **Markup from image** below |
-| Find visual references, anti-references, or direction evidence | `../design-inspiration/SKILL.md` |
-| Compare an unfamiliar component or interaction pattern | `../component-pattern-mine/SKILL.md` |
-| Create, inspect, optimize, or integrate models, scenes, glTF, or real-time 3D | `../web-3d-pipeline/SKILL.md` |
-| Shape, audit, discover, specify, or build animation, SVG, Canvas, shader, pointer, or scroll effects | `../creative-web-effects/SKILL.md` |
-| Shape, audit, specify, or build an evidence-heavy report, benchmark, comparison, dashboard, calculator, or decision page | `../evidence-interface-design/SKILL.md` |
+- Sort, deduplicate, or resolve Tailwind classes: follow **Canonicalize
+  Tailwind** below.
+- Reconstruct semantic markup from a screenshot, mockup, or wireframe: follow
+  **Markup from image** below.
+- For an explicitly requested specialist job, point to the narrow child skill:
+  `component-pattern-mine`, `web-3d-pipeline`, `creative-web-effects`, or
+  `evidence-interface-design`.
 
-If a shader is part of a scene with models, cameras, or 3D interaction, route
-through `web-3d-pipeline` first and hand its rendering boundary to
-`creative-web-effects`. For other multi-job requests, order research before
-implementation and state the handoff between child outputs.
+Do not use this helper to choose a visual direction, shape a page, or complete
+meaningful UI work. Those jobs belong to `design-workflow`.
 
 ## Direct workflows
 

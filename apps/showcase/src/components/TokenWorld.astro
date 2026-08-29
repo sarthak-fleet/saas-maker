@@ -49,18 +49,24 @@ const updatedLabel = new Intl.DateTimeFormat('en', {
   <dl class="token-world-measures" aria-label="Verified token impact measures">
     <div>
       <dt>Latest day</dt>
-      <dd>{number.format(tokenWorld.todayTokens)}</dd>
-      <small>{snapshotLabel}</small>
+      <dd>
+        {number.format(tokenWorld.todayTokens)}
+        <small>{snapshotLabel}</small>
+      </dd>
     </div>
     <div>
       <dt>Projects used</dt>
-      <dd>Worldwide</dd>
-      <small>Across borders and time zones</small>
+      <dd>
+        Worldwide
+        <small>Across borders and time zones</small>
+      </dd>
     </div>
     <div>
       <dt>Projects contributing</dt>
-      <dd>{number.format(tokenWorld.projectsContributing)}</dd>
-      <small>CodeVetter starts the count</small>
+      <dd>
+        {number.format(tokenWorld.projectsContributing)}
+        <small>CodeVetter starts the count</small>
+      </dd>
     </div>
   </dl>
 

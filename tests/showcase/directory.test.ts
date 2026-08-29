@@ -18,7 +18,7 @@ describe('complete public Fleet directory', () => {
       {}
     );
 
-    expect(catalog.schemaVersion).toBe(4);
+    expect(catalog.schemaVersion).toBe(5);
     expect(catalog.directory).toHaveLength(56);
     expect(new Set(ids).size).toBe(56);
     expect(counts.current).toBe(32);
@@ -32,6 +32,16 @@ describe('complete public Fleet directory', () => {
       expect(project.form).toBeTruthy();
       expect(project.platforms.length).toBeGreaterThan(0);
       expect(project.technologies.length).toBeGreaterThan(0);
+      if (project.id !== 'ios-landings') {
+        expect(Object.keys(project.purposeContract).sort()).toEqual([
+          'audience',
+          'mechanism',
+          'nextAction',
+          'outcome',
+          'proof',
+          'purpose',
+        ]);
+      }
       expect(JSON.stringify(project)).not.toMatch(
         /(?:sourcePath|cfProject|credential|password|private repository|\/Users\/)/i
       );

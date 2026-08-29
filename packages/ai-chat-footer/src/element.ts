@@ -92,7 +92,7 @@ export function registerAIChatFooter(): void {
       style.textContent = `
         :host {
           --ai-footer-text: inherit;
-          --ai-footer-muted: color-mix(in srgb, currentColor 62%, transparent);
+          --ai-footer-muted: color-mix(in srgb, currentColor 72%, transparent);
           --ai-footer-border: color-mix(in srgb, currentColor 18%, transparent);
           --ai-footer-surface: transparent;
           --ai-footer-control: color-mix(in srgb, currentColor 4%, transparent);

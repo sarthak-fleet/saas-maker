@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "generatedFrom": [
     "site-health/apps/backend/config/projects.json"
   ],
@@ -8,8 +8,16 @@
     {
       "id": "codevetter",
       "name": "CodeVetter",
-      "description": "AI code review platform — desktop-first, works offline.",
+      "description": "Execution-backed verification for AI-written software changes — local-first and inspectable.",
       "makerNote": "I built CodeVetter to make reviewing AI-generated code rigorous without giving up a local-first workflow.",
+      "purposeContract": {
+        "purpose": "CodeVetter verifies whether AI-written software changes actually satisfy their task, not merely whether the diff looks plausible.",
+        "audience": "Developers and teams shipping code produced with AI agents.",
+        "outcome": "Higher confidence that an agent completed the requested change correctly and safely.",
+        "mechanism": "Local-first review combines repository context, executable checks, targeted evaluation, and inspectable verification receipts.",
+        "proof": "The desktop product already performs source-aware review and is being extended toward execution-backed, receipt-based verification.",
+        "nextAction": "Inspect the product and public roadmap; use current evidence to judge the verification workflow while the flagship continues to mature."
+      },
       "kind": "product",
       "form": "Desktop app",
       "platforms": [
@@ -46,6 +54,14 @@
       "name": "HeyPace",
       "description": "Local-only macOS voice agent that can understand what is on your screen.",
       "makerNote": "I wanted a fast, privacy-first Mac assistant that could understand what is on my screen while keeping the work local.",
+      "purposeContract": {
+        "purpose": "HeyPace is a private Mac assistant for fast voice-driven help grounded in what is currently on screen.",
+        "audience": "A Mac user who wants contextual assistance without sending their desktop workflow to a hosted service.",
+        "outcome": "Get useful help in the moment with less typing and less context switching.",
+        "mechanism": "A local macOS agent combines voice interaction, screen context, and device-side tools.",
+        "proof": "The public 0.3.19 preview is downloadable and the native implementation includes voice, screen context, local planning, and macOS actions; signed-release hardware smoke and sustained daily use remain unproven.",
+        "nextAction": "Download the current Mac preview, test one recurring voice-and-screen workflow, and judge it against Pace's visible local and off-device trust boundary."
+      },
       "kind": "product",
       "form": "macOS app",
       "platforms": [
@@ -79,6 +95,14 @@
       "name": "PostTrainLLM",
       "description": "A local factory for training, evaluating, and running specialist language models.",
       "makerNote": "I use PostTrainLLM to explore local model training and turn those experiments into repeatable recipes for specialist models.",
+      "purposeContract": {
+        "purpose": "PostTrainLLM turns local model-training experiments into measured, reproducible recipes for useful specialist language models.",
+        "audience": "Practitioners learning or running post-training workflows on personal Apple hardware and in the browser.",
+        "outcome": "Train, evaluate, compare, and run specialist models with evidence about what worked and why.",
+        "mechanism": "A local factory joins datasets, training methods, evaluation, experiment tracking, and inference into repeatable recipes.",
+        "proof": "The project contains working browser and Mac-local experiments, evaluation infrastructure, and reproducible training paths.",
+        "nextAction": "Explore the measured recipes and follow new experiments as they produce reproducible proof rather than scale claims."
+      },
       "kind": "product",
       "form": "Research platform",
       "platforms": [
@@ -112,6 +136,14 @@
       "name": "Site Health",
       "description": "A local portfolio dashboard for domains, performance, search, and AI visibility evidence.",
       "makerNote": "I built Site Health because I needed one clear view of Fleet’s domains, performance, search visibility, and AI visibility.",
+      "purposeContract": {
+        "purpose": "Site Health gives the Fleet owner one private, evidence-backed view of portfolio inventory and public-surface health.",
+        "audience": "The owner operating a large portfolio of independent software projects.",
+        "outcome": "Know what exists, what is live, and where domains, performance, search, or AI visibility need attention.",
+        "mechanism": "A local five-area dashboard joins the canonical catalog with provider, repository, performance, search, and visibility evidence.",
+        "proof": "It owns the 56-identity private catalog, generated project dossiers, and the operational evidence used across Fleet reviews.",
+        "nextAction": "Run it locally and use its five owner questions to investigate portfolio health; it is not a public SaaS signup."
+      },
       "kind": "platform",
       "form": "Local dashboard",
       "platforms": [
@@ -136,6 +168,14 @@
       "name": "Live",
       "description": "The original Significant Hobbies experience, now independently owned while preserving its data and authentication boundary.",
       "makerNote": "I wanted a product that helps people live more intentionally through goals, possibilities, and things worth anticipating.",
+      "purposeContract": {
+        "purpose": "Live helps a person turn passive wanting into a life they can deliberately imagine, plan, and experience.",
+        "audience": "People who want meaningful goals, possibilities, and experiences to look forward to.",
+        "outcome": "Build a personal catalogue of things worth doing and keep moving from possibility toward lived experience.",
+        "mechanism": "The independent app combines a bucket list, goals, discovery, search, and suggestions around one private life catalogue.",
+        "proof": "The product is independently owned, in active dogfooding, and retains its established data and authentication boundary.",
+        "nextAction": "Open Live and use the catalogue, search, and suggestions to add or act on something you genuinely want to experience."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -168,6 +208,14 @@
       "name": "ChatGPT Connections",
       "description": "A read-only MCP gateway that exposes selected public Fleet data to ChatGPT connections.",
       "makerNote": "I had many projects but no solid way to connect them to ChatGPT, so I built a selective gateway for that.",
+      "purposeContract": {
+        "purpose": "ChatGPT Connections lets ChatGPT read selected Fleet product data through one bounded gateway.",
+        "audience": "The Fleet owner and approved ChatGPT conversations that need specific project context.",
+        "outcome": "Ask useful cross-project questions without exposing the private portfolio catalog or granting write access.",
+        "mechanism": "A read-only MCP gateway publishes explicit, privacy-filtered resources for named consumers.",
+        "proof": "The shared gateway is working and already exposes selected public product contracts to ChatGPT.",
+        "nextAction": "Use an existing approved connection; add another resource only when a concrete consumer needs it."
+      },
       "kind": "platform",
       "form": "MCP service",
       "platforms": [
@@ -196,6 +244,14 @@
       "name": "SaaS Maker",
       "description": "Software as a specialized service: a living studio of focused products built for particular problems and maintained in public.",
       "makerNote": "I use SaaS Maker as the public home for Fleet and as a workshop for reusable feedback, workflow, and automation tools.",
+      "purposeContract": {
+        "purpose": "SaaS Maker is the public product studio and reusable tooling workshop for the Fleet portfolio.",
+        "audience": "Visitors exploring Sarthak’s products and builders consuming the studio’s public packages, workflows, and evidence.",
+        "outcome": "Understand the body of work and reuse the tools that have earned a stable place across its products.",
+        "mechanism": "A generated public directory sits beside shared feedback, UI, workflow, skill, and automation tooling maintained through real Fleet use.",
+        "proof": "It publishes the canonical privacy-safe project directory and houses packages and tooling used by multiple independent repositories.",
+        "nextAction": "Explore the complete directory or open the public tooling catalogue; product-specific work continues in each owning repository."
+      },
       "kind": "product",
       "form": "Web directory and service",
       "platforms": [
@@ -230,6 +286,14 @@
       "name": "GitStat",
       "description": "A GitHub analytics dashboard for contribution history, code churn, collaboration, and AI-assisted work.",
       "makerNote": "I built GitStat to understand how my time and code churn are distributed across a large collection of repositories.",
+      "purposeContract": {
+        "purpose": "GitStat explains how engineering effort, contribution history, and code churn are distributed across many repositories.",
+        "audience": "A developer managing enough GitHub projects that the normal contribution graph no longer answers useful questions.",
+        "outcome": "See where time and change are going and distinguish sustained work from noisy activity.",
+        "mechanism": "A GitHub analytics dashboard aggregates commits, churn, collaboration, and AI-assisted work across the portfolio.",
+        "proof": "The maintained dashboard answers the owner’s recurring repository-distribution questions and is considered functionally complete.",
+        "nextAction": "Use the dashboard for a concrete portfolio question; request new analysis only when an unanswered recurring question appears."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -261,6 +325,14 @@
       "name": "Reel Pipeline",
       "description": "A cost-bounded pipeline for planning, producing, and retaining short-form video artifacts.",
       "makerNote": "I wanted to automate the repetitive work of making and publishing useful product videos.",
+      "purposeContract": {
+        "purpose": "Reel Pipeline is a reproducible workflow for turning approved source material into publishable short-form product videos.",
+        "audience": "A product operator producing recurring short videos from owned and approved material.",
+        "outcome": "Plan, create, review, and retain useful videos without losing cost, provenance, or operator control.",
+        "mechanism": "A story-first pipeline records source approval, media-generation steps, artifacts, costs, and publication boundaries.",
+        "proof": "The repository contains substantial planning and media automation, but the full publishable loop never shipped and remains held.",
+        "nextAction": "Treat the current work as a held pipeline; reopen only by proving one bounded video-to-publication loop with explicit cost limits."
+      },
       "kind": "product",
       "form": "Video pipeline",
       "platforms": [
@@ -291,6 +363,14 @@
       "name": "Mobile Dev Cockpit",
       "description": "A parked mobile supervision client retained for possible future reactivation.",
       "makerNote": "I explored whether development work running on a desktop could be supervised clearly from a phone.",
+      "purposeContract": {
+        "purpose": "Mobile Dev Cockpit explored supervising a desktop development workflow from a phone.",
+        "audience": "A developer who wanted to observe and approve bounded desktop-agent work while away from the machine.",
+        "outcome": "Understand remote progress and intervene safely without reproducing the full desktop environment.",
+        "mechanism": "A paired mobile client used allowlisted controls, explicit approvals, and status views over a desktop companion.",
+        "proof": "The pairing and approval patterns are retained, but the required desktop-control dependency was abandoned.",
+        "nextAction": "Read the retained history only; this product is permanently archived and has no active signup or roadmap."
+      },
       "kind": "product",
       "form": "Mobile app",
       "platforms": [
@@ -316,6 +396,14 @@
       "name": "Drank",
       "description": "Domain Rating intelligence for product, SEO, and market research.",
       "makerNote": "I built DRank when domain-rating data became accessible enough to track the strength of my own domains over time.",
+      "purposeContract": {
+        "purpose": "DRank tracks domain-strength evidence for owned products and makes it usable in portfolio decisions.",
+        "audience": "The Fleet operator comparing domain authority across products, SEO work, and markets.",
+        "outcome": "See current Domain Rating and its changes without manually checking every domain.",
+        "mechanism": "A focused adapter collects available domain-rating data and feeds a consistent history into Site Health.",
+        "proof": "The integration is complete and already supplies domain-strength evidence to the private portfolio dashboard.",
+        "nextAction": "Use the evidence through Site Health; maintain the adapter rather than expecting a separate product roadmap."
+      },
       "kind": "product",
       "form": "Web tool",
       "platforms": [
@@ -348,6 +436,14 @@
       "name": "Email Manager",
       "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
       "makerNote": "Gmail did not help me see who was filling my inbox, so I built a clearer way to understand volume and unsubscribe.",
+      "purposeContract": {
+        "purpose": "Email Manager helps a person understand who fills their Gmail inbox and deliberately reduce unwanted volume.",
+        "audience": "A Gmail user who wants private search, sender-level insight, and explicit unsubscribe control.",
+        "outcome": "Find old mail, identify repeat senders, and unsubscribe with a clear understanding of what will change.",
+        "mechanism": "A private Gmail workspace combines local semantic search, sender aggregation, and user-confirmed unsubscribe workflows.",
+        "proof": "The maintained application performs its intended search, sender-insight, and unsubscribe jobs in regular use.",
+        "nextAction": "Open the private workspace and investigate a sender or search question; no speculative feature expansion is planned."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -381,6 +477,14 @@
       "name": "Memory Map",
       "description": "Turn a ChatGPT export into a private, browser-computed map of recurring themes, facts, and conversations.",
       "makerNote": "I wanted to learn what my exported AI conversations reveal about my themes, emotions, memory, and personal change.",
+      "purposeContract": {
+        "purpose": "Memory Map turns an exported AI conversation history into a private map of recurring themes, facts, emotions, and change.",
+        "audience": "People curious about patterns across their own ChatGPT history who do not want to upload the archive to a service.",
+        "outcome": "Recognize recurring concerns and how interests, language, and personal themes changed over time.",
+        "mechanism": "The browser computes structured conversation analysis locally from an imported export and presents linked historical views.",
+        "proof": "A useful browser-local dashboard exists today; deeper shift analysis and additional export sources remain active work.",
+        "nextAction": "Import a ChatGPT export locally and explore the resulting private map; the source archive stays in the browser."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -412,6 +516,14 @@
       "name": "Free AI",
       "description": "OpenAI-compatible gateway across free-tier model providers.",
       "makerNote": "I built Free AI to make genuinely useful free model capacity easier to discover and use through one resilient interface.",
+      "purposeContract": {
+        "purpose": "Free AI makes useful free-tier language-model capacity available through one resilient, OpenAI-compatible interface.",
+        "audience": "Fleet applications and developers who need low-cost model access without hard-coding one free provider.",
+        "outcome": "Keep AI-dependent workflows available as provider limits, models, and free capacity change.",
+        "mechanism": "A capability-aware gateway routes compatible requests across supported free-tier providers with fallback behavior.",
+        "proof": "The gateway works for internal consumers and is maintained as shared infrastructure rather than an independent feature product.",
+        "nextAction": "Use the compatible gateway from a named consumer; add providers only when they improve capability, reliability, or capacity."
+      },
       "kind": "platform",
       "form": "API gateway",
       "platforms": [
@@ -445,6 +557,14 @@
       "name": "PSI Swarm",
       "description": "Repeated Lighthouse distributions for honest website performance tracking.",
       "makerNote": "I wanted repeatable evidence of how my products perform under real Lighthouse conditions, not a single flattering test.",
+      "purposeContract": {
+        "purpose": "PSI Swarm measures website performance as repeated distributions instead of a single flattering Lighthouse run.",
+        "audience": "The Fleet operator and developers who need trustworthy performance evidence across public products.",
+        "outcome": "See typical performance, variability, and regressions under repeated real measurement conditions.",
+        "mechanism": "An operational CLI runs and aggregates multiple PageSpeed and Lighthouse observations for Site Health.",
+        "proof": "The completed measurement tool already feeds repeated performance evidence into the portfolio dashboard.",
+        "nextAction": "Run it for a concrete performance investigation or consume its evidence in Site Health; keep the tool operationally narrow."
+      },
       "kind": "platform",
       "form": "Performance platform",
       "platforms": [
@@ -478,6 +598,14 @@
       "name": "High Signal",
       "description": "Evidence-backed daily intelligence across technology, startups, finance, and public markets.",
       "makerNote": "I built High Signal to combine scattered news and data sources and extract the signals that are actually useful.",
+      "purposeContract": {
+        "purpose": "High Signal turns scattered technology, startup, finance, and market sources into an evidence-backed daily intelligence brief.",
+        "audience": "A curious operator who wants decision-relevant signals without reading every feed and article.",
+        "outcome": "Understand what changed, why it may matter, and which source supports each signal.",
+        "mechanism": "The product collects multiple sources, groups related events, and derives a concise brief with visible evidence.",
+        "proof": "The product focus and daily-brief surface exist, but regular owner use has not yet validated what deserves continued investment.",
+        "nextAction": "Read and dogfood the Daily Brief; resume feature work only when repeated use exposes a concrete deficiency."
+      },
       "kind": "product",
       "form": "Intelligence web app",
       "platforms": [
@@ -511,6 +639,14 @@
       "name": "High Signal Podcasts",
       "description": "A source-backed index of what notable people said on podcasts, including books and tools they use.",
       "makerNote": "I’m building High Signal Podcasts to extract useful insights, recommendations, and emerging technology signals from top podcasts without listening to every episode.",
+      "purposeContract": {
+        "purpose": "High Signal Podcasts indexes evidenced claims, recommendations, books, and tools mentioned by notable podcast guests.",
+        "audience": "People who want useful ideas from important podcasts without listening to every episode end to end.",
+        "outcome": "Find what a person actually said or recommended and trace it back to the source episode.",
+        "mechanism": "A source-backed corpus extracts attributable claims and organizes them into people, topics, books, tools, and emerging signals.",
+        "proof": "The reviewed public beta is live with 166 published claims, 183 distinct evidence-linked recommendations, and 139 source episodes.",
+        "nextAction": "Browse a recommendation or claim and follow its quote, speaker, episode, and source receipt."
+      },
       "kind": "product",
       "form": "Podcast intelligence web app",
       "platforms": [
@@ -537,13 +673,21 @@
       "changelogUrl": "https://podcasts.highsignal.app/changelog",
       "roadmapUrl": "https://github.com/Significant-Hobbies/on-record/issues",
       "firstCommitAt": "2026-08-24",
-      "latestCommitAt": "2026-08-28"
+      "latestCommitAt": "2026-08-27"
     },
     {
       "id": "issue-pages",
       "name": "IssuePages",
       "description": "A public website where a GitHub issue becomes a readable, searchable page.",
       "makerNote": "I wanted publishing a public page to be as simple as opening a GitHub issue.",
+      "purposeContract": {
+        "purpose": "IssuePages turns a GitHub issue into a readable, searchable public page.",
+        "audience": "A builder or writer who wants lightweight publishing while keeping GitHub as the editing workflow.",
+        "outcome": "Publish and update a durable page without adopting a separate CMS.",
+        "mechanism": "An owner-approved issue is rendered into a public page with edit, archive, search, and source-link behavior.",
+        "proof": "The owner-only production pilot has proven the issue-to-page loop at issues.sarthakagrawal.dev.",
+        "nextAction": "Read the current pages or inspect the pilot; public authoring remains gated on moderation and authenticated rendering."
+      },
       "kind": "experiment",
       "form": "Issue-backed publishing website",
       "platforms": [
@@ -569,13 +713,21 @@
       "repositoryUrl": "https://github.com/sarthakagrawal927/issue-pages",
       "roadmapUrl": "https://github.com/sarthakagrawal927/issue-pages/issues",
       "firstCommitAt": "2026-08-25",
-      "latestCommitAt": "2026-08-25"
+      "latestCommitAt": "2026-08-28"
     },
     {
       "id": "everythingrated",
       "name": "EverythingRated",
-      "description": "A general-purpose rating and comparison experiment.",
+      "description": "Multi-axis ratings for deciding which AI developer tools to adopt.",
       "makerNote": "I have long wanted a place where people can make lists and rate anything, while recognizing that its social loop needs real care.",
+      "purposeContract": {
+        "purpose": "EverythingRated helps developers decide which AI development library to adopt by making the important trade-offs visible axis by axis.",
+        "audience": "Developers and technical operators comparing AI development tools for real projects.",
+        "outcome": "Choose an AI library with a clearer view of maintenance, community, license, API stability, footprint, and model portability.",
+        "mechanism": "Anonymous multi-axis ratings, weighted comparisons, confidence counts, and moderated tool submissions focus one directory on adoption decisions.",
+        "proof": "The live surface compares 24 AI development libraries; the broader rate-anything concept and other seeded directories are deliberately parked.",
+        "nextAction": "Compare AI development tools or rate one yourself; broader directory expansion waits for adoption traffic or moderation evidence."
+      },
       "kind": "experiment",
       "form": "Ratings experiment",
       "platforms": [
@@ -607,6 +759,14 @@
       "name": "Research Papers",
       "description": "Academic paper discovery and a structured research data asset.",
       "makerNote": "I wanted one large, searchable research library where retrieval could help me understand what already exists in a market.",
+      "purposeContract": {
+        "purpose": "Research Papers is a structured, searchable library for discovering and interrogating academic and market research.",
+        "audience": "The Fleet owner investigating a concrete product, technical, or market question.",
+        "outcome": "Find relevant papers and retrieve grounded context from a large retained corpus.",
+        "mechanism": "A curated research dataset is indexed for search and retrieval-assisted analysis with source structure intact.",
+        "proof": "The corpus and discovery system are essentially complete and available when a real research question appears.",
+        "nextAction": "Use the library for a named research question; maintain the corpus rather than expanding it speculatively."
+      },
       "kind": "product",
       "form": "Research library",
       "platforms": [
@@ -639,6 +799,14 @@
       "name": "Materia",
       "description": "Evidence-graded remedy reference organized by body system.",
       "makerNote": "I want to make anatomy explorable and connect body concerns to clear, evidence-based information about treatments and remedies.",
+      "purposeContract": {
+        "purpose": "Materia explores an anatomy-led, evidence-graded reference for understanding body concerns, treatments, and remedies.",
+        "audience": "People seeking a clearer educational map from a body concern to bounded, source-backed information.",
+        "outcome": "Understand relevant anatomy and compare remedy evidence without mistaking the product for medical diagnosis.",
+        "mechanism": "An interactive body-system model links concerns to structured remedy pages with explicit evidence grades and safety limits.",
+        "proof": "A technically ambitious reference exists, but sustained evidence quality, medical safety, and content maintenance are unresolved.",
+        "nextAction": "Use the retained material as an educational experiment only; reopen publication work after defining a medical-safety and evidence standard."
+      },
       "kind": "experiment",
       "form": "Interactive experiment",
       "platforms": [
@@ -670,6 +838,14 @@
       "name": "Knowledge Base",
       "description": "Private agent search over specialized corpora with ranked citations, provenance, and schema-aware retrieval.",
       "makerNote": "I built Knowledge Base as the private, cited retrieval layer that other Fleet applications can rely on.",
+      "purposeContract": {
+        "purpose": "Knowledge Base supplies private, cited retrieval over specialized corpora to other Fleet applications and agents.",
+        "audience": "Named internal products and agents that need grounded answers from controlled source collections.",
+        "outcome": "Retrieve relevant context with ranked citations, provenance, and a schema the consuming product can trust.",
+        "mechanism": "A shared RAG service performs corpus-aware search, ranking, citation, and schema-constrained retrieval behind a private boundary.",
+        "proof": "The service has healthy Fleet consumers and already operates as the shared cited-retrieval layer.",
+        "nextAction": "Connect it only for a concrete consumer need; change the infrastructure when retrieval evidence shows a real failure."
+      },
       "kind": "platform",
       "form": "Knowledge platform",
       "platforms": [
@@ -705,6 +881,14 @@
       "name": "Significant Hobbies",
       "description": "The shared Hub and backend for six maintained Significant Hobbies applications, plus retained compatibility data domains.",
       "makerNote": "I wanted one Hub for my maintained personal apps while letting every app keep ownership of its own data.",
+      "purposeContract": {
+        "purpose": "Significant Hobbies is the shared home and privacy-aware control plane for six independently owned personal applications.",
+        "audience": "One person using Live, Journal, Calorie, Setline, Kith, and Anchor as a connected personal system.",
+        "outcome": "See and act across the six apps without collapsing their data ownership or product identities.",
+        "mechanism": "A Hub, backend, and typed sync contracts exchange privacy-safe summaries and semantic actions while each app keeps its own source and data.",
+        "proof": "The canonical Hub supports exactly six maintained apps; the former Habits domain remains compatibility data, not a seventh product.",
+        "nextAction": "Open the Hub to reach the six apps; current work focuses on unified authentication and safe cross-app summaries."
+      },
       "kind": "product",
       "form": "Personal-app Hub",
       "platforms": [
@@ -739,6 +923,14 @@
       "name": "India Standards",
       "description": "A transparent India demographic standards calculator using aggregate PLFS data, explicit uncertainty ranges, and clear source limits.",
       "makerNote": "I wanted official data to provide a more grounded answer to how a person is doing in the Indian context.",
+      "purposeContract": {
+        "purpose": "India Standards contextualizes a person’s situation against official Indian demographic data without pretending the comparison is exact.",
+        "audience": "People who want a grounded India-specific reference for demographic and economic comparison.",
+        "outcome": "Understand where a value sits in aggregate context and see the uncertainty and source limits behind that estimate.",
+        "mechanism": "A transparent calculator uses aggregate PLFS data, explicit ranges, documented formulas, and visible caveats.",
+        "proof": "The working calculator exposes its aggregate sources and uncertainty, while current data quality limits further expansion.",
+        "nextAction": "Use the calculator as a bounded contextual reference; expansion waits for materially better authoritative data."
+      },
       "kind": "product",
       "form": "Reference web app",
       "platforms": [
@@ -773,6 +965,14 @@
       "name": "Anime List",
       "description": "Anime and manga discovery with multi-axis filtering and personal watchlists.",
       "makerNote": "I wanted better anime filtering and discovery than the standard catalog experience, with a watchlist that works for me.",
+      "purposeContract": {
+        "purpose": "Anime List helps anime and manga fans filter a large catalogue, discover what fits, and maintain a personal watchlist.",
+        "audience": "Anime and manga fans who want more precise discovery than a standard catalogue provides.",
+        "outcome": "Find suitable titles quickly and keep personal viewing or reading plans organized.",
+        "mechanism": "Multi-field search, shareable filters, seasonal discovery, taste tools, schedules, and signed-in watchlists operate over a large synced catalogue.",
+        "proof": "The production app serves roughly 35,000 titles and is frequently used; broader community features are intentionally out of scope.",
+        "nextAction": "Search the catalogue or use the watchlist; maintenance focuses on data quality and core discovery reliability."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -807,6 +1007,14 @@
       "name": "Chess Coach",
       "description": "Browser chess against Stockfish with optional AI move coaching.",
       "makerNote": "I built Chess to explore whether a local AI agent could become a practical, patient partner for improving my game.",
+      "purposeContract": {
+        "purpose": "Chess Coach explored whether a local AI assistant could make playing and reviewing chess more instructive.",
+        "audience": "A chess learner who wants a patient practice partner rather than only a move engine.",
+        "outcome": "Play against Stockfish and receive optional coaching that explains useful move ideas.",
+        "mechanism": "A browser board pairs engine play with a local AI coaching layer for contextual feedback.",
+        "proof": "The public artifact works, but the owner lost interest in chess and the product has no active roadmap.",
+        "nextAction": "Try the retained chess artifact if useful; expect no active development or product expansion."
+      },
       "kind": "experiment",
       "form": "Web game",
       "platforms": [
@@ -838,6 +1046,14 @@
       "name": "LoopTV",
       "description": "A lean-back, TV-style random video player for curated channels.",
       "makerNote": "I wanted a more controlled and curated way to watch YouTube, shaped like television rather than an endless feed.",
+      "purposeContract": {
+        "purpose": "LoopTV turns curated YouTube channels into a calmer, lean-back television experience.",
+        "audience": "Viewers who want intentional channel selection without YouTube’s endless recommendation feed.",
+        "outcome": "Start watching something suitable quickly while retaining control over the available catalogue.",
+        "mechanism": "A TV-like random player uses curated channels, focused search, and resilient handling of unavailable videos.",
+        "proof": "The maintained product is complete for its intended viewing loop and already handles common catalogue failures.",
+        "nextAction": "Open a curated channel and watch; future changes are limited to catalogue health or a proven viewing need."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -871,6 +1087,14 @@
       "name": "Reader",
       "description": "Capture, annotate, revisit, and discuss saved reading.",
       "makerNote": "I wanted any article or PDF to become a focused reading and research surface instead of another forgotten browser tab.",
+      "purposeContract": {
+        "purpose": "Reader turns a saved article or PDF into a focused place to read, annotate, revisit, and discuss it.",
+        "audience": "People who save serious reading but lose it among browser tabs and undifferentiated bookmarks.",
+        "outcome": "Move from capture to attentive reading and retain useful notes and questions around the source.",
+        "mechanism": "A dedicated reading surface combines capture, document parsing, annotation, retrieval, and source-grounded discussion.",
+        "proof": "The product is mature, but current owner usage is too low to justify speculative expansion.",
+        "nextAction": "Use Reader for a real article or PDF; resume improvements only where the capture-to-reading loop actually breaks."
+      },
       "kind": "product",
       "form": "Reading web app",
       "platforms": [
@@ -904,6 +1128,14 @@
       "name": "SWE Interview Prep",
       "description": "A learning OS for software-engineering interview practice.",
       "makerNote": "I built this as a learning-by-doing system that combines Pomodoro, Feynman, retrieval practice, and practical roadmaps.",
+      "purposeContract": {
+        "purpose": "SWE Interview Prep is a personal learning OS that turns software-engineering study into retained, artifact-backed understanding.",
+        "audience": "Software engineers preparing for interviews or strengthening practical technical judgment through active study.",
+        "outcome": "Build causal understanding that survives recall and can be demonstrated through code, diagrams, explanations, or projects.",
+        "mechanism": "An evidence-gated Concept → Drill → Build → Review → Apply loop combines retrieval practice, Feynman explain-backs, roadmaps, and adaptive review.",
+        "proof": "The active product already unifies broad curriculum, practice, build labs, Socratic help, and a shared mastery model.",
+        "nextAction": "Start a focused learning or practice loop and produce an artifact; new tracks should earn their place by improving retention."
+      },
       "kind": "product",
       "form": "Learning web app",
       "platforms": [
@@ -936,6 +1168,14 @@
       "name": "Calorie",
       "description": "A private, local-first food, water, and weight journal with transparent timing guidance.",
       "makerNote": "I wanted one personal system for weight loss that connects food logging, fasting, exercise timing, and daily performance.",
+      "purposeContract": {
+        "purpose": "Calorie is a private food and body journal that turns lightweight logging into transparent daily and timing guidance.",
+        "audience": "A person pursuing weight loss who logs food with one hand and checks progress in short daily moments.",
+        "outcome": "Track intake, hydration, weight, and routines quickly, then understand practical training, fasting, and sleep timing.",
+        "mechanism": "A local-first iPhone journal records food and four core nutrients, applies visible formulas, and offers optional private sync.",
+        "proof": "The maintained app is functionally complete, connected to the Hub family, and designed so recommendations trace to visible rules.",
+        "nextAction": "Log a meal or daily measurement in the app; change the product only when repeated use reveals a concrete gap."
+      },
       "kind": "product",
       "form": "iOS app",
       "platforms": [
@@ -970,15 +1210,23 @@
       "name": "Setline",
       "description": "An iOS-native training tracker that runs a written strength, cardio and mobility programme one set at a time and measures each exercise against an authored target.",
       "makerNote": "I built Setline to make workouts easier to execute one set at a time, with timing and performance kept accurate.",
+      "purposeContract": {
+        "purpose": "Setline runs a written workout one set at a time and measures each exercise against its authored target.",
+        "audience": "A person following a structured strength, cardio, or mobility programme during real sessions.",
+        "outcome": "Stay focused on the current set, keep rest timing accurate, and understand performance against the plan.",
+        "mechanism": "A native iOS workout player sequences exercises, timers, targets, and completed performance without turning the session into data entry.",
+        "proof": "The focused workout loop is under active native development and is being validated through real sessions.",
+        "nextAction": "Run an authored workout in Setline and let actual session friction determine the next product change."
+      },
       "kind": "product",
-      "form": "Web app",
+      "form": "iOS app",
       "platforms": [
-        "Web"
+        "iOS"
       ],
       "technologies": [
-        "Astro",
-        "TypeScript",
-        "Cloudflare Pages"
+        "SwiftUI",
+        "CloudKit",
+        "PersonalSyncKit"
       ],
       "group": "current",
       "lifecycle": "maintained",
@@ -1002,6 +1250,14 @@
       "name": "Journal",
       "description": "A private daily journal and personal archive with an independently owned native codebase.",
       "makerNote": "I believe journaling is an important habit, so I wanted a durable journal that fits naturally inside the Hub.",
+      "purposeContract": {
+        "purpose": "Journal makes private daily writing and reflection durable enough to become a real personal practice.",
+        "audience": "An iPhone user who wants a quiet, device-first journal inside the Significant Hobbies family.",
+        "outcome": "Write regularly, revisit a personal archive, and notice useful patterns without surrendering ownership of the entries.",
+        "mechanism": "An independently owned native app keeps the writing loop simple, private, and compatible with privacy-safe Hub summaries.",
+        "proof": "The app is actively being built and dogfooded as a private device-first journal with its own native codebase.",
+        "nextAction": "Write and revisit real entries; future reflection features should follow lived journaling practice and preserve privacy."
+      },
       "kind": "product",
       "form": "iOS app",
       "platforms": [
@@ -1036,15 +1292,23 @@
       "name": "Kith",
       "description": "A private iPhone app for the people you actually want to stay close to — closeness-weighted constellation home, standing notes, and a chronological log per person.",
       "makerNote": "I wanted a beautiful personal relationship-memory app that helps me stay more thoughtful about the people in my life.",
+      "purposeContract": {
+        "purpose": "Kith helps a person remember the people they genuinely want to stay close to and act with more thoughtfulness.",
+        "audience": "An iPhone user who values a small set of relationships and dislikes treating them like a sales CRM.",
+        "outcome": "Retain meaningful context, notice who needs attention, and show up better in important relationships.",
+        "mechanism": "A private constellation home organizes closeness, standing notes, and a chronological memory log for each person.",
+        "proof": "The device-first native product is built around a distinctive constellation model and is in active personal use validation.",
+        "nextAction": "Use Kith with real relationships and let recurring memory and follow-through needs guide improvements."
+      },
       "kind": "product",
-      "form": "Web app",
+      "form": "iOS app",
       "platforms": [
-        "Web"
+        "iOS"
       ],
       "technologies": [
-        "Astro",
-        "TypeScript",
-        "Cloudflare Pages"
+        "SwiftUI",
+        "CloudKit",
+        "PersonalSyncKit"
       ],
       "group": "current",
       "lifecycle": "maintained",
@@ -1089,8 +1353,16 @@
     {
       "id": "rolepatch",
       "name": "RolePatch",
-      "description": "AI-assisted resume tailoring, role research, and interview preparation.",
+      "description": "Evidence-bound resume tailoring and review-first application preparation for one specific job.",
       "makerNote": "I wanted a focused way to tailor a resume and its supporting material to the actual job description.",
+      "purposeContract": {
+        "purpose": "RolePatch tailors a resume and supporting application material to the evidence and language of a specific job.",
+        "audience": "A job seeker preparing a serious application for a particular role.",
+        "outcome": "Present relevant experience more clearly and prepare for the role without inventing qualifications.",
+        "mechanism": "The product joins job-description analysis, resume tailoring, role research, proof review, and interview preparation in one workflow.",
+        "proof": "A strong working product exists, including the evidence ideas retained from TrueHire, but owner job-search intent is currently absent.",
+        "nextAction": "Use it against a real application when job hunting resumes; until then, treat the product as held rather than actively marketed."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -1122,8 +1394,16 @@
     {
       "id": "karte",
       "name": "Karte",
-      "description": "An AI link-in-bio that turns a profile into a conversation.",
+      "description": "A creator-owned public profile that answers visitor questions and preserves context for better inbound.",
       "makerNote": "I wanted a link-in-bio surface that could grow into something more personal: a greeting card, profile, and small agent.",
+      "purposeContract": {
+        "purpose": "Karte gives a creator or independent operator a public profile that answers visitor questions and preserves context for better inbound.",
+        "audience": "An individual or small company that wants visitors to understand and explore who they are through one compact page.",
+        "outcome": "Help a visitor find relevant links, context, and answers instead of scanning an undifferentiated list.",
+        "mechanism": "A designed profile combines greeting-card presentation, owner-published context, structured links, visitor questions, contact handoff, and a small grounded agent.",
+        "proof": "The individual profile and conversational foundation are strong; company positioning and repeated company use remain the next validation.",
+        "nextAction": "Explore the existing profile experience; company adoption should wait for a focused workflow and a real company test."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -1158,6 +1438,14 @@
       "name": "Starboard",
       "description": "Organize and semantically search your GitHub stars.",
       "makerNote": "GitHub Stars stopped working for me at scale, so I built a better personal interface for exploring what I had saved.",
+      "purposeContract": {
+        "purpose": "Starboard makes a large GitHub Stars collection useful for personal exploration and project-aware tool discovery.",
+        "audience": "Developers whose saved repositories have outgrown GitHub’s default starred-items interface.",
+        "outcome": "Rediscover relevant tools, understand why they were saved, and connect them to current project needs.",
+        "mechanism": "Synchronization, search, tags, lists, semantic retrieval, and project-aware recommendations operate over the user’s saved repositories.",
+        "proof": "Core sync, search, organization, and project-aware discovery are largely complete and under focused active improvement.",
+        "nextAction": "Connect or explore a Stars collection and use a current project question to drive discovery; avoid unrelated alert or reporting scope."
+      },
       "kind": "product",
       "form": "Web app",
       "platforms": [
@@ -1191,6 +1479,14 @@
       "name": "AliveVille",
       "description": "Persistent AI world and multi-agent simulation experiments.",
       "makerNote": "I wanted to create a long-running world where AI characters remember, form grudges, make choices, and live through open-ended conflict.",
+      "purposeContract": {
+        "purpose": "AliveVille explores a playable world where AI characters remember, form relationships and grudges, and act through persistent conflict.",
+        "audience": "Players drawn to open-ended agent worlds rather than a demonstration of model APIs.",
+        "outcome": "Feel that a small town and its characters remain alive, consequential, and worth returning to.",
+        "mechanism": "A persistent simulation combines autonomous NPC memory, quests, dialogue, combat, and a browser-playable 3D town.",
+        "proof": "The simulation stack and playable artifact exist, but no visual direction or core loop has yet made the game emotionally compelling.",
+        "nextAction": "Treat it as a held game experiment; reopen only with a convincing visual direction and one demonstrably fun playable loop."
+      },
       "kind": "experiment",
       "form": "Web game",
       "platforms": [
@@ -1223,6 +1519,14 @@
       "name": "Protein Index",
       "description": "Searchable protein and nutrition reference.",
       "makerNote": "I wanted a clear catalog for comparing the protein products available in India, despite the difficulty of reliable data.",
+      "purposeContract": {
+        "purpose": "Protein Index was built to catalogue and compare protein products available in India using trustworthy nutrition data.",
+        "audience": "Indian shoppers comparing packaged protein sources on nutrition, price, and practical fit.",
+        "outcome": "Choose among products using a consistent searchable reference instead of scattered marketing claims.",
+        "mechanism": "A product catalogue normalizes nutrition and comparison fields across available Indian protein products.",
+        "proof": "The product structure exists, but authoritative and affordable market data is not available enough for current coverage.",
+        "nextAction": "Use the retained reference cautiously; reopen active work only when reliable product data can support an honest catalogue."
+      },
       "kind": "experiment",
       "form": "Data API and web app",
       "platforms": [
@@ -1255,6 +1559,14 @@
       "name": "Recipe Index",
       "description": "A searchable directory of vegetarian protein foods and practical nutrition comparisons.",
       "makerNote": "I wanted a practical collection of higher-protein recipes that works with ingredients people actually use in Indian kitchens.",
+      "purposeContract": {
+        "purpose": "Recipe Index collects practical higher-protein vegetarian foods and recipes built around ingredients used in Indian kitchens.",
+        "audience": "Vegetarian cooks in India who want more protein without abandoning familiar ingredients and meals.",
+        "outcome": "Find realistic food ideas and compare their nutrition when meal variety becomes useful.",
+        "mechanism": "A searchable food directory organizes recipes and ingredient-level protein comparisons for an Indian cooking context.",
+        "proof": "A public directory exists, but the result did not become compelling enough to justify active expansion.",
+        "nextAction": "Browse the retained directory; new recipe work waits until cooking variety becomes a real owner need."
+      },
       "kind": "experiment",
       "form": "Food directory",
       "platforms": [
@@ -1284,6 +1596,14 @@
       "name": "App Health",
       "description": "Privacy-first endpoint health for Node, Go, and OpenTelemetry services.",
       "makerNote": "I built App Health because checking Sentry, PostHog, Slack, and cloud consoles separately made basic product health too fragmented.",
+      "purposeContract": {
+        "purpose": "App Health gives a developer an immediate, privacy-first view of how every observed service endpoint is performing.",
+        "audience": "A developer or operator running Node, Go, Hono, Pages Functions, or OpenTelemetry-instrumented services.",
+        "outcome": "See endpoint health across short time windows without opening several observability consoles or storing raw request data.",
+        "mechanism": "One small SDK or OTLP connection feeds aggregate-only endpoint summaries into a focused private dashboard.",
+        "proof": "The production V0 supports multiple Node and Go surfaces, OTLP ingestion, aggregate storage, and live dashboard and ingest hosts.",
+        "nextAction": "Integrate a real owned service and use observed failures to guide the next change; the dashboard is not a generic public unlock page."
+      },
       "kind": "product",
       "form": "Monitoring service",
       "platforms": [
@@ -1318,33 +1638,55 @@
       "name": "Mashup",
       "description": "A local-first tool that turns owned media archives into inspectable multi-clip edits.",
       "makerNote": "I wanted a creator’s archive to become coherent topic-specific compilations instead of a pile of isolated clips.",
+      "purposeContract": {
+        "purpose": "Mashup turns an owned creator archive into coherent topic-specific compilations while keeping every edit inspectable.",
+        "audience": "A creator or operator assembling comedy, motivation, podcast, or clipping compilations from approved media.",
+        "outcome": "Find, approve, sequence, and render useful clips without losing source provenance or editorial control.",
+        "mechanism": "A local pipeline combines archive analysis, clipping, editable EDLs, source receipts, approval boundaries, and deterministic rendering.",
+        "proof": "The first public Startups proof assembles a source-faithful 47-second argument from four beats across three Creative Commons podcast episodes, with captions and media receipts.",
+        "nextAction": "Use the local tool on a larger approved channel archive and judge whether repeated multi-episode edits sustain the same editorial quality."
+      },
       "kind": "experiment",
-      "form": "Local media tool",
+      "form": "Local media tool with public proof",
       "platforms": [
+        "Web",
         "CLI",
         "Local"
       ],
       "technologies": [
         "Python",
         "FFmpeg",
-        "SQLite",
-        "MLX"
+        "Astro",
+        "Cloudflare Pages"
       ],
       "group": "current",
       "lifecycle": "maintained",
-      "deployed": false,
-      "deploymentProviders": [],
-      "domains": [],
+      "deployed": true,
+      "deploymentProviders": [
+        "Cloudflare Pages"
+      ],
+      "domains": [
+        "mashup.highsignal.app"
+      ],
+      "url": "https://mashup.highsignal.app",
       "repositoryUrl": "https://github.com/sass-maker/mashup",
       "roadmapUrl": "https://github.com/sass-maker/mashup/issues",
       "firstCommitAt": "2026-07-25",
-      "latestCommitAt": "2026-08-20"
+      "latestCommitAt": "2026-08-28"
     },
     {
       "id": "motion",
       "name": "Motion",
       "description": "Use your body as the controller for an iPhone-hosted game that can mirror to a larger screen.",
       "makerNote": "I wanted body movement captured by a phone to become playful games on a television—and a workout without feeling like one.",
+      "purposeContract": {
+        "purpose": "Motion turns body movement seen by an iPhone into the controls for playful games on a larger screen.",
+        "audience": "People who want active, social play without buying a dedicated motion-console system.",
+        "outcome": "Move, play, and exercise through a game that responds directly to the body.",
+        "mechanism": "The iPhone performs body tracking and hosts the game while mirroring the experience to a television or larger display.",
+        "proof": "A promising native prototype exists, but physical control feel, fun, and distribution remain unproven on real devices.",
+        "nextAction": "Treat it as a held prototype; reopen around physical-device testing of one genuinely fun control loop."
+      },
       "kind": "product",
       "form": "iOS game",
       "platforms": [
@@ -1379,6 +1721,14 @@
       "name": "TrueHire",
       "description": "Earlier resume and hiring workflow superseded by RolePatch.",
       "makerNote": "I explored whether candidates could be ranked more transparently using verified evidence from their public GitHub work.",
+      "purposeContract": {
+        "purpose": "TrueHire tested whether technical candidates could be ranked transparently from verified public GitHub evidence.",
+        "audience": "Technical candidates and recruiters who wanted inspectable evidence behind a candidate score.",
+        "outcome": "Evaluate engineering signals without relying only on self-declared profile claims.",
+        "mechanism": "Public GitHub activity was ingested into explicit scoring factors, evidence-linked profiles, and recruiter proof views.",
+        "proof": "The evidence-scoring MVP shipped, but trust and marketplace adoption remained unsolved and RolePatch superseded active hiring work.",
+        "nextAction": "Read the archived methodology and retained proof only; there is no active marketplace, signup, or standalone roadmap."
+      },
       "kind": "experiment",
       "form": "Hiring experiment",
       "platforms": [
@@ -1405,6 +1755,14 @@
       "name": "Open Historia",
       "description": "Interactive historical storytelling and world simulation.",
       "makerNote": "I wanted a local, credit-free version of an AI grand-strategy game where long-form memory could make countries feel alive.",
+      "purposeContract": {
+        "purpose": "Open Historia explores a local AI grand-strategy game where countries remember history and carry it into future turns.",
+        "audience": "Strategy players interested in emergent historical storytelling without metered model credits.",
+        "outcome": "Play a coherent campaign in which countries feel persistent and past decisions continue to matter.",
+        "mechanism": "A local simulation combines long-form country memory, generated events, diplomacy, and an interactive campaign map.",
+        "proof": "Durable country memory works as an idea, but the map and campaign-turn loop were not enjoyable enough to sustain development.",
+        "nextAction": "Treat it as a held game; reopen only with a game-quality map and one coherent, enjoyable campaign turn."
+      },
       "kind": "experiment",
       "form": "Strategy web game",
       "platforms": [
@@ -1436,6 +1794,14 @@
       "name": "Companion Robot",
       "description": "Earlier companion robotics and embodied-agent exploration.",
       "makerNote": "I am keeping this as a future exploration of what a genuinely useful embodied AI companion could become.",
+      "purposeContract": {
+        "purpose": "Companion Robot preserves an exploration of what a genuinely useful embodied AI companion could become.",
+        "audience": "The owner evaluating a future personal hardware-and-agent experiment.",
+        "outcome": "Test whether physical presence, perception, and local intelligence create value beyond a screen-based assistant.",
+        "mechanism": "The proposed system joins Apple-device perception, local AI, and an ESP32-class embodied platform in bounded experiments.",
+        "proof": "Only ideation and planning are retained; there is no completed hardware build or public product today.",
+        "nextAction": "No action is currently available; reopen only after an explicit hardware purchase and a bounded Phase 0 experiment."
+      },
       "kind": "experiment",
       "form": "Hardware experiment",
       "platforms": [
@@ -1464,6 +1830,14 @@
       "name": "Forecast Lab",
       "description": "Forecasting experiments and evaluation tooling.",
       "makerNote": "I wanted to learn forecasting by modeling how regional, temporal, and behavioral signals shape commerce demand.",
+      "purposeContract": {
+        "purpose": "Forecast Lab is an evaluation-first learning environment for modeling how regional, temporal, and behavioral signals shape commerce demand.",
+        "audience": "A practitioner learning forecasting methods with bounded datasets and explicit evaluation.",
+        "outcome": "Understand which signals improve a forecast and where the model fails, without pretending to offer a proven consulting product.",
+        "mechanism": "Rust, Python, and web experiments compare forecasting approaches against held-out data and visible metrics.",
+        "proof": "The research toolkit supports concrete experiments, but lacks the proprietary data and domain validation required for credible B2B claims.",
+        "nextAction": "Use it for a specific learning or evaluation question; do not treat the held lab as an active consulting service."
+      },
       "kind": "experiment",
       "form": "Research toolkit",
       "platforms": [
@@ -1491,6 +1865,14 @@
       "name": "Web Playables",
       "description": "Small browser-playable game experiments.",
       "makerNote": "I built this laboratory to understand how idle and HTML-based games are designed, shipped, and distributed.",
+      "purposeContract": {
+        "purpose": "Web Playables is a small laboratory for learning how browser and YouTube-ready games are designed, packaged, and distributed.",
+        "audience": "A builder studying reusable HTML5 game mechanics and portable distribution constraints.",
+        "outcome": "Prototype a mechanic once and ship it as a normal web game and a submission-ready playable package.",
+        "mechanism": "A reusable gamekit supplies loops, saves, offline progress, platform adapters, and builds for a small games hub.",
+        "proof": "The research goal produced a working gamekit, a live idle game, and YouTube-compatible packaging; the project is now parked.",
+        "nextAction": "Play the retained game or inspect the kit; add another game only when a specific mechanic is worth studying."
+      },
       "kind": "experiment",
       "form": "Game collection",
       "platforms": [
@@ -1522,6 +1904,14 @@
       "name": "What It Takes to Win",
       "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
       "makerNote": "I wanted to study the real advantages behind success and replace unhelpful comparison with evidence-based understanding.",
+      "purposeContract": {
+        "purpose": "What It Takes to Win shows why visible success cannot be reduced to a simple formula or a fair comparison with your own path.",
+        "audience": "Readers who turn another person’s visible outcome into a judgment about their own pace, ability, or worth.",
+        "outcome": "Replace flattened comparison with a more humane, evidence-bounded understanding of conditions, sequence, perseverance, and luck.",
+        "mechanism": "A guided research exhibit connects source-linked life events and early-breakthrough paths through what people brought, were handed, and were surrounded by.",
+        "proof": "The publication contains thousands of documented early-breakthrough paths, visible methodology, and ongoing source-linked profile coverage.",
+        "nextAction": "Complete the guided comparison-futility journey, then inspect the underlying profiles, sources, and coverage."
+      },
       "kind": "product",
       "form": "Research publication",
       "platforms": [
@@ -1553,6 +1943,14 @@
       "name": "Sarthak Agrawal",
       "description": "Personal portfolio of Sarthak Agrawal — AI infrastructure and product engineer.",
       "makerNote": "I maintain a personal website because I need one durable, accurate public record of my work and professional identity.",
+      "purposeContract": {
+        "purpose": "Sarthak Agrawal’s personal site is the durable public record of his work, writing, résumé, and professional identity.",
+        "audience": "People evaluating Sarthak as an AI infrastructure and product engineer, collaborator, or builder.",
+        "outcome": "Understand what he works on, what he has built, and how to verify or contact him.",
+        "mechanism": "A maintained portfolio connects current positioning to selected projects, writing, résumé evidence, and public profiles.",
+        "proof": "The public site is complete and satisfactory as the canonical professional record; updates follow changes in the underlying work.",
+        "nextAction": "Explore the current work and résumé or use the listed contact paths; do not infer stale focus areas from older copy."
+      },
       "kind": "product",
       "form": "Portfolio website",
       "platforms": [
@@ -1585,6 +1983,14 @@
       "name": "Office OS",
       "description": "A local-first Mac workplace where named AI employees have bounded responsibilities and their work stays inspectable.",
       "makerNote": "I wanted to explore a company where humans and non-coding agents each own outcomes and keep working toward them over time.",
+      "purposeContract": {
+        "purpose": "Office OS gives a small-organization owner a persistent Mac workplace for hiring, directing, and supervising named AI employees.",
+        "audience": "An owner who wants useful non-technical AI employees without managing prompts, workflows, or agent infrastructure directly.",
+        "outcome": "Delegate bounded responsibilities, see progress and blockers, review artifacts, intervene safely, and resume work across days.",
+        "mechanism": "Named employees have durable roles, memory, workspaces, skills, scoped authority, and inspectable outcome loops inside a local organization folder.",
+        "proof": "A credible local proof of concept can run a bounded writer-manager workday, but differentiation and recurring owner use remain unproven.",
+        "nextAction": "Review the local proof; reopen product investment only after comparing strong alternatives and proving one recurring workflow."
+      },
       "kind": "product",
       "form": "macOS app",
       "platforms": [
@@ -1615,6 +2021,14 @@
       "name": "Local AI Video Studio",
       "description": "A local-first Mac studio for comparing reproducible video-effect variants before export.",
       "makerNote": "I wanted editing intent to choose efficient local video tools before defaulting to expensive generative video.",
+      "purposeContract": {
+        "purpose": "Local AI Video Studio helps a creator compare reproducible local video effects before choosing and exporting a result.",
+        "audience": "A Mac-based creator who wants deterministic editing options before paying for generative video.",
+        "outcome": "Translate an editing intention into visible effect variants and choose a result that can be reproduced.",
+        "mechanism": "A native Mac studio uses AVFoundation, Core Image, and hardware video tools to render comparable local variants from one source.",
+        "proof": "The bounded local experiment works, but owner interest faded before a recurring creator workflow was established.",
+        "nextAction": "Treat it as a held local experiment; reopen only around a real creator job where deterministic effects clearly help."
+      },
       "kind": "experiment",
       "form": "macOS app",
       "platforms": [
@@ -1645,7 +2059,15 @@
       "id": "field-track",
       "name": "Field Track",
       "description": "A private field-location system for managed Android devices and team-scoped route review.",
-      "makerNote": "I started Field Track for my father: an employee-controlled way to share field location only when work requires it.",
+      "makerNote": "I started Field Track for my father: a lower-cost way for managers to locate employees carrying administrator-enrolled Android devices and review retained routes.",
+      "purposeContract": {
+        "purpose": "Field Track is an administrator-managed field-location system for continuously enrolled Android devices and freshness-aware route review.",
+        "audience": "A small field team and its manager, initially the owner’s father’s business.",
+        "outcome": "Let a manager find employees quickly and review retained routes while managed tracking remains visible on each Android device.",
+        "mechanism": "An administrator-enrolled Android app captures points continuously, queues them through weak 4G, and sends them to a team-scoped dashboard where server policy controls retention.",
+        "proof": "A clearly labeled synthetic-data dashboard and bounded MVP path exist; economics and physical Android testing remain unresolved.",
+        "nextAction": "Review the synthetic demo as a held MVP; validate business economics and a real Android device before expanding or onboarding a team."
+      },
       "kind": "product",
       "form": "Android app and dashboard",
       "platforms": [
@@ -1678,6 +2100,14 @@
       "name": "Reddit Insights",
       "description": "A bounded research collector for subreddit evidence and recurring insight snapshots.",
       "makerNote": "I wanted to understand how the signals and emotions inside a subreddit change over time, even though historical data is difficult to obtain.",
+      "purposeContract": {
+        "purpose": "Reddit Insights studies how topics, signals, and emotional tone inside a subreddit change over time.",
+        "audience": "A researcher or product operator following a specific community longitudinally.",
+        "outcome": "Recognize recurring shifts and emerging concerns from a retained body of subreddit evidence.",
+        "mechanism": "A bounded collector stores attributable snapshots and derives recurring insight views without claiming unavailable history.",
+        "proof": "The collector and snapshot model exist, but reliable lawful access to historical Reddit data remains the central blocker.",
+        "nextAction": "Use it for forward collection or retained snapshots; historical claims must wait for a lawful dependable source."
+      },
       "kind": "experiment",
       "form": "Research collector",
       "platforms": [
@@ -1708,6 +2138,14 @@
       "name": "Verified Bases",
       "description": "A retained research-data identity with no retained local Git history or standalone public destination.",
       "makerNote": "I explored whether the native codebases I already build could become inexpensive, verified templates for other makers.",
+      "purposeContract": {
+        "purpose": "Verified Bases tested whether proven iOS and Mac codebases could be packaged as inexpensive, inspectable starter templates.",
+        "audience": "Independent makers who value verified product foundations, ownership, and optional launch help over raw generated code.",
+        "outcome": "Start from a reviewed native base with clearer quality and delivery expectations.",
+        "mechanism": "A proposed storefront paired curated code packages with previews, verification, ownership, fulfilment, and optional assistance.",
+        "proof": "The marketplace and fulfilment prototype was archived before paid checkout or any catalogue listing proved buyer demand.",
+        "nextAction": "Read the retained research identity only; there is no active store or purchasable template until demand and support economics are validated."
+      },
       "kind": "experiment",
       "form": "Research dataset",
       "platforms": [
@@ -1734,6 +2172,14 @@
       "name": "Anchor",
       "description": "A local-first day planner and focus timer for Mac, iPhone, and Apple Watch that explains the gap between the schedule you planned and the day you lived.",
       "makerNote": "I wanted a realistic daily planner that could help me follow the day and explain why the lived plan diverged from the intended one.",
+      "purposeContract": {
+        "purpose": "Anchor helps a person plan a realistic day, follow the current intention, and learn why the day lived differed from the day planned.",
+        "audience": "A person moving between Mac, iPhone, and Apple Watch who wants a deliberate day rather than another task list.",
+        "outcome": "Make more realistic plans, recover from interruptions, and protect activities that genuinely matter without moralizing imperfect adherence.",
+        "mechanism": "Native apps combine schedule blocks, recurring routines, wall-clock focus sessions, interruption evidence, and an end-of-day divergence review.",
+        "proof": "The maintained successor to Indulge and Habits has signed native builds and an integrated schedule → focus → interruption → review loop under dogfooding.",
+        "nextAction": "Use Anchor through a real day and review the divergence evidence; let repeated lived patterns decide the next change."
+      },
       "kind": "product",
       "form": "Apple app",
       "platforms": [
@@ -1768,7 +2214,7 @@
     {
       "id": "codevetter",
       "name": "CodeVetter",
-      "description": "AI code review platform — desktop-first, works offline.",
+      "description": "Execution-backed verification for AI-written software changes — local-first and inspectable.",
       "url": "https://codevetter.com",
       "tier": "core",
       "category": "product",
@@ -1778,7 +2224,15 @@
       "changelogUrl": "https://codevetter.com/changelog",
       "repositoryUrl": "https://github.com/Codevetter/codevetter",
       "roadmapUrl": "https://github.com/Codevetter/codevetter/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "CodeVetter verifies whether AI-written software changes actually satisfy their task, not merely whether the diff looks plausible.",
+        "audience": "Developers and teams shipping code produced with AI agents.",
+        "outcome": "Higher confidence that an agent completed the requested change correctly and safely.",
+        "mechanism": "Local-first review combines repository context, executable checks, targeted evaluation, and inspectable verification receipts.",
+        "proof": "The desktop product already performs source-aware review and is being extended toward execution-backed, receipt-based verification.",
+        "nextAction": "Inspect the product and public roadmap; use current evidence to judge the verification workflow while the flagship continues to mature."
+      }
     },
     {
       "id": "pace",
@@ -1793,7 +2247,15 @@
       "changelogUrl": "https://heypace.app/changelog",
       "repositoryUrl": "https://github.com/HeyPace/pace",
       "roadmapUrl": "https://github.com/HeyPace/pace/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "HeyPace is a private Mac assistant for fast voice-driven help grounded in what is currently on screen.",
+        "audience": "A Mac user who wants contextual assistance without sending their desktop workflow to a hosted service.",
+        "outcome": "Get useful help in the moment with less typing and less context switching.",
+        "mechanism": "A local macOS agent combines voice interaction, screen context, and device-side tools.",
+        "proof": "The public 0.3.19 preview is downloadable and the native implementation includes voice, screen context, local planning, and macOS actions; signed-release hardware smoke and sustained daily use remain unproven.",
+        "nextAction": "Download the current Mac preview, test one recurring voice-and-screen workflow, and judge it against Pace's visible local and off-device trust boundary."
+      }
     },
     {
       "id": "high-signal",
@@ -1808,7 +2270,15 @@
       "changelogUrl": "https://highsignal.app/changelog",
       "repositoryUrl": "https://github.com/High-Signal-App/high-signal",
       "roadmapUrl": "https://github.com/High-Signal-App/high-signal/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "High Signal turns scattered technology, startup, finance, and market sources into an evidence-backed daily intelligence brief.",
+        "audience": "A curious operator who wants decision-relevant signals without reading every feed and article.",
+        "outcome": "Understand what changed, why it may matter, and which source supports each signal.",
+        "mechanism": "The product collects multiple sources, groups related events, and derives a concise brief with visible evidence.",
+        "proof": "The product focus and daily-brief surface exist, but regular owner use has not yet validated what deserves continued investment.",
+        "nextAction": "Read and dogfood the Daily Brief; resume feature work only when repeated use exposes a concrete deficiency."
+      }
     },
     {
       "id": "posttrainllm",
@@ -1823,7 +2293,15 @@
       "changelogUrl": "https://posttrainllm.com/changelog",
       "repositoryUrl": "https://github.com/PostTrainLLM/posttrainllm",
       "roadmapUrl": "https://github.com/PostTrainLLM/posttrainllm/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "PostTrainLLM turns local model-training experiments into measured, reproducible recipes for useful specialist language models.",
+        "audience": "Practitioners learning or running post-training workflows on personal Apple hardware and in the browser.",
+        "outcome": "Train, evaluate, compare, and run specialist models with evidence about what worked and why.",
+        "mechanism": "A local factory joins datasets, training methods, evaluation, experiment tracking, and inference into repeatable recipes.",
+        "proof": "The project contains working browser and Mac-local experiments, evaluation infrastructure, and reproducible training paths.",
+        "nextAction": "Explore the measured recipes and follow new experiments as they produce reproducible proof rather than scale claims."
+      }
     },
     {
       "id": "anchor",
@@ -1836,7 +2314,15 @@
       "spotlight": false,
       "maturity": "in-progress",
       "changelogUrl": "https://anchor.significanthobbies.com/changelog",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Anchor helps a person plan a realistic day, follow the current intention, and learn why the day lived differed from the day planned.",
+        "audience": "A person moving between Mac, iPhone, and Apple Watch who wants a deliberate day rather than another task list.",
+        "outcome": "Make more realistic plans, recover from interruptions, and protect activities that genuinely matter without moralizing imperfect adherence.",
+        "mechanism": "Native apps combine schedule blocks, recurring routines, wall-clock focus sessions, interruption evidence, and an end-of-day divergence review.",
+        "proof": "The maintained successor to Indulge and Habits has signed native builds and an integrated schedule → focus → interruption → review loop under dogfooding.",
+        "nextAction": "Use Anchor through a real day and review the divergence evidence; let repeated lived patterns decide the next change."
+      }
     },
     {
       "id": "anime-list",
@@ -1851,7 +2337,15 @@
       "changelogUrl": "https://anime.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/anime-list",
       "roadmapUrl": "https://github.com/Significant-Hobbies/anime-list/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Anime List helps anime and manga fans filter a large catalogue, discover what fits, and maintain a personal watchlist.",
+        "audience": "Anime and manga fans who want more precise discovery than a standard catalogue provides.",
+        "outcome": "Find suitable titles quickly and keep personal viewing or reading plans organized.",
+        "mechanism": "Multi-field search, shareable filters, seasonal discovery, taste tools, schedules, and signed-in watchlists operate over a large synced catalogue.",
+        "proof": "The production app serves roughly 35,000 titles and is frequently used; broader community features are intentionally out of scope.",
+        "nextAction": "Search the catalogue or use the watchlist; maintenance focuses on data quality and core discovery reliability."
+      }
     },
     {
       "id": "app-health",
@@ -1866,7 +2360,15 @@
       "changelogUrl": "https://health.sassmaker.com/changelog",
       "repositoryUrl": "https://github.com/sass-maker/app-health",
       "roadmapUrl": "https://github.com/sass-maker/app-health/issues",
-      "pillarId": "visibility"
+      "pillarId": "visibility",
+      "purposeContract": {
+        "purpose": "App Health gives a developer an immediate, privacy-first view of how every observed service endpoint is performing.",
+        "audience": "A developer or operator running Node, Go, Hono, Pages Functions, or OpenTelemetry-instrumented services.",
+        "outcome": "See endpoint health across short time windows without opening several observability consoles or storing raw request data.",
+        "mechanism": "One small SDK or OTLP connection feeds aggregate-only endpoint summaries into a focused private dashboard.",
+        "proof": "The production V0 supports multiple Node and Go surfaces, OTLP ingestion, aggregate storage, and live dashboard and ingest hosts.",
+        "nextAction": "Integrate a real owned service and use observed failures to guide the next change; the dashboard is not a generic public unlock page."
+      }
     },
     {
       "id": "calorie",
@@ -1881,7 +2383,15 @@
       "changelogUrl": "https://calorie.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/calorie",
       "roadmapUrl": "https://github.com/Significant-Hobbies/calorie/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Calorie is a private food and body journal that turns lightweight logging into transparent daily and timing guidance.",
+        "audience": "A person pursuing weight loss who logs food with one hand and checks progress in short daily moments.",
+        "outcome": "Track intake, hydration, weight, and routines quickly, then understand practical training, fasting, and sleep timing.",
+        "mechanism": "A local-first iPhone journal records food and four core nutrients, applies visible formulas, and offers optional private sync.",
+        "proof": "The maintained app is functionally complete, connected to the Hub family, and designed so recommendations trace to visible rules.",
+        "nextAction": "Log a meal or daily measurement in the app; change the product only when repeated use reveals a concrete gap."
+      }
     },
     {
       "id": "drank",
@@ -1896,7 +2406,15 @@
       "changelogUrl": "https://domains.sassmaker.com/changelog",
       "repositoryUrl": "https://github.com/sass-maker/drank",
       "roadmapUrl": "https://github.com/sass-maker/drank/issues",
-      "pillarId": "market"
+      "pillarId": "market",
+      "purposeContract": {
+        "purpose": "DRank tracks domain-strength evidence for owned products and makes it usable in portfolio decisions.",
+        "audience": "The Fleet operator comparing domain authority across products, SEO work, and markets.",
+        "outcome": "See current Domain Rating and its changes without manually checking every domain.",
+        "mechanism": "A focused adapter collects available domain-rating data and feeds a consistent history into Site Health.",
+        "proof": "The integration is complete and already supplies domain-strength evidence to the private portfolio dashboard.",
+        "nextAction": "Use the evidence through Site Health; maintain the adapter rather than expecting a separate product roadmap."
+      }
     },
     {
       "id": "email-manager",
@@ -1911,12 +2429,20 @@
       "changelogUrl": "https://mail.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/email-manager",
       "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Email Manager helps a person understand who fills their Gmail inbox and deliberately reduce unwanted volume.",
+        "audience": "A Gmail user who wants private search, sender-level insight, and explicit unsubscribe control.",
+        "outcome": "Find old mail, identify repeat senders, and unsubscribe with a clear understanding of what will change.",
+        "mechanism": "A private Gmail workspace combines local semantic search, sender aggregation, and user-confirmed unsubscribe workflows.",
+        "proof": "The maintained application performs its intended search, sender-insight, and unsubscribe jobs in regular use.",
+        "nextAction": "Open the private workspace and investigate a sender or search question; no speculative feature expansion is planned."
+      }
     },
     {
       "id": "field-track",
       "name": "Field Track",
-      "description": "An interactive manager dashboard for freshness-aware field location operations, shown with clearly labeled synthetic employees and routes.",
+      "description": "A synthetic manager dashboard for continuous, administrator-enrolled Android field tracking, freshness-aware locations, and retained route review.",
       "url": "https://field-track.sassmaker.com",
       "tier": "active",
       "category": "product",
@@ -1924,7 +2450,15 @@
       "spotlight": false,
       "maturity": "in-progress",
       "changelogUrl": "https://field-track.sassmaker.com/changelog",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Field Track is an administrator-managed field-location system for continuously enrolled Android devices and freshness-aware route review.",
+        "audience": "A small field team and its manager, initially the owner’s father’s business.",
+        "outcome": "Let a manager find employees quickly and review retained routes while managed tracking remains visible on each Android device.",
+        "mechanism": "An administrator-enrolled Android app captures points continuously, queues them through weak 4G, and sends them to a team-scoped dashboard where server policy controls retention.",
+        "proof": "A clearly labeled synthetic-data dashboard and bounded MVP path exist; economics and physical Android testing remain unresolved.",
+        "nextAction": "Review the synthetic demo as a held MVP; validate business economics and a real Android device before expanding or onboarding a team."
+      }
     },
     {
       "id": "free-ai",
@@ -1939,7 +2473,15 @@
       "changelogUrl": "https://ai-gateway.sassmaker.com/changelog",
       "repositoryUrl": "https://github.com/sass-maker/free-ai",
       "roadmapUrl": "https://github.com/sass-maker/free-ai/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Free AI makes useful free-tier language-model capacity available through one resilient, OpenAI-compatible interface.",
+        "audience": "Fleet applications and developers who need low-cost model access without hard-coding one free provider.",
+        "outcome": "Keep AI-dependent workflows available as provider limits, models, and free capacity change.",
+        "mechanism": "A capability-aware gateway routes compatible requests across supported free-tier providers with fallback behavior.",
+        "proof": "The gateway works for internal consumers and is maintained as shared infrastructure rather than an independent feature product.",
+        "nextAction": "Use the compatible gateway from a named consumer; add providers only when they improve capability, reliability, or capacity."
+      }
     },
     {
       "id": "on-record",
@@ -1954,7 +2496,15 @@
       "changelogUrl": "https://podcasts.highsignal.app/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/on-record",
       "roadmapUrl": "https://github.com/Significant-Hobbies/on-record/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "High Signal Podcasts indexes evidenced claims, recommendations, books, and tools mentioned by notable podcast guests.",
+        "audience": "People who want useful ideas from important podcasts without listening to every episode end to end.",
+        "outcome": "Find what a person actually said or recommended and trace it back to the source episode.",
+        "mechanism": "A source-backed corpus extracts attributable claims and organizes them into people, topics, books, tools, and emerging signals.",
+        "proof": "The reviewed public beta is live with 166 published claims, 183 distinct evidence-linked recommendations, and 139 source episodes.",
+        "nextAction": "Browse a recommendation or claim and follow its quote, speaker, episode, and source receipt."
+      }
     },
     {
       "id": "india-standards",
@@ -1969,7 +2519,15 @@
       "changelogUrl": "https://india-standards.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/india-standards",
       "roadmapUrl": "https://github.com/Significant-Hobbies/india-standards/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "India Standards contextualizes a person’s situation against official Indian demographic data without pretending the comparison is exact.",
+        "audience": "People who want a grounded India-specific reference for demographic and economic comparison.",
+        "outcome": "Understand where a value sits in aggregate context and see the uncertainty and source limits behind that estimate.",
+        "mechanism": "A transparent calculator uses aggregate PLFS data, explicit ranges, documented formulas, and visible caveats.",
+        "proof": "The working calculator exposes its aggregate sources and uncertainty, while current data quality limits further expansion.",
+        "nextAction": "Use the calculator as a bounded contextual reference; expansion waits for materially better authoritative data."
+      }
     },
     {
       "id": "journal",
@@ -1984,12 +2542,20 @@
       "changelogUrl": "https://journal.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/journal",
       "roadmapUrl": "https://github.com/Significant-Hobbies/journal/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Journal makes private daily writing and reflection durable enough to become a real personal practice.",
+        "audience": "An iPhone user who wants a quiet, device-first journal inside the Significant Hobbies family.",
+        "outcome": "Write regularly, revisit a personal archive, and notice useful patterns without surrendering ownership of the entries.",
+        "mechanism": "An independently owned native app keeps the writing loop simple, private, and compatible with privacy-safe Hub summaries.",
+        "proof": "The app is actively being built and dogfooded as a private device-first journal with its own native codebase.",
+        "nextAction": "Write and revisit real entries; future reflection features should follow lived journaling practice and preserve privacy."
+      }
     },
     {
       "id": "karte",
       "name": "Karte",
-      "description": "An AI link-in-bio that turns a profile into a conversation.",
+      "description": "A creator-owned public profile that answers visitor questions and preserves context for better inbound.",
       "url": "https://karte.cc",
       "tier": "secondary",
       "category": "personal",
@@ -1999,7 +2565,15 @@
       "changelogUrl": "https://karte.cc/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/karte",
       "roadmapUrl": "https://github.com/Significant-Hobbies/karte/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Karte gives a creator or independent operator a public profile that answers visitor questions and preserves context for better inbound.",
+        "audience": "An individual or small company that wants visitors to understand and explore who they are through one compact page.",
+        "outcome": "Help a visitor find relevant links, context, and answers instead of scanning an undifferentiated list.",
+        "mechanism": "A designed profile combines greeting-card presentation, owner-published context, structured links, visitor questions, contact handoff, and a small grounded agent.",
+        "proof": "The individual profile and conversational foundation are strong; company positioning and repeated company use remain the next validation.",
+        "nextAction": "Explore the existing profile experience; company adoption should wait for a focused workflow and a real company test."
+      }
     },
     {
       "id": "kith",
@@ -2014,7 +2588,15 @@
       "changelogUrl": "https://kith.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/kith",
       "roadmapUrl": "https://github.com/Significant-Hobbies/kith/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Kith helps a person remember the people they genuinely want to stay close to and act with more thoughtfulness.",
+        "audience": "An iPhone user who values a small set of relationships and dislikes treating them like a sales CRM.",
+        "outcome": "Retain meaningful context, notice who needs attention, and show up better in important relationships.",
+        "mechanism": "A private constellation home organizes closeness, standing notes, and a chronological memory log for each person.",
+        "proof": "The device-first native product is built around a distinctive constellation model and is in active personal use validation.",
+        "nextAction": "Use Kith with real relationships and let recurring memory and follow-through needs guide improvements."
+      }
     },
     {
       "id": "knowledge-base",
@@ -2029,7 +2611,15 @@
       "changelogUrl": "https://knowledgebase.sassmaker.com/changelog",
       "repositoryUrl": "https://github.com/sass-maker/knowledge-base",
       "roadmapUrl": "https://github.com/sass-maker/knowledge-base/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Knowledge Base supplies private, cited retrieval over specialized corpora to other Fleet applications and agents.",
+        "audience": "Named internal products and agents that need grounded answers from controlled source collections.",
+        "outcome": "Retrieve relevant context with ranked citations, provenance, and a schema the consuming product can trust.",
+        "mechanism": "A shared RAG service performs corpus-aware search, ranking, citation, and schema-constrained retrieval behind a private boundary.",
+        "proof": "The service has healthy Fleet consumers and already operates as the shared cited-retrieval layer.",
+        "nextAction": "Connect it only for a concrete consumer need; change the infrastructure when retrieval evidence shows a real failure."
+      }
     },
     {
       "id": "live",
@@ -2044,7 +2634,15 @@
       "changelogUrl": "https://live.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/live",
       "roadmapUrl": "https://github.com/Significant-Hobbies/live/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Live helps a person turn passive wanting into a life they can deliberately imagine, plan, and experience.",
+        "audience": "People who want meaningful goals, possibilities, and experiences to look forward to.",
+        "outcome": "Build a personal catalogue of things worth doing and keep moving from possibility toward lived experience.",
+        "mechanism": "The independent app combines a bucket list, goals, discovery, search, and suggestions around one private life catalogue.",
+        "proof": "The product is independently owned, in active dogfooding, and retains its established data and authentication boundary.",
+        "nextAction": "Open Live and use the catalogue, search, and suggestions to add or act on something you genuinely want to experience."
+      }
     },
     {
       "id": "local-ai-video-studio",
@@ -2056,7 +2654,15 @@
       "priority": "P2",
       "spotlight": false,
       "maturity": "maintained",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Local AI Video Studio helps a creator compare reproducible local video effects before choosing and exporting a result.",
+        "audience": "A Mac-based creator who wants deterministic editing options before paying for generative video.",
+        "outcome": "Translate an editing intention into visible effect variants and choose a result that can be reproduced.",
+        "mechanism": "A native Mac studio uses AVFoundation, Core Image, and hardware video tools to render comparable local variants from one source.",
+        "proof": "The bounded local experiment works, but owner interest faded before a recurring creator workflow was established.",
+        "nextAction": "Treat it as a held local experiment; reopen only around a real creator job where deterministic effects clearly help."
+      }
     },
     {
       "id": "looptv",
@@ -2071,7 +2677,15 @@
       "changelogUrl": "https://tv.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/looptv",
       "roadmapUrl": "https://github.com/Significant-Hobbies/looptv/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "LoopTV turns curated YouTube channels into a calmer, lean-back television experience.",
+        "audience": "Viewers who want intentional channel selection without YouTube’s endless recommendation feed.",
+        "outcome": "Start watching something suitable quickly while retaining control over the available catalogue.",
+        "mechanism": "A TV-like random player uses curated channels, focused search, and resilient handling of unavailable videos.",
+        "proof": "The maintained product is complete for its intended viewing loop and already handles common catalogue failures.",
+        "nextAction": "Open a curated channel and watch; future changes are limited to catalogue health or a proven viewing need."
+      }
     },
     {
       "id": "chatgpt-memory-insights",
@@ -2086,7 +2700,15 @@
       "changelogUrl": "https://chatgpt.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights",
       "roadmapUrl": "https://github.com/Significant-Hobbies/chatgpt-memory-insights/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Memory Map turns an exported AI conversation history into a private map of recurring themes, facts, emotions, and change.",
+        "audience": "People curious about patterns across their own ChatGPT history who do not want to upload the archive to a service.",
+        "outcome": "Recognize recurring concerns and how interests, language, and personal themes changed over time.",
+        "mechanism": "The browser computes structured conversation analysis locally from an imported export and presents linked historical views.",
+        "proof": "A useful browser-local dashboard exists today; deeper shift analysis and additional export sources remain active work.",
+        "nextAction": "Import a ChatGPT export locally and explore the resulting private map; the source archive stays in the browser."
+      }
     },
     {
       "id": "motion",
@@ -2101,7 +2723,15 @@
       "changelogUrl": "https://motion.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/motion",
       "roadmapUrl": "https://github.com/Significant-Hobbies/motion/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Motion turns body movement seen by an iPhone into the controls for playful games on a larger screen.",
+        "audience": "People who want active, social play without buying a dedicated motion-console system.",
+        "outcome": "Move, play, and exercise through a game that responds directly to the body.",
+        "mechanism": "The iPhone performs body tracking and hosts the game while mirroring the experience to a television or larger display.",
+        "proof": "A promising native prototype exists, but physical control feel, fun, and distribution remain unproven on real devices.",
+        "nextAction": "Treat it as a held prototype; reopen around physical-device testing of one genuinely fun control loop."
+      }
     },
     {
       "id": "agent-office",
@@ -2113,7 +2743,15 @@
       "priority": "P1",
       "spotlight": false,
       "maturity": "maintained",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "Office OS gives a small-organization owner a persistent Mac workplace for hiring, directing, and supervising named AI employees.",
+        "audience": "An owner who wants useful non-technical AI employees without managing prompts, workflows, or agent infrastructure directly.",
+        "outcome": "Delegate bounded responsibilities, see progress and blockers, review artifacts, intervene safely, and resume work across days.",
+        "mechanism": "Named employees have durable roles, memory, workspaces, skills, scoped authority, and inspectable outcome loops inside a local organization folder.",
+        "proof": "A credible local proof of concept can run a bounded writer-manager workday, but differentiation and recurring owner use remain unproven.",
+        "nextAction": "Review the local proof; reopen product investment only after comparing strong alternatives and proving one recurring workflow."
+      }
     },
     {
       "id": "psi-swarm",
@@ -2128,7 +2766,15 @@
       "changelogUrl": "https://performance.sassmaker.com/changelog",
       "repositoryUrl": "https://github.com/sass-maker/psi-swarm",
       "roadmapUrl": "https://github.com/sass-maker/psi-swarm/issues",
-      "pillarId": "visibility"
+      "pillarId": "visibility",
+      "purposeContract": {
+        "purpose": "PSI Swarm measures website performance as repeated distributions instead of a single flattering Lighthouse run.",
+        "audience": "The Fleet operator and developers who need trustworthy performance evidence across public products.",
+        "outcome": "See typical performance, variability, and regressions under repeated real measurement conditions.",
+        "mechanism": "An operational CLI runs and aggregates multiple PageSpeed and Lighthouse observations for Site Health.",
+        "proof": "The completed measurement tool already feeds repeated performance evidence into the portfolio dashboard.",
+        "nextAction": "Run it for a concrete performance investigation or consume its evidence in Site Health; keep the tool operationally narrow."
+      }
     },
     {
       "id": "reader",
@@ -2143,7 +2789,15 @@
       "changelogUrl": "https://read.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/reader",
       "roadmapUrl": "https://github.com/Significant-Hobbies/reader/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Reader turns a saved article or PDF into a focused place to read, annotate, revisit, and discuss it.",
+        "audience": "People who save serious reading but lose it among browser tabs and undifferentiated bookmarks.",
+        "outcome": "Move from capture to attentive reading and retain useful notes and questions around the source.",
+        "mechanism": "A dedicated reading surface combines capture, document parsing, annotation, retrieval, and source-grounded discussion.",
+        "proof": "The product is mature, but current owner usage is too low to justify speculative expansion.",
+        "nextAction": "Use Reader for a real article or PDF; resume improvements only where the capture-to-reading loop actually breaks."
+      }
     },
     {
       "id": "research-papers",
@@ -2158,12 +2812,20 @@
       "changelogUrl": "https://papers.highsignal.app/changelog",
       "repositoryUrl": "https://github.com/High-Signal-App/research-papers",
       "roadmapUrl": "https://github.com/High-Signal-App/research-papers/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Research Papers is a structured, searchable library for discovering and interrogating academic and market research.",
+        "audience": "The Fleet owner investigating a concrete product, technical, or market question.",
+        "outcome": "Find relevant papers and retrieve grounded context from a large retained corpus.",
+        "mechanism": "A curated research dataset is indexed for search and retrieval-assisted analysis with source structure intact.",
+        "proof": "The corpus and discovery system are essentially complete and available when a real research question appears.",
+        "nextAction": "Use the library for a named research question; maintain the corpus rather than expanding it speculatively."
+      }
     },
     {
       "id": "rolepatch",
       "name": "RolePatch",
-      "description": "AI-assisted resume tailoring, role research, and interview preparation.",
+      "description": "Evidence-bound resume tailoring and review-first application preparation for one specific job.",
       "url": "https://rolepatch.com",
       "tier": "secondary",
       "category": "personal",
@@ -2173,7 +2835,15 @@
       "changelogUrl": "https://rolepatch.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/rolepatch",
       "roadmapUrl": "https://github.com/Significant-Hobbies/rolepatch/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "RolePatch tailors a resume and supporting application material to the evidence and language of a specific job.",
+        "audience": "A job seeker preparing a serious application for a particular role.",
+        "outcome": "Present relevant experience more clearly and prepare for the role without inventing qualifications.",
+        "mechanism": "The product joins job-description analysis, resume tailoring, role research, proof review, and interview preparation in one workflow.",
+        "proof": "A strong working product exists, including the evidence ideas retained from TrueHire, but owner job-search intent is currently absent.",
+        "nextAction": "Use it against a real application when job hunting resumes; until then, treat the product as held rather than actively marketed."
+      }
     },
     {
       "id": "saas-maker",
@@ -2188,7 +2858,15 @@
       "changelogUrl": "https://sassmaker.com/changelog",
       "repositoryUrl": "https://github.com/sass-maker/saas-maker",
       "roadmapUrl": "https://github.com/sass-maker/saas-maker/issues",
-      "pillarId": "build"
+      "pillarId": "build",
+      "purposeContract": {
+        "purpose": "SaaS Maker is the public product studio and reusable tooling workshop for the Fleet portfolio.",
+        "audience": "Visitors exploring Sarthak’s products and builders consuming the studio’s public packages, workflows, and evidence.",
+        "outcome": "Understand the body of work and reuse the tools that have earned a stable place across its products.",
+        "mechanism": "A generated public directory sits beside shared feedback, UI, workflow, skill, and automation tooling maintained through real Fleet use.",
+        "proof": "It publishes the canonical privacy-safe project directory and houses packages and tooling used by multiple independent repositories.",
+        "nextAction": "Explore the complete directory or open the public tooling catalogue; product-specific work continues in each owning repository."
+      }
     },
     {
       "id": "sarthakagrawal-personal",
@@ -2203,7 +2881,15 @@
       "changelogUrl": "https://sarthakagrawal.dev/changelog",
       "repositoryUrl": "https://github.com/sarthakagrawal927/portfolio",
       "roadmapUrl": "https://github.com/sarthakagrawal927/portfolio/issues",
-      "pillarId": "personal"
+      "pillarId": "personal",
+      "purposeContract": {
+        "purpose": "Sarthak Agrawal’s personal site is the durable public record of his work, writing, résumé, and professional identity.",
+        "audience": "People evaluating Sarthak as an AI infrastructure and product engineer, collaborator, or builder.",
+        "outcome": "Understand what he works on, what he has built, and how to verify or contact him.",
+        "mechanism": "A maintained portfolio connects current positioning to selected projects, writing, résumé evidence, and public profiles.",
+        "proof": "The public site is complete and satisfactory as the canonical professional record; updates follow changes in the underlying work.",
+        "nextAction": "Explore the current work and résumé or use the listed contact paths; do not infer stale focus areas from older copy."
+      }
     },
     {
       "id": "setline",
@@ -2218,7 +2904,15 @@
       "changelogUrl": "https://setline.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/setline",
       "roadmapUrl": "https://github.com/Significant-Hobbies/setline/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Setline runs a written workout one set at a time and measures each exercise against its authored target.",
+        "audience": "A person following a structured strength, cardio, or mobility programme during real sessions.",
+        "outcome": "Stay focused on the current set, keep rest timing accurate, and understand performance against the plan.",
+        "mechanism": "A native iOS workout player sequences exercises, timers, targets, and completed performance without turning the session into data entry.",
+        "proof": "The focused workout loop is under active native development and is being validated through real sessions.",
+        "nextAction": "Run an authored workout in Setline and let actual session friction determine the next product change."
+      }
     },
     {
       "id": "significanthobbies",
@@ -2233,7 +2927,15 @@
       "changelogUrl": "https://significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/significanthobbies",
       "roadmapUrl": "https://github.com/Significant-Hobbies/significanthobbies/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Significant Hobbies is the shared home and privacy-aware control plane for six independently owned personal applications.",
+        "audience": "One person using Live, Journal, Calorie, Setline, Kith, and Anchor as a connected personal system.",
+        "outcome": "See and act across the six apps without collapsing their data ownership or product identities.",
+        "mechanism": "A Hub, backend, and typed sync contracts exchange privacy-safe summaries and semantic actions while each app keeps its own source and data.",
+        "proof": "The canonical Hub supports exactly six maintained apps; the former Habits domain remains compatibility data, not a seventh product.",
+        "nextAction": "Open the Hub to reach the six apps; current work focuses on unified authentication and safe cross-app summaries."
+      }
     },
     {
       "id": "starboard",
@@ -2248,7 +2950,15 @@
       "changelogUrl": "https://starboard.codevetter.com/changelog",
       "repositoryUrl": "https://github.com/Codevetter/starboard",
       "roadmapUrl": "https://github.com/Codevetter/starboard/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Starboard makes a large GitHub Stars collection useful for personal exploration and project-aware tool discovery.",
+        "audience": "Developers whose saved repositories have outgrown GitHub’s default starred-items interface.",
+        "outcome": "Rediscover relevant tools, understand why they were saved, and connect them to current project needs.",
+        "mechanism": "Synchronization, search, tags, lists, semantic retrieval, and project-aware recommendations operate over the user’s saved repositories.",
+        "proof": "Core sync, search, organization, and project-aware discovery are largely complete and under focused active improvement.",
+        "nextAction": "Connect or explore a Stars collection and use a current project question to drive discovery; avoid unrelated alert or reporting scope."
+      }
     },
     {
       "id": "swe-interview-prep",
@@ -2263,7 +2973,15 @@
       "changelogUrl": "https://learn.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/swe-interview-prep",
       "roadmapUrl": "https://github.com/Significant-Hobbies/swe-interview-prep/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "SWE Interview Prep is a personal learning OS that turns software-engineering study into retained, artifact-backed understanding.",
+        "audience": "Software engineers preparing for interviews or strengthening practical technical judgment through active study.",
+        "outcome": "Build causal understanding that survives recall and can be demonstrated through code, diagrams, explanations, or projects.",
+        "mechanism": "An evidence-gated Concept → Drill → Build → Review → Apply loop combines retrieval practice, Feynman explain-backs, roadmaps, and adaptive review.",
+        "proof": "The active product already unifies broad curriculum, practice, build labs, Socratic help, and a shared mastery model.",
+        "nextAction": "Start a focused learning or practice loop and produce an artifact; new tracks should earn their place by improving retention."
+      }
     },
     {
       "id": "what-it-takes-to-win",
@@ -2278,7 +2996,15 @@
       "changelogUrl": "https://paths.significanthobbies.com/changelog",
       "repositoryUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win",
       "roadmapUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win/issues",
-      "pillarId": "learn"
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "What It Takes to Win shows why visible success cannot be reduced to a simple formula or a fair comparison with your own path.",
+        "audience": "Readers who turn another person’s visible outcome into a judgment about their own pace, ability, or worth.",
+        "outcome": "Replace flattened comparison with a more humane, evidence-bounded understanding of conditions, sequence, perseverance, and luck.",
+        "mechanism": "A guided research exhibit connects source-linked life events and early-breakthrough paths through what people brought, were handed, and were surrounded by.",
+        "proof": "The publication contains thousands of documented early-breakthrough paths, visible methodology, and ongoing source-linked profile coverage.",
+        "nextAction": "Complete the guided comparison-futility journey, then inspect the underlying profiles, sources, and coverage."
+      }
     }
   ],
   "pastProjects": [
@@ -2287,70 +3013,150 @@
       "name": "AliveVille",
       "description": "Persistent AI world and multi-agent simulation experiments.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/aliveville"
+      "repositoryUrl": "https://github.com/sarthakagrawal927/aliveville",
+      "purposeContract": {
+        "purpose": "AliveVille explores a playable world where AI characters remember, form relationships and grudges, and act through persistent conflict.",
+        "audience": "Players drawn to open-ended agent worlds rather than a demonstration of model APIs.",
+        "outcome": "Feel that a small town and its characters remain alive, consequential, and worth returning to.",
+        "mechanism": "A persistent simulation combines autonomous NPC memory, quests, dialogue, combat, and a browser-playable 3D town.",
+        "proof": "The simulation stack and playable artifact exist, but no visual direction or core loop has yet made the game emotionally compelling.",
+        "nextAction": "Treat it as a held game experiment; reopen only with a convincing visual direction and one demonstrably fun playable loop."
+      }
     },
     {
       "id": "chess",
       "name": "Chess Coach",
       "description": "Browser chess against Stockfish with optional AI move coaching.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/Significant-Hobbies/chess"
+      "repositoryUrl": "https://github.com/Significant-Hobbies/chess",
+      "purposeContract": {
+        "purpose": "Chess Coach explored whether a local AI assistant could make playing and reviewing chess more instructive.",
+        "audience": "A chess learner who wants a patient practice partner rather than only a move engine.",
+        "outcome": "Play against Stockfish and receive optional coaching that explains useful move ideas.",
+        "mechanism": "A browser board pairs engine play with a local AI coaching layer for contextual feedback.",
+        "proof": "The public artifact works, but the owner lost interest in chess and the product has no active roadmap.",
+        "nextAction": "Try the retained chess artifact if useful; expect no active development or product expansion."
+      }
     },
     {
       "id": "companion-robot",
       "name": "Companion Robot",
       "description": "Earlier companion robotics and embodied-agent exploration.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/HeyPace/companion-robot"
+      "repositoryUrl": "https://github.com/HeyPace/companion-robot",
+      "purposeContract": {
+        "purpose": "Companion Robot preserves an exploration of what a genuinely useful embodied AI companion could become.",
+        "audience": "The owner evaluating a future personal hardware-and-agent experiment.",
+        "outcome": "Test whether physical presence, perception, and local intelligence create value beyond a screen-based assistant.",
+        "mechanism": "The proposed system joins Apple-device perception, local AI, and an ESP32-class embodied platform in bounded experiments.",
+        "proof": "Only ideation and planning are retained; there is no completed hardware build or public product today.",
+        "nextAction": "No action is currently available; reopen only after an explicit hardware purchase and a bounded Phase 0 experiment."
+      }
     },
     {
       "id": "everythingrated",
       "name": "EverythingRated",
-      "description": "A general-purpose rating and comparison experiment.",
+      "description": "Multi-axis ratings for deciding which AI developer tools to adopt.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/High-Signal-App/everythingrated"
+      "repositoryUrl": "https://github.com/High-Signal-App/everythingrated",
+      "purposeContract": {
+        "purpose": "EverythingRated helps developers decide which AI development library to adopt by making the important trade-offs visible axis by axis.",
+        "audience": "Developers and technical operators comparing AI development tools for real projects.",
+        "outcome": "Choose an AI library with a clearer view of maintenance, community, license, API stability, footprint, and model portability.",
+        "mechanism": "Anonymous multi-axis ratings, weighted comparisons, confidence counts, and moderated tool submissions focus one directory on adoption decisions.",
+        "proof": "The live surface compares 24 AI development libraries; the broader rate-anything concept and other seeded directories are deliberately parked.",
+        "nextAction": "Compare AI development tools or rate one yourself; broader directory expansion waits for adoption traffic or moderation evidence."
+      }
     },
     {
       "id": "forecast-lab",
       "name": "Forecast Lab",
       "description": "Forecasting experiments and evaluation tooling.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/forecast-lab"
+      "repositoryUrl": "https://github.com/sarthakagrawal927/forecast-lab",
+      "purposeContract": {
+        "purpose": "Forecast Lab is an evaluation-first learning environment for modeling how regional, temporal, and behavioral signals shape commerce demand.",
+        "audience": "A practitioner learning forecasting methods with bounded datasets and explicit evaluation.",
+        "outcome": "Understand which signals improve a forecast and where the model fails, without pretending to offer a proven consulting product.",
+        "mechanism": "Rust, Python, and web experiments compare forecasting approaches against held-out data and visible metrics.",
+        "proof": "The research toolkit supports concrete experiments, but lacks the proprietary data and domain validation required for credible B2B claims.",
+        "nextAction": "Use it for a specific learning or evaluation question; do not treat the held lab as an active consulting service."
+      }
     },
     {
       "id": "materia",
       "name": "Materia",
       "description": "Evidence-graded remedy reference organized by body system.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/Significant-Hobbies/materia"
+      "repositoryUrl": "https://github.com/Significant-Hobbies/materia",
+      "purposeContract": {
+        "purpose": "Materia explores an anatomy-led, evidence-graded reference for understanding body concerns, treatments, and remedies.",
+        "audience": "People seeking a clearer educational map from a body concern to bounded, source-backed information.",
+        "outcome": "Understand relevant anatomy and compare remedy evidence without mistaking the product for medical diagnosis.",
+        "mechanism": "An interactive body-system model links concerns to structured remedy pages with explicit evidence grades and safety limits.",
+        "proof": "A technically ambitious reference exists, but sustained evidence quality, medical safety, and content maintenance are unresolved.",
+        "nextAction": "Use the retained material as an educational experiment only; reopen publication work after defining a medical-safety and evidence standard."
+      }
     },
     {
       "id": "open-historia",
       "name": "Open Historia",
       "description": "Interactive historical storytelling and world simulation.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/open-historia"
+      "repositoryUrl": "https://github.com/sarthakagrawal927/open-historia",
+      "purposeContract": {
+        "purpose": "Open Historia explores a local AI grand-strategy game where countries remember history and carry it into future turns.",
+        "audience": "Strategy players interested in emergent historical storytelling without metered model credits.",
+        "outcome": "Play a coherent campaign in which countries feel persistent and past decisions continue to matter.",
+        "mechanism": "A local simulation combines long-form country memory, generated events, diplomacy, and an interactive campaign map.",
+        "proof": "Durable country memory works as an idea, but the map and campaign-turn loop were not enjoyable enough to sustain development.",
+        "nextAction": "Treat it as a held game; reopen only with a game-quality map and one coherent, enjoyable campaign turn."
+      }
     },
     {
       "id": "protein-index",
       "name": "Protein Index",
       "description": "Searchable protein and nutrition reference.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/Significant-Hobbies/protein-index-resilience"
+      "repositoryUrl": "https://github.com/Significant-Hobbies/protein-index-resilience",
+      "purposeContract": {
+        "purpose": "Protein Index was built to catalogue and compare protein products available in India using trustworthy nutrition data.",
+        "audience": "Indian shoppers comparing packaged protein sources on nutrition, price, and practical fit.",
+        "outcome": "Choose among products using a consistent searchable reference instead of scattered marketing claims.",
+        "mechanism": "A product catalogue normalizes nutrition and comparison fields across available Indian protein products.",
+        "proof": "The product structure exists, but authoritative and affordable market data is not available enough for current coverage.",
+        "nextAction": "Use the retained reference cautiously; reopen active work only when reliable product data can support an honest catalogue."
+      }
     },
     {
       "id": "truehire",
       "name": "TrueHire",
       "description": "Earlier resume and hiring workflow superseded by RolePatch.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/truehire"
+      "repositoryUrl": "https://github.com/sarthakagrawal927/truehire",
+      "purposeContract": {
+        "purpose": "TrueHire tested whether technical candidates could be ranked transparently from verified public GitHub evidence.",
+        "audience": "Technical candidates and recruiters who wanted inspectable evidence behind a candidate score.",
+        "outcome": "Evaluate engineering signals without relying only on self-declared profile claims.",
+        "mechanism": "Public GitHub activity was ingested into explicit scoring factors, evidence-linked profiles, and recruiter proof views.",
+        "proof": "The evidence-scoring MVP shipped, but trust and marketplace adoption remained unsolved and RolePatch superseded active hiring work.",
+        "nextAction": "Read the archived methodology and retained proof only; there is no active marketplace, signup, or standalone roadmap."
+      }
     },
     {
       "id": "web-playables",
       "name": "Web Playables",
       "description": "Small browser-playable game experiments.",
       "lifecycle": "past",
-      "repositoryUrl": "https://github.com/sarthakagrawal927/web-playables"
+      "repositoryUrl": "https://github.com/sarthakagrawal927/web-playables",
+      "purposeContract": {
+        "purpose": "Web Playables is a small laboratory for learning how browser and YouTube-ready games are designed, packaged, and distributed.",
+        "audience": "A builder studying reusable HTML5 game mechanics and portable distribution constraints.",
+        "outcome": "Prototype a mechanic once and ship it as a normal web game and a submission-ready playable package.",
+        "mechanism": "A reusable gamekit supplies loops, saves, offline progress, platform adapters, and builds for a small games hub.",
+        "proof": "The research goal produced a working gamekit, a live idle game, and YouTube-compatible packaging; the project is now parked.",
+        "nextAction": "Play the retained game or inspect the kit; add another game only when a specific mechanic is worth studying."
+      }
     }
   ]
 }
