@@ -33,6 +33,24 @@ Capability discovery is repository-relative and does not require the former
 node scripts/fleet-capabilities.mjs doctor --json
 ```
 
+## Landing pages
+
+Fleet keeps two landing-page engines and no more:
+
+- `Significant-Hobbies/ios-landings` for app-style products — one page engine,
+  one site per `products/<id>/`;
+- [`templates/web-landing`](templates/web-landing/README.md) for web products,
+  developer tools, and dashboards — the canonical web starting point.
+
+[`docs/landing-surface-classification.md`](docs/landing-surface-classification.md)
+records every bespoke Fleet landing surface as `adopt`, `keep`, `retire`, or
+`undecided`, with the evidence behind each verdict. Read it before starting or
+converting a landing page.
+
+The former copy-to-fork `templates/ios-landing` is
+[retired](templates/ios-landing/DEPRECATED.md). Scaffolding an iOS landing page
+means adding a product directory to the factory, not forking a template.
+
 ## Public monitoring
 
 The repository also runs checks whose source and inputs are already public:
