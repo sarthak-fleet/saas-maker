@@ -25,6 +25,7 @@ const activeScripts = new Set([
   'github-priority-queue.mjs',
   'install-priority-queue-schedule.mjs',
   'install-skill-run-hook.mjs',
+  'link-graph-audit.mjs',
   'link-project-agent-assets.sh',
   'unlink-project-agent-assets.sh',
   'validate-tooling.mjs',
