@@ -56,12 +56,14 @@ function auditFixtures(ids) {
   });
 }
 
-test('the shipped standard validates and is still unratified', () => {
+test('the shipped standard validates and is ratified with a date', () => {
   const { valid, problems } = validateStandard(standard);
   assert.deepEqual(problems, []);
   assert.equal(valid, true);
-  assert.equal(standard.status, 'unratified');
-  assert.equal(standard.ratifiedAt, null);
+  assert.equal(standard.status, 'ratified');
+  assert.match(standard.ratifiedAt, /^\d{4}-\d{2}-\d{2}$/u);
+  assert.equal(standard.canonical.option, 'vercel-ai-sdk');
+  assert.equal(standard.gateway.host, 'ai-gateway.sassmaker.com');
 });
 
 test('validateStandard rejects loose pins, undated exceptions, and claimed ratification', () => {
@@ -79,7 +81,15 @@ test('validateStandard rejects loose pins, undated exceptions, and claimed ratif
 
   const claimed = structuredClone(standard);
   claimed.status = 'ratified';
+  claimed.ratifiedAt = null;
   assert.match(validateStandard(claimed).problems.join('\n'), /requires ratifiedAt/u);
+
+  const staleUnratified = structuredClone(standard);
+  staleUnratified.status = 'unratified';
+  assert.match(
+    validateStandard(staleUnratified).problems.join('\n'),
+    /must carry ratifiedAt: null/u
+  );
 });
 
 test('package manifests are read across the workspace and skip build output', () => {
@@ -226,7 +236,7 @@ test('classifyProject needs no filesystem and covers every verdict name', () => 
   assert.deepEqual([...seen].sort(), [...VERDICTS].sort());
 });
 
-test('the report summarises every verdict bucket and stays advisory while unratified', () => {
+test('the report summarises every verdict bucket and is binding once ratified', () => {
   const report = auditFixtures([
     'compliant-project',
     'drifted-project',
@@ -235,8 +245,8 @@ test('the report summarises every verdict bucket and stays advisory while unrati
     'plain-project',
   ]);
   assert.equal(report.schema, 'fleet.ai-client-audit.v1');
-  assert.equal(report.advisory, true);
-  assert.equal(report.standard.status, 'unratified');
+  assert.equal(report.advisory, false);
+  assert.equal(report.standard.status, 'ratified');
   assert.deepEqual(report.summary, {
     projects: 5,
     scanned: 5,

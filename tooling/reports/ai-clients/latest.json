@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "schema": "fleet.ai-client-audit.v1",
-  "generatedAt": "2026-08-29T12:44:23.625Z",
+  "generatedAt": "2026-08-29T16:19:05.884Z",
   "standard": {
-    "status": "unratified",
-    "ratifiedAt": null,
+    "status": "ratified",
+    "ratifiedAt": "2026-08-29",
     "option": "vercel-ai-sdk",
     "packages": {
       "ai": "6.0.168",
@@ -12,7 +12,7 @@
     },
     "issue": "https://github.com/sass-maker/saas-maker/issues/61"
   },
-  "advisory": true,
+  "advisory": false,
   "summary": {
     "projects": 56,
     "scanned": 56,
@@ -197,7 +197,7 @@
       "declared": [],
       "evidence": {
         "manifests": 1,
-        "filesScanned": 43,
+        "filesScanned": 52,
         "truncated": false,
         "gatewayHostFiles": 0,
         "providerHostFiles": 0,
