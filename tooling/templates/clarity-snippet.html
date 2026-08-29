@@ -1,15 +1,25 @@
 <!--
   Microsoft Clarity snippet — session replay + heatmaps.
 
-  One shared Clarity project for the whole fleet. Each site sets a
-  `project_id` custom tag so sessions can be filtered by product in
-  the Clarity dashboard.
+  ONE CLARITY PROJECT PER PRODUCT. Two products loading the same project ID
+  merge their recordings, heatmaps, and settings into a single bucket that
+  cannot be separated afterwards. The `project_id` custom tag filters within a
+  product; it is not a substitute for having your own project.
+
+  This template deliberately ships no project ID. Both substitutions below are
+  required — an unsubstituted copy loads nothing rather than silently
+  inheriting another product's analytics.
 
   USAGE:
-    1. Replace y39u4kk9oq with your Clarity project ID
-       (from Settings > Setup > Install tracking code).
-    2. Replace PROJECT_SLUG with this site's fleet project id
+    1. Replace CLARITY_PROJECT_ID with THIS product's own 10-character Clarity
+       project ID (clarity.microsoft.com > Settings > Setup > Install tracking
+       code). If the product has no project yet, create one. Never paste an ID
+       copied from another product or from a shared fleet project.
+    2. Replace PROJECT_SLUG with this site's Site Health catalog id
        (e.g. "codevetter", "significanthobbies", "drank").
+    3. Record the result in saas-maker/tooling/config/clarity-projects.json —
+       catalog id, Clarity ID, and the file you just wired — then run
+       `node scripts/clarity-audit.mjs --check` from saas-maker/tooling.
 
   PostHog is NOT removed — Clarity is additive for replay + heatmaps.
 -->
@@ -18,6 +28,6 @@
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
     t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window,document,"clarity","script","y39u4kk9oq");
+  })(window,document,"clarity","script","CLARITY_PROJECT_ID");
   window.clarity("set","project_id","PROJECT_SLUG");
 </script>

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "schema": "fleet.clarity-registry.v1",
+  "updatedAt": "2026-08-30",
+  "legacySharedId": "y39u4kk9oq",
+  "projects": [
+    {
+      "id": "alpha",
+      "repo": "alpha",
+      "clarityId": "y6aaaaaaaa",
+      "tag": "alpha",
+      "wiredFiles": ["alpha/index.html"]
+    },
+    {
+      "id": "beta",
+      "repo": "beta",
+      "clarityId": "y6bbbbbbbb",
+      "tag": "beta",
+      "wiredFiles": ["beta/src/layout.tsx"]
+    },
+    {
+      "id": "epsilon",
+      "repo": "epsilon",
+      "clarityId": null,
+      "wiredFiles": [],
+      "reason": "Native-only product with no browser-delivered surface in this checkout, so there is nothing to tag."
+    }
+  ]
+}

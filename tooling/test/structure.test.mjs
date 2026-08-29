@@ -14,6 +14,7 @@ const activeScripts = new Set([
   'audit.mjs',
   'campaign-manifest.mjs',
   'check-github-actions-policy.mjs',
+  'clarity-audit.mjs',
   'deploy-health.sh',
   'design-workflow.mjs',
   'devin-autonomous-run.sh',

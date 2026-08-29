@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "schema": "fleet.clarity-registry.v1",
+  "updatedAt": "2026-08-30",
+  "legacySharedId": "y39u4kk9oq",
+  "note": "Receipt of Microsoft Clarity project decisions, keyed by the Site Health catalog id. One Clarity project per product: an ID recorded against two products merges their sessions and cannot be unmerged afterwards. This file records only decisions that have actually been made; it is deliberately not a copy of the private 56-entry catalog, and a catalog entry that is absent here simply has no Clarity decision yet. Verify with: node scripts/clarity-audit.mjs --check",
+  "projects": [
+    {
+      "id": "anime-list",
+      "repo": "anime-list",
+      "clarityId": "y6bu7b62ia",
+      "tag": "anime-list",
+      "wiredFiles": ["anime-list/index.html"]
+    },
+    {
+      "id": "companion-robot",
+      "repo": "companion-robot",
+      "clarityId": null,
+      "wiredFiles": [],
+      "reason": "Documentation-only repository with no browser-delivered surface: the checkout holds README, PROJECT_STATUS, docs/, and a package manifest, and the catalog records it undeployed. Nothing to tag until a surface exists."
+    },
+    {
+      "id": "drank",
+      "repo": "drank",
+      "clarityId": "y6bt519ewi",
+      "tag": "drank",
+      "wiredFiles": ["drank/app/layout.tsx"]
+    },
+    {
+      "id": "high-signal",
+      "repo": "high-signal",
+      "clarityId": "y39u4kk9oq",
+      "tag": "high-signal",
+      "wiredFiles": ["high-signal/apps/web/src/app/layout.tsx"],
+      "violation": {
+        "code": "LEGACY_SHARED_ID",
+        "recordedAt": "2026-08-30",
+        "reason": "Still loads the retired fleet-wide shared Clarity project instead of a project of its own, so its sessions land in the shared bucket alongside anything else that was ever pointed at it.",
+        "fix": "Create a Clarity project for High Signal, then in high-signal/apps/web/src/app/layout.tsx replace both occurrences of y39u4kk9oq on line 130 with the new 10-character ID, and update this entry."
+      }
+    },
+    {
+      "id": "india-standards",
+      "repo": "india-standards",
+      "clarityId": "y6btzgl5r3",
+      "tag": "india-standards",
+      "wiredFiles": ["india-standards/app/layout.tsx"]
+    },
+    {
+      "id": "journal",
+      "repo": "journal",
+      "clarityId": null,
+      "wiredFiles": [],
+      "surfaceOwner": "ios-landings",
+      "reason": "Native-only repository: the checkout is an Xcode project with Swift sources and no browser-delivered file. Its marketing page is built by the ios-landings factory, so any tag belongs there rather than here."
+    },
+    {
+      "id": "live",
+      "repo": "live",
+      "clarityId": "y6btx9iks3",
+      "tag": "significanthobbies",
+      "wiredFiles": ["live/src/app/layout.tsx"],
+      "violation": {
+        "code": "SHARED_CLARITY_ID",
+        "recordedAt": "2026-08-30",
+        "reason": "Loads Significant Hobbies' Clarity project and tags itself as significanthobbies, so both products' recordings, heatmaps, and settings currently merge into one project that cannot be separated after the fact.",
+        "fix": "Create a Clarity project for Live, then in live/src/app/layout.tsx line 100 replace both occurrences of y6btx9iks3 with the new 10-character ID and change project_id from \"significanthobbies\" to \"live\", and update this entry."
+      }
+    },
+    {
+      "id": "posttrainllm",
+      "repo": "posttrainllm",
+      "clarityId": "y6br5d0ds7",
+      "tag": "posttrainllm",
+      "wiredFiles": ["posttrainllm/browser/src/layouts/Default.astro"]
+    },
+    {
+      "id": "reader",
+      "repo": "reader",
+      "clarityId": "y6budslpbi",
+      "tag": "reader",
+      "wiredFiles": ["reader/app.html"]
+    },
+    {
+      "id": "reddit-insights",
+      "repo": "reddit-insights",
+      "clarityId": "y6bwkyh4qb",
+      "tag": "reddit-insights",
+      "wiredFiles": ["reddit-insights/scripts/build-pages.mjs"]
+    },
+    {
+      "id": "rolepatch",
+      "repo": "rolepatch",
+      "clarityId": "y6buz6rkot",
+      "tag": "rolepatch",
+      "wiredFiles": ["rolepatch/src/app/layout.tsx"]
+    },
+    {
+      "id": "saas-maker",
+      "repo": "saas-maker",
+      "clarityId": "y6brryt053",
+      "tag": "saas-maker",
+      "wiredFiles": ["saas-maker/apps/cockpit/src/app/layout.tsx"]
+    },
+    {
+      "id": "significanthobbies",
+      "repo": "significanthobbies",
+      "clarityId": "y6btx9iks3",
+      "tag": "significanthobbies",
+      "wiredFiles": ["significanthobbies/src/app/layout.tsx"]
+    },
+    {
+      "id": "starboard",
+      "repo": "starboard",
+      "clarityId": "y6bv3iipqv",
+      "tag": "starboard",
+      "wiredFiles": ["starboard/src/app/layout.tsx"]
+    }
+  ]
+}

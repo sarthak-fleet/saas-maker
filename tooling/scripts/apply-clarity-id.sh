@@ -7,6 +7,12 @@
 #
 # Run from the fleet root (/Users/sarthak/Desktop/fleet).
 # Safe to re-run — only touches files that still contain the placeholder.
+#
+# This stamps ONE id across every listed file, which is exactly how the fleet
+# ended up with products sharing a Clarity project. Prefer editing one surface
+# at a time and recording it in tooling/config/clarity-projects.json, then
+# verify with `node tooling/scripts/clarity-audit.mjs --check`. The snippet
+# template is deliberately not in this list: it must keep its placeholder.
 
 set -euo pipefail
 
@@ -19,7 +25,6 @@ if [[ ! "$ID" =~ ^[a-z0-9]{10}$ ]]; then
 fi
 
 FILES=(
-  "saas-maker/tooling/templates/clarity-snippet.html"
   "codevetter/apps/landing-page-astro/src/layouts/Layout.astro"
   "posttrainllm/browser/src/layouts/Default.astro"
   "reddit-insights/scripts/build-pages.mjs"
