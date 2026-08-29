@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Platform"
+  short_description: "Build and ship Apple apps safely"
+  default_prompt: "Use $apple-platform to build, test, or release an iOS or Mac application."

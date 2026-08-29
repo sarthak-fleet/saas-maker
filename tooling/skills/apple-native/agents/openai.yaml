@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Native"
+  short_description: "Build and qualify native Apple apps"
+  default_prompt: "Use $apple-native to build or qualify this Swift, iOS, macOS, or watchOS app."

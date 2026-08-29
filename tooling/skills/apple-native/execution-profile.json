@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "frontier", "reasoning": "high" },
+  "minimum": { "intelligence": "balanced", "reasoning": "high" },
+  "degradation": "ask",
+  "rationale": "Native implementation work turns on judgment a weaker model gets wrong quietly: SwiftData and CloudKit schema edits are runtime compatibility changes that still compile, platform boundaries decide what is genuinely shared versus cramped into one screen model, and entitlements must not be weakened to make a local build pass. High reasoning is the floor because the failure mode is a passing build that breaks users at runtime."
+}

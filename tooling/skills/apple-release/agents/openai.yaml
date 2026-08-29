@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Release"
+  short_description: "Ship through Apple with receipts"
+  default_prompt: "Use $apple-release to qualify or deliver this Apple app through TestFlight, App Review, or notarization."

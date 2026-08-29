@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "balanced", "reasoning": "high" },
+  "minimum": { "intelligence": "balanced", "reasoning": "medium" },
+  "degradation": "ask",
+  "rationale": "This is the Apple entry point: it reads the request and routes to the focused implementation or release skill, so most of its own work is dispatch rather than execution. It still carries the shared operating contract, and misrouting release work into the native skill would skip the release gates, so it asks before degrading rather than allowing it silently."
+}
