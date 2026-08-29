@@ -1,6 +1,6 @@
 # SaaS Maker Tooling — PROJECT STATUS
 
-Last updated: 2026-08-22
+Last updated: 2026-08-30
 
 ## Why / What
 
@@ -33,6 +33,13 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-08-30 — Retired the copy-to-fork `templates/ios-landing` template and
+  left a pointer to the `ios-landings` factory in its place, promoted
+  `templates/web-landing` as the canonical web starting point, and recorded the
+  first per-surface landing classification in
+  `docs/landing-surface-classification.md` — 6 adopt, 6 keep, 3 retire, 3
+  undecided across sixteen bespoke Astro surfaces and two app-homepage
+  products, with the candidate engine set fixed at two. Refs #62.
 - 2026-08-22 — Restored a canonical-root site-audit operator workflow. Ahrefs
   Health Scores stay optional and fail-closed without entitlement; the working
   path is a local sitemap crawl that emits source actions for 4xx pages,
