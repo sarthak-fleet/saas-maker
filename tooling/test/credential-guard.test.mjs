@@ -35,6 +35,26 @@ test('reports credential categories and paths without returning matched values',
   }
 });
 
+test('reports project-key tokens without returning the matched value', () => {
+  const root = mkdtempSync(join(tmpdir(), 'credential-guard-'));
+  const leakedValue = `pk_${'A1b2C3d4'.repeat(4)}`;
+  try {
+    const repo = join(root, 'app');
+    mkdirSync(repo, { recursive: true });
+    writeFileSync(join(repo, 'foundry.json'), `{"projectKey":"${leakedValue}"}\n`);
+    execFileSync('git', ['init', '-q'], { cwd: repo });
+    execFileSync('git', ['add', 'foundry.json'], { cwd: repo });
+
+    const report = scanFleetCredentials({ fleetRoot: root });
+    assert.equal(report.summary.current, 1);
+    assert.equal(report.findings[0].category, 'provider-token');
+    assert.equal(report.findings[0].path, 'foundry.json');
+    assert.doesNotMatch(JSON.stringify(report), new RegExp(leakedValue));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test('ignores explicit placeholders but catches high-entropy credential assignments', () => {
   const root = mkdtempSync(join(tmpdir(), 'credential-guard-'));
   try {

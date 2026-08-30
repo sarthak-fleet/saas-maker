@@ -24,7 +24,7 @@ const HUMAN_READABLE_PLACEHOLDER = /[a-z]{4,}[-_][a-z]{4,}/i;
 
 const TOKEN_PATTERNS = [
   { category: 'private-key', pattern: /-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----[\s\S]{80,}?-----END (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----/g },
-  { category: 'provider-token', pattern: /\b(?:ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|xox[baprs]-[A-Za-z0-9-]{20,}|sk-(?:live|proj)-[A-Za-z0-9_-]{20,})\b/g },
+  { category: 'provider-token', pattern: /\b(?:ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|xox[baprs]-[A-Za-z0-9-]{20,}|sk-(?:live|proj)-[A-Za-z0-9_-]{20,}|pk_[A-Za-z0-9]{32,})\b/g },
   { category: 'credential-bearing-libsql-url', pattern: /libsql:\/\/[^\s:@]+:[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+@[^\s"']+/g },
 ];
 
