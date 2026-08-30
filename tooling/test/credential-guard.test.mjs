@@ -35,13 +35,17 @@ test('reports credential categories and paths without returning matched values',
   }
 });
 
-test('reports project-key tokens without returning the matched value', () => {
+test('ignores publishable project keys but reports privileged agent tokens without returning values', () => {
   const root = mkdtempSync(join(tmpdir(), 'credential-guard-'));
-  const leakedValue = `pk_${'A1b2C3d4'.repeat(4)}`;
+  const publishableValue = `pk_${'A1b2C3d4'.repeat(4)}`;
+  const leakedValue = `smk_${'Z9y8X7w6'.repeat(4)}`;
   try {
     const repo = join(root, 'app');
     mkdirSync(repo, { recursive: true });
-    writeFileSync(join(repo, 'foundry.json'), `{"projectKey":"${leakedValue}"}\n`);
+    writeFileSync(
+      join(repo, 'foundry.json'),
+      `{"projectKey":"${publishableValue}","agentToken":"${leakedValue}"}\n`,
+    );
     execFileSync('git', ['init', '-q'], { cwd: repo });
     execFileSync('git', ['add', 'foundry.json'], { cwd: repo });
 
@@ -49,6 +53,7 @@ test('reports project-key tokens without returning the matched value', () => {
     assert.equal(report.summary.current, 1);
     assert.equal(report.findings[0].category, 'provider-token');
     assert.equal(report.findings[0].path, 'foundry.json');
+    assert.doesNotMatch(JSON.stringify(report), new RegExp(publishableValue));
     assert.doesNotMatch(JSON.stringify(report), new RegExp(leakedValue));
   } finally {
     rmSync(root, { recursive: true, force: true });
