@@ -515,6 +515,9 @@ export function validateStandard(value) {
       if (entry.reviewBy !== undefined && !isIsoDate(entry.reviewBy)) {
         fail(`${label}.reviewBy must be an ISO date when present`);
       }
+      if (entry.allowsRetiredGatewayReferences !== undefined && typeof entry.allowsRetiredGatewayReferences !== 'boolean') {
+        fail(`${label}.allowsRetiredGatewayReferences must be boolean when present`);
+      }
     }
   }
 
@@ -973,19 +976,24 @@ export function auditProject({ project, fleetRoot, standard, explain = false }) 
       ...(explain ? { detail: source.credentialFiles } : {}),
     });
   }
-  for (const host of source.retiredHosts) {
-    blocking.push({
-      code: 'RETIRED_GATEWAY_HOST',
-      project: project.id,
-      message: `References retired gateway host ${host}.`,
-    });
-  }
-  if (source.gatewayEnvFiles > 0) {
-    blocking.push({
-      code: 'RETIRED_GATEWAY_ENV',
-      project: project.id,
-      message: `References a retired gateway-only environment name in ${source.gatewayEnvFiles} source file(s).`,
-    });
+  // A dated, explicit exception may let the retiring gateway repository name
+  // its own surface while it is being decommissioned. Caller repositories do
+  // not inherit this exemption, and credential-shaped literals always block.
+  if (exception?.allowsRetiredGatewayReferences !== true) {
+    for (const host of source.retiredHosts) {
+      blocking.push({
+        code: 'RETIRED_GATEWAY_HOST',
+        project: project.id,
+        message: `References retired gateway host ${host}.`,
+      });
+    }
+    if (source.gatewayEnvFiles > 0) {
+      blocking.push({
+        code: 'RETIRED_GATEWAY_ENV',
+        project: project.id,
+        message: `References a retired gateway-only environment name in ${source.gatewayEnvFiles} source file(s).`,
+      });
+    }
   }
 
   return {

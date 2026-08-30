@@ -197,6 +197,27 @@ test('a dated exception wins over the measured pattern and records its reason', 
   assert.match(result.reasons.join('\n'), /Dated exception recorded 2026-08-29/u);
 });
 
+test('only an explicit dated exception can allow the retiring gateway to reference itself', () => {
+  const withException = structuredClone(standard);
+  withException.exceptions = [
+    {
+      project: 'raw-http-project',
+      recordedAt: '2026-08-29',
+      reason: 'The fixture stands in for the retiring gateway repository itself.',
+      allowsRetiredGatewayReferences: true,
+    },
+  ];
+  const report = auditAiClients({
+    projects: [{ id: 'raw-http-project', repo: 'raw-http-project' }],
+    fleetRoot: fixtureRoot,
+    standard: withException,
+    now: Date.parse('2026-08-29T00:00:00.000Z'),
+  });
+  assert.equal(report.results[0].verdict, 'exception');
+  assert.deepEqual(report.results[0].blocking, []);
+  assert.deepEqual(report.blocking, []);
+});
+
 test('a missing checkout is reported honestly rather than passed', () => {
   const report = auditFixtures(['not-checked-out']);
   const result = report.results[0];

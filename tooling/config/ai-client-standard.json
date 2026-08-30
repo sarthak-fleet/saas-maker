@@ -83,6 +83,7 @@
       "verdict": "exception",
       "recordedAt": "2026-08-30",
       "reason": "The retiring gateway must keep its upstream provider clients until its callers and deployment are decommissioned; it is not a reusable Fleet client.",
+      "allowsRetiredGatewayReferences": true,
       "reviewBy": "2026-09-30"
     },
     {
