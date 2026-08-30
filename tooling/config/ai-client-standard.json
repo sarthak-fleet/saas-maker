@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "status": "ratified",
-  "ratifiedAt": "2026-08-29",
+  "ratifiedAt": "2026-08-30",
   "recommendedBy": "tooling/docs/ai-client-standard.md",
   "issue": "https://github.com/sass-maker/saas-maker/issues/61",
   "canonical": {
-    "option": "vercel-ai-sdk",
+    "option": "direct-free-model-vercel-ai-sdk",
     "packages": {
       "ai": "6.0.168",
       "@ai-sdk/openai-compatible": "2.0.41"
@@ -14,18 +14,16 @@
       "@ai-sdk/react": "3.0.86"
     },
     "upgradeCadence": "monthly-review, pinned exact, one converging bump per cadence",
-    "baseUrlEnv": "AI_GATEWAY_BASE_URL"
+    "endpointOwnership": "project",
+    "baseUrlEnv": "AI_BASE_URL",
+    "apiKeyEnv": "AI_API_KEY"
   },
   "gateway": {
-    "host": "ai-gateway.sassmaker.com",
-    "openAiCompatiblePaths": [
-      "/v1/chat/completions",
-      "/v1/responses",
-      "/v1/embeddings",
-      "/v1/messages",
-      "/v1/models"
-    ],
-    "retiredHosts": []
+    "host": null,
+    "openAiCompatiblePaths": [],
+    "retiredHosts": [
+      "ai-gateway.sassmaker.com"
+    ]
   },
   "detection": {
     "canonicalPackages": [
@@ -59,6 +57,13 @@
       "api.perplexity.ai",
       "api.x.ai"
     ],
+    "modelRequestPaths": [
+      "/v1/chat/completions",
+      "/v1/responses",
+      "/v1/embeddings",
+      "/v1/messages",
+      "/v1/models"
+    ],
     "scanIgnorePaths": [
       "tooling/test/fixtures/ai-client-audit"
     ],
@@ -76,32 +81,61 @@
     {
       "project": "free-ai",
       "verdict": "exception",
-      "recordedAt": "2026-08-29",
-      "reason": "The gateway itself. It is the OpenAI-compatible endpoint every other project calls, so it must talk to upstream providers directly. Another product owns this repository; issue #61 treats it as read-only.",
-      "reviewBy": "2027-02-28"
+      "recordedAt": "2026-08-30",
+      "reason": "The retiring gateway must keep its upstream provider clients until its callers and deployment are decommissioned; it is not a reusable Fleet client.",
+      "reviewBy": "2026-09-30"
     },
     {
       "project": "posttrainllm",
       "verdict": "exception",
-      "recordedAt": "2026-08-29",
-      "reason": "The product trains and runs its own in-browser model. Its only hosted-model call is a Python evaluation harness pointed at OpenAI-compatible endpoints, and a JavaScript client package cannot apply there, so convergence would be meaningless.",
+      "recordedAt": "2026-08-30",
+      "reason": "The product trains and runs its own local model, and its optional evaluation harness uses native Python or Swift clients where a JavaScript package cannot apply.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "on-record",
+      "verdict": "exception",
+      "recordedAt": "2026-08-30",
+      "reason": "The ingestion runtime is Python and now requires an explicit project-owned free-provider or local endpoint, key, and model; the JavaScript Vercel AI SDK is not applicable to this runtime.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "codevetter",
+      "verdict": "exception",
+      "recordedAt": "2026-08-30",
+      "reason": "The desktop product performs provider calls inside its Rust trust boundary and now exposes only explicit local or provider-owned routes; a JavaScript model client would cross the product security boundary.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "mashup",
+      "verdict": "exception",
+      "recordedAt": "2026-08-30",
+      "reason": "The media pipeline is Python and now uses an explicit direct free-provider endpoint without gateway metadata; the JavaScript Vercel AI SDK is not applicable to this runtime.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "pace",
+      "verdict": "exception",
+      "recordedAt": "2026-08-30",
+      "reason": "The Apple-native product uses URLSession for local and user-selected direct endpoints inside its Swift runtime; the JavaScript Vercel AI SDK is not applicable.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "research-papers",
+      "verdict": "exception",
+      "recordedAt": "2026-08-30",
+      "reason": "The operator-side Python pipeline talks only to local MLX and LM Studio inference servers; the JavaScript Vercel AI SDK is not applicable.",
+      "reviewBy": "2027-02-28"
+    },
+    {
+      "project": "issue-pages",
+      "verdict": "exception",
+      "recordedAt": "2026-08-30",
+      "reason": "This Worker calls the dedicated moderation endpoint, which is not a Vercel AI SDK text-generation surface; it remains isolated from the Fleet model-routing contract.",
       "reviewBy": "2027-02-28"
     }
   ],
-  "followUps": [
-    {
-      "id": "rolepatch-pin-convergence",
-      "repository": "rolepatch",
-      "note": "rolepatch declares ai ^6.0.97 and @ai-sdk/openai-compatible ^2.0.41 as ranges rather than the pinned canonical versions. Converging it is a change in another repository and is deliberately out of scope for the audit PR; it is blocked on ratification of the canonical option.",
-      "blockedOn": "ratification"
-    },
-    {
-      "id": "stale-next-standalone-copy",
-      "repository": "rolepatch",
-      "note": "A vendored .next/standalone/package.json restates the dependency set. The audit skips .next, node_modules, and dist so the stale copy never reaches a verdict.",
-      "blockedOn": "none"
-    }
-  ],
+  "followUps": [],
   "ratifiedBy": "owner decision on https://github.com/sass-maker/saas-maker/issues/61",
-  "ratifiedDecision": "Every Fleet project that calls a hosted model goes through the free-ai gateway (ai-gateway.sassmaker.com) via its OpenAI-compatible paths. In JavaScript and TypeScript the client is the Vercel AI SDK at the pinned canonical versions. Runtimes without a JavaScript client still target the gateway; only the client library differs. Calling a provider API host directly is non-compliant regardless of which client library is used."
+  "ratifiedDecision": "Fleet does not use a shared AI gateway. JavaScript and TypeScript model callers use the pinned Vercel AI SDK against a project-owned free-provider or local endpoint wherever the runtime supports it. Native runtimes keep explicit project-owned clients. Direct provider calls are routing evidence, while the retired gateway host and gateway-only environment variables are blocking findings."
 }

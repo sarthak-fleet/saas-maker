@@ -66,8 +66,9 @@ test('the shipped standard validates and is ratified with a date', () => {
   assert.equal(valid, true);
   assert.equal(standard.status, 'ratified');
   assert.match(standard.ratifiedAt, /^\d{4}-\d{2}-\d{2}$/u);
-  assert.equal(standard.canonical.option, 'vercel-ai-sdk');
-  assert.equal(standard.gateway.host, 'ai-gateway.sassmaker.com');
+  assert.equal(standard.canonical.option, 'direct-free-model-vercel-ai-sdk');
+  assert.equal(standard.gateway.host, null);
+  assert.deepEqual(standard.gateway.retiredHosts, ['ai-gateway.sassmaker.com']);
 });
 
 test('validateStandard rejects loose pins, undated exceptions, and claimed ratification', () => {
@@ -132,12 +133,16 @@ test('a ranged or off-pin canonical declaration is drifted and names the pin', (
   assert.match(result.reasons.join('\n'), /ai declares \^6\.0\.97, canonical pin is 6\.0\.168/u);
 });
 
-test('raw HTTP against the gateway is hand-rolled, not compliant and not skipped', () => {
+test('raw HTTP against the retired gateway is hand-rolled and blocking', () => {
   const result = auditFixtures(['raw-http-project']).results[0];
   assert.equal(result.verdict, 'hand-rolled');
   assert.equal(result.pattern, 'raw-http');
   assert.deepEqual(result.declared, []);
   assert.equal(result.evidence.gatewayHostFiles, 1);
+  assert.deepEqual(
+    result.blocking.map((entry) => entry.code).sort(),
+    ['RETIRED_GATEWAY_ENV', 'RETIRED_GATEWAY_HOST']
+  );
 });
 
 test('a provider SDK without the canonical client is hand-rolled and labelled provider-sdk', () => {
@@ -260,7 +265,10 @@ test('the report summarises every verdict bucket and is binding once ratified', 
     exception: 0,
     'not-applicable': 1,
   });
-  assert.deepEqual(report.blocking, []);
+  assert.deepEqual(
+    report.blocking.map((entry) => entry.code).sort(),
+    ['RETIRED_GATEWAY_ENV', 'RETIRED_GATEWAY_HOST']
+  );
 });
 
 test('omitPrivate counts private repositories without naming them', () => {
@@ -353,7 +361,7 @@ test('bring-your-own-key placeholder text is a mention, never a call site', () =
   assert.equal(result.verdict, 'not-applicable');
 });
 
-test('a provider picker is configuration, not a gateway bypass', () => {
+test('a provider picker is configuration, not a direct call site', () => {
   const result = evidenceFor('preset-menu-project');
   assert.equal(result.evidence.providerHostFiles, 2);
   assert.equal(result.evidence.providerCallSites, 0);
@@ -361,7 +369,7 @@ test('a provider picker is configuration, not a gateway bypass', () => {
   // It is still a model call path, so it is not silently dropped to
   // not-applicable; it is just not reported as bypassing the gateway.
   assert.equal(result.verdict, 'hand-rolled');
-  assert.doesNotMatch(result.reasons.join('\n'), /bypassing the gateway/u);
+  assert.doesNotMatch(result.reasons.join('\n'), /project-owned provider API directly/u);
   assert.match(result.reasons.join('\n'), /bring-your-own-key/u);
 });
 
@@ -379,7 +387,7 @@ test('a test proving the product refuses provider hosts is not evidence it calls
   assert.equal(result.evidence.providerHostFiles, 2);
   assert.equal(result.evidence.providerCallSites, 0);
   assert.deepEqual(classesIn(result), { test: 5 });
-  assert.doesNotMatch(result.reasons.join('\n'), /bypassing the gateway/u);
+  assert.doesNotMatch(result.reasons.join('\n'), /project-owned provider API directly/u);
 });
 
 test('billing and usage endpoints are provider traffic but not model calls', () => {
@@ -403,12 +411,12 @@ test('a real provider call in a test helper is still reported, not silently drop
   assert.match(result.reasons.join('\n'), /Worth reading, not a verdict/u);
 });
 
-test('an environment default pointed at a provider is a genuine bypass', () => {
+test('an environment default pointed at a provider is a genuine direct route', () => {
   const result = evidenceFor('env-default-bypass-project');
   assert.equal(result.evidence.providerCallSites, 2);
   assert.equal(result.evidence.providerCallSiteFiles, 2);
   assert.equal(result.verdict, 'hand-rolled');
-  assert.match(result.reasons.join('\n'), /2 call site\(s\) across 2 file\(s\), bypassing the gateway/u);
+  assert.match(result.reasons.join('\n'), /project-owned provider API directly at 2 call site\(s\) across 2 file\(s\)/u);
   assert.deepEqual(
     result.evidence.providerCallSiteDetail.map((entry) => `${entry.file}:${entry.line}`).sort(),
     [join('cli', 'src', 'reason.ts') + ':1', join('scripts', 'auto-publish.ts') + ':5']
@@ -417,22 +425,20 @@ test('an environment default pointed at a provider is a genuine bypass', () => {
   assert.equal(result.evidence.providerHostBreakdown.comment, 1);
 });
 
-test('a call to a path the gateway does not declare is surfaced, not decided', () => {
+test('a provider-specific path is surfaced without gateway-era warnings', () => {
   const report = auditFixtures(['moderation-bypass-project']);
   const result = report.results[0];
   assert.equal(result.evidence.providerCallSites, 1);
   assert.equal(result.evidence.providerCallSiteDetail[0].path, '/v1/moderations');
   assert.equal(result.evidence.providerCallSiteDetail[0].gatewayPathSupported, false);
-  assert.match(
-    report.warnings.join('\n'),
-    /\/v1\/moderations is not among the gateway's declared OpenAI-compatible paths/u
+  assert.equal(
+    report.warnings.some((warning) => warning.includes('gateway') || warning.includes('/v1/moderations')),
+    false
   );
-  assert.match(report.warnings.join('\n'), /Owner decision/u);
-  // Surfacing it is not failing it.
   assert.deepEqual(report.blocking, []);
 });
 
-test('a supported gateway path raises no unanswered-path warning', () => {
+test('a standard model path raises no gateway-era warning', () => {
   const report = auditFixtures(['env-default-bypass-project']);
   assert.equal(
     report.warnings.some((warning) => warning.includes('not among the gateway')),

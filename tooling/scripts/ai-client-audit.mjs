@@ -2,7 +2,7 @@
 
 // Credential-free audit of how each Fleet project calls a hosted model.
 // Reads a supplied project list, inspects package manifests and source, and
-// reports a per-project verdict against the candidate canonical client.
+// reports a per-project verdict against the canonical direct-model client.
 // Read-only: it never writes outside this repository.
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -102,8 +102,8 @@ const CREDENTIAL_EXEMPT_PATH =
 // A provider host appearing in a file is not evidence that the project calls
 // that provider. Placeholder text, preset pickers, documentation, comments and
 // tests all mention hosts they never talk to. Every occurrence is therefore
-// classified, and only `call-site` occurrences are reported as a gateway
-// bypass. The raw mention count is kept alongside so nothing is hidden.
+// classified, and only `call-site` occurrences are reported as a direct model
+// route. The raw mention count is kept alongside so nothing is hidden.
 // ---------------------------------------------------------------------------
 
 export const PROVIDER_HOST_CLASSES = Object.freeze([
@@ -142,7 +142,7 @@ const PLACEHOLDER_PATTERN =
   /placeholder|\bhint\b|helper[-_]?text|\bexample\b|\bsample\b|\be\.g\.|for instance/i;
 
 // Billing, usage, key and catalogue endpoints are provider traffic that is not
-// a model call, so they are not a gateway bypass. `/models` only counts as a
+// a model call, so they are not an inference route. `/models` only counts as a
 // listing when it is the final segment: `/v1beta/models/<model>:generate` is
 // inference.
 const NON_INFERENCE_PATH_PATTERN =
@@ -232,6 +232,29 @@ function firstTestBlockLine(lines) {
   return -1;
 }
 
+function isActiveRuntimePath(relativePath) {
+  if (TEST_PATH_PATTERN.test(relativePath) || DOC_PATH_PATTERN.test(relativePath)) return false;
+  if (/^(?:AGENTS|README|PROJECT_STATUS|agents)\b/i.test(relativePath)) return false;
+  if (/(?:^|[\/])(?:public|data)(?:[\/]|$)/i.test(relativePath)) return false;
+  if (/(?:^|[\/])(?:catalog|reports)(?:[\/]|$)/i.test(relativePath)) return false;
+  if (relativePath.startsWith('packages/portfolio-project-strip/')) return false;
+  if (relativePath.startsWith('tooling/preserved/')) return false;
+  if (relativePath === 'tooling/config/sites.json') return false;
+  if (/(?:^|[\/])(?:cloudflare-env|worker-configuration)\.d\.ts$/i.test(relativePath)) {
+    return false;
+  }
+  if (/(?:^|[\/])\.(?:env|dev\.vars)(?:\.example|\.sample|\.template)$/i.test(relativePath)) {
+    return false;
+  }
+  if (
+    relativePath === 'tooling/config/ai-client-standard.json'
+    || relativePath === 'tooling/scripts/ai-client-audit.mjs'
+  ) {
+    return false;
+  }
+  return true;
+}
+
 // A URL assigned to a url-shaped name is a request target waiting to happen,
 // which is the shape of the real bypasses: `const AI_BASE_URL = process.env.X
 // ?? '<provider base url>'`. An object property is deliberately not a
@@ -273,7 +296,7 @@ function lineForOffset(offsets, offset) {
 // audit has always matched, so the raw count stays comparable.
 export function scanProviderHostUsage({ source, relativePath, extension, standard }) {
   const hosts = standard.detection?.providerApiHosts ?? [];
-  const gatewayPaths = standard.gateway?.openAiCompatiblePaths ?? [];
+  const modelPaths = standard.detection?.modelRequestPaths ?? [];
   if (hosts.length === 0) return [];
 
   const raw = [];
@@ -305,7 +328,7 @@ export function scanProviderHostUsage({ source, relativePath, extension, standar
     line: lineForOffset(offsets, entry.index) + 1,
     // A bare base URL such as /v1 is supported because the declared paths hang
     // off it; /v1/moderations is not, because no declared path covers it.
-    gatewayPathSupported: gatewayPaths.some(
+        gatewayPathSupported: modelPaths.some(
       (value) =>
         entry.path === value
         || entry.path.startsWith(`${value}/`)
@@ -456,7 +479,6 @@ export function validateStandard(value) {
   }
 
   if (!value.gateway || typeof value.gateway !== 'object') fail('gateway must be an object');
-  else if (!value.gateway.host) fail('gateway.host is required');
   else if (!Array.isArray(value.gateway.retiredHosts)) fail('gateway.retiredHosts must be an array');
 
   if (!value.detection || typeof value.detection !== 'object') {
@@ -466,6 +488,7 @@ export function validateStandard(value) {
       'canonicalPackages',
       'providerSdkPackages',
       'providerApiHosts',
+      'modelRequestPaths',
       'gatewayEnvNames',
     ]) {
       if (!Array.isArray(value.detection[key])) fail(`detection.${key} must be an array`);
@@ -602,7 +625,7 @@ export function scanSource(projectRoot, standard) {
   const gatewayHosts = [standard.gateway.host, ...standard.gateway.retiredHosts].filter(Boolean);
   const retired = new Set(standard.gateway.retiredHosts);
   const envNames = standard.detection.gatewayEnvNames;
-  const paths = standard.gateway.openAiCompatiblePaths ?? [];
+  const paths = standard.detection.modelRequestPaths ?? [];
 
   const ignoredPaths = (standard.detection.scanIgnorePaths ?? []).map((value) =>
     value.split('/').join(sep)
@@ -618,6 +641,7 @@ export function scanSource(projectRoot, standard) {
     providerHostBreakdown: Object.fromEntries(PROVIDER_HOST_CLASSES.map((name) => [name, 0])),
     providerCallSiteDetail: [],
     gatewayEnvFiles: 0,
+    gatewayEnvPaths: [],
     completionsPathFiles: 0,
     canonicalImportFiles: 0,
     providerSdkImportFiles: 0,
@@ -674,11 +698,14 @@ export function scanSource(projectRoot, standard) {
       }
       evidence.filesScanned += 1;
 
-      for (const host of gatewayHosts) {
-        if (!source.includes(host)) continue;
-        evidence.gatewayHostFiles += 1;
-        if (retired.has(host)) evidence.retiredHosts.add(host);
-        break;
+      const activeRuntimePath = isActiveRuntimePath(relativePath);
+      if (activeRuntimePath) {
+        for (const host of gatewayHosts) {
+          if (!source.includes(host)) continue;
+          evidence.gatewayHostFiles += 1;
+          if (retired.has(host)) evidence.retiredHosts.add(host);
+          break;
+        }
       }
       const providerUsage = scanProviderHostUsage({
         source,
@@ -724,8 +751,13 @@ export function scanSource(projectRoot, standard) {
           evidence.providerTestReferenceFiles += 1;
         }
       }
-      if (envNames.some((name) => source.includes(name))) evidence.gatewayEnvFiles += 1;
-      if (paths.some((value) => source.includes(value))) evidence.completionsPathFiles += 1;
+      if (activeRuntimePath && envNames.some((name) => source.includes(name))) {
+        evidence.gatewayEnvFiles += 1;
+        if (evidence.gatewayEnvPaths.length < 20) evidence.gatewayEnvPaths.push(relativePath);
+      }
+      if (activeRuntimePath && paths.some((value) => source.includes(value))) {
+        evidence.completionsPathFiles += 1;
+      }
       if (importPattern.test(source)) evidence.canonicalImportFiles += 1;
       if (providerPattern.test(source)) evidence.providerSdkImportFiles += 1;
       for (const pattern of CREDENTIAL_LITERALS) {
@@ -846,19 +878,9 @@ function providerHostReasons(source) {
   const mentions = source.providerHostMentions ?? 0;
 
   if (callSites > 0) {
-    const unsupported = (source.providerCallSiteDetail ?? []).filter(
-      (entry) => !entry.gatewayPathSupported
-    );
     reasons.push(
-      `Calls a provider API host directly at ${callSites} call site(s) across ${callSiteFiles} file(s), bypassing the gateway.`
+      `Calls a project-owned provider API directly at ${callSites} call site(s) across ${callSiteFiles} file(s).`
     );
-    if (unsupported.length > 0) {
-      reasons.push(
-        `${unsupported.length} of those call site(s) target a path the gateway does not declare (${[
-          ...new Set(unsupported.map((entry) => entry.path)),
-        ].join(', ')}); migrating them needs a gateway change or a recorded exception.`
-      );
-    }
   }
 
   const soft = [
@@ -875,7 +897,7 @@ function providerHostReasons(source) {
 
   if (soft.length > 0) {
     reasons.push(
-      `Mentions a provider API host ${mentions} time(s) that are not counted as a bypass: ${soft.join(', ')}. Worth reading, not a verdict.`
+      `Mentions a provider API host ${mentions} time(s) that are not counted as a call site: ${soft.join(', ')}. Worth reading, not a verdict.`
     );
   }
   return reasons;
@@ -958,6 +980,13 @@ export function auditProject({ project, fleetRoot, standard, explain = false }) 
       message: `References retired gateway host ${host}.`,
     });
   }
+  if (source.gatewayEnvFiles > 0) {
+    blocking.push({
+      code: 'RETIRED_GATEWAY_ENV',
+      project: project.id,
+      message: `References a retired gateway-only environment name in ${source.gatewayEnvFiles} source file(s).`,
+    });
+  }
 
   return {
     id: project.id,
@@ -983,6 +1012,7 @@ export function auditProject({ project, fleetRoot, standard, explain = false }) 
       providerHostBreakdown: source.providerHostBreakdown,
       providerCallSiteDetail: source.providerCallSiteDetail,
       gatewayEnvFiles: source.gatewayEnvFiles,
+      ...(explain ? { gatewayEnvPaths: source.gatewayEnvPaths } : {}),
       completionsPathFiles: source.completionsPathFiles,
       canonicalImportFiles: source.canonicalImportFiles,
       providerSdkImportFiles: source.providerSdkImportFiles,
@@ -1055,23 +1085,6 @@ export function auditAiClients({
       ...entry,
     }))
   );
-  // A project already carrying a dated exception is not a migration candidate,
-  // so its off-gateway paths are evidence but not an open question.
-  const exempt = new Set(
-    published.filter((result) => result.verdict === 'exception').map((result) => result.id)
-  );
-  const unsupported = new Map();
-  for (const entry of providerCallSites) {
-    if (entry.gatewayPathSupported || exempt.has(entry.project)) continue;
-    const key = `${entry.project}::${entry.path}`;
-    if (!unsupported.has(key)) unsupported.set(key, entry);
-  }
-  for (const entry of unsupported.values()) {
-    warnings.push(
-      `${entry.project} calls ${entry.url} (${entry.file}:${entry.line}), and ${entry.path} is not among the gateway's declared OpenAI-compatible paths. It cannot be migrated as-is: it needs a gateway extension or a recorded exception. Owner decision.`
-    );
-  }
-
   return {
     schemaVersion: 1,
     schema: 'fleet.ai-client-audit.v1',
@@ -1093,8 +1106,8 @@ export function auditAiClients({
     providerHosts: {
       note:
         'providerHostFiles counts files that contain a provider-host string. providerCallSites '
-        + 'counts the subset the classifier is willing to call a request target. Only the latter '
-        + 'is read as a gateway bypass; the former is kept so a mention is still visible.',
+        + 'counts the subset the classifier is willing to call a request target. Direct call sites '
+        + 'are routing evidence, not gateway bypasses; the raw mention count remains visible.',
       mentionFiles: results.reduce(
         (total, result) => total + (result.evidence?.providerHostFiles ?? 0),
         0
@@ -1103,7 +1116,7 @@ export function auditAiClients({
       callSites: providerCallSites,
     },
     warnings,
-    blocking: results.flatMap((result) => result.blocking),
+    blocking: published.flatMap((result) => result.blocking),
     followUps: standard.followUps ?? [],
     ...(withheld ? { withheld } : {}),
     results: published,
@@ -1139,7 +1152,7 @@ Usage:
                       [--omit-private]
 
 Reports, per project, the declared hosted-model dependency, the calling
-pattern found in source, and the verdict against the candidate canonical
+pattern found in source, and the verdict against the canonical direct-model
 client: ${VERDICTS.join(' | ')}.
 
 The audit is read-only with respect to every project it inspects, needs no
@@ -1152,7 +1165,7 @@ repository without publishing a private project catalog.
 Exit codes:
   0  Report produced. Drift against an unratified standard is reported, not failed.
   1  Something unambiguously wrong: an invalid standard file, a credential
-     literal in tracked source, or a retired gateway host still referenced.
+     literal in tracked source, or a retired gateway host/variable still referenced.
   2  Usage error.`;
 
 export async function main(argv = process.argv.slice(2)) {
