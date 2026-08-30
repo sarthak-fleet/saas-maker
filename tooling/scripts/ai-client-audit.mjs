@@ -96,6 +96,331 @@ const CREDENTIAL_PLACEHOLDER = /(?:xxx|XXX|\.\.\.|example|placeholder|redacted|c
 const CREDENTIAL_EXEMPT_PATH =
   /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs|e2e|fixtures?|mocks?|examples?|benchmarks?)(?:\/|$)|\.(?:test|spec)\.[a-z]+$|(?:fixture|mock|sample|benchmark)/i;
 
+// ---------------------------------------------------------------------------
+// Provider-host occurrence classification
+//
+// A provider host appearing in a file is not evidence that the project calls
+// that provider. Placeholder text, preset pickers, documentation, comments and
+// tests all mention hosts they never talk to. Every occurrence is therefore
+// classified, and only `call-site` occurrences are reported as a gateway
+// bypass. The raw mention count is kept alongside so nothing is hidden.
+// ---------------------------------------------------------------------------
+
+export const PROVIDER_HOST_CLASSES = Object.freeze([
+  'call-site',
+  'byo-key-config',
+  'non-inference',
+  'placeholder',
+  'test',
+  'documentation',
+  'comment',
+  'unclassified',
+]);
+
+// Occurrences within this many lines of each other are read as one lexical
+// neighbourhood, which is how a provider picker is told from a single target.
+const PROVIDER_MENU_WINDOW_LINES = 8;
+const REQUEST_LOOKBEHIND_LINES = 3;
+const PLACEHOLDER_LOOKBEHIND_LINES = 2;
+const MAX_OCCURRENCES_PER_FILE = 200;
+const MAX_CALL_SITE_DETAIL = 12;
+
+// `Tests` needs the capital so `latest/` is not read as a test directory.
+const TEST_PATH_PATTERN =
+  /(?:^|[\\/])(?:tests?|[A-Za-z0-9._-]*Tests?|__tests__|__mocks__|specs?|e2e|fixtures?|mocks?|examples?|samples?|benchmarks?|testdata)(?:[\\/]|$)|\.(?:test|spec)\.[A-Za-z]+$|[A-Za-z0-9]Tests?\.[A-Za-z]+$/;
+
+const DOC_PATH_PATTERN =
+  /(?:^|[\\/])(?:docs?|documentation|website|guides?|handbook)(?:[\\/]|$)|(?:^|[\\/])(?:README|CHANGELOG|CONTRIBUTING|LICENSE)/i;
+
+// A block that begins one of these is test code even in a file whose path says
+// nothing, which is how a Rust `#[cfg(test)]` module at the end of a command
+// file is kept out of the call-site count.
+const TEST_BLOCK_PATTERN =
+  /^\s*(?:#\[cfg\(test\)\]|@Test\b|func\s+test[A-Z]|(?:async\s+)?(?:describe|suite)\s*\(|class\s+Test[A-Z]|@pytest\.|def\s+test_)/;
+
+const PLACEHOLDER_PATTERN =
+  /placeholder|\bhint\b|helper[-_]?text|\bexample\b|\bsample\b|\be\.g\.|for instance/i;
+
+// Billing, usage, key and catalogue endpoints are provider traffic that is not
+// a model call, so they are not a gateway bypass. `/models` only counts as a
+// listing when it is the final segment: `/v1beta/models/<model>:generate` is
+// inference.
+const NON_INFERENCE_PATH_PATTERN =
+  /\/(?:organizations?|usage|usage_report|costs?|billing|credits?|invoices?|limits?|quota|keys?|datasets?|rankings?|dashboard|health|status|me)(?:[/?]|$)|\/models$/;
+
+const REQUEST_CALL_PATTERN =
+  /\b(?:fetch|axios|got|ky|httpx|urlopen|urlretrieve|reqwest|URLSession|URLRequest|HttpClient|http)\s*[(.]|\.(?:post|get|put|patch|delete|head|request|send|fetch)\s*\(|\b[A-Za-z_$][\w$]*(?:Post|Get|Put|Delete|Request|Fetch|Call|Client)\s*\(|\brequests\.|\bcurl\b/;
+
+const LINE_COMMENT_PREFIXES = ['//', '#', '*', '/*', '<!--'];
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// A line-level comment test rather than a full lexer. A provider host that is
+// the target of a request is effectively never parked behind code on the same
+// line as a trailing comment, and a line-level test cannot be derailed by an
+// apostrophe in JSX prose the way a character-level scanner can.
+export function commentLineMap(lines, extension) {
+  const map = new Array(lines.length).fill(false);
+  const blocks =
+    extension === '.py'
+      ? [
+        ['"""', '"""'],
+        ["'''", "'''"],
+      ]
+      : [
+        ['/*', '*/'],
+        ['<!--', '-->'],
+      ];
+  let openBlock = null;
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (openBlock) {
+      map[index] = true;
+      if (line.includes(openBlock)) openBlock = null;
+      continue;
+    }
+    const trimmed = line.trimStart();
+    if (LINE_COMMENT_PREFIXES.some((prefix) => trimmed.startsWith(prefix))) map[index] = true;
+    for (const [open, close] of blocks) {
+      // A comment opener stands alone or follows whitespace. Requiring that
+      // keeps a glob such as `src/**` or `tmp/*/chats` from opening a block
+      // comment that then swallows the rest of the file.
+      const at = openerIndex(line, open);
+      if (at < 0) continue;
+      if (line.indexOf(close, at + open.length) < 0) {
+        openBlock = close;
+        map[index] = true;
+      }
+      break;
+    }
+  }
+  return map;
+}
+
+function openerIndex(line, open) {
+  for (let at = line.indexOf(open); at >= 0; at = line.indexOf(open, at + 1)) {
+    if (at !== 0 && !/\s/.test(line[at - 1])) continue;
+    if (insideQuotes(line, at)) continue;
+    return at;
+  }
+  return -1;
+}
+
+// Cheap odd-quote test. A `/*` inside a quoted glob such as 'GET /**' is not a
+// comment opener, and treating it as one used to swallow the rest of the file.
+function insideQuotes(line, at) {
+  for (const quote of ['"', "'", '`']) {
+    let count = 0;
+    for (let index = 0; index < at; index += 1) {
+      if (line[index] === '\\') {
+        index += 1;
+        continue;
+      }
+      if (line[index] === quote) count += 1;
+    }
+    if (count % 2 === 1) return true;
+  }
+  return false;
+}
+
+function firstTestBlockLine(lines) {
+  for (let index = 0; index < lines.length; index += 1) {
+    if (TEST_BLOCK_PATTERN.test(lines[index])) return index;
+  }
+  return -1;
+}
+
+// A URL assigned to a url-shaped name is a request target waiting to happen,
+// which is the shape of the real bypasses: `const AI_BASE_URL = process.env.X
+// ?? '<provider base url>'`. An object property is deliberately not a
+// declaration — `endpointUrl: '…'` in a preset list is configuration, not a
+// target.
+export function declaredUrlIdentifier(line) {
+  const match = line.match(
+    /^\s*(?:export\s+)?(?:public\s+|private\s+|internal\s+|pub\s+)?(?:const|let|var|static|final|val|readonly)?\s*([A-Za-z_$][\w$]*)\s*(?::\s*[^=]+?)?=(?!=)/
+  );
+  if (!match) return null;
+  return /base|endpoint|url|uri|host|api/i.test(match[1]) ? match[1] : null;
+}
+
+function normaliseRequestPath(path) {
+  return path.startsWith('/api/v') ? path.slice('/api'.length) : path;
+}
+
+function lineOffsets(source) {
+  const offsets = [0];
+  for (let index = source.indexOf('\n'); index >= 0; index = source.indexOf('\n', index + 1)) {
+    offsets.push(index + 1);
+  }
+  return offsets;
+}
+
+function lineForOffset(offsets, offset) {
+  let low = 0;
+  let high = offsets.length - 1;
+  while (low < high) {
+    const middle = (low + high + 1) >> 1;
+    if (offsets[middle] <= offset) low = middle;
+    else high = middle - 1;
+  }
+  return low;
+}
+
+// Returns every provider-host occurrence in one file with its classification.
+// The host must be followed by a version segment, which is the same shape the
+// audit has always matched, so the raw count stays comparable.
+export function scanProviderHostUsage({ source, relativePath, extension, standard }) {
+  const hosts = standard.detection?.providerApiHosts ?? [];
+  const gatewayPaths = standard.gateway?.openAiCompatiblePaths ?? [];
+  if (hosts.length === 0) return [];
+
+  const raw = [];
+  for (const host of hosts) {
+    const pattern = new RegExp(`${escapeRegExp(host)}(/(?:api/)?v\\d[A-Za-z0-9._~%:@\\-/]*)`, 'g');
+    for (let match = pattern.exec(source); match; match = pattern.exec(source)) {
+      raw.push({
+        host,
+        index: match.index,
+        url: match[0],
+        path: normaliseRequestPath(match[1]),
+      });
+      if (raw.length >= MAX_OCCURRENCES_PER_FILE) break;
+    }
+    if (raw.length >= MAX_OCCURRENCES_PER_FILE) break;
+  }
+  if (raw.length === 0) return [];
+  raw.sort((a, b) => a.index - b.index);
+
+  const lines = source.split('\n');
+  const offsets = lineOffsets(source);
+  const comments = commentLineMap(lines, extension);
+  const testBlockLine = firstTestBlockLine(lines);
+  const isTestPath = TEST_PATH_PATTERN.test(relativePath);
+  const isDocPath = DOC_PATH_PATTERN.test(relativePath);
+
+  const occurrences = raw.map((entry) => ({
+    ...entry,
+    line: lineForOffset(offsets, entry.index) + 1,
+    // A bare base URL such as /v1 is supported because the declared paths hang
+    // off it; /v1/moderations is not, because no declared path covers it.
+    gatewayPathSupported: gatewayPaths.some(
+      (value) =>
+        entry.path === value
+        || entry.path.startsWith(`${value}/`)
+        || value.startsWith(`${entry.path}/`)
+    ),
+  }));
+
+  for (const occurrence of occurrences) {
+    const lineIndex = occurrence.line - 1;
+    const line = lines[lineIndex] ?? '';
+    const hasRequestTokenOnLine = REQUEST_CALL_PATTERN.test(line);
+    const { classification, note } = classifyProviderHostOccurrence({
+      occurrence,
+      occurrences,
+      line,
+      lines,
+      lineIndex,
+      comments,
+      testBlockLine,
+      isTestPath,
+      isDocPath,
+      hasRequestTokenOnLine,
+    });
+    occurrence.classification = classification;
+    occurrence.note = note;
+  }
+  return occurrences;
+}
+
+function classifyProviderHostOccurrence({
+  occurrence,
+  occurrences,
+  line,
+  lines,
+  lineIndex,
+  comments,
+  testBlockLine,
+  isTestPath,
+  isDocPath,
+  hasRequestTokenOnLine,
+}) {
+  if (comments[lineIndex]) {
+    return { classification: 'comment', note: 'Appears in a comment, not in code.' };
+  }
+  if (isDocPath) {
+    return { classification: 'documentation', note: 'Appears in a documentation path.' };
+  }
+  if (isTestPath || (testBlockLine >= 0 && lineIndex >= testBlockLine)) {
+    return {
+      classification: 'test',
+      note: 'Appears in test code, which mentions hosts it may never call in production.',
+    };
+  }
+
+  const placeholderWindow = lines
+    .slice(Math.max(0, lineIndex - PLACEHOLDER_LOOKBEHIND_LINES), lineIndex + 1)
+    .join('\n');
+  if (PLACEHOLDER_PATTERN.test(placeholderWindow)) {
+    return {
+      classification: 'placeholder',
+      note: 'Reads as placeholder, hint or example text rather than a request target.',
+    };
+  }
+
+  if (NON_INFERENCE_PATH_PATTERN.test(occurrence.path)) {
+    return {
+      classification: 'non-inference',
+      note: `Targets ${occurrence.path}, which is billing, usage, key or catalogue traffic rather than a model call.`,
+    };
+  }
+
+  // Two or more distinct provider hosts in one neighbourhood is a picker of
+  // bring-your-own-key endpoints, not a hardwired bypass, which always names a
+  // single provider.
+  if (!hasRequestTokenOnLine) {
+    const neighbours = new Set(
+      occurrences
+        .filter((other) => Math.abs(other.line - occurrence.line) <= PROVIDER_MENU_WINDOW_LINES)
+        .map((other) => other.host)
+    );
+    if (neighbours.size >= 2) {
+      return {
+        classification: 'byo-key-config',
+        note: `One of ${neighbours.size} provider endpoints offered together, which reads as a bring-your-own-key picker.`,
+      };
+    }
+  }
+
+  if (hasRequestTokenOnLine) {
+    return { classification: 'call-site', note: 'Passed to an HTTP client on the same line.' };
+  }
+  for (let offset = 1; offset <= REQUEST_LOOKBEHIND_LINES; offset += 1) {
+    const previous = lines[lineIndex - offset];
+    if (previous === undefined) break;
+    if (REQUEST_CALL_PATTERN.test(previous)) {
+      return {
+        classification: 'call-site',
+        note: 'Supplied as an argument to an HTTP client opened just above.',
+      };
+    }
+  }
+  const identifier = declaredUrlIdentifier(line);
+  if (identifier) {
+    return {
+      classification: 'call-site',
+      note: `Assigned to ${identifier}, a request-target name.`,
+    };
+  }
+
+  return {
+    classification: 'unclassified',
+    note: 'Mentioned in code with no evidence either way; reported, not counted as a bypass.',
+  };
+}
+
 export function validateStandard(value) {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -279,15 +604,19 @@ export function scanSource(projectRoot, standard) {
   const envNames = standard.detection.gatewayEnvNames;
   const paths = standard.gateway.openAiCompatiblePaths ?? [];
 
-  const providerHosts = (standard.detection.providerApiHosts ?? []).map(
-    (host) => new RegExp(`${host.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/(?:api/)?v\\d`)
-  );
   const ignoredPaths = (standard.detection.scanIgnorePaths ?? []).map((value) =>
     value.split('/').join(sep)
   );
   const evidence = {
     gatewayHostFiles: 0,
     providerHostFiles: 0,
+    providerHostMentions: 0,
+    providerCallSiteFiles: 0,
+    providerCallSites: 0,
+    providerModelPathFiles: 0,
+    providerTestReferenceFiles: 0,
+    providerHostBreakdown: Object.fromEntries(PROVIDER_HOST_CLASSES.map((name) => [name, 0])),
+    providerCallSiteDetail: [],
     gatewayEnvFiles: 0,
     completionsPathFiles: 0,
     canonicalImportFiles: 0,
@@ -351,7 +680,50 @@ export function scanSource(projectRoot, standard) {
         if (retired.has(host)) evidence.retiredHosts.add(host);
         break;
       }
-      if (providerHosts.some((pattern) => pattern.test(source))) evidence.providerHostFiles += 1;
+      const providerUsage = scanProviderHostUsage({
+        source,
+        relativePath,
+        extension,
+        standard,
+      });
+      if (providerUsage.length > 0) {
+        evidence.providerHostFiles += 1;
+        evidence.providerHostMentions += providerUsage.length;
+        for (const occurrence of providerUsage) {
+          evidence.providerHostBreakdown[occurrence.classification] += 1;
+        }
+        const callSites = providerUsage.filter(
+          (occurrence) => occurrence.classification === 'call-site'
+        );
+        if (callSites.length > 0) {
+          evidence.providerCallSiteFiles += 1;
+          evidence.providerCallSites += callSites.length;
+          for (const occurrence of callSites) {
+            if (evidence.providerCallSiteDetail.length >= MAX_CALL_SITE_DETAIL) break;
+            evidence.providerCallSiteDetail.push({
+              file: relativePath,
+              line: occurrence.line,
+              host: occurrence.host,
+              url: occurrence.url,
+              path: occurrence.path,
+              gatewayPathSupported: occurrence.gatewayPathSupported,
+              why: occurrence.note,
+            });
+          }
+        }
+        if (
+          providerUsage.some(
+            (occurrence) =>
+              occurrence.classification === 'call-site'
+              || occurrence.classification === 'byo-key-config'
+          )
+        ) {
+          evidence.providerModelPathFiles += 1;
+        }
+        if (providerUsage.some((occurrence) => occurrence.classification === 'test')) {
+          evidence.providerTestReferenceFiles += 1;
+        }
+      }
       if (envNames.some((name) => source.includes(name))) evidence.gatewayEnvFiles += 1;
       if (paths.some((value) => source.includes(value))) evidence.completionsPathFiles += 1;
       if (importPattern.test(source)) evidence.canonicalImportFiles += 1;
@@ -391,9 +763,11 @@ export function classifyProject({ project, declared, source, standard, exception
 
   const canonicalDeclarations = declared.filter((entry) => entry.kind === 'canonical');
   const providerDeclarations = declared.filter((entry) => entry.kind === 'provider-sdk');
+  // A provider host that is only mentioned — a placeholder, a doc example, a
+  // test asserting the product refuses it — is not a model call path.
   const callsModel =
     source.gatewayHostFiles > 0 ||
-    source.providerHostFiles > 0 ||
+    source.providerModelPathFiles > 0 ||
     source.gatewayEnvFiles > 0 ||
     source.completionsPathFiles > 0 ||
     source.canonicalImportFiles > 0 ||
@@ -403,7 +777,12 @@ export function classifyProject({ project, declared, source, standard, exception
     return {
       verdict: 'not-applicable',
       pattern: 'none',
-      reasons: ['No hosted-model dependency and no model call site found in source.'],
+      // Even a pass says what was seen, so a mention the classifier declined to
+      // act on is still on the page rather than buried in the counters.
+      reasons: [
+        'No hosted-model dependency and no model call site found in source.',
+        ...providerHostReasons(source),
+      ],
     };
   }
 
@@ -424,6 +803,7 @@ export function classifyProject({ project, declared, source, standard, exception
         `Also declares provider SDKs directly: ${providerDeclarations.map((entry) => entry.package).join(', ')}`
       );
     }
+    reasons.push(...providerHostReasons(source));
     if (!drifted) reasons.unshift('Declares the canonical packages at the pinned versions.');
     return { verdict: drifted ? 'drifted' : 'compliant', pattern: 'vercel-ai-sdk', reasons };
   }
@@ -437,11 +817,7 @@ export function classifyProject({ project, declared, source, standard, exception
   if (source.gatewayHostFiles > 0) {
     reasons.push(`References the gateway host in ${source.gatewayHostFiles} source file(s).`);
   }
-  if (source.providerHostFiles > 0) {
-    reasons.push(
-      `Calls a provider API host directly in ${source.providerHostFiles} source file(s), bypassing the gateway.`
-    );
-  }
+  reasons.push(...providerHostReasons(source));
   if (source.gatewayEnvFiles > 0) {
     reasons.push(`References a gateway environment name in ${source.gatewayEnvFiles} source file(s).`);
   }
@@ -457,6 +833,52 @@ export function classifyProject({ project, declared, source, standard, exception
     pattern: providerDeclarations.length > 0 ? 'provider-sdk' : 'raw-http',
     reasons,
   };
+}
+
+// Separates what the audit is willing to assert — a request aimed at a
+// provider host — from what it merely saw. Both are stated, so a reader can
+// still follow up on a mention the classifier declined to call a bypass.
+function providerHostReasons(source) {
+  const reasons = [];
+  const breakdown = source.providerHostBreakdown ?? {};
+  const callSites = source.providerCallSites ?? 0;
+  const callSiteFiles = source.providerCallSiteFiles ?? 0;
+  const mentions = source.providerHostMentions ?? 0;
+
+  if (callSites > 0) {
+    const unsupported = (source.providerCallSiteDetail ?? []).filter(
+      (entry) => !entry.gatewayPathSupported
+    );
+    reasons.push(
+      `Calls a provider API host directly at ${callSites} call site(s) across ${callSiteFiles} file(s), bypassing the gateway.`
+    );
+    if (unsupported.length > 0) {
+      reasons.push(
+        `${unsupported.length} of those call site(s) target a path the gateway does not declare (${[
+          ...new Set(unsupported.map((entry) => entry.path)),
+        ].join(', ')}); migrating them needs a gateway change or a recorded exception.`
+      );
+    }
+  }
+
+  const soft = [
+    ['byo-key-config', 'a bring-your-own-key endpoint picker'],
+    ['non-inference', 'billing, usage or catalogue traffic'],
+    ['placeholder', 'placeholder or example text'],
+    ['test', 'test code'],
+    ['documentation', 'documentation'],
+    ['comment', 'a comment'],
+    ['unclassified', 'code the classifier could not read either way'],
+  ]
+    .filter(([name]) => (breakdown[name] ?? 0) > 0)
+    .map(([name, label]) => `${breakdown[name]} in ${label}`);
+
+  if (soft.length > 0) {
+    reasons.push(
+      `Mentions a provider API host ${mentions} time(s) that are not counted as a bypass: ${soft.join(', ')}. Worth reading, not a verdict.`
+    );
+  }
+  return reasons;
 }
 
 // A credential-shaped literal inside a test block, or on an assertion line, is
@@ -475,7 +897,7 @@ function patternFor(declared, source) {
   if (declared.some((entry) => entry.kind === 'provider-sdk')) return 'provider-sdk';
   if (
     source.gatewayHostFiles > 0
-    || source.providerHostFiles > 0
+    || source.providerModelPathFiles > 0
     || source.completionsPathFiles > 0
     || source.gatewayEnvFiles > 0
   ) {
@@ -551,7 +973,15 @@ export function auditProject({ project, fleetRoot, standard, explain = false }) 
       filesScanned: source.filesScanned,
       truncated: source.truncated,
       gatewayHostFiles: source.gatewayHostFiles,
+      // Raw signal, kept deliberately: files that contain a provider-host
+      // string at all, whatever the classifier made of them.
       providerHostFiles: source.providerHostFiles,
+      providerHostMentions: source.providerHostMentions,
+      // High-confidence signal: a provider host used as a request target.
+      providerCallSiteFiles: source.providerCallSiteFiles,
+      providerCallSites: source.providerCallSites,
+      providerHostBreakdown: source.providerHostBreakdown,
+      providerCallSiteDetail: source.providerCallSiteDetail,
       gatewayEnvFiles: source.gatewayEnvFiles,
       completionsPathFiles: source.completionsPathFiles,
       canonicalImportFiles: source.canonicalImportFiles,
@@ -617,6 +1047,31 @@ export function auditAiClients({
     }
     : null;
 
+  // Named call sites are drawn from the published results only, so a private
+  // project is never identified by its evidence.
+  const providerCallSites = published.flatMap((result) =>
+    (result.evidence?.providerCallSiteDetail ?? []).map((entry) => ({
+      project: result.id,
+      ...entry,
+    }))
+  );
+  // A project already carrying a dated exception is not a migration candidate,
+  // so its off-gateway paths are evidence but not an open question.
+  const exempt = new Set(
+    published.filter((result) => result.verdict === 'exception').map((result) => result.id)
+  );
+  const unsupported = new Map();
+  for (const entry of providerCallSites) {
+    if (entry.gatewayPathSupported || exempt.has(entry.project)) continue;
+    const key = `${entry.project}::${entry.path}`;
+    if (!unsupported.has(key)) unsupported.set(key, entry);
+  }
+  for (const entry of unsupported.values()) {
+    warnings.push(
+      `${entry.project} calls ${entry.url} (${entry.file}:${entry.line}), and ${entry.path} is not among the gateway's declared OpenAI-compatible paths. It cannot be migrated as-is: it needs a gateway extension or a recorded exception. Owner decision.`
+    );
+  }
+
   return {
     schemaVersion: 1,
     schema: 'fleet.ai-client-audit.v1',
@@ -635,6 +1090,18 @@ export function auditAiClients({
       ...summary,
     },
     patterns,
+    providerHosts: {
+      note:
+        'providerHostFiles counts files that contain a provider-host string. providerCallSites '
+        + 'counts the subset the classifier is willing to call a request target. Only the latter '
+        + 'is read as a gateway bypass; the former is kept so a mention is still visible.',
+      mentionFiles: results.reduce(
+        (total, result) => total + (result.evidence?.providerHostFiles ?? 0),
+        0
+      ),
+      callSiteProjects: [...new Set(providerCallSites.map((entry) => entry.project))].sort(),
+      callSites: providerCallSites,
+    },
     warnings,
     blocking: results.flatMap((result) => result.blocking),
     followUps: standard.followUps ?? [],
@@ -772,6 +1239,23 @@ function renderText(report, { compact = false } = {}) {
       if (result.verdict === 'not-applicable') continue;
       const declared = result.declared.map((entry) => `${entry.package}@${entry.version}`).join(' ');
       lines.push(`  ${result.id.padEnd(24)} ${result.verdict.padEnd(15)} ${declared}`);
+    }
+  }
+  const hosts = report.providerHosts;
+  if (hosts) {
+    lines.push(
+      '',
+      `Provider hosts: ${hosts.mentionFiles} file(s) mention one; `
+        + `${hosts.callSites.length} call site(s) in ${hosts.callSiteProjects.length} project(s) `
+        + 'are read as a request target.'
+    );
+    if (!compact) {
+      for (const entry of hosts.callSites) {
+        lines.push(
+          `  ${entry.project.padEnd(20)} ${entry.file}:${entry.line} ${entry.url}`
+            + `${entry.gatewayPathSupported ? '' : '  [path not on the gateway]'}`
+        );
+      }
     }
   }
   if (!compact && report.warnings.length > 0) {
