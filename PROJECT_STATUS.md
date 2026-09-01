@@ -24,6 +24,30 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-09-01 — Fleet rollout decisions and Clarity source closure:** Recorded
+  Starboard, High Signal, and Open Historia as the second shared web-landing
+  adoption batch; confirmed the no-license UI path uses Preline or another
+  maintained free upstream; and completed the five remaining dedicated Clarity
+  projects and source integrations. The credential-free registry audit now
+  verifies 56 distinct IDs across 56 products with no blocking findings.
+  Production deployment and live verification remain separate receipts.
+- **2026-09-01 — Unified footer composition repaired locally:** Updated the
+  hosted Ask AI loader to compose with a project strip that mounts later,
+  removed the obsolete Fleet-only composition opt-outs from active consumers,
+  and regenerated Calorie's checked-in factory output. The shared-package
+  checks pass with 29 tests, the 65-page showcase build passes, and the delayed
+  loader plus a controlled 40-identity built-document harness render exactly
+  one shared extension without the extension widening the document at 390,
+  768, and 1440 px. Existing product-specific responsive receipts remain the
+  authority for the host pages themselves. Protein Index remains the one
+  source exception because its retired repository requires explicit
+  reactivation before edits. No deployment or package publication ran. Refs
+  #76.
+- **2026-08-31 — Portfolio-strip fallback synchronized:** Regenerated the
+  backend-free package's bundled public-project fallback from the checked-in
+  canonical public projection, adding High Signal Podcasts and refreshing three
+  changed product descriptions. Both shared-package checks and the public
+  directory build pass. No npm publication or deployment ran.
 - **2026-08-26 — Repository publication dogfood:** Extended public
   project profiles with a lazy, read-only IssuePages publication when the
   privacy-safe catalog exposes a validated public GitHub repository. Profiles

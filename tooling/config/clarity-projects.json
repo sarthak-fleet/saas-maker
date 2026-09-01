@@ -1,120 +1,73 @@
 {
   "schemaVersion": 1,
   "schema": "fleet.clarity-registry.v1",
-  "updatedAt": "2026-08-30",
+  "updatedAt": "2026-09-01",
   "legacySharedId": "y39u4kk9oq",
-  "note": "Receipt of Microsoft Clarity project decisions, keyed by the Site Health catalog id. One Clarity project per product: an ID recorded against two products merges their sessions and cannot be unmerged afterwards. This file records only decisions that have actually been made; it is deliberately not a copy of the private 56-entry catalog, and a catalog entry that is absent here simply has no Clarity decision yet. Verify with: node scripts/clarity-audit.mjs --check",
+  "note": "Complete public receipt keyed by the 56-entry Site Health catalog snapshot inspected on 2026-08-31. A Clarity project can exist before source wiring, but source integration and live deployment remain separate gates. Verify with: node scripts/clarity-audit.mjs --check",
+  "unmappedProjects": [
+    { "clarityId": "y6bvisartm", "name": "SaaS Ideas", "reason": "Retired identity absorbed into SaaS Maker Ideas." },
+    { "clarityId": "y6bupt9sah", "name": "Personal Platform", "reason": "Historical identity superseded by the canonical Sarthak Agrawal portfolio entry." },
+    { "clarityId": "y6bvrir8nn", "name": "Today Little Log", "reason": "No current canonical Fleet catalog identity." },
+    { "clarityId": "y6bvy3fses", "name": "Elves HQ", "reason": "Historical identity superseded by the canonical Office OS entry." },
+    { "clarityId": "y6bwf6hr76", "name": "Habits", "reason": "Generated iOS landing identity without a current canonical Fleet catalog row." },
+    { "clarityId": "y6broomk5c", "name": "Workflows and Skills", "reason": "Standalone predecessor folded into SaaS Maker Tooling and removed from the canonical catalog." }
+  ],
   "projects": [
-    {
-      "id": "anime-list",
-      "repo": "anime-list",
-      "clarityId": "y6bu7b62ia",
-      "tag": "anime-list",
-      "wiredFiles": ["anime-list/index.html"]
-    },
-    {
-      "id": "companion-robot",
-      "repo": "companion-robot",
-      "clarityId": null,
-      "wiredFiles": [],
-      "reason": "Documentation-only repository with no browser-delivered surface: the checkout holds README, PROJECT_STATUS, docs/, and a package manifest, and the catalog records it undeployed. Nothing to tag until a surface exists."
-    },
-    {
-      "id": "drank",
-      "repo": "drank",
-      "clarityId": "y6bt519ewi",
-      "tag": "drank",
-      "wiredFiles": ["drank/app/layout.tsx"]
-    },
-    {
-      "id": "high-signal",
-      "repo": "high-signal",
-      "clarityId": "y39u4kk9oq",
-      "tag": "high-signal",
-      "wiredFiles": ["high-signal/apps/web/src/app/layout.tsx"],
-      "violation": {
-        "code": "LEGACY_SHARED_ID",
-        "recordedAt": "2026-08-30",
-        "reason": "Still loads the retired fleet-wide shared Clarity project instead of a project of its own, so its sessions land in the shared bucket alongside anything else that was ever pointed at it.",
-        "fix": "Create a Clarity project for High Signal, then in high-signal/apps/web/src/app/layout.tsx replace both occurrences of y39u4kk9oq on line 130 with the new 10-character ID, and update this entry."
-      }
-    },
-    {
-      "id": "india-standards",
-      "repo": "india-standards",
-      "clarityId": "y6btzgl5r3",
-      "tag": "india-standards",
-      "wiredFiles": ["india-standards/app/layout.tsx"]
-    },
-    {
-      "id": "journal",
-      "repo": "journal",
-      "clarityId": null,
-      "wiredFiles": [],
-      "surfaceOwner": "ios-landings",
-      "reason": "Native-only repository: the checkout is an Xcode project with Swift sources and no browser-delivered file. Its marketing page is built by the ios-landings factory, so any tag belongs there rather than here."
-    },
-    {
-      "id": "live",
-      "repo": "live",
-      "clarityId": "y6btx9iks3",
-      "tag": "significanthobbies",
-      "wiredFiles": ["live/src/app/layout.tsx"],
-      "violation": {
-        "code": "SHARED_CLARITY_ID",
-        "recordedAt": "2026-08-30",
-        "reason": "Loads Significant Hobbies' Clarity project and tags itself as significanthobbies, so both products' recordings, heatmaps, and settings currently merge into one project that cannot be separated after the fact.",
-        "fix": "Create a Clarity project for Live, then in live/src/app/layout.tsx line 100 replace both occurrences of y6btx9iks3 with the new 10-character ID and change project_id from \"significanthobbies\" to \"live\", and update this entry."
-      }
-    },
-    {
-      "id": "posttrainllm",
-      "repo": "posttrainllm",
-      "clarityId": "y6br5d0ds7",
-      "tag": "posttrainllm",
-      "wiredFiles": ["posttrainllm/browser/src/layouts/Default.astro"]
-    },
-    {
-      "id": "reader",
-      "repo": "reader",
-      "clarityId": "y6budslpbi",
-      "tag": "reader",
-      "wiredFiles": ["reader/app.html"]
-    },
-    {
-      "id": "reddit-insights",
-      "repo": "reddit-insights",
-      "clarityId": "y6bwkyh4qb",
-      "tag": "reddit-insights",
-      "wiredFiles": ["reddit-insights/scripts/build-pages.mjs"]
-    },
-    {
-      "id": "rolepatch",
-      "repo": "rolepatch",
-      "clarityId": "y6buz6rkot",
-      "tag": "rolepatch",
-      "wiredFiles": ["rolepatch/src/app/layout.tsx"]
-    },
-    {
-      "id": "saas-maker",
-      "repo": "saas-maker",
-      "clarityId": "y6brryt053",
-      "tag": "saas-maker",
-      "wiredFiles": ["saas-maker/apps/cockpit/src/app/layout.tsx"]
-    },
-    {
-      "id": "significanthobbies",
-      "repo": "significanthobbies",
-      "clarityId": "y6btx9iks3",
-      "tag": "significanthobbies",
-      "wiredFiles": ["significanthobbies/src/app/layout.tsx"]
-    },
-    {
-      "id": "starboard",
-      "repo": "starboard",
-      "clarityId": "y6bv3iipqv",
-      "tag": "starboard",
-      "wiredFiles": ["starboard/src/app/layout.tsx"]
-    }
+    { "id": "codevetter", "name": "CodeVetter", "repo": "codevetter", "clarityId": "y6bqiui587", "hostname": "codevetter.com", "wiredFiles": ["codevetter/apps/landing-page-astro/src/layouts/Layout.astro"], "reason": "Clarity covers only the public marketing and synthetic benchmark pages; the local desktop verifier and repository data remain outside browser analytics." },
+    { "id": "pace", "name": "HeyPace", "repo": "pace", "clarityId": "y6bqufsq6g", "hostname": "heypace.app", "wiredFiles": [], "reason": "Intentionally unwired: Pace's current public privacy contract promises no analytics SDK or telemetry, and its active landing work removed the previous PostHog loader." },
+    { "id": "posttrainllm", "name": "PostTrainLLM", "repo": "posttrainllm", "clarityId": "y6br5d0ds7", "hostname": "posttrainllm.com", "tag": "posttrainllm", "wiredFiles": ["posttrainllm/browser/src/layouts/Default.astro"] },
+    { "id": "site-health", "name": "Site Health", "repo": "site-health", "clarityId": "y6brmox52n", "hostname": "github.com", "wiredFiles": [], "reason": "Local-only portfolio operations product with no public browser-delivered surface to tag." },
+    { "id": "live", "name": "Live", "repo": "live", "clarityId": "ybcglnzl4t", "hostname": "live.significanthobbies.com", "tag": "live", "wiredFiles": ["live/src/app/layout.tsx"] },
+    { "id": "chatgpt-connections", "name": "ChatGPT Connections", "repo": "chatgpt-connections", "clarityId": "y6brqwtobx", "hostname": "github.com", "wiredFiles": [], "reason": "The catalog records a Worker but no visual page; do not invent a browser surface solely for analytics." },
+    { "id": "saas-maker", "name": "SaaS Maker", "repo": "saas-maker", "clarityId": "y6brryt053", "hostname": "sassmaker.com", "tag": "saas-maker", "wiredFiles": ["saas-maker/apps/cockpit/src/app/layout.tsx"] },
+    { "id": "gitstat", "name": "GitStat", "repo": "gitstat", "clarityId": "y6bru7gtx7", "hostname": "git.significanthobbies.com", "wiredFiles": [], "reason": "Intentionally unwired: GitStat's public product contract explicitly promises no product analytics tracking." },
+    { "id": "reel-pipeline", "name": "Reel Pipeline", "repo": "reel-pipeline", "clarityId": "y6bt0t3zwu", "hostname": "github.com", "wiredFiles": [], "reason": "The deployed Worker has no cataloged visual public page; do not invent a tracking surface." },
+    { "id": "mobile-dev-cockpit", "name": "Mobile Dev Cockpit", "repo": "mobile-dev-cockpit", "clarityId": "y6bt2o1g4k", "hostname": "github.com", "wiredFiles": [], "reason": "Retired native product with no browser-delivered surface." },
+    { "id": "drank", "name": "Drank", "repo": "drank", "clarityId": "y6bt519ewi", "hostname": "domains.sassmaker.com", "tag": "drank", "wiredFiles": ["drank/app/layout.tsx"] },
+    { "id": "email-manager", "name": "Email Manager", "repo": "email-manager", "clarityId": "y6bt70yq9x", "hostname": "mail.significanthobbies.com", "tag": "email-manager", "wiredFiles": ["email-manager/landing-astro/src/layouts/Layout.astro"], "reason": "Clarity is limited to the public marketing landing; the authenticated Gmail application is deliberately excluded so session replay cannot observe inbox content." },
+    { "id": "chatgpt-memory-insights", "name": "Memory Map", "repo": "chatgpt-memory-insights", "clarityId": "y6bt9512d0", "hostname": "chatgpt.significanthobbies.com", "wiredFiles": ["chatgpt-memory-insights/src/components/public-clarity.astro"], "reason": "Clarity covers only the public about and changelog pages; the private ZIP analysis, report, and search route intentionally do not import the loader." },
+    { "id": "free-ai", "name": "Free AI", "repo": "free-ai", "clarityId": "y6btb1ecvz", "hostname": "ai-gateway.sassmaker.com", "wiredFiles": [], "reason": "The gateway is a retiring compatibility service; do not add new analytics while its decommission is pending." },
+    { "id": "psi-swarm", "name": "PSI Swarm", "repo": "psi-swarm", "clarityId": "y6btd6q3g2", "hostname": "performance.sassmaker.com", "wiredFiles": [], "reason": "Intentionally unwired: the product's explicit local-first contract promises no telemetry on the deployed static controller." },
+    { "id": "high-signal", "name": "High Signal", "repo": "high-signal", "clarityId": "ybcgyx9ugh", "hostname": "highsignal.app", "tag": "high-signal", "wiredFiles": ["high-signal/apps/web/src/app/layout.tsx", "high-signal/apps/web/landing-astro/src/layouts/Layout.astro"] },
+    { "id": "on-record", "name": "High Signal Podcasts", "repo": "on-record", "clarityId": "ybch0p6cta", "hostname": "podcasts.highsignal.app", "tag": "on-record", "wiredFiles": ["on-record/apps/web/src/layouts/Base.astro"] },
+    { "id": "issue-pages", "name": "IssuePages", "repo": "issue-pages", "clarityId": "ybch2c99wz", "hostname": "issues.sarthakagrawal.dev", "tag": "issue-pages", "wiredFiles": ["issue-pages/src/ui/templates.ts"] },
+    { "id": "everythingrated", "name": "EverythingRated", "repo": "everythingrated", "clarityId": "y6btfbf6sv", "hostname": "ratings.highsignal.app", "tag": "everythingrated", "wiredFiles": ["everythingrated/apps/web/src/app/layout.tsx"] },
+    { "id": "research-papers", "name": "Research Papers", "repo": "research-papers", "clarityId": "y6btr00dl7", "hostname": "papers.highsignal.app", "wiredFiles": ["research-papers/web/src/components/site-nav.astro"], "reason": "Clarity covers public no-account pages; the search and cited-answer subtrees are explicitly masked and the boundary is disclosed on /data." },
+    { "id": "materia", "name": "Materia", "repo": "materia", "clarityId": "y6btt7db5o", "hostname": "materia.significanthobbies.com", "wiredFiles": ["materia/src/layouts/BaseLayout.astro"], "reason": "Clarity covers public reference navigation; the search and health-checker routes are explicitly excluded from the loader." },
+    { "id": "knowledge-base", "name": "Knowledge Base", "repo": "knowledge-base", "clarityId": "y6btv19tqf", "hostname": "knowledgebase.sassmaker.com", "tag": "knowledge-base", "wiredFiles": ["knowledge-base/landing-astro/src/layouts/Layout.astro"], "reason": "Clarity is limited to the public landing; the Access-protected private-corpus operator workspace deliberately does not load this layout." },
+    { "id": "significanthobbies", "name": "Significant Hobbies", "repo": "significanthobbies", "clarityId": "y6btx9iks3", "hostname": "significanthobbies.com", "tag": "significanthobbies", "wiredFiles": ["significanthobbies/src/app/layout.tsx"] },
+    { "id": "india-standards", "name": "India Standards", "repo": "india-standards", "clarityId": "y6btzgl5r3", "hostname": "india-standards.significanthobbies.com", "tag": "india-standards", "wiredFiles": ["india-standards/app/layout.tsx"] },
+    { "id": "anime-list", "name": "Anime List", "repo": "anime-list", "clarityId": "y6bu7b62ia", "hostname": "anime.significanthobbies.com", "tag": "anime-list", "wiredFiles": ["anime-list/index.html"] },
+    { "id": "chess", "name": "Chess", "repo": "chess", "clarityId": "y6bu9epxsu", "hostname": "chess.significanthobbies.com", "wiredFiles": [], "reason": "The distinct project exists, but wiring is intentionally deferred: Stockfish requires COEP require-corp and Clarity's project bootstrap response does not provide CORS or Cross-Origin-Resource-Policy headers." },
+    { "id": "looptv", "name": "LoopTV", "repo": "looptv", "clarityId": "y6bubc8t38", "hostname": "tv.significanthobbies.com", "tag": "looptv", "wiredFiles": ["looptv/src/layouts/BaseLayout.astro"] },
+    { "id": "reader", "name": "Reader", "repo": "reader", "clarityId": "y6budslpbi", "hostname": "read.significanthobbies.com", "tag": "reader", "wiredFiles": ["reader/app.html"] },
+    { "id": "swe-interview-prep", "name": "SWE Interview Prep", "repo": "swe-interview-prep", "clarityId": "y6bufvqbjl", "hostname": "learn.significanthobbies.com", "tag": "swe-interview-prep", "wiredFiles": ["swe-interview-prep/index.html"] },
+    { "id": "calorie", "name": "Calorie", "repo": "calorie", "clarityId": "y6bultfwvf", "hostname": "calorie.significanthobbies.com", "tag": "calorie", "wiredFiles": ["ios-landings/src/lib/clarity.ts"], "surfaceOwner": "ios-landings" },
+    { "id": "setline", "name": "Setline", "repo": "setline", "clarityId": "y6bunkz9vz", "hostname": "setline.significanthobbies.com", "tag": "setline", "wiredFiles": ["ios-landings/src/lib/clarity.ts"], "surfaceOwner": "ios-landings" },
+    { "id": "journal", "name": "Journal", "repo": "journal", "clarityId": "ybcifeb3uv", "hostname": "journal.significanthobbies.com", "tag": "journal", "wiredFiles": ["ios-landings/src/lib/clarity.ts"], "surfaceOwner": "ios-landings" },
+    { "id": "kith", "name": "Kith", "repo": "kith", "clarityId": "y6bus3owf7", "hostname": "kith.significanthobbies.com", "tag": "kith", "wiredFiles": ["ios-landings/src/lib/clarity.ts"], "surfaceOwner": "ios-landings" },
+    { "id": "ios-landings", "name": "iOS landings", "repo": "ios-landings", "clarityId": "y6buu9qzrj", "hostname": "journal.significanthobbies.com", "wiredFiles": [], "reason": "Factory identity has no standalone public page; per-product generated pages receive their product IDs instead." },
+    { "id": "rolepatch", "name": "RolePatch", "repo": "rolepatch", "clarityId": "y6buz6rkot", "hostname": "rolepatch.com", "tag": "rolepatch", "wiredFiles": ["rolepatch/src/app/layout.tsx"] },
+    { "id": "karte", "name": "Karte", "repo": "karte", "clarityId": "y6bv15rm1t", "hostname": "karte.cc", "wiredFiles": ["karte/landing-astro/src/layouts/Layout.astro"], "reason": "Clarity covers only the static marketing layer; profiles, chat, contact, sign-in, and authenticated dashboard routes intentionally exclude it." },
+    { "id": "starboard", "name": "Starboard", "repo": "starboard", "clarityId": "y6bv3iipqv", "hostname": "starboard.codevetter.com", "tag": "starboard", "wiredFiles": ["starboard/src/app/layout.tsx"] },
+    { "id": "ai-game", "name": "AliveVille", "repo": "aliveville", "clarityId": "y6bv5ous5y", "hostname": "aliveville.com", "wiredFiles": [], "reason": "Intentionally unwired: the product is inactive, requires explicit reactivation, and its live marketing surface is marked do-not-modify." },
+    { "id": "protein-index", "name": "Protein Index", "repo": "protein-index", "clarityId": "y6bv7pucg0", "hostname": "protein.significanthobbies.com", "wiredFiles": [], "reason": "Intentionally unwired: the product is retired and requires explicit reactivation before product or deployment work." },
+    { "id": "veg-protein-food", "name": "Recipe Index", "repo": "recipe-dashboard", "clarityId": "y6bvcb5mwv", "hostname": "veg-protein-food.significanthobbies.com", "wiredFiles": ["recipe-dashboard/src/pages/index.astro"], "reason": "Clarity covers the public no-account recipe index, with its analytics boundary disclosed in the footer." },
+    { "id": "app-health", "name": "App Health", "repo": "app-health", "clarityId": "y6bveiqm8k", "hostname": "health.sassmaker.com", "wiredFiles": ["app-health/apps/web/scripts/generate-public-entrypoints.mjs"], "reason": "Clarity is injected only into the public changelog entrypoint; the owner-key unlock and private operator dashboard never load it." },
+    { "id": "mashup", "name": "Mashup", "repo": "mashup", "clarityId": "y6bvgfkqwg", "hostname": "mashup.highsignal.app", "wiredFiles": ["mashup/web/src/pages/index.astro"], "reason": "Clarity covers only the public proof site; archives, editing, rendering, approvals, and publishing remain local and outside session replay." },
+    { "id": "motion", "name": "Motion", "repo": "motion", "clarityId": "y6bvl31bna", "hostname": "motion.significanthobbies.com", "tag": "motion", "wiredFiles": ["ios-landings/src/lib/clarity.ts"], "surfaceOwner": "ios-landings" },
+    { "id": "truehire", "name": "TrueHire", "repo": "truehire", "clarityId": "y6bvpae3yx", "hostname": "github.com", "wiredFiles": [], "reason": "Archived and out of Fleet with no public URL; do not reopen or invent a surface solely for analytics." },
+    { "id": "open-historia", "name": "Open Historia", "repo": "open-historia", "clarityId": "y6bvtr9hri", "hostname": "historia.aliveville.com", "wiredFiles": [], "reason": "Intentionally unwired while the owner classifies this parked landing as adopt, keep, or retire under the shared landing-engine program." },
+    { "id": "companion-robot", "name": "Companion Robot", "repo": "companion-robot", "clarityId": "y6bvvoaakg", "hostname": "github.com", "wiredFiles": [], "reason": "Documentation-only undeployed repository with no browser-delivered surface." },
+    { "id": "forecast-lab", "name": "Forecast Lab", "repo": "forecast-lab", "clarityId": "y6bw2z18xp", "hostname": "github.com", "wiredFiles": [], "reason": "Undeployed project with no public browser-delivered surface." },
+    { "id": "web-playables", "name": "Web Playables", "repo": "web-playables", "clarityId": "y6bw57fiim", "hostname": "idle.aliveville.com", "wiredFiles": ["web-playables/apps/hub/index.html"], "reason": "Clarity covers only the parked public hub; the playable game, embeddable build, and YouTube certification bundle remain analytics-free." },
+    { "id": "what-it-takes-to-win", "name": "What It Takes to Win", "repo": "what-it-takes-to-win", "clarityId": "y6bw72v6ih", "hostname": "paths.significanthobbies.com", "wiredFiles": ["what-it-takes-to-win/src/layouts/Base.astro"], "reason": "Clarity covers the public research exhibit but is intentionally disabled on the local-only ROI worksheet so user-supplied inputs stay out of replay." },
+    { "id": "sarthakagrawal-personal", "name": "Sarthak Agrawal", "repo": "portfolio", "clarityId": "y6bw8jogxg", "hostname": "sarthakagrawal.dev", "wiredFiles": ["portfolio/src/layouts/BaseLayout.astro"], "reason": "Clarity covers the public portfolio through its shared layout, with PostHog and Clarity disclosed on the privacy route." },
+    { "id": "agent-office", "name": "Office OS", "repo": "agent-office", "clarityId": "y6bwaot70j", "hostname": "office-os.sassmaker.com", "tag": "agent-office", "wiredFiles": ["agent-office/site/index.html"], "reason": "Clarity is limited to the public informational site; the native local workplace remains analytics-free." },
+    { "id": "local-ai-video-studio", "name": "Local AI Video Studio", "repo": "local-ai-video-studio", "clarityId": "y6bwgxt2sr", "hostname": "local-ai-video-studio.sassmaker.com", "tag": "local-ai-video-studio", "wiredFiles": ["local-ai-video-studio/site/index.html"], "reason": "Clarity is limited to the public informational site; the native local media application remains telemetry-free." },
+    { "id": "field-track", "name": "Field Track", "repo": "field-track", "clarityId": "y6bwivrpqg", "hostname": "field-track.sassmaker.com", "wiredFiles": ["field-track/src/layouts/AppLayout.astro"], "reason": "Clarity covers only the credential-free synthetic manager demo; the public Worker has no production D1 binding and the native employee application is excluded." },
+    { "id": "reddit-insights", "name": "Reddit Insights", "repo": "reddit-insights", "clarityId": "y6bwkyh4qb", "hostname": "reddit-insights.highsignal.app", "tag": "reddit-insights", "wiredFiles": ["reddit-insights/scripts/build-pages.mjs"] },
+    { "id": "verified-bases", "name": "Verified Bases", "repo": "verified-bases", "clarityId": "y6bwnblvl4", "hostname": "github.com", "wiredFiles": [], "reason": "Retained-resource Worker with no visual public page to tag." },
+    { "id": "anchor", "name": "Anchor", "repo": "anchor", "clarityId": "y6bwr0anyd", "hostname": "anchor.significanthobbies.com", "tag": "anchor", "wiredFiles": ["ios-landings/src/lib/clarity.ts"], "surfaceOwner": "ios-landings" }
   ]
 }

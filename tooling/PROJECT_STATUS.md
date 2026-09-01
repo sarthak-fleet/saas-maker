@@ -1,6 +1,6 @@
 # SaaS Maker Tooling — PROJECT STATUS
 
-Last updated: 2026-08-30
+Last updated: 2026-09-01
 
 ## Why / What
 
@@ -33,6 +33,51 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-09-01 — Completed the signed-in Clarity project gap: created dedicated
+  projects for Live, High Signal, High Signal Podcasts, IssuePages, and Journal;
+  wired their owning public sources; and updated the registry to 56 distinct
+  IDs across 56 canonical products with every declared source verified and no
+  blocking findings. No analytics project was deleted, no additional terms
+  were accepted, and deployment remains a separate gate. Refs #63.
+- 2026-09-01 — Owner resolved the landing classification: Starboard, High
+  Signal, and Open Historia are the second `adopt` batch, leaving 9 adopt, 6
+  keep, 3 retire, and 0 undecided across the inventory. The owner also
+  confirmed there is no paid Tailwind Plus access; Preline or a better-fitting
+  maintained free upstream is the active web fallback. Refs #62, #80.
+- 2026-09-01 — Corrected issue #76's source ledger after an exact Fleet scan
+  found obsolete `data-compose="false"` flags on active consumers. Removed the
+  active opt-outs, regenerated Calorie from the shared iOS factory, added
+  late-strip composition to the hosted loader, and passed product-owned builds
+  plus a controlled 40-identity built-document composition matrix at 390, 768,
+  and 1440 px. Every checked document rendered one Ask AI surface and one
+  project strip inside one extension without the extension widening the
+  document; existing product-specific responsive receipts remain authoritative
+  for each host page. The only remaining source opt-out is in the
+  retired Protein Index repository, whose instructions require explicit
+  reactivation. Added a generic, credential-free source audit with five focused
+  tests; the caller-owned Site Health receipt now reproduces 51/52 visual
+  identities source-ready, 1/1 shared factory source-ready, one dated retired
+  exception, and zero blocking findings. No deployment ran. Refs #76.
+- 2026-09-01 — Qualified the newly wired App Health changelog, Web Playables
+  hub, Materia reference homepage, Mashup public proof, and CodeVetter
+  marketing homepage at 390, 768, and 1440 px. All five keep the shared footer
+  composed within the viewport and have no document-level horizontal overflow.
+  The check exposed and fixed a CodeVetter comparison-panel min-content width
+  defect, then passed after rebuild. No deployment ran. Refs #76.
+- 2026-09-01 — Reconciled the Clarity receipt against the current 56-entry
+  public catalog and the signed-in account inventory: 53 entries have an ID,
+  52 IDs are distinct, 36 public surfaces have source wiring, and the other 20
+  entries have explicit no-surface, privacy, retirement, or pending decisions.
+  Five account-side project creations remain: three absent projects plus clean
+  replacements for the shared Live and legacy High Signal IDs. No Clarity
+  project was created and no site was deployed. Refs #63.
+- 2026-08-31 — Revalidated the ratified direct free-model client standard across
+  all 56 canonical projects: 14 exact pinned SDK clients, 8 dated native or
+  product-boundary exceptions, 34 non-model callers, zero drift, zero
+  hand-written migration debt, and no blocking retired-gateway references.
+  Corrected the Tooling README's stale unratified wording and linked the
+  separately approval-gated Free AI decommission runbook. No deploy, DNS,
+  credential, provider-resource, or data action ran. Refs #61.
 - 2026-08-30 — Retired the copy-to-fork `templates/ios-landing` template and
   left a pointer to the `ios-landings` factory in its place, promoted
   `templates/web-landing` as the canonical web starting point, and recorded the

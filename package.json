@@ -19,6 +19,7 @@
     "tooling:ai-clients": "cd tooling && node scripts/ai-client-audit.mjs --omit-private --output reports/ai-clients/latest.json",
     "tooling:credentials": "node tooling/scripts/credential-guard.mjs",
     "tooling:clarity": "cd tooling && node scripts/clarity-audit.mjs --scan-fleet --omit-private",
+    "tooling:footers": "node tooling/scripts/footer-source-audit.mjs --manifest ../site-health/apps/backend/config/footer-surfaces.json --fleet-root .. --check",
     "deploy:directory": "pnpm deploy:guard && pnpm -F @saas-maker/landing-page run deploy",
     "deploy:api": "pnpm deploy:guard && pnpm -F @saas-maker/api run deploy",
     "deploy:cockpit": "pnpm deploy:guard && pnpm -F @saas-maker/dashboard run deploy",

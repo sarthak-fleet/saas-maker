@@ -653,7 +653,7 @@ function renderText(report, { compact = false } = {}) {
   const lines = [
     `Clarity registry audit — receipt updated ${report.registry.updatedAt}${report.strict ? ' (strict)' : ''}`,
     `${report.registry.projects} recorded product(s), ${report.registry.distinctClarityIds} distinct Clarity project(s), `
-    + `${report.registry.noSurface} with no surface`,
+    + `${report.registry.noSurface} with no Clarity ID`,
     report.summary.verifiedAgainstSource
       ? 'Every claim was verified against the source it names.'
       : 'Claims were NOT verified against source: no Fleet checkout available.',
@@ -662,7 +662,7 @@ function renderText(report, { compact = false } = {}) {
   if (!compact) {
     lines.push('', 'Per project:');
     for (const result of report.results) {
-      const state = result.clarityId ?? 'no surface';
+      const state = result.clarityId ?? 'no Clarity ID';
       const flag = result.findings.length > 0 ? `  <- ${[...new Set(result.findings)].join(', ')}` : '';
       lines.push(`  ${result.id.padEnd(22)} ${String(state).padEnd(12)} ${result.wiredFiles.join(', ')}${flag}`);
     }

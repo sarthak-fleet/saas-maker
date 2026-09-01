@@ -106,6 +106,18 @@ test('browser entrypoint bundles all five provider artwork files', async () => {
   assert.doesNotMatch(bundle, /createProviderIcon/);
 });
 
+test('hosted loader composes a project strip that mounts after Ask AI', async () => {
+  const loader = await readFile(
+    new URL('../../../apps/showcase/src/pages/ai-chat-footer.js.ts', import.meta.url),
+    'utf8'
+  );
+
+  assert.match(loader, /const compose = \(\) =>/);
+  assert.match(loader, /new MutationObserver/);
+  assert.match(loader, /observer\.observe\(document\.body, \{ childList: true, subtree: true \}\)/);
+  assert.match(loader, /script\.dataset\.compose === 'false'/);
+});
+
 for (const provider of DEFAULT_PROVIDERS) {
   test(`${provider} source artwork is a retained JPEG asset`, async () => {
     const artwork = await readFile(

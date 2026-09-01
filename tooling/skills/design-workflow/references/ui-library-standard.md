@@ -25,6 +25,12 @@ Tailwind Plus is lawfully available:
 - Blocks: https://preline.co/blocks/
 - License: https://preline.co/license.html
 
+**Current access decision (2026-09-01):** the owner confirmed there is no paid
+Tailwind Plus access. Until that changes, treat proprietary Tailwind Plus
+source as unavailable. Start deficient web surfaces from Preline's free catalog
+or another maintained free upstream that materially fits the product better,
+with the exact source and license recorded in the design receipt.
+
 These libraries provide interface structure and behavior, not Fleet identity.
 Adapt the selected source with the product's real content, semantic tokens,
 typography, spacing, imagery, and distinctive product proof. The result must

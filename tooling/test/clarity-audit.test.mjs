@@ -272,29 +272,25 @@ test('omitPrivate counts private repositories without naming them', () => {
   assert.equal(JSON.stringify(report.results).includes('beta'), false);
 });
 
-test('the shipped registry records both live contract violations with an exact fix', () => {
+test('the shipped registry has distinct, wired IDs for the five resolved projects', () => {
   const violations = shipped.projects.filter((entry) => entry.violation);
-  assert.deepEqual(
-    violations.map((entry) => [entry.id, entry.violation.code]),
-    [
-      ['high-signal', 'LEGACY_SHARED_ID'],
-      ['live', 'SHARED_CLARITY_ID'],
-    ]
+  assert.deepEqual(violations, []);
+
+  const resolved = Object.fromEntries(
+    shipped.projects
+      .filter((entry) => ['high-signal', 'issue-pages', 'journal', 'live', 'on-record'].includes(entry.id))
+      .map((entry) => [entry.id, entry.clarityId])
   );
-  assert.match(
-    violations.find((entry) => entry.id === 'live').violation.fix,
-    /live\/src\/app\/layout\.tsx/u
-  );
-  assert.match(
-    violations.find((entry) => entry.id === 'high-signal').violation.fix,
-    /high-signal\/apps\/web\/src\/app\/layout\.tsx/u
-  );
+  assert.deepEqual(resolved, {
+    'high-signal': 'ybcgyx9ugh',
+    'issue-pages': 'ybch2c99wz',
+    journal: 'ybcifeb3uv',
+    live: 'ybcglnzl4t',
+    'on-record': 'ybch0p6cta',
+  });
 
   const findings = findRegistryViolations(shipped);
-  assert.deepEqual(
-    findings.map((entry) => `${entry.code}:${entry.project}`).sort(),
-    ['LEGACY_SHARED_ID:high-signal', 'SHARED_CLARITY_ID:live', 'SHARED_CLARITY_ID:significanthobbies']
-  );
+  assert.deepEqual(findings, []);
 });
 
 test('the snippet template ships no Clarity ID and demands both substitutions', () => {

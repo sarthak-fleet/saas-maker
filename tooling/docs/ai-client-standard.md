@@ -84,3 +84,6 @@ locally when a credential finding needs a file path.
 
 Production deploys, credential changes, provider-resource deletion, DNS
 changes, and gateway decommissioning remain separate operational actions.
+The non-executing, approval-gated decommission runbook belongs to the retiring
+Free AI product at
+[`docs/operations/decommission.md`](https://github.com/sass-maker/free-ai/blob/main/docs/operations/decommission.md).

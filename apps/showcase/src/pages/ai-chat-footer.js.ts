@@ -193,18 +193,29 @@ const source = `(() => {
     for (const attribute of ['label', 'prompt', 'providers', 'theme']) {
       if (script.dataset[attribute]) footer.setAttribute(attribute, script.dataset[attribute]);
     }
-    const strip = document.querySelector('portfolio-project-strip');
-    if (!strip || script.dataset.compose === 'false') {
-      if (!footer.isConnected) document.body.append(footer);
-      return;
-    }
-    const extension = document.querySelector('fleet-footer-extension') || document.createElement('fleet-footer-extension');
-    footer.setAttribute('integrated', '');
-    footer.slot = 'ai';
-    strip.setAttribute('integrated', '');
-    strip.slot = 'projects';
-    extension.append(footer, strip);
-    if (!extension.isConnected) document.body.append(extension);
+    const compose = () => {
+      const strip = document.querySelector('portfolio-project-strip');
+      if (!strip || script.dataset.compose === 'false') return false;
+      const extension = document.querySelector('fleet-footer-extension') || document.createElement('fleet-footer-extension');
+      footer.setAttribute('integrated', '');
+      footer.slot = 'ai';
+      strip.setAttribute('integrated', '');
+      strip.slot = 'projects';
+      extension.append(footer, strip);
+      if (!extension.isConnected) document.body.append(extension);
+      return true;
+    };
+    if (compose()) return;
+    if (!footer.isConnected) document.body.append(footer);
+    if (script.dataset.compose === 'false') return;
+    let stopWaiting = 0;
+    const observer = new MutationObserver(() => {
+      if (!compose()) return;
+      observer.disconnect();
+      window.clearTimeout(stopWaiting);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    stopWaiting = window.setTimeout(() => observer.disconnect(), 10000);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
   else mount();

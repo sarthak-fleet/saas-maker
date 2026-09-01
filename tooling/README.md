@@ -70,13 +70,17 @@ node scripts/audit.mjs --mode performance --runs 3
 node scripts/ahrefs-site-audit-health.mjs
 node scripts/ai-client-audit.mjs --check
 node scripts/clarity-audit.mjs --check
+node scripts/footer-source-audit.mjs --manifest <file> --fleet-root <dir> --check
 ```
 
 `ai-client-audit.mjs` reports, per supplied project, how that project calls a
-hosted model and whether it matches the candidate canonical client. The
-standard in [`config/ai-client-standard.json`](config/ai-client-standard.json)
-is still unratified, so drift is reported and never enforced. The project list
-is an input; no private catalog is committed here. See
+hosted model and whether it matches the ratified direct free-model client
+standard in
+[`config/ai-client-standard.json`](config/ai-client-standard.json). Retired
+gateway references and credential literals are blocking; SDK drift and
+hand-written clients remain visible migration findings without making known debt
+look like a new regression. The project list is an input; no private catalog is
+committed here. See
 [`docs/ai-client-standard.md`](docs/ai-client-standard.md).
 
 `clarity-audit.mjs` reads the Microsoft Clarity receipt in
@@ -89,6 +93,16 @@ in another repository; once that fix lands the record goes stale and the audit
 fails until the receipt is updated. `--strict` fails on every finding. The
 receipt records decisions that have been made, not the private catalog, and
 `--omit-private` keeps non-public repositories out of a committed report.
+
+`footer-source-audit.mjs` reads a caller-owned manifest of relative source
+paths and verifies that each named browser surface loads the project strip
+before Ask AI, carries both loaders, and has no active `data-compose=false`
+opt-out. Dated retirement exceptions stay visible and become blocking when
+their recorded debt disappears, preventing stale exceptions. The exact Fleet
+surface receipt remains beside Site Health's private canonical catalog rather
+than being duplicated in this public repository. From the SaaS Maker root,
+`pnpm tooling:footers` runs that Fleet-owned receipt when the sibling checkout
+is available.
 
 `ahrefs-site-audit-health.mjs` reads the sibling Site Health brand catalog
 and crawls each root. Ahrefs Health Scores are optional and fail closed

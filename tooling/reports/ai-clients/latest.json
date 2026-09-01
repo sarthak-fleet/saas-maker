@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "schema": "fleet.ai-client-audit.v1",
-  "generatedAt": "2026-08-30T11:56:34.093Z",
+  "generatedAt": "2026-08-31T17:19:22.662Z",
   "standard": {
     "status": "ratified",
     "ratifiedAt": "2026-08-30",
@@ -30,7 +30,7 @@
   },
   "providerHosts": {
     "note": "providerHostFiles counts files that contain a provider-host string. providerCallSites counts the subset the classifier is willing to call a request target. Direct call sites are routing evidence, not gateway bypasses; the raw mention count remains visible.",
-    "mentionFiles": 35,
+    "mentionFiles": 34,
     "callSiteProjects": [
       "codevetter",
       "free-ai",
@@ -442,7 +442,7 @@
       "declared": [],
       "evidence": {
         "manifests": 2,
-        "filesScanned": 56,
+        "filesScanned": 59,
         "truncated": false,
         "gatewayHostFiles": 0,
         "providerHostFiles": 0,
@@ -522,16 +522,16 @@
       "declared": [],
       "evidence": {
         "manifests": 4,
-        "filesScanned": 854,
+        "filesScanned": 862,
         "truncated": false,
         "gatewayHostFiles": 0,
-        "providerHostFiles": 9,
-        "providerHostMentions": 21,
+        "providerHostFiles": 8,
+        "providerHostMentions": 18,
         "providerCallSiteFiles": 1,
         "providerCallSites": 2,
         "providerHostBreakdown": {
           "call-site": 2,
-          "byo-key-config": 6,
+          "byo-key-config": 3,
           "non-inference": 2,
           "placeholder": 0,
           "test": 10,
@@ -1564,7 +1564,7 @@
       "declared": [],
       "evidence": {
         "manifests": 4,
-        "filesScanned": 126,
+        "filesScanned": 127,
         "truncated": false,
         "gatewayHostFiles": 0,
         "providerHostFiles": 0,

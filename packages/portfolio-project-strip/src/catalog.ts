@@ -156,7 +156,7 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "id": "field-track",
     "name": "Field Track",
     "url": "https://field-track.sassmaker.com",
-    "description": "An interactive manager dashboard for freshness-aware field location operations, shown with clearly labeled synthetic employees and routes.",
+    "description": "A synthetic manager dashboard for continuous, administrator-enrolled Android field tracking, freshness-aware locations, and retained route review.",
     "tier": "active",
     "priority": "P2",
     "category": "product",
@@ -180,6 +180,21 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "pillarId": "build",
     "domains": [
       "ai-gateway.sassmaker.com"
+    ]
+  },
+  {
+    "id": "on-record",
+    "name": "High Signal Podcasts",
+    "url": "https://podcasts.highsignal.app",
+    "description": "Source-backed podcast intelligence with attributable claims and recommendations linked to the original episode.",
+    "tier": "active",
+    "priority": "P2",
+    "category": "product",
+    "maturity": "public-ready",
+    "spotlight": false,
+    "pillarId": "learn",
+    "domains": [
+      "podcasts.highsignal.app"
     ]
   },
   {
@@ -216,7 +231,7 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "id": "karte",
     "name": "Karte",
     "url": "https://karte.cc",
-    "description": "An AI link-in-bio that turns a profile into a conversation.",
+    "description": "A creator-owned public profile that answers visitor questions and preserves context for better inbound.",
     "tier": "secondary",
     "priority": "P2",
     "category": "personal",
@@ -396,7 +411,7 @@ export const DEFAULT_PROJECTS: readonly PortfolioProject[] = [
     "id": "rolepatch",
     "name": "RolePatch",
     "url": "https://rolepatch.com",
-    "description": "AI-assisted resume tailoring, role research, and interview preparation.",
+    "description": "Evidence-bound resume tailoring and review-first application preparation for one specific job.",
     "tier": "secondary",
     "priority": "P2",
     "category": "personal",
