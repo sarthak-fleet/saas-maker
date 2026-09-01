@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const FLEET_ROOT = resolve(SCRIPT_DIR, '../../../..');
+const FLEET_ROOT = resolve(SCRIPT_DIR, '../../../../..');
 const DEFAULT_REGISTRY = resolve(
   FLEET_ROOT,
   'site-health/apps/backend/config/projects.json',

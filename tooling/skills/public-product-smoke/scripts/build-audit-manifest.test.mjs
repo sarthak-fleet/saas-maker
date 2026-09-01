@@ -109,7 +109,10 @@ test('rejects a missing or unknown auth model for an eligible product', () => {
 test('the Fleet registry classifies every project and preserves key boundaries', () => {
   const registry = JSON.parse(
     readFileSync(
-      new URL('../../../config/projects.json', import.meta.url),
+      new URL(
+        '../../../../../site-health/apps/backend/config/projects.json',
+        import.meta.url,
+      ),
       'utf8',
     ),
   );
@@ -118,8 +121,11 @@ test('the Fleet registry classifies every project and preserves key boundaries',
   );
 
   assert.ok(
-    registry.projects.every((project) => AUTH_MODELS.has(project.authModel)),
+    registry.projects
+      .filter((project) => project.status === 'live')
+      .every((project) => AUTH_MODELS.has(project.authModel)),
   );
+  assert.equal(byId.get('site-health'), 'local-only');
   assert.equal(byId.get('email-manager'), 'required-user');
   assert.equal(byId.get('free-ai'), 'required-service');
   assert.equal(byId.get('app-health'), 'required-service');

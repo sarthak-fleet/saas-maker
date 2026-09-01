@@ -14,10 +14,10 @@ possible.
 From the Fleet root, generate the canonical target manifest:
 
 ```bash
-node skills/public-product-smoke/scripts/build-audit-manifest.mjs
-node skills/public-product-smoke/scripts/build-audit-manifest.mjs \
+node saas-maker/tooling/skills/public-product-smoke/scripts/build-audit-manifest.mjs
+node saas-maker/tooling/skills/public-product-smoke/scripts/build-audit-manifest.mjs \
   --exclude fleet-workspace,drank,protein-index
-node skills/public-product-smoke/scripts/build-audit-manifest.mjs \
+node saas-maker/tooling/skills/public-product-smoke/scripts/build-audit-manifest.mjs \
   --only pace,starboard --format table
 ```
 
