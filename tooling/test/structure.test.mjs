@@ -23,6 +23,7 @@ const activeScripts = new Set([
   'fleet-deploy-guard.sh',
   'fleet-health.sh',
   'fleet-init.sh',
+  'footer-source-audit.mjs',
   'geo-observatory-record.mjs',
   'git-health.sh',
   'github-priority-queue.mjs',
