@@ -20,8 +20,13 @@
  * Required checks: llms.txt, /api/ai, homepage markdown, not-SPA-fake,
  * robots (User-agent + Sitemap line), AI-crawler access (GPTBot/ClaudeBot/
  * OAI-SearchBot/PerplexityBot not disallowed), sitemap (real XML, same-host
- * <loc> entries). If /api/ai advertises llmsFull, that URL must resolve.
+ * <loc> entries), name agreement across the agent channels, and HEAD/GET
+ * parity. If /api/ai advertises llmsFull, that URL must resolve.
  * Bonus (reported, not required): /skill.md, IndexNow key file.
+ *
+ * Presence is not identity: the audit also checks that /llms.txt, /api/ai and
+ * JSON-LD AGREE on the product name, because eight surfaces scored S-tier while
+ * publishing a name the fleet has no record of.
  */
 
 import { readFileSync, existsSync } from 'node:fs';
@@ -35,6 +40,15 @@ import {
   configuredProbeConcurrency,
   withTransientRetries,
 } from '../../../lib/agent-probe-retry.mjs';
+import {
+  apiAiName,
+  canonicalIdentityFor,
+  gradeNameAgreement,
+  jsonLdName,
+  llmsName,
+  loadCanonicalIdentities,
+} from '../../../lib/entity-name-agreement.mjs';
+import { gradeHeadParity } from '../../../lib/head-parity.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // scripts → agent-ready → skills → tooling → saas-maker → fleet root
@@ -51,6 +65,12 @@ const MAX_PUBLIC_ROUTES = 50_000;
 const MAX_SITEMAP_BYTES = 50 * 1024 * 1024;
 const MAX_ROUTE_PROBES = 250;
 const MAX_CATALOG_SURFACES = 1_000;
+// How many sitemap routes the HEAD/GET parity check compares, on top of the
+// four fixed agent endpoints (whose GET statuses this audit already has). A
+// HEAD/GET asymmetry is a routing property of the host rather than of one page,
+// so a small deterministic sample finds it without doubling the 250-route
+// Markdown sweep.
+const MAX_HEAD_ROUTE_PROBES = 10;
 const PROBE_CONCURRENCY = configuredProbeConcurrency(
   process.env.FLEET_AGENT_PROBE_CONCURRENCY,
 );
@@ -70,6 +90,8 @@ const REQUIRED_CHECKS = [
   'sitemap',
   'route_markdown',
   'catalog_integrity',
+  'name_agreement',
+  'head_parity',
 ];
 
 async function main() {
@@ -82,12 +104,13 @@ async function main() {
   }
 
   const indexNowKey = loadIndexNowKey();
+  const identities = loadCanonicalIdentities();
 
   const results = [];
   for (const t of targets) {
     process.stderr.write(`Auditing ${t.name} (${t.origin})…\n`);
     try {
-      results.push(await auditOrigin(t, { indexNowKey }));
+      results.push(await auditOrigin(t, { indexNowKey, identities }));
     } catch (err) {
       results.push({
         name: t.name,
@@ -188,7 +211,12 @@ function summarizeResult(result) {
  * the general-purpose --json response exceed child-process output buffers.
  */
 function metricResult(result) {
-  const includedData = new Set(['route_markdown', 'catalog_integrity']);
+  const includedData = new Set([
+    'route_markdown',
+    'catalog_integrity',
+    'name_agreement',
+    'head_parity',
+  ]);
   return {
     ...summarizeResult(result),
     pass: result.pass,
@@ -251,7 +279,7 @@ function resolveTargets(args) {
       console.error(`Product ${p.id} has no url in the registry`);
       process.exit(2);
     }
-    return [{ name: p.name || p.id, origin }];
+    return [{ name: p.name || p.id, origin, id: p.id }];
   }
 
   if (args.all) {
@@ -264,10 +292,10 @@ function resolveTargets(args) {
 }
 
 /**
- * @param {{ name: string, origin: string }} target
+ * @param {{ name: string, origin: string, id?: string }} target
  */
-async function auditOrigin(target, { indexNowKey } = {}) {
-  const { origin, name } = target;
+async function auditOrigin(target, { indexNowKey, identities } = {}) {
+  const { origin, name, id } = target;
   const checks = {};
 
   // --- llms.txt ---
@@ -335,6 +363,31 @@ async function auditOrigin(target, { indexNowKey } = {}) {
   const homepage = await probe(`${origin}/`, { accept: 'text/html' });
   checks.jsonld = gradeJsonLd(homepage);
 
+  // --- name agreement: do the agent channels declare the canonical name? ---
+  const canonical = identities
+    ? canonicalIdentityFor(identities, { id, origin })
+    : null;
+  checks.name_agreement = gradeNameAgreement({
+    canonical,
+    observed: {
+      'llms.txt': llmsName(llms.ok && !llms.isHtml ? llms.bodyFull : null),
+      '/api/ai': apiAiName(apiAi.ok && !apiAi.isHtml ? apiAi.bodyFull : null),
+      'json-ld': jsonLdName(homepage.isHtml ? homepage.bodyFull : null),
+    },
+  });
+
+  // --- HEAD/GET parity on already-probed URLs ---
+  checks.head_parity = await gradeHeadParity({
+    probes: await headParityTargets(
+      origin,
+      { llms, apiAi, robots, homepage },
+      sitemap,
+      cachedProbe,
+    ),
+    head: (url, accept) => probeHead(url, accept),
+    concurrency: PROBE_CONCURRENCY,
+  });
+
   if (indexNowKey) {
     const keyProbe = await probe(`${origin}/${indexNowKey}.txt`);
     const keyOk = keyProbe.ok && !keyProbe.isHtml && keyProbe.bodyFull?.trim() === indexNowKey;
@@ -353,18 +406,76 @@ async function auditOrigin(target, { indexNowKey } = {}) {
   const passCount = applicable.filter((k) => checks[k]?.status === 'pass').length;
   const failCount = applicable.filter((k) => checks[k]?.status === 'fail').length;
   const score = Math.round((passCount / applicable.length) * 100);
-  const tier =
-    failCount === 0 ? 'S' : passCount >= 5 ? 'A' : passCount >= 3 ? 'B' : 'C';
+  // A surface publishing a name that exists in no fleet record is not partially
+  // agent-ready: an agent that reads it resolves to a different product, so the
+  // rest of the surface being perfect does not help. That floors the tier rather
+  // than costing one check (sass-maker/saas-maker#94).
+  const identityConflict = checks.name_agreement?.data?.identityConflict === true;
+  const tier = identityConflict
+    ? 'C'
+    : failCount === 0
+      ? 'S'
+      : passCount >= 5
+        ? 'A'
+        : passCount >= 3
+          ? 'B'
+          : 'C';
 
   return {
     name,
     origin,
+    ...(id ? { id } : {}),
     tier,
     score,
     pass: passCount,
     fail: failCount,
     checks,
   };
+}
+
+/**
+ * URLs to compare HEAD against GET for.
+ *
+ * Every pair differs only in the method: the HEAD carries the same Accept the
+ * GET carried. Comparing a Markdown-negotiated GET against a bare HEAD reports
+ * negotiation as a routing defect — two fleet surfaces answer 404 to
+ * `Accept: text/markdown` on a route that exists, which is a negotiation
+ * choice, not the missing-asset failure this check is for.
+ *
+ * The four fixed agent endpoints reuse statuses already collected, so they cost
+ * one HEAD each and no extra GET. The route sample is the only place a GET is
+ * re-issued (bare, as a crawler sends it) and it is capped at
+ * MAX_HEAD_ROUTE_PROBES routes drawn from the same deterministic sample the
+ * Markdown sweep used.
+ */
+async function headParityTargets(origin, endpoints, sitemap, cachedProbe) {
+  const targets = [
+    {
+      url: `${origin}/`,
+      label: '/',
+      status: endpoints.homepage?.status,
+      accept: 'text/html',
+    },
+    { url: `${origin}/llms.txt`, label: '/llms.txt', status: endpoints.llms?.status },
+    {
+      url: `${origin}/api/ai`,
+      label: '/api/ai',
+      status: endpoints.apiAi?.status,
+      accept: 'application/json',
+    },
+    { url: `${origin}/robots.txt`, label: '/robots.txt', status: endpoints.robots?.status },
+  ];
+
+  const sampled = evenlySample(
+    evenlySample(sitemap.urls ?? [], MAX_ROUTE_PROBES),
+    MAX_HEAD_ROUTE_PROBES,
+  );
+  for (const url of sampled) {
+    if (targets.some((target) => target.url === url)) continue;
+    const response = await cachedProbe(url);
+    targets.push({ url, label: new URL(url).pathname, status: response.status });
+  }
+  return targets;
 }
 
 function gradeAgentText(probe, { requireHash }) {
@@ -1081,6 +1192,38 @@ async function probe(url, options = {}) {
   return withTransientRetries(() => probeOnce(url, options));
 }
 
+/**
+ * Status-only HEAD probe. No body is read, so this is the cheapest request the
+ * audit makes; it exists to catch hosts that resolve a path for GET but not for
+ * HEAD (sass-maker/saas-maker#93).
+ */
+async function probeHead(url, accept) {
+  return withTransientRetries(async () => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+    try {
+      const res = await fetch(url, {
+        method: 'HEAD',
+        redirect: 'follow',
+        signal: ctrl.signal,
+        headers: {
+          'User-Agent': UA,
+          ...(accept ? { Accept: accept } : {}),
+        },
+      });
+      return {
+        ok: res.ok,
+        status: res.status,
+        retryAfter: res.headers.get('retry-after'),
+      };
+    } catch (err) {
+      return { ok: false, status: 0, error: String(err?.message || err) };
+    } finally {
+      clearTimeout(timer);
+    }
+  });
+}
+
 async function probeOnce(url, { accept, retainFullBody = false } = {}) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
@@ -1161,9 +1304,11 @@ function printScoreboard(results) {
       pad('robots', 7) +
       pad('ai-ok', 6) +
       pad('sitemap', 8) +
+      pad('name', 6) +
+      pad('head', 6) +
       'jsonld'
   );
-  console.log('-'.repeat(104));
+  console.log('-'.repeat(116));
 
   for (const r of sorted) {
     if (r.error) {
@@ -1186,6 +1331,8 @@ function printScoreboard(results) {
         pad(mark('robots'), 7) +
         pad(mark('ai_access'), 6) +
         pad(mark('sitemap'), 8) +
+        pad(mark('name_agreement'), 6) +
+        pad(mark('head_parity'), 6) +
         mark('jsonld')
     );
   }

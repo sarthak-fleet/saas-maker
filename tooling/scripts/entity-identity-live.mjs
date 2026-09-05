@@ -39,6 +39,13 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+import {
+  apiAiName,
+  classifyName,
+  jsonLdNames,
+  llmsName,
+} from '../lib/entity-name-agreement.mjs';
+
 const repoRoot = path.resolve(import.meta.dirname, '../..');
 const fleetRoot = path.resolve(repoRoot, '..');
 const catalogPath = path.resolve(
@@ -66,56 +73,11 @@ async function get(url) {
   }
 }
 
-/** llms.txt declares the product in its first markdown heading. */
-function llmsName(text) {
-  if (!text) return null;
-  const line = text.split('\n').find((l) => l.trim().startsWith('#'));
-  return line ? line.replace(/^#+\s*/, '').trim() || null : null;
-}
-
-function apiName(text) {
-  if (!text) return null;
-  try {
-    const data = JSON.parse(text);
-    return data.name ?? data.product?.name ?? null;
-  } catch {
-    return null;
-  }
-}
-
 /**
- * The name a model reads from markup is the WebSite / app node — NOT the first
- * "name" in the document, which is usually the Person node for the author and
- * will produce a false mismatch on every surface that credits one.
+ * Name extraction and drift classification are shared with agent-ready's
+ * auditor (tooling/lib/entity-name-agreement.mjs) so the two tools cannot
+ * disagree about what a surface declares or how a mismatch is classified.
  */
-function jsonLdNames(html) {
-  if (!html) return [];
-  const names = [];
-  const blocks = html.matchAll(
-    /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
-  );
-  for (const [, body] of blocks) {
-    let data;
-    try {
-      data = JSON.parse(body);
-    } catch {
-      continue;
-    }
-    const stack = [data];
-    while (stack.length) {
-      const node = stack.pop();
-      if (Array.isArray(node)) stack.push(...node);
-      else if (node && typeof node === 'object') {
-        const types = [node['@type']].flat().filter(Boolean);
-        if (types.some((t) => ['WebSite', 'SoftwareApplication', 'WebApplication'].includes(t))) {
-          if (node.name) names.push(String(node.name));
-        }
-        stack.push(...Object.values(node));
-      }
-    }
-  }
-  return names;
-}
 
 /** Fixed, not random: a stable control path keeps runs comparable. */
 const CONTROL_PATH = 'a7f3c9';
@@ -241,13 +203,12 @@ async function probeSurface(surface) {
 
   const observed = {
     'llms.txt': llmsName(llms),
-    '/api/ai': apiName(api),
+    '/api/ai': apiAiName(api),
     'json-ld': jsonLdNames(html)[0] ?? null,
   };
   const title = pageTitle(html);
   const titleDrift = titleVerdict(title, surface.name, surface.aliases);
 
-  const known = new Set([surface.name, ...surface.aliases].map((n) => n.toLowerCase()));
   const drift = Object.entries(observed).filter(([, value]) => value && value !== surface.name);
 
   return {
@@ -255,19 +216,15 @@ async function probeSurface(surface) {
     observed,
     title,
     drift: drift
-      .map(([channel, value]) => {
+      .map(([channel, value]) => ({
         // Case is not cosmetic in a brand name: "posttrainllm" is the repo
-        // slug leaking into an agent surface, not the product. Classify it
-        // rather than normalizing it away, or a focus-tier product publishing
-        // its slug to every agent endpoint reads as passing.
-        const kind =
-          value.toLowerCase() === surface.name.toLowerCase()
-            ? 'casing'
-            : known.has(value.toLowerCase())
-              ? 'retired-alias'
-              : 'unrecorded';
-        return { channel, value, kind };
-      })
+        // slug leaking into an agent surface, not the product. Classified
+        // rather than normalized away, or a focus-tier product publishing its
+        // slug to every agent endpoint reads as passing.
+        channel,
+        value,
+        kind: classifyName(value, surface),
+      }))
       .concat(titleDrift ?? []),
     pricingState: surface.pricing.state,
     pricingProbe,
