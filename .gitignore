@@ -37,3 +37,5 @@ cockroach-sql-*/
 *.png
 project-idea-dump.md
 .fallow/
+# Local harness state (Paperclip spend-guard, run scratch) - not a work product
+.fleet-local/
