@@ -6,6 +6,7 @@
 // - Returns JSON errors for unknown /api/* paths.
 // - Adds rate-limit headers to API responses.
 // - Serves /api/ai with rate-limit headers (static asset passthrough with headers).
+// - Resolves HEAD exactly like GET, then strips the body (issue #93).
 
 const SITE_URL = 'https://sassmaker.com';
 const RATE_LIMIT = 120;
@@ -153,7 +154,7 @@ function addRateLimitHeaders(headers: Headers): void {
   headers.set('RateLimit-Reset', String(RATE_LIMIT_WINDOW));
 }
 
-function markdown404(pathname: string, method: string): Response {
+function markdown404(pathname: string): Response {
   const path = normalizePath(pathname);
   const body = `# 404 — Not Found
 
@@ -167,7 +168,7 @@ function markdown404(pathname: string, method: string): Response {
 - [Agent catalog (JSON)](${SITE_URL}/api/ai)
 - [OpenAPI spec](${SITE_URL}/openapi.json)
 `;
-  return new Response(method === 'HEAD' ? null : body, {
+  return new Response(body, {
     status: 404,
     headers: {
       'content-type': 'text/markdown; charset=utf-8',
@@ -177,7 +178,7 @@ function markdown404(pathname: string, method: string): Response {
   });
 }
 
-function html404(_request: Request): Response {
+function html404(): Response {
   const body = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>404 — Not Found</title></head><body><h1>404 — Not Found</h1><p>The page you requested does not exist.</p></body></html>`;
   return new Response(body, {
     status: 404,
@@ -203,13 +204,12 @@ function jsonError(status: number, code: string, message: string, path: string):
   });
 }
 
-export const onRequest: PagesFunction = async (context) => {
-  const { request } = context;
-
-  if (request.method !== 'GET' && request.method !== 'HEAD') {
-    return context.next();
-  }
-
+// Every request reaching this handler is a GET (HEAD is rewritten by onRequest
+// below), so the asset lookups and body inspections here always see a body.
+async function handleGet(
+  context: EventContext<unknown, string, Record<string, unknown>>,
+  request: Request
+): Promise<Response> {
   const url = new URL(request.url);
   const pathname = url.pathname;
 
@@ -226,12 +226,12 @@ export const onRequest: PagesFunction = async (context) => {
 
   // /api/ai — serve from static asset with rate-limit headers.
   if (pathname === '/api/ai') {
-    const response = await context.next();
+    const response = await context.next(request);
     if (response.status === 200) {
       const headers = new Headers(response.headers);
       addRateLimitHeaders(headers);
       headers.set('access-control-allow-origin', '*');
-      return new Response(request.method === 'HEAD' ? null : response.body, {
+      return new Response(response.body, {
         status: response.status,
         statusText: response.statusText,
         headers,
@@ -251,7 +251,7 @@ export const onRequest: PagesFunction = async (context) => {
     pathname.startsWith('/_next/') ||
     (pathname.includes('.') && !pathname.endsWith('.md'))
   ) {
-    return context.next();
+    return context.next(request);
   }
 
   // Accept: text/markdown negotiation for HTML pages that have a .md alternate.
@@ -270,7 +270,7 @@ export const onRequest: PagesFunction = async (context) => {
           headers.set('content-type', 'text/markdown; charset=utf-8');
           headers.set('vary', 'Accept, Accept-Encoding');
           headers.set('x-content-type-options', 'nosniff');
-          return new Response(request.method === 'HEAD' ? null : mdResponse.body, {
+          return new Response(mdResponse.body, {
             status: 200,
             headers,
           });
@@ -279,15 +279,15 @@ export const onRequest: PagesFunction = async (context) => {
     }
   }
 
-  const response = await context.next();
+  const response = await context.next(request);
   const contentType = response.headers.get('content-type') ?? '';
 
   // Agent-friendly 404 with markdown recovery body.
   if (response.status === 404 && !pathname.startsWith('/api/')) {
     if (wantsMarkdown(request)) {
-      return markdown404(pathname, request.method);
+      return markdown404(pathname);
     }
-    return html404(request);
+    return html404();
   }
 
   // Soft-404 detection: Cloudflare Pages serves index.html with 200 for unknown
@@ -305,9 +305,9 @@ export const onRequest: PagesFunction = async (context) => {
     if (!body.includes(pathCanonical)) {
       // The canonical URL doesn't match the request path → soft-404
       if (wantsMarkdown(request)) {
-        return markdown404(pathname, request.method);
+        return markdown404(pathname);
       }
-      return html404(request);
+      return html404();
     }
     // Valid page — reconstruct with Vary header
     const headers = new Headers(response.headers);
@@ -333,4 +333,31 @@ export const onRequest: PagesFunction = async (context) => {
     statusText: response.statusText,
     headers,
   });
+}
+
+export const onRequest: PagesFunction = async (context) => {
+  const { request } = context;
+
+  if (request.method === 'GET') {
+    return handleGet(context, request);
+  }
+
+  // HEAD must answer with the same status and headers as GET. Resolving it as a
+  // GET keeps body-dependent logic (soft-404 detection, markdown negotiation)
+  // working, then the body is dropped for the HEAD response.
+  if (request.method === 'HEAD') {
+    const getRequest = new Request(request.url, {
+      method: 'GET',
+      headers: request.headers,
+      redirect: 'manual',
+    });
+    const response = await handleGet(context, getRequest);
+    return new Response(null, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+    });
+  }
+
+  return context.next();
 };
