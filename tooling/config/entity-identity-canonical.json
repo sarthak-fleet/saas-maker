@@ -1,0 +1,171 @@
+{
+  "$comment": "Canonical identity decisions for SAR-9. This file is the record of what was DECIDED and why; tooling/scripts/entity-identity-apply.mjs is what writes those decisions into site-health/apps/backend/config/projects.json. Add a decision here rather than hand-editing the catalog, so the reason a name changed survives the commit that changed it. Run the applier with --check in CI to detect drift back.",
+
+  "authorityOrder": {
+    "$comment": "When sources disagree on a product's public NAME, this is the tiebreak, highest first. It is not a preference — it is which source a model actually reads when it resolves the entity.",
+    "order": [
+      "deployed public surface (JSON-LD name / og:site_name / <title>)",
+      "the product repo's own README + landing source",
+      "geoIdentities registry",
+      "sassmaker.com directory projection",
+      "GitHub repo description",
+      "third-party directory listings"
+    ],
+    "note": "A completed, deployed, committed rename is not a two-source disagreement to escalate. It is internal records failing to follow the product. Escalate only when the live surface is itself ambiguous or the rename is not evidenced in the owning repo."
+  },
+
+  "rules": {
+    "registryDescriptionMirrorsPublic": {
+      "$comment": "geoIdentities entries carried no description field at all, which is why entity-identity-diff reported a description conflict on literally every surface: the registry had nothing to compare. The registry is the record third-party corrections quote from, so it has to carry the one-liner. Source of truth is projects[].public.description.",
+      "enabled": true
+    }
+  },
+
+  "pricingStates": {
+    "$comment": "What each pricing.state asserts. Written down because the honest answer to 'this product charges nothing today but promises nothing' looked like a schema gap, and it is not one: that is exactly 'published' pointing at the page that says so. Reaching for 'free' instead would convert a careful non-promise into a permanent commitment the product never made.",
+    "published": "A pricing/access declaration exists at `url`. Says nothing about the price itself — it says the answer is published, go read it. Correct for free-today-no-promise and for paid alike.",
+    "free": "The product asserts it is free as a positional claim, not merely priced at zero today. Only use where the surface itself makes that commitment.",
+    "not-declared": "No declaration exists on any public surface. This is a finding, not a resting state — a product a model cannot price is one it will hedge about.",
+    "not-applicable": "The product has no pricing surface by nature: a dataset, a CLI, an internal tool.",
+    "probe": "tooling/scripts/entity-identity-live.mjs fetches /pricing on every registry surface and flags states that disagree with what is live."
+  },
+
+  "decisions": [
+    {
+      "id": "email-manager",
+      "decidedAt": "2026-09-05",
+      "decidedBy": "SAR-9",
+      "name": "Kinetic",
+      "retireNameToAlias": true,
+      "canonicalUrl": "https://mail.significanthobbies.com",
+      "authority": "deployed public surface",
+      "evidence": [
+        "https://mail.significanthobbies.com and https://mail.sassmaker.com both return <title>Kinetic — Remember the email, not the exact words</title> (probed 2026-09-05)",
+        "email-manager/landing-astro/src/layouts/Layout.astro sets JSON-LD name, og:site_name and application-name to 'Kinetic', and SITE_URL to https://mail.significanthobbies.com",
+        "email-manager PR #48 merged from branch fix/kinetic-footer-csp-47"
+      ],
+      "rationale": "The rename shipped and is live on both hosts; only the internal records and the repo README still say 'Email Manager'. mail.sassmaker.com is an alias host, not the canonical origin — Layout.astro names significanthobbies as SITE_URL. The old name is kept as an alias so internal identity resolution unifies the two; aliases are internal-only, so this costs nothing and is worth keeping regardless of where the retired name survives externally.",
+      "openItem": "email-manager/README.md still opens with '# Email Manager'. That is a product-repo change and belongs in the owning repo's issues, not this catalog pass.",
+      "correction": "This rationale originally justified the alias by '~80 third-party listings from the 2026-07-17 run still assert it'. SAR-7 could not find evidence any July listing ever published — each confirmed destination returns the same hit count for a nonsense control as for a real query, i.e. the query echoed into the page. The alias decision is unchanged; only its stated reason was wrong, and it no longer rests on that premise. Corrected 2026-09-05 on evidence from agent 167eff46 (SAR-7 targets doc v2, section 0)."
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "decidedAt": "2026-09-05",
+      "decidedBy": "SAR-9",
+      "name": "Look Sideways",
+      "retireNameToAlias": true,
+      "canonicalUrl": "https://paths.significanthobbies.com",
+      "authority": "deployed public surface",
+      "evidence": [
+        "https://paths.significanthobbies.com returns <title>Look Sideways — The Path You Remember Is One of Many</title> (probed 2026-09-05)",
+        "what-it-takes-to-win/README.md opens '# Look Sideways'",
+        "commits e9fbf2c 'feat: refocus Look Sideways journey' and e19dd40 'Polish Look Sideways research surfaces'"
+      ],
+      "rationale": "Same shape as email-manager: a deliberate, committed, deployed rename that the registry and directory never followed. The repo directory name and GitHub repo slug stay what-it-takes-to-win — a repo slug is not a product name, and renaming the repo would break the repoUrl that currently agrees across all four sources.",
+      "note": "Found by this pass, not present in the SAR-7 handoff list.",
+      "externalWork": "None. SAR-7 confirmed that neither what-it-takes-to-win nor on-record appears anywhere in the recovered 2026-07-17 submission log — that payload was 23 products and included neither. There is no external listing asserting the retired name, so this rename carries no outreach work. Recorded 2026-09-05 so nobody goes looking for it."
+    },
+    {
+      "id": "saas-maker",
+      "decidedAt": "2026-09-05",
+      "decidedBy": "SAR-9",
+      "name": "SaaS Maker",
+      "addAliases": ["Foundry"],
+      "authority": "already canonical in every internal record",
+      "evidence": [
+        "https://sassmaker.com returns <title>SaaS Maker — Fleet products and shared tooling</title> (probed 2026-09-05)",
+        "registry, directory projection and GitHub already all say 'SaaS Maker'"
+      ],
+      "rationale": "No name change: this one was never wrong internally. 'Foundry' is recorded as an alias only so entity resolution unifies the two wherever the retired brand survives. geoIdentities aliases are consumed for internal identity resolution (tooling/preserved/legacy-fleet-tooling/lib/project-catalog.mjs) and are not published to any public surface, so this does not re-assert the retired brand anywhere a model reads.",
+      "externalWork": "Correcting the listings themselves is SAR-7's outreach, which quotes this record.",
+      "correction": "As with email-manager, the '~80 third-party listings from 2026-07-17' premise is withdrawn — SAR-7 found no evidence those listings ever published. The alias stands on its own merits. This also narrows the Foundry argument: the stale brand surviving in search indexes is self-inflicted rather than externally reinforced, which makes an apex reindex more likely to settle it on its own. Corrected 2026-09-05 on evidence from agent 167eff46."
+    },
+    {
+      "id": "on-record",
+      "decidedAt": "2026-09-05",
+      "decidedBy": "SAR-9",
+      "pricing": { "state": "published", "url": "https://podcasts.highsignal.app/pricing" },
+      "authority": "deployed public surface",
+      "evidence": [
+        "https://podcasts.highsignal.app/pricing returns 200 with <title>Access and pricing: High Signal Podcasts</title> and <h1>Browse the public index without an account or charge.</h1> (probed 2026-09-05)",
+        "page body: 'The website and public read-only API currently require no account, API key, subscription, or checkout. This describes the product today and does not promise a permanent pricing model.'",
+        "page body: 'The repository establishes no future plan, paid tier, or permanent free tier, so none is claimed here.'"
+      ],
+      "rationale": "'published' rather than 'free', and the distinction is the whole point. The page deliberately declines to promise a permanent free tier; recording 'free' would launder that careful non-promise into a commitment the product never made, and would be quoted back at it later. 'published' asserts only that the answer is declared and reachable, which is true and is what a model resolving the entity needs.",
+      "flaggedBy": "SAR-5 (comment 34157dd9, 2026-09-05) — found by hand while verifying URLs",
+      "note": "No name decision was open on this surface after all: registry, directory and live JSON-LD all already say 'High Signal Podcasts' with 'On the Record' as a recorded alias, so there was nothing here for a pricing edit to collide with."
+    },
+    {
+      "id": "rolepatch",
+      "decidedAt": "2026-09-05",
+      "decidedBy": "SAR-9",
+      "pricing": { "state": "published", "url": "https://rolepatch.com/pricing" },
+      "authority": "deployed public surface",
+      "evidence": [
+        "https://rolepatch.com/pricing returns 200 with <title>Pricing | RolePatch</title> (probed 2026-09-05)",
+        "page publishes three token packs with prices: Starter $5 / 10 tokens, Pro $12 / 30 tokens, Bulk $30 / 100 tokens",
+        "page body: 'No subscription. Buy packs when needed.' and a free reviewed workflow that spends no tokens"
+      ],
+      "rationale": "The most consequential of the three. This is a product that charges real money, carrying a registry state of 'not-declared' — a model asked what RolePatch costs had nothing authoritative to read. Found by the /pricing probe added to entity-identity-live.mjs in this pass, not by hand.",
+      "flaggedBy": "SAR-9 — pricing probe sweep, 2026-09-05"
+    },
+    {
+      "id": "pace",
+      "decidedAt": "2026-09-05",
+      "decidedBy": "SAR-9",
+      "pricing": { "state": "published", "url": "https://heypace.app/pricing" },
+      "authority": "deployed public surface",
+      "evidence": [
+        "https://heypace.app/pricing returns 200 with <title>Pricing — Pace</title> (probed 2026-09-05)",
+        "registry previously recorded the declaration URL as the bare origin https://heypace.app"
+      ],
+      "rationale": "State was already right; the URL pointed at the homepage rather than at the declaration. The field exists so a model can go read the pricing, so pointing it at the site root is a soft version of not declaring at all.",
+      "flaggedBy": "SAR-9 — pricing probe sweep, 2026-09-05"
+    }
+  ],
+
+  "verifiedNoChangeNeeded": [
+    {
+      "id": "pace",
+      "flaggedBy": "SAR-7 #3",
+      "finding": "2026-07-17 listings used the preview host pace-6xg.pages.dev",
+      "catalogState": "already correct — name 'HeyPace', origin https://heypace.app in both registry and directory",
+      "action": "external only (SAR-7)"
+    },
+    {
+      "id": "anime-list",
+      "flaggedBy": "SAR-7 #5",
+      "finding": "2026-07-17 listings used the retired name 'MAL Explorer'",
+      "catalogState": "already correct — name 'Anime List', with 'MAL Explorer' already present as a registry alias",
+      "action": "external only (SAR-7)"
+    },
+    {
+      "id": "free-ai",
+      "flaggedBy": "SAR-7 #5",
+      "finding": "2026-07-17 listings used the retired name 'AI Gateway'",
+      "catalogState": "already correct — name 'Free AI', with 'AI Gateway' already present as a registry alias",
+      "action": "external only (SAR-7)"
+    },
+    {
+      "id": "saas-maker-docs",
+      "flaggedBy": "SAR-7 #2",
+      "finding": "docs.sassmaker.com submitted to ~80 destinations; host is NXDOMAIN (confirmed 2026-09-05)",
+      "catalogState": "no such id exists in projects[] or geoIdentities, and no file in the fleet tree links to docs.sassmaker.com except the SAR-7 campaign record itself",
+      "action": "external only (SAR-7) — nothing to correct internally, the dead URL exists only in the July payload"
+    },
+    {
+      "id": "on-record",
+      "flaggedBy": "SAR-7 #6",
+      "finding": "counts ~70x stale: internal docs say 166 claims / 139 episodes, live serves 11,624 claims / 1,190 source episodes / 935 people / 23 shows",
+      "catalogState": "the catalog carries no counts for this product — its description is 'Source-backed podcast intelligence with attributable claims and recommendations linked to the original episode.' The stale numbers live in SAR-2's issue text and in on-record/HANDOFF.md, neither of which is a public surface.",
+      "action": "no catalog change; HANDOFF.md is a product-repo doc fix"
+    },
+    {
+      "id": "what-it-takes-to-win-counts",
+      "flaggedBy": "SAR-9 issue description (known open item: stale public dataset counts)",
+      "finding": "directory description claims 3,578 documented paths",
+      "catalogState": "verified accurate — the live site serves 3,578 in 12 places (probed 2026-09-05). The count is not stale; the NAME was.",
+      "action": "none"
+    }
+  ]
+}

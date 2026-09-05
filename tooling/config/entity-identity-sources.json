@@ -1,0 +1,210 @@
+{
+  "$comment": "Where each surface declares its own identity, for tooling/scripts/entity-identity-diff.mjs (SAR-9). The 'docs' source is the product's own public site — the JSON-LD/meta a model actually reads — plus the docs site's deployed URL, assembled from the two blume.config.ts keys that make it up. Paths are relative to the fleet root. Read-only: nothing here is used to write.",
+  "surfaces": [
+    {
+      "id": "codevetter",
+      "label": "CodeVetter",
+      "domain": "codevetter.com",
+      "repoPath": "codevetter",
+      "docs": {
+        "name": {
+          "files": ["apps/landing-page-astro/src/layouts/Layout.astro"],
+          "patterns": ["\"@type\":\"WebSite\",\"@id\":\"[^\"]*\",\"name\":\"([^\"]+)\""]
+        },
+        "description": {
+          "files": ["apps/landing-page-astro/src/layouts/Layout.astro"],
+          "patterns": ["\"@type\":\"WebSite\"[\\s\\S]{0,400}?\"description\":\"([^\"]+)\""]
+        },
+        "canonicalUrl": {
+          "files": ["apps/landing-page-astro/src/layouts/Layout.astro"],
+          "patterns": ["const SITE_URL = '([^']+)'"]
+        },
+        "docsUrl": {
+          "kind": "concat",
+          "parts": [
+            {
+              "files": ["docs-site/blume.config.ts"],
+              "patterns": ["site: '([^']+)'"]
+            },
+            {
+              "files": ["docs-site/blume.config.ts"],
+              "patterns": ["base: '([^']+)'"]
+            }
+          ]
+        },
+        "repoUrl": {
+          "files": ["apps/landing-page-astro/src/layouts/Layout.astro"],
+          "patterns": ["\"sameAs\":\\[\"(https://github\\.com/[^\"/]+/[^\"]+)\""]
+        }
+      }
+    },
+    {
+      "id": "posttrainllm",
+      "label": "PostTrainLLM",
+      "domain": "posttrainllm.com",
+      "repoPath": "posttrainllm",
+      "docs": {
+        "name": {
+          "files": ["browser/src/layouts/Default.astro"],
+          "patterns": ["\"@type\":\\s*\"WebSite\"[\\s\\S]{0,200}?\"name\":\\s*\"([^\"]+)\""]
+        },
+        "description": {
+          "files": ["browser/src/layouts/Default.astro"],
+          "patterns": ["\"@type\":\\s*\"WebSite\"[\\s\\S]{0,600}?\"description\":\\s*\"([^\"]+)\""]
+        },
+        "canonicalUrl": {
+          "files": ["browser/astro.config.mjs"],
+          "patterns": ["site:\\s*\"([^\"]+)\""]
+        },
+        "docsUrl": {
+          "kind": "concat",
+          "parts": [
+            {
+              "files": ["docs-site/blume.config.ts"],
+              "patterns": ["site: '([^']+)'"]
+            },
+            {
+              "files": ["docs-site/blume.config.ts"],
+              "patterns": ["base: '([^']+)'"]
+            }
+          ]
+        },
+        "repoUrl": {
+          "files": ["browser/src/layouts/Default.astro"],
+          "patterns": ["\"sameAs\":\\s*\\[\"(https://github\\.com/[^\"/]+/[^\"]+)\""]
+        }
+      }
+    },
+    {
+      "id": "saas-maker",
+      "label": "SaaS Maker",
+      "domain": "sassmaker.com",
+      "repoPath": "saas-maker",
+      "docs": {
+        "name": {
+          "files": ["apps/showcase/src/data/studio.ts"],
+          "patterns": ["export const STUDIO_PROFILE[\\s\\S]{0,80}?name: '([^']+)'"]
+        },
+        "description": {
+          "files": ["apps/showcase/src/data/studio.ts"],
+          "patterns": ["oneLine:\\s*\n?\\s*'([^']+)'"]
+        },
+        "canonicalUrl": {
+          "files": ["apps/showcase/astro.config.mjs"],
+          "patterns": ["site: '([^']+)'"]
+        },
+        "$comment-repoUrl": "sassmaker.com declares sameAs: ['https://github.com/sass-maker'] — the GitHub *org* profile, which is correct for an Organization node and is not a repo URL. So the site declares no repo URL; requiring two path segments makes that absence visible rather than reporting a false conflict.",
+        "repoUrl": {
+          "files": ["apps/showcase/src/data/studio.ts"],
+          "patterns": ["sameAs: \\['(https://github\\.com/[^'/]+/[^']+)'\\]"]
+        }
+      }
+    },
+    {
+      "id": "high-signal",
+      "label": "High Signal",
+      "domain": "highsignal.app",
+      "repoPath": "high-signal",
+      "docs": {
+        "name": {
+          "files": ["apps/web/src/app/layout.tsx"],
+          "patterns": ["\"@type\":\"WebSite\",\"@id\":\"[^\"]*\",\"name\":\"([^\"]+)\""]
+        },
+        "description": {
+          "files": ["apps/web/src/app/layout.tsx"],
+          "patterns": ["\"@type\":\"WebSite\"[\\s\\S]{0,600}?\"description\":\"([^\"]+)\""]
+        },
+        "canonicalUrl": {
+          "files": ["apps/web/src/app/layout.tsx"],
+          "patterns": ["\"@type\":\"WebSite\"[\\s\\S]{0,300}?\"url\":\"([^\"]+)\""]
+        },
+        "docsUrl": {
+          "kind": "concat",
+          "parts": [
+            {
+              "files": ["docs-site/blume.config.ts"],
+              "patterns": ["site: '([^']+)'"]
+            },
+            {
+              "files": ["docs-site/blume.config.ts"],
+              "patterns": ["base: '([^']+)'"]
+            }
+          ]
+        },
+        "repoUrl": {
+          "files": ["apps/web/src/app/layout.tsx"],
+          "patterns": ["\"sameAs\":\\[\"(https://github\\.com/[^\"/]+/[^\"]+)\""]
+        }
+      }
+    },
+    {
+      "id": "on-record",
+      "label": "High Signal Podcasts",
+      "domain": "podcasts.highsignal.app",
+      "repoSlug": "Significant-Hobbies/on-record",
+      "repoPath": "on-record",
+      "docs": {
+        "name": {
+          "files": ["apps/web/src/layouts/Base.astro"],
+          "patterns": ["'@type': 'WebSite',[\\s\\S]{0,200}?name: '([^']+)'"]
+        },
+        "description": {
+          "files": ["apps/web/src/layouts/Base.astro"],
+          "patterns": ["description = '([^']+)'"]
+        },
+        "canonicalUrl": {
+          "files": ["apps/web/src/layouts/Base.astro"],
+          "patterns": ["const siteUrl = '([^']+)'"]
+        },
+        "repoUrl": {
+          "files": ["apps/web/src/layouts/Base.astro"],
+          "patterns": ["sameAs: \\['(https://github\\.com/[^'/]+/[^']+)'\\]"]
+        }
+      }
+    },
+    {
+      "id": "significanthobbies",
+      "label": "Significant Hobbies",
+      "domain": "significanthobbies.com",
+      "repoPath": "significanthobbies",
+      "docs": {
+        "name": {
+          "files": ["src/app/layout.tsx"],
+          "patterns": ["\"@type\":\"WebSite\",\"@id\":\"[^\"]*\",\"name\":\"([^\"]+)\""]
+        },
+        "description": {
+          "files": ["src/app/layout.tsx"],
+          "patterns": ["\"@type\":\"WebSite\"[\\s\\S]{0,600}?\"description\":\"([^\"]+)\""]
+        },
+        "canonicalUrl": {
+          "files": ["src/app/layout.tsx"],
+          "patterns": ["\"@type\":\"WebSite\"[\\s\\S]{0,300}?\"url\":\"([^\"]+)\""]
+        },
+        "repoUrl": {
+          "files": ["src/app/layout.tsx"],
+          "patterns": ["\"sameAs\":\\[\"(https://github\\.com/[^\"/]+/[^\"]+)\"\\]"]
+        }
+      }
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "label": "Look Sideways",
+      "domain": "paths.significanthobbies.com",
+      "repoPath": "what-it-takes-to-win",
+      "docs": {
+        "name": {
+          "files": ["src/layouts/Base.astro"],
+          "patterns": ["title = \"([^\"]+)\""]
+        },
+        "description": {
+          "files": ["src/scripts/generate_discovery_surfaces.mjs"],
+          "patterns": ["\"(Look Sideways is a guided argument[^\"]+)\""]
+        },
+        "canonicalUrl": {
+          "files": ["astro.config.mjs"],
+          "patterns": ["site: \"([^\"]+)\""]
+        }
+      }
+    }
+  ]
+}
