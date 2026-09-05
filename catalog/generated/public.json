@@ -433,11 +433,11 @@
     },
     {
       "id": "email-manager",
-      "name": "Email Manager",
+      "name": "Kinetic",
       "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
       "makerNote": "Gmail did not help me see who was filling my inbox, so I built a clearer way to understand volume and unsubscribe.",
       "purposeContract": {
-        "purpose": "Email Manager helps a person understand who fills their Gmail inbox and deliberately reduce unwanted volume.",
+        "purpose": "Kinetic helps a person understand who fills their Gmail inbox and deliberately reduce unwanted volume.",
         "audience": "A Gmail user who wants private search, sender-level insight, and explicit unsubscribe control.",
         "outcome": "Find old mail, identify repeat senders, and unsubscribe with a clear understanding of what will change.",
         "mechanism": "A private Gmail workspace combines local semantic search, sender aggregation, and user-confirmed unsubscribe workflows.",
@@ -644,7 +644,7 @@
         "audience": "People who want useful ideas from important podcasts without listening to every episode end to end.",
         "outcome": "Find what a person actually said or recommended and trace it back to the source episode.",
         "mechanism": "A source-backed corpus extracts attributable claims and organizes them into people, topics, books, tools, and emerging signals.",
-        "proof": "The reviewed public beta is live with 166 published claims, 183 distinct evidence-linked recommendations, and 139 source episodes.",
+        "proof": "The public corpus is live with 11,624 published claims, 294 named references, and 1,190 episodes with evidence.",
         "nextAction": "Browse a recommendation or claim and follow its quote, speaker, episode, and source receipt."
       },
       "kind": "product",
@@ -1906,11 +1906,11 @@
     },
     {
       "id": "what-it-takes-to-win",
-      "name": "What It Takes to Win",
-      "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
+      "name": "Look Sideways",
+      "description": "Explore 3,578 documented early-breakthrough paths without pretending success follows a formula.",
       "makerNote": "I wanted to study the real advantages behind success and replace unhelpful comparison with evidence-based understanding.",
       "purposeContract": {
-        "purpose": "What It Takes to Win shows why visible success cannot be reduced to a simple formula or a fair comparison with your own path.",
+        "purpose": "Look Sideways shows why visible success cannot be reduced to a simple formula or a fair comparison with your own path.",
         "audience": "Readers who turn another person’s visible outcome into a judgment about their own pace, ability, or worth.",
         "outcome": "Replace flattened comparison with a more humane, evidence-bounded understanding of conditions, sequence, perseverance, and luck.",
         "mechanism": "A guided research exhibit connects source-linked life events and early-breakthrough paths through what people brought, were handed, and were surrounded by.",
@@ -2422,29 +2422,6 @@
       }
     },
     {
-      "id": "email-manager",
-      "name": "Email Manager",
-      "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
-      "url": "https://mail.significanthobbies.com",
-      "tier": "active",
-      "category": "personal",
-      "priority": "P4",
-      "spotlight": false,
-      "maturity": "maintained",
-      "changelogUrl": "https://mail.significanthobbies.com/changelog",
-      "repositoryUrl": "https://github.com/Significant-Hobbies/email-manager",
-      "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
-      "pillarId": "learn",
-      "purposeContract": {
-        "purpose": "Email Manager helps a person understand who fills their Gmail inbox and deliberately reduce unwanted volume.",
-        "audience": "A Gmail user who wants private search, sender-level insight, and explicit unsubscribe control.",
-        "outcome": "Find old mail, identify repeat senders, and unsubscribe with a clear understanding of what will change.",
-        "mechanism": "A private Gmail workspace combines local semantic search, sender aggregation, and user-confirmed unsubscribe workflows.",
-        "proof": "The maintained application performs its intended search, sender-insight, and unsubscribe jobs in regular use.",
-        "nextAction": "Open the private workspace and investigate a sender or search question; no speculative feature expansion is planned."
-      }
-    },
-    {
       "id": "field-track",
       "name": "Field Track",
       "description": "A synthetic manager dashboard for continuous, administrator-enrolled Android field tracking, freshness-aware locations, and retained route review.",
@@ -2507,7 +2484,7 @@
         "audience": "People who want useful ideas from important podcasts without listening to every episode end to end.",
         "outcome": "Find what a person actually said or recommended and trace it back to the source episode.",
         "mechanism": "A source-backed corpus extracts attributable claims and organizes them into people, topics, books, tools, and emerging signals.",
-        "proof": "The reviewed public beta is live with 166 published claims, 183 distinct evidence-linked recommendations, and 139 source episodes.",
+        "proof": "The public corpus is live with 11,624 published claims, 294 named references, and 1,190 episodes with evidence.",
         "nextAction": "Browse a recommendation or claim and follow its quote, speaker, episode, and source receipt."
       }
     },
@@ -2578,6 +2555,29 @@
         "mechanism": "A designed profile combines greeting-card presentation, owner-published context, structured links, visitor questions, contact handoff, and a small grounded agent.",
         "proof": "The individual profile and conversational foundation are strong; company positioning and repeated company use remain the next validation.",
         "nextAction": "Explore the existing profile experience; company adoption should wait for a focused workflow and a real company test."
+      }
+    },
+    {
+      "id": "email-manager",
+      "name": "Kinetic",
+      "description": "A private Gmail workspace for local semantic search, sender insights, and explicit unsubscribe workflows.",
+      "url": "https://mail.significanthobbies.com",
+      "tier": "active",
+      "category": "personal",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://mail.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/email-manager",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/email-manager/issues",
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Kinetic helps a person understand who fills their Gmail inbox and deliberately reduce unwanted volume.",
+        "audience": "A Gmail user who wants private search, sender-level insight, and explicit unsubscribe control.",
+        "outcome": "Find old mail, identify repeat senders, and unsubscribe with a clear understanding of what will change.",
+        "mechanism": "A private Gmail workspace combines local semantic search, sender aggregation, and user-confirmed unsubscribe workflows.",
+        "proof": "The maintained application performs its intended search, sender-insight, and unsubscribe jobs in regular use.",
+        "nextAction": "Open the private workspace and investigate a sender or search question; no speculative feature expansion is planned."
       }
     },
     {
@@ -2667,6 +2667,29 @@
         "mechanism": "A native Mac studio uses AVFoundation, Core Image, and hardware video tools to render comparable local variants from one source.",
         "proof": "The bounded local experiment works, but owner interest faded before a recurring creator workflow was established.",
         "nextAction": "Treat it as a held local experiment; reopen only around a real creator job where deterministic effects clearly help."
+      }
+    },
+    {
+      "id": "what-it-takes-to-win",
+      "name": "Look Sideways",
+      "description": "Explore 3,578 documented early-breakthrough paths without pretending success follows a formula.",
+      "url": "https://paths.significanthobbies.com",
+      "tier": "secondary",
+      "category": "personal",
+      "priority": "P4",
+      "spotlight": false,
+      "maturity": "maintained",
+      "changelogUrl": "https://paths.significanthobbies.com/changelog",
+      "repositoryUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win",
+      "roadmapUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win/issues",
+      "pillarId": "learn",
+      "purposeContract": {
+        "purpose": "Look Sideways shows why visible success cannot be reduced to a simple formula or a fair comparison with your own path.",
+        "audience": "Readers who turn another person’s visible outcome into a judgment about their own pace, ability, or worth.",
+        "outcome": "Replace flattened comparison with a more humane, evidence-bounded understanding of conditions, sequence, perseverance, and luck.",
+        "mechanism": "A guided research exhibit connects source-linked life events and early-breakthrough paths through what people brought, were handed, and were surrounded by.",
+        "proof": "The publication contains thousands of documented early-breakthrough paths, visible methodology, and ongoing source-linked profile coverage.",
+        "nextAction": "Complete the guided comparison-futility journey, then inspect the underlying profiles, sources, and coverage."
       }
     },
     {
@@ -2986,29 +3009,6 @@
         "mechanism": "An evidence-gated Concept → Drill → Build → Review → Apply loop combines retrieval practice, Feynman explain-backs, roadmaps, and adaptive review.",
         "proof": "The active product already unifies broad curriculum, practice, build labs, Socratic help, and a shared mastery model.",
         "nextAction": "Start a focused learning or practice loop and produce an artifact; new tracks should earn their place by improving retention."
-      }
-    },
-    {
-      "id": "what-it-takes-to-win",
-      "name": "What It Takes to Win",
-      "description": "Explore 2,585 documented early-breakthrough paths without pretending success follows a formula.",
-      "url": "https://paths.significanthobbies.com",
-      "tier": "secondary",
-      "category": "personal",
-      "priority": "P4",
-      "spotlight": false,
-      "maturity": "maintained",
-      "changelogUrl": "https://paths.significanthobbies.com/changelog",
-      "repositoryUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win",
-      "roadmapUrl": "https://github.com/Significant-Hobbies/what-it-takes-to-win/issues",
-      "pillarId": "learn",
-      "purposeContract": {
-        "purpose": "What It Takes to Win shows why visible success cannot be reduced to a simple formula or a fair comparison with your own path.",
-        "audience": "Readers who turn another person’s visible outcome into a judgment about their own pace, ability, or worth.",
-        "outcome": "Replace flattened comparison with a more humane, evidence-bounded understanding of conditions, sequence, perseverance, and luck.",
-        "mechanism": "A guided research exhibit connects source-linked life events and early-breakthrough paths through what people brought, were handed, and were surrounded by.",
-        "proof": "The publication contains thousands of documented early-breakthrough paths, visible methodology, and ongoing source-linked profile coverage.",
-        "nextAction": "Complete the guided comparison-futility journey, then inspect the underlying profiles, sources, and coverage."
       }
     }
   ],
