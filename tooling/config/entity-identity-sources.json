@@ -184,6 +184,7 @@
       "label": "Significant Hobbies",
       "domain": "significanthobbies.com",
       "repoPath": "significanthobbies",
+      "$comment": "CAUTION: the 'docs' channel below reads repo source, and for this one surface repo source is NOT a proxy for the deployed site. origin/main's layout.tsx declares a WebSite node at @id .../#app carrying Live's one-liner; the deployed apex declares @id .../#website with the correct hub description, and neither the title nor the meta description match either. Verified 2026-09-05. So a category-drift finding on this surface's `docs` value is a finding about the repo, not about what the public sees — the canonical record's authorityOrder puts the deployed surface first. Tracked in Significant-Hobbies/significanthobbies#148 along with the two apex machine channels (/api/ai 308s to Live's catalog, /llms.txt is Live's file) that ARE wrong in public.",
       "claim": {
         "$comment": "This surface is a hub, so it legitimately names the products it hosts. Without the allowlist the foreign-entity check would fire six times on a description that is correct.",
         "anchors": ["hub", "control plane"],
