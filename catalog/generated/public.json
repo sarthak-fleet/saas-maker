@@ -166,7 +166,7 @@
     {
       "id": "live",
       "name": "Live",
-      "description": "The original Significant Hobbies experience, now independently owned while preserving its data and authentication boundary.",
+      "description": "The long-running Significant Hobbies experience for recording, exploring, and acting on a life lived beyond passive consumption.",
       "makerNote": "I wanted a product that helps people live more intentionally through goals, possibilities, and things worth anticipating.",
       "purposeContract": {
         "purpose": "Live helps a person turn passive wanting into a life they can deliberately imagine, plan, and experience.",
@@ -637,7 +637,7 @@
     {
       "id": "on-record",
       "name": "High Signal Podcasts",
-      "description": "A source-backed index of what notable people said on podcasts, including books and tools they use.",
+      "description": "Source-backed podcast intelligence with attributable claims and recommendations linked to the original episode.",
       "makerNote": "I’m building High Signal Podcasts to extract useful insights, recommendations, and emerging technology signals from top podcasts without listening to every episode.",
       "purposeContract": {
         "purpose": "High Signal Podcasts indexes evidenced claims, recommendations, books, and tools mentioned by notable podcast guests.",
@@ -879,7 +879,7 @@
     {
       "id": "significanthobbies",
       "name": "Significant Hobbies",
-      "description": "The shared Hub and backend for six maintained Significant Hobbies applications, plus retained compatibility data domains.",
+      "description": "The shared Hub for Live, Journal, Calorie, Setline, Kith, and Anchor, backed by one privacy-aware control plane.",
       "makerNote": "I wanted one Hub for my maintained personal apps while letting every app keep ownership of its own data.",
       "purposeContract": {
         "purpose": "Significant Hobbies is the shared home and privacy-aware control plane for six independently owned personal applications.",
@@ -1248,7 +1248,7 @@
     {
       "id": "journal",
       "name": "Journal",
-      "description": "A private daily journal and personal archive with an independently owned native codebase.",
+      "description": "A private iPhone journal for daily writing, reflection, and a personal archive that stays under the owner's control.",
       "makerNote": "I believe journaling is an important habit, so I wanted a durable journal that fits naturally inside the Hub.",
       "purposeContract": {
         "purpose": "Journal makes private daily writing and reflection durable enough to become a real personal practice.",
@@ -2063,7 +2063,7 @@
     {
       "id": "field-track",
       "name": "Field Track",
-      "description": "A private field-location system for managed Android devices and team-scoped route review.",
+      "description": "A synthetic manager dashboard for continuous, administrator-enrolled Android field tracking, freshness-aware locations, and retained route review.",
       "makerNote": "I started Field Track for my father: a lower-cost way for managers to locate employees carrying administrator-enrolled Android devices and review retained routes.",
       "purposeContract": {
         "purpose": "Field Track is an administrator-managed field-location system for continuously enrolled Android devices and freshness-aware route review.",
