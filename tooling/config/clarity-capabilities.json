@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "schema": "fleet.clarity-capabilities.v1",
+  "updatedAt": "2026-09-01",
+  "note": "Public desired-state policy only. Provider settings and observations remain private Site Health evidence; this file contains no credentials, IP addresses, visitor identifiers, or raw Clarity data.",
+  "capabilities": [
+    { "id": "recordings", "label": "Session recordings", "mode": "automatic", "defaultState": "desired" },
+    { "id": "heatmaps", "label": "Click, scroll, area, and conversion heatmaps", "mode": "automatic", "defaultState": "desired" },
+    { "id": "behavior-insights", "label": "Behavioral and frustration insights", "mode": "automatic", "defaultState": "desired" },
+    { "id": "copilot", "label": "Copilot summaries and chat", "mode": "automatic", "defaultState": "desired" },
+    { "id": "smart-events-auto", "label": "Automatic Smart Events", "mode": "automatic", "defaultState": "desired" },
+    { "id": "smart-events-custom", "label": "Product-specific Smart Events", "mode": "provider", "defaultState": "desired" },
+    { "id": "funnels", "label": "Product-specific funnels", "mode": "provider", "defaultState": "desired" },
+    { "id": "ai-citations", "label": "AI Visibility citations", "mode": "provider", "defaultState": "desired" },
+    { "id": "ai-bot-activity", "label": "AI Bot Activity", "mode": "infrastructure", "defaultState": "blocked", "reason": "Requires a supported CDN or server integration and a separate production-cost/configuration review." },
+    { "id": "masking", "label": "Sensitive-content masking", "mode": "provider", "defaultState": "desired" },
+    { "id": "ip-blocking", "label": "Stable internal IPv4 exclusion", "mode": "provider", "defaultState": "conditional", "reason": "Applicable only when a stable internal IPv4 address or CIDR range is known." },
+    { "id": "ga4", "label": "Google Analytics 4 integration", "mode": "provider", "defaultState": "conditional", "reason": "Applicable only when the product owns a GA4 web property." },
+    { "id": "consent-v2", "label": "Consent API v2", "mode": "source", "defaultState": "conditional", "reason": "Required where a consent-management flow exists or regulation requires an explicit signal." },
+    { "id": "data-export", "label": "Data Export API", "mode": "operator", "defaultState": "desired" },
+    { "id": "mcp-analytics", "label": "MCP analytics investigation", "mode": "operator", "defaultState": "desired" },
+    { "id": "mcp-recordings", "label": "MCP recording investigation", "mode": "operator", "defaultState": "desired" },
+    { "id": "benchmarks", "label": "Clarity website benchmarks", "mode": "automatic", "defaultState": "desired" }
+  ]
+}

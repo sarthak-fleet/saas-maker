@@ -20,10 +20,29 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SELF_ROOT = resolve(REPOSITORY_ROOT, '..');
 const DEFAULT_REGISTRY_PATH = join(REPOSITORY_ROOT, 'config', 'clarity-projects.json');
+const DEFAULT_CAPABILITIES_PATH = join(REPOSITORY_ROOT, 'config', 'clarity-capabilities.json');
+const DEFAULT_JOURNEYS_PATH = join(REPOSITORY_ROOT, 'config', 'clarity-journeys.json');
 const DEFAULT_FLEET_ROOT = resolve(REPOSITORY_ROOT, '..', '..');
 const DEFAULT_PROJECTS_RELATIVE = join('site-health', 'apps', 'backend', 'config', 'projects.json');
 
 export const CLARITY_ID_PATTERN = /^[a-z0-9]{10}$/;
+export const BROWSER_SURFACE_KINDS = Object.freeze([
+  'browser-app',
+  'combined',
+  'landing',
+]);
+export const CAPABILITY_STATES = Object.freeze([
+  'blocked',
+  'conditional',
+  'desired',
+]);
+export const CAPABILITY_MODES = Object.freeze([
+  'automatic',
+  'infrastructure',
+  'operator',
+  'provider',
+  'source',
+]);
 
 // Codes an entry may acknowledge as recorded debt. STALE_ACKNOWLEDGEMENT is
 // deliberately not acknowledgeable: it is the signal that an acknowledgement
@@ -101,6 +120,12 @@ function isWrittenReason(value) {
   return typeof value === 'string' && value.trim().length >= 20;
 }
 
+function isSafeFleetRelativePath(value) {
+  if (typeof value !== 'string' || !value) return false;
+  if (value.startsWith('/') || /^[a-zA-Z]:[\\/]/.test(value)) return false;
+  return value.split(/[\\/]/).every((segment) => segment && segment !== '.' && segment !== '..');
+}
+
 export function validateRegistry(value) {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -108,9 +133,9 @@ export function validateRegistry(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     return { valid: false, problems: ['registry must be an object'] };
   }
-  if (value.schemaVersion !== 1) fail('schemaVersion must be 1');
-  if (value.schema !== 'fleet.clarity-registry.v1') {
-    fail('schema must be "fleet.clarity-registry.v1"');
+  if (value.schemaVersion !== 2) fail('schemaVersion must be 2');
+  if (value.schema !== 'fleet.clarity-registry.v2') {
+    fail('schema must be "fleet.clarity-registry.v2"');
   }
   if (!isIsoDate(value.updatedAt)) fail('updatedAt must be an ISO date');
   if (!CLARITY_ID_PATTERN.test(String(value.legacySharedId ?? ''))) {
@@ -140,19 +165,52 @@ export function validateRegistry(value) {
 
     const wired = entry.wiredFiles;
     if (!Array.isArray(wired) || wired.some((file) => typeof file !== 'string' || !file)) {
-      fail(`${name}.wiredFiles must be an array of paths, relative to the Fleet root`);
+      fail(`${name}.wiredFiles must remain an array of compatibility paths`);
+    }
+
+    const browserSurfaces = entry.browserSurfaces;
+    if (!Array.isArray(browserSurfaces)) {
+      fail(`${name}.browserSurfaces must be an array`);
+    } else {
+      const surfaceFiles = new Set();
+      for (const [surfaceIndex, surface] of browserSurfaces.entries()) {
+        const surfaceLabel = `${name}.browserSurfaces[${surfaceIndex}]`;
+        if (!surface || typeof surface !== 'object' || Array.isArray(surface)) {
+          fail(`${surfaceLabel} must be an object`);
+          continue;
+        }
+        if (!BROWSER_SURFACE_KINDS.includes(surface.kind)) {
+          fail(`${surfaceLabel}.kind must be one of: ${BROWSER_SURFACE_KINDS.join(', ')}`);
+        }
+        if (!isSafeFleetRelativePath(surface.file)) {
+          fail(`${surfaceLabel}.file must be a safe path relative to the Fleet root`);
+        } else if (surfaceFiles.has(surface.file)) {
+          fail(`${surfaceLabel}.file duplicates ${surface.file}`);
+        } else {
+          surfaceFiles.add(surface.file);
+        }
+        if (surface.mask !== undefined && surface.mask !== 'root') {
+          fail(`${surfaceLabel}.mask must be "root" when present`);
+        }
+      }
+      if (Array.isArray(wired)) {
+        const declaredFiles = browserSurfaces.map((surface) => surface?.file);
+        if (JSON.stringify(wired) !== JSON.stringify(declaredFiles)) {
+          fail(`${name}.wiredFiles must exactly match browserSurfaces[].file`);
+        }
+      }
     }
 
     if (entry.clarityId === null || entry.clarityId === undefined) {
       if (!isWrittenReason(entry.reason)) {
         fail(`${name} has no Clarity ID, so reason must be a written justification`);
       }
-      if (Array.isArray(wired) && wired.length > 0) {
+      if (Array.isArray(browserSurfaces) && browserSurfaces.length > 0) {
         fail(`${name} lists wired files but claims no Clarity ID`);
       }
     } else if (!CLARITY_ID_PATTERN.test(String(entry.clarityId))) {
       fail(`${name}.clarityId must be 10 lowercase alphanumerics, got ${entry.clarityId}`);
-    } else if (Array.isArray(wired) && wired.length === 0 && !isWrittenReason(entry.reason)) {
+    } else if (Array.isArray(browserSurfaces) && browserSurfaces.length === 0 && !isWrittenReason(entry.reason)) {
       fail(`${name} claims a Clarity ID with no wired file and no written reason`);
     }
 
@@ -180,6 +238,130 @@ export function validateRegistry(value) {
   }
 
   return { valid: problems.length === 0, problems };
+}
+
+export function validateCapabilityPolicy(value) {
+  const problems = [];
+  const fail = (message) => problems.push(message);
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return { valid: false, problems: ['capability policy must be an object'] };
+  }
+  if (value.schemaVersion !== 1) fail('capability policy schemaVersion must be 1');
+  if (value.schema !== 'fleet.clarity-capabilities.v1') {
+    fail('capability policy schema must be "fleet.clarity-capabilities.v1"');
+  }
+  if (!isIsoDate(value.updatedAt)) fail('capability policy updatedAt must be an ISO date');
+  if (!Array.isArray(value.capabilities) || value.capabilities.length === 0) {
+    fail('capability policy capabilities must be a non-empty array');
+    return { valid: problems.length === 0, problems };
+  }
+  const seen = new Set();
+  for (const [index, capability] of value.capabilities.entries()) {
+    const label = `capabilities[${index}]`;
+    if (!capability?.id || typeof capability.id !== 'string') fail(`${label}.id is required`);
+    else if (seen.has(capability.id)) fail(`${label} duplicates capability id ${capability.id}`);
+    else seen.add(capability.id);
+    if (!capability?.label || typeof capability.label !== 'string') fail(`${label}.label is required`);
+    if (!CAPABILITY_MODES.includes(capability?.mode)) {
+      fail(`${label}.mode must be one of: ${CAPABILITY_MODES.join(', ')}`);
+    }
+    if (!CAPABILITY_STATES.includes(capability?.defaultState)) {
+      fail(`${label}.defaultState must be one of: ${CAPABILITY_STATES.join(', ')}`);
+    }
+    if (['blocked', 'conditional'].includes(capability?.defaultState)
+      && !isWrittenReason(capability?.reason)) {
+      fail(`${label}.reason must explain blocked or conditional adoption`);
+    }
+  }
+  return { valid: problems.length === 0, problems };
+}
+
+export function loadCapabilityPolicy(path = DEFAULT_CAPABILITIES_PATH) {
+  const policy = JSON.parse(readFileSync(path, 'utf8'));
+  const { valid, problems } = validateCapabilityPolicy(policy);
+  if (!valid) {
+    throw new Error(`Invalid Clarity capability policy at ${path}:\n- ${problems.join('\n- ')}`);
+  }
+  return policy;
+}
+
+export function validateJourneyRegistry(value, registry) {
+  const problems = [];
+  const fail = (message) => problems.push(message);
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return { valid: false, problems: ['journey registry must be an object'] };
+  }
+  if (value.schemaVersion !== 1) fail('journey registry schemaVersion must be 1');
+  if (value.schema !== 'fleet.clarity-journeys.v1') {
+    fail('journey registry schema must be "fleet.clarity-journeys.v1"');
+  }
+  if (!isIsoDate(value.observedAt)) fail('journey registry observedAt must be an ISO date');
+  if (!Array.isArray(value.projects)) {
+    fail('journey registry projects must be an array');
+    return { valid: false, problems };
+  }
+  const wired = new Set(
+    registry.projects.filter((entry) => (entry.browserSurfaces ?? []).length > 0).map((entry) => entry.id)
+  );
+  const seen = new Set();
+  for (const [index, project] of value.projects.entries()) {
+    const label = `journeys[${index}]`;
+    if (!project?.id || typeof project.id !== 'string') fail(`${label}.id is required`);
+    else if (seen.has(project.id)) fail(`${label} duplicates project id ${project.id}`);
+    else seen.add(project.id);
+    if (project?.id && !wired.has(project.id)) fail(`${label} names unwired project ${project.id}`);
+    if (!['ready', 'discovery-required'].includes(project?.state)) {
+      fail(`${label}.state must be ready or discovery-required`);
+    }
+    if (project?.state === 'discovery-required') {
+      if (!isWrittenReason(project.reason)) fail(`${label}.reason must explain missing journey evidence`);
+      if (project.event || project.funnel) fail(`${label} cannot define an unverified event or funnel`);
+      continue;
+    }
+    if (!/^[a-z0-9_]+$/.test(project?.event?.name ?? '')) {
+      fail(`${label}.event.name must be a lowercase stable identifier`);
+    }
+    if (!project?.event?.text || (!project.event.href && !project.event.hrefPrefix && !project.event.selector)) {
+      fail(`${label}.event must record observed text and an href, hrefPrefix, or selector`);
+    }
+    if (!project?.funnel?.name || !Array.isArray(project.funnel.steps)
+      || project.funnel.steps.length < 2) {
+      fail(`${label}.funnel must contain a name and at least two steps`);
+    }
+  }
+  for (const id of wired) if (!seen.has(id)) fail(`journey registry is missing wired project ${id}`);
+  return { valid: problems.length === 0, problems };
+}
+
+export function loadJourneyRegistry(registry, path = DEFAULT_JOURNEYS_PATH) {
+  const journeys = JSON.parse(readFileSync(path, 'utf8'));
+  const { valid, problems } = validateJourneyRegistry(journeys, registry);
+  if (!valid) {
+    throw new Error(`Invalid Clarity journey registry at ${path}:\n- ${problems.join('\n- ')}`);
+  }
+  return journeys;
+}
+
+export function projectCapabilityCoverage(registry, policy) {
+  const wired = registry.projects.filter((entry) => (entry.browserSurfaces ?? []).length > 0);
+  const capabilities = policy.capabilities.map((capability) => ({
+    id: capability.id,
+    label: capability.label,
+    mode: capability.mode,
+    state: capability.defaultState,
+    providerState: 'unverified',
+    ...(capability.reason ? { reason: capability.reason } : {}),
+  }));
+  return {
+    policyUpdatedAt: policy.updatedAt,
+    capabilities,
+    projects: registry.projects.length,
+    wiredProjects: wired.length,
+    desiredAssignments: wired.length * capabilities.filter((item) => item.state === 'desired').length,
+    conditionalAssignments: wired.length * capabilities.filter((item) => item.state === 'conditional').length,
+    blockedAssignments: wired.length * capabilities.filter((item) => item.state === 'blocked').length,
+    providerVerifiedAssignments: 0,
+  };
 }
 
 export function loadRegistry(path = DEFAULT_REGISTRY_PATH) {
@@ -247,14 +429,15 @@ export function verifyWiring(registry, fleetRoot) {
   const results = [];
 
   for (const entry of registry.projects) {
-    const wiredFiles = entry.wiredFiles ?? [];
+    const browserSurfaces = entry.browserSurfaces ?? [];
     const files = [];
-    for (const file of wiredFiles) {
+    for (const surface of browserSurfaces) {
+      const file = surface.file;
       const path = resolve(fleetRoot, file);
       if (!existsSync(path)) {
-        files.push({ path: file, present: false, wired: false, legacy: false });
+        files.push({ kind: surface.kind, path: file, present: false, wired: false, legacy: false });
         findings.push(
-          finding('UNWIRED_CLAIM', entry.id, `Declared surface ${file} does not exist in this checkout.`)
+          finding('UNWIRED_CLAIM', entry.id, `Declared ${surface.kind} surface ${file} does not exist in this checkout.`)
         );
         continue;
       }
@@ -262,19 +445,33 @@ export function verifyWiring(registry, fleetRoot) {
       try {
         source = readFileSync(path, 'utf8');
       } catch (error) {
-        files.push({ path: file, present: true, wired: false, legacy: false });
-        findings.push(finding('UNWIRED_CLAIM', entry.id, `Declared surface ${file} is unreadable: ${error.message}`));
+        files.push({ kind: surface.kind, path: file, present: true, wired: false, legacy: false });
+        findings.push(finding('UNWIRED_CLAIM', entry.id, `Declared ${surface.kind} surface ${file} is unreadable: ${error.message}`));
         continue;
       }
       const wired = Boolean(entry.clarityId) && source.includes(entry.clarityId);
       const legacy = source.includes(registry.legacySharedId);
-      files.push({ path: file, present: true, wired, legacy });
+      const maskedRoot = surface.mask === 'root'
+        ? (source.match(/<[^>]+>/g) ?? []).some(
+          (tag) => /\bid=["']root["']/.test(tag) && /\bdata-clarity-mask=["']true["']/.test(tag)
+        )
+        : null;
+      files.push({ kind: surface.kind, path: file, present: true, wired, legacy, ...(maskedRoot !== null ? { maskedRoot } : {}) });
       if (!wired) {
         findings.push(
           finding(
             'UNWIRED_CLAIM',
             entry.id,
             `Registry claims Clarity project ${entry.clarityId} in ${file}, but that ID is not present there.`
+          )
+        );
+      }
+      if (surface.mask === 'root' && !maskedRoot) {
+        findings.push(
+          finding(
+            'UNWIRED_CLAIM',
+            entry.id,
+            `Declared ${surface.kind} surface ${file} must explicitly mask its root element before Clarity collection.`
           )
         );
       }
@@ -361,7 +558,7 @@ export function scanSelfForLegacyId(registry, selfRoot = SELF_ROOT) {
 export function scanFleetForUndeclared(registry, fleetRoot) {
   const declared = new Set();
   for (const entry of registry.projects) {
-    for (const file of entry.wiredFiles ?? []) declared.add(file.split('/').join(sep));
+    for (const surface of entry.browserSurfaces ?? []) declared.add(surface.file.split('/').join(sep));
   }
   const byId = new Map(registry.projects.filter((entry) => entry.clarityId).map((entry) => [entry.clarityId, entry.id]));
 
@@ -396,6 +593,8 @@ function catalogVisibility(projectsPath) {
 
 export function auditClarity({
   registry,
+  capabilityPolicy = null,
+  journeys = null,
   fleetRoot,
   selfRoot = SELF_ROOT,
   visibility = new Map(),
@@ -492,6 +691,7 @@ export function auditClarity({
       clarityId: entry.clarityId ?? null,
       tag: entry.tag ?? null,
       visibility: visibility.get(entry.id) ?? 'unknown',
+      browserSurfaces: entry.browserSurfaces ?? [],
       wiredFiles: entry.wiredFiles ?? [],
       verified: fleetPresent,
       files: wiredById.get(entry.id)?.files ?? [],
@@ -506,6 +706,19 @@ export function auditClarity({
   const published = omitPrivate ? results.filter((result) => result.visibility === 'public') : results;
 
   const distinctIds = new Set(registry.projects.filter((entry) => entry.clarityId).map((entry) => entry.clarityId));
+  const capabilityCoverage = capabilityPolicy
+    ? projectCapabilityCoverage(registry, capabilityPolicy)
+    : null;
+  const journeyCoverage = journeys
+    ? {
+      observedAt: journeys.observedAt,
+      projects: journeys.projects.length,
+      ready: journeys.projects.filter((entry) => entry.state === 'ready').length,
+      discoveryRequired: journeys.projects.filter(
+        (entry) => entry.state === 'discovery-required'
+      ).length,
+    }
+    : null;
 
   return {
     schemaVersion: 1,
@@ -516,10 +729,12 @@ export function auditClarity({
       updatedAt: registry.updatedAt,
       legacySharedIdRetired: true,
       projects: registry.projects.length,
-      wired: registry.projects.filter((entry) => (entry.wiredFiles ?? []).length > 0).length,
+      wired: registry.projects.filter((entry) => (entry.browserSurfaces ?? []).length > 0).length,
       noSurface: registry.projects.filter((entry) => !entry.clarityId).length,
       distinctClarityIds: distinctIds.size,
     },
+    ...(capabilityCoverage ? { capabilityCoverage } : {}),
+    ...(journeyCoverage ? { journeyCoverage } : {}),
     summary: {
       verifiedAgainstSource: fleetPresent,
       findings: annotated.length,
@@ -544,7 +759,7 @@ export function auditClarity({
   };
 }
 
-const VALUE_FLAGS = new Set(['--registry', '--fleet-root', '--self-root', '--projects', '--output']);
+const VALUE_FLAGS = new Set(['--registry', '--capabilities', '--journeys', '--fleet-root', '--self-root', '--projects', '--output']);
 
 export function parseArguments(argv) {
   const options = {};
@@ -566,7 +781,8 @@ export function parseArguments(argv) {
 const HELP = `Fleet Clarity project registry audit
 
 Usage:
-  clarity-audit.mjs [--registry <file>] [--fleet-root <dir>] [--projects <file>]
+  clarity-audit.mjs [--registry <file>] [--capabilities <file>] [--journeys <file>]
+                    [--fleet-root <dir>] [--projects <file>]
                     [--output <file>] [--json] [--check] [--strict]
                     [--scan-fleet] [--omit-private]
 
@@ -606,9 +822,13 @@ export async function main(argv = process.argv.slice(2)) {
 
   let options;
   let registry;
+  let capabilityPolicy;
+  let journeys;
   try {
     ({ options } = parseArguments(argv));
     registry = loadRegistry(resolve(options['--registry'] ?? DEFAULT_REGISTRY_PATH));
+    capabilityPolicy = loadCapabilityPolicy(resolve(options['--capabilities'] ?? DEFAULT_CAPABILITIES_PATH));
+    journeys = loadJourneyRegistry(registry, resolve(options['--journeys'] ?? DEFAULT_JOURNEYS_PATH));
   } catch (error) {
     process.stderr.write(`${error.message}\n`);
     process.exitCode = 1;
@@ -620,6 +840,8 @@ export async function main(argv = process.argv.slice(2)) {
 
   const report = auditClarity({
     registry,
+    capabilityPolicy,
+    journeys,
     fleetRoot,
     selfRoot: resolve(options['--self-root'] ?? SELF_ROOT),
     visibility: catalogVisibility(projectsPath),
@@ -659,12 +881,30 @@ function renderText(report, { compact = false } = {}) {
       : 'Claims were NOT verified against source: no Fleet checkout available.',
   ];
 
+  if (report.capabilityCoverage) {
+    const coverage = report.capabilityCoverage;
+    lines.push(
+      `Capability policy — ${coverage.capabilities.length} capability(s), `
+      + `${coverage.desiredAssignments} desired wired-project assignment(s), `
+      + `${coverage.providerVerifiedAssignments} provider-verified.`
+    );
+  }
+
+  if (report.journeyCoverage) {
+    const journeys = report.journeyCoverage;
+    lines.push(
+      `Journey policy — ${journeys.ready} ready, `
+      + `${journeys.discoveryRequired} require rendered-provider discovery.`
+    );
+  }
+
   if (!compact) {
     lines.push('', 'Per project:');
     for (const result of report.results) {
       const state = result.clarityId ?? 'no Clarity ID';
       const flag = result.findings.length > 0 ? `  <- ${[...new Set(result.findings)].join(', ')}` : '';
-      lines.push(`  ${result.id.padEnd(22)} ${String(state).padEnd(12)} ${result.wiredFiles.join(', ')}${flag}`);
+      const surfaces = result.browserSurfaces.map((surface) => `${surface.kind}:${surface.file}`);
+      lines.push(`  ${result.id.padEnd(22)} ${String(state).padEnd(12)} ${surfaces.join(', ')}${flag}`);
     }
   }
 

@@ -1,0 +1,3135 @@
+{
+  "$schema": "fleet.platform-accreditation-state.v1",
+  "version": 1,
+  "updated": "2026-07-17",
+  "ownerExclusions": [
+    "hacker-news",
+    "linkedin",
+    "x"
+  ],
+  "stalenessDays": 30,
+  "platforms": [
+    {
+      "id": "hacker-news",
+      "name": "Hacker News",
+      "source": "protected-channel",
+      "artifactFit": [
+        "product",
+        "major-feature",
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://news.ycombinator.com/submit",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "protected",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "source": "protected-channel",
+      "artifactFit": [
+        "product",
+        "major-feature",
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://www.linkedin.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "protected",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "x",
+      "name": "X",
+      "source": "protected-channel",
+      "artifactFit": [
+        "product",
+        "major-feature",
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://x.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "protected",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "medium",
+      "name": "Medium",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://medium.com/new-story",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "dev-community",
+      "name": "DEV Community",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://dev.to/new",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "hashnode",
+      "name": "Hashnode",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://hashnode.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "hackernoon",
+      "name": "HackerNoon",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://hackernoon.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "daily-dev",
+      "name": "daily.dev",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://app.daily.dev/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "peerlist",
+      "name": "Peerlist",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://peerlist.io/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "indie-hackers",
+      "name": "Indie Hackers",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://www.indiehackers.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "reddit",
+      "name": "Reddit",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://www.reddit.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "lobsters",
+      "name": "Lobsters",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://lobste.rs/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "substack",
+      "name": "Substack",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://substack.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "ghost",
+      "name": "Ghost",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://ghost.org/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "wordpress",
+      "name": "WordPress",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://wordpress.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "blogger",
+      "name": "Blogger",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://www.blogger.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "tumblr",
+      "name": "Tumblr",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://www.tumblr.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "beehiiv",
+      "name": "Beehiiv",
+      "source": "article-syndication",
+      "artifactFit": [
+        "article"
+      ],
+      "submitUrl": null,
+      "home": "https://www.beehiiv.com/",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "smol-launch",
+      "name": "Smol Launch",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://smollaunch.com/submit",
+      "home": "https://smollaunch.com",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "captcha",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:27:21.098275+00:00",
+          "evidence": {
+            "liveUrl": "https://smollaunch.com/submit",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "Smol Launch | Page Not Found (404)"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "product-hunt",
+      "name": "Product Hunt",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.producthunt.com/posts/new",
+      "home": "https://www.producthunt.com",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "launching-next",
+      "name": "Launching Next",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.launchingnext.com/submit/",
+      "home": "https://www.launchingnext.com",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "betalist",
+      "name": "BetaList",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://betalist.com/submit",
+      "home": "https://betalist.com",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "uneed",
+      "name": "Uneed",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.uneed.best",
+      "home": "https://www.uneed.best",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "captcha",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:27:27.993299+00:00",
+          "evidence": {
+            "liveUrl": "https://www.uneed.best/",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "Uneed - Launch. Get seen. Grow. | Uneed"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "alternativeto",
+      "name": "AlternativeTo",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://alternativeto.net",
+      "home": "https://alternativeto.net",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "saashub",
+      "name": "SaaSHub",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.saashub.com/submit",
+      "home": "https://www.saashub.com",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:27:34.500238+00:00",
+          "evidence": {
+            "liveUrl": "https://www.saashub.com/submit",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "SaaSHub Submit - Top Submitted Products of Last 30 days"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "taaft",
+      "name": "There's An AI For That",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://theresanaiforthat.com/submit/",
+      "home": "https://theresanaiforthat.com",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:27:40.208904+00:00",
+          "evidence": {
+            "liveUrl": "https://theresanaiforthat.com/launch/",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "Launch Your AI Tool | There's An AI For That"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "devhunt",
+      "name": "DevHunt",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://devhunt.org/submit",
+      "home": "https://devhunt.org",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:27:46.044021+00:00",
+          "evidence": {
+            "liveUrl": "https://devhunt.org/submit",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "undefined's profile on Dev Hunt - Dev Hunt"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "g2",
+      "name": "G2",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.g2.com",
+      "home": "https://www.g2.com",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "capterra",
+      "name": "Capterra",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.capterra.com",
+      "home": "https://www.capterra.com",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "microlaunch",
+      "name": "Microlaunch",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://microlaunch.net/submit",
+      "home": "https://microlaunch.net",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "insidr",
+      "name": "Insidr.ai",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.insidr.ai/submit-tools/",
+      "home": "https://www.insidr.ai",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "aitoolnet",
+      "name": "Aitoolnet",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.aitoolnet.com/submit",
+      "home": "https://www.aitoolnet.com",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "futuretools",
+      "name": "Future Tools",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.futuretools.io/submit-a-tool",
+      "home": "https://www.futuretools.io",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "captcha",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:41:05.086671+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startup-fast",
+      "name": "Startup Fast",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.startupfa.st/projects/submit",
+      "home": "https://www.startupfa.st",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "open-launch",
+      "name": "Open Launch",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.open-launch.com/projects/submit",
+      "home": "https://www.open-launch.com",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "captcha",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:28:04.930223+00:00",
+          "evidence": {
+            "liveUrl": "https://open-launch.com/sign-in?redirect=/projects/submit",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "Open Launch - Discover the Best Tech Products"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "toolify",
+      "name": "Toolify",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.toolify.ai/submit",
+      "home": "https://www.toolify.ai",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "captcha",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:28:12.338857+00:00",
+          "evidence": {
+            "liveUrl": "https://www.toolify.ai/submit",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "Toolify - Find The Exact AI Tool For Your Needs"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "futurepedia",
+      "name": "Futurepedia",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.futurepedia.io/submit-tool",
+      "home": "https://www.futurepedia.io",
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "captcha",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T10:28:18.246538+00:00",
+          "evidence": {
+            "liveUrl": "https://www.futurepedia.io/submit-tool",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": "Submit Your Company, Software or AI Tool to Futurepedia"
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "sourceforge",
+      "name": "SourceForge",
+      "source": "curated-directory-registry",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://sourceforge.net/create",
+      "home": "https://sourceforge.net",
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupbase",
+      "name": "Log into your account | StartupBase",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startupbase.io/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "getworm",
+      "name": "Submit a Startup",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://getworm.com/submit-startup",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T11:43:22.862350+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "feedough",
+      "name": "Submit Your Startup - Feedough",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.feedough.com/submit-your-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "paggu",
+      "name": "Submit Your StartUp/SaaS Product -",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.paggu.com/submit-your-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "techpluto",
+      "name": "Submit A Startup - TechPluto - Latest Startup & Tech News",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.techpluto.com/submit-a-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "apprater",
+      "name": "Page not found - AppRater",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://apprater.net/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "marsx",
+      "name": "MarsX for AI Startups - Transform Your AI Vision into Reality",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.marsx.dev/ai-startups",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "dynamite",
+      "name": "Dynamite AI - Find the best AI tools for your needs",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.dynamite-ai.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "submissionweb",
+      "name": "Submission Marketing Web Directory- Submit Link",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.submissionwebdirectory.com/submit.php",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "9sites",
+      "name": "9Sites.net - Submit Your Site",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://9sites.net/addurl.php",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "business-software",
+      "name": "Add Your Product - Business-Software.com",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.business-software.com/add-your-product/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "tiny_startups",
+      "name": "Get listed on Tiny Startups 🔥",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://tally.so/r/wMzP8X",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "microlaunch_tally",
+      "name": "MicroLaunch - New Product Form",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://tally.so/r/mYaR6N",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startups_fyi",
+      "name": "Submit new startup 🎉",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://tally.so/r/3lOGLk",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "thestartupinc",
+      "name": "Submit Startup | List Your Startup Company | Promote Startup",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.thestartupinc.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "crozdesk",
+      "name": "Reach Engaged Software Buyers | Revleads",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://vendor.softwareselect.com/user/signup",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "betabound",
+      "name": "Find Great Beta Testers on Betabound",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://betabound.com/announce/",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:41:36.687793+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "openfuture",
+      "name": "Submit Tool | OpenFuture",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://openfuture.ai/submit-tool",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:41:50.380400+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "saasaitools",
+      "name": "Join | SaaS AI Tools",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://saasaitools.com/join/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "techdirectory",
+      "name": "techdirectory",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://techdirectory.io/get-listed",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "fivetaco",
+      "name": "FiveTaco - How Solopreneurs Find Software",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://fivetaco.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "crazyabout",
+      "name": "crazyabout",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.crazyaboutstartups.com/share-your-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "promoteproject",
+      "name": "PromoteProject | Startup Growth Platform",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://promoteproject.com/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:30.348229+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "profithunt",
+      "name": "Profit Hunt | Discover ideas that make money",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://profithunt.co/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "toolsalad",
+      "name": "toolsalad",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://toolsalad.com/submit/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "awesomeindie",
+      "name": "Login | Awesome Indie",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://awesomeindie.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "cloudfindr",
+      "name": "503 Service Unavailable",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.cloudfindr.co/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "launched",
+      "name": "launched",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://launched.io/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "sideprojectors",
+      "name": "sideprojectors",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.sideprojectors.com/project/new",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupinspire",
+      "name": "startupinspire",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startupinspire.com/dashboard/startup/create",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:38.952664+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "taalk",
+      "name": "taalk",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://taalk.com/submit-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "beingguru",
+      "name": "beingguru",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://beingguru.com/submit-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupwizz",
+      "name": "startupwizz",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startupwizz.com/submit-a-startup/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "americaninno",
+      "name": "americaninno",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.americaninno.com/post-a-startup/",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "anti-bot",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:44:30.768258+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "inc42",
+      "name": "inc42",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://inc42.com/startup-submission/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "webrazzi",
+      "name": "webrazzi",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://webrazzi.com/en/startup-form/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "killerstartups",
+      "name": "killerstartups",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.killerstartups.com/submit/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "springwise",
+      "name": "springwise",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.springwise.com/spotted/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "10words",
+      "name": "10words",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://portal.10words.io/submissions/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:57.473218+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "postmake",
+      "name": "postmake",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://postmake.io/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "smollaunch",
+      "name": "smollaunch",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://smollaunch.com/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:47.355214+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "fazier",
+      "name": "fazier",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://fazier.com/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:42:40.373735+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "launchingnext",
+      "name": "launchingnext",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.launchingnext.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "nocodelist",
+      "name": "nocodelist",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://nocodelist.co/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "workspaces",
+      "name": "workspaces",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.workspaces.xyz/submit-a-workspace",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "aivalley",
+      "name": "AI Valley | Discover The Newest AI Tools And Prompts For Any Use In Se",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://aivalley.ai/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:42:29.252187+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "allthingsai",
+      "name": "allthingsai",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://allthingsai.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "poweredbyai",
+      "name": "PoweredbyAI - Free ai tools",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://poweredbyai.app/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "quickai",
+      "name": "404: This page could not be found.",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://quickaidirectory.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "aicatalog",
+      "name": "Access Denied",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.aicatalog.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "topai",
+      "name": "Submit AI tool",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://topai.tools/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "aitoolsdir",
+      "name": "aitoolsdir",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://aitoolsdirectory.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "softwaresuggest",
+      "name": "Softwaresuggest - Error Site",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.softwaresuggest.com/vendors/register",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:36.132556+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "saasworthy",
+      "name": "Promote Your SaaS on SaaSworthy | Generate Leads & Boost Visibility",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.saasworthy.com/offerings",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "softwareworld",
+      "name": "Just a moment...",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.softwareworld.co/register",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "alternative_me",
+      "name": "Error 404 - File not found - Alternative.me",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://alternative.me/how-to/submit-software",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:42:32.822962+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "exactseek",
+      "name": "Add Your URL: ExactSeek.com",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.exactseek.com/add.html",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "somuch",
+      "name": "ERROR",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.somuch.com/add-url/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "webwiki",
+      "name": "Just a moment...",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.webwiki.com/info/add-website.html",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "venture_radar",
+      "name": "VentureRadar",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.ventureradar.com/add_company",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "super_new",
+      "name": "SuperNew",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://linusekenstam.typeform.com/super-new",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "benbites",
+      "name": "Ben's Bites | Substack",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://news.bensbites.com/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:41.247386+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "growthjunkie",
+      "name": "Submit Juice - GrowthJunkie - The most complete Directory of SaaS Tool",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://growthjunkie.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "spotsaas",
+      "name": "Get Your Software Listed on Spotsaas — Reach 2M+ Buyers",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://spotsaas.com/get-listed",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T12:42:35.690221+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "launching_io",
+      "name": "launching_io",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.launching.io/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupfa_st",
+      "name": "Startup Fast - Submit Your Startup & Get Quality Backlinks",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.startupfa.st/projects/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:13:53.796779+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "financesonline",
+      "name": "Page Not Found - Financesonline.com",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://financesonline.com/for-vendors/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "peerspot",
+      "name": "Most Popular Vendors",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.peerspot.com/vendors",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "trustradius",
+      "name": "Page not found - TrustRadius for Vendors",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.trustradius.com/vendor/signup",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "clutch",
+      "name": "Just a moment...",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://clutch.co/profile/claim",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "softpedia",
+      "name": "404 Not Found",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.softpedia.com/user/addProgram.asp",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "cipinet",
+      "name": "Web Directory Submission Form",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://cipinet.com/suggest.php",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "ezweb",
+      "name": "Error - Free Business Directory",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.ezwebdirectory.com/submit.php",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startus",
+      "name": "startus",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.startus.cc/startup/add",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupxplore",
+      "name": "startupxplore",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startupxplore.com/en/startup/new",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupranking",
+      "name": "startupranking",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.startupranking.com/startup/add",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "appagg",
+      "name": "appagg",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://appagg.com/submit/",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:14:13.638460+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "webapprater",
+      "name": "webapprater",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://webapprater.com/submit-your-web-application-for-review-html",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "victrays",
+      "name": "victrays",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://victrays.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "landbook",
+      "name": "landbook",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://land-book.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "makerpad",
+      "name": "makerpad",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.makerpad.co/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "nocodedevs",
+      "name": "nocodedevs",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.nocodedevs.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "howtobuysaas",
+      "name": "howtobuysaas",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://howtobuysaas.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "bigstartups",
+      "name": "bigstartups",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://bigstartups.co/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:14:06.014098+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startuptracker",
+      "name": "startuptracker",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startuptracker.io/submit",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:14:08.855105+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "trendystartups",
+      "name": "trendystartups",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://trendystartups.com/register",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "cuspera",
+      "name": "cuspera",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://cuspera.com/vendors",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "payonce",
+      "name": "payonce",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://payonceapps.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "thepopularapps",
+      "name": "thepopularapps",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://thepopularapps.com/submit-app/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startupcollections",
+      "name": "startupcollections",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startupcollections.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "projecthatch",
+      "name": "projecthatch",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://projecthatch.co/your-story/",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "techendo",
+      "name": "techendo",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://techendo.com/beta",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startups_watch",
+      "name": "startups_watch",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startups.watch/startups/new",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "snapmunk",
+      "name": "snapmunk",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://startups.snapmunk.com/join",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "amfibi",
+      "name": "amfibi",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://amfibi.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startup_pitch",
+      "name": "startup_pitch",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://thestartuppitch.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "alphadigits",
+      "name": "alphadigits",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://alphadigits.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "comparasoftware",
+      "name": "comparasoftware",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://comparasoftware.com/en/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "indiehackerstacks",
+      "name": "indiehackerstacks",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://indiehackerstacks.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "sideprojects_net",
+      "name": "sideprojects_net",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://sideprojects.net/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "appysmarts",
+      "name": "appysmarts",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://appysmarts.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "newstartups",
+      "name": "newstartups",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://new-startups.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "startuplister",
+      "name": "startuplister",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://www.startuplister.com/submit-startup",
+      "home": null,
+      "currentState": "blocked",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": "signin",
+      "rejectionReason": null,
+      "transitions": [
+        {
+          "$schema": "fleet.platform-accreditation-evidence.v1",
+          "fromState": "seed",
+          "toState": "blocked",
+          "applied": true,
+          "observedAt": "2026-07-17T13:14:11.877835+00:00",
+          "evidence": {
+            "liveUrl": "undefined",
+            "httpStatus": null,
+            "finalStatus": null,
+            "formDetected": null,
+            "captchaDetected": null,
+            "signinRequired": null,
+            "paymentRequired": null,
+            "screenshotPath": null
+          },
+          "outcome": "confirmed",
+          "note": ""
+        }
+      ],
+      "transitionsArchive": []
+    },
+    {
+      "id": "robin_tools",
+      "name": "robin_tools",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://tools.robingood.com/submit",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    },
+    {
+      "id": "aiinfinity",
+      "name": "aiinfinity",
+      "source": "research-probe",
+      "artifactFit": [
+        "product",
+        "major-feature"
+      ],
+      "submitUrl": "https://aiinfinity-meetpatel.notion.site/AI-Infinity-AI-Tools-Directory-0da673c487124ea2b6f8ebe59b75a231",
+      "home": null,
+      "currentState": "seed",
+      "verifiedAt": null,
+      "qualityGate": "standard",
+      "blocker": null,
+      "rejectionReason": null,
+      "transitions": [],
+      "transitionsArchive": []
+    }
+  ]
+}

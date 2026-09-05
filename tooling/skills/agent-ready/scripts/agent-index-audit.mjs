@@ -37,8 +37,8 @@ import {
 } from '../../../lib/agent-probe-retry.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// scripts → agent-ready → skills → saas-maker/tooling → fleet root
-const FLEET_ROOT = resolve(__dirname, '../../../..');
+// scripts → agent-ready → skills → tooling → saas-maker → fleet root
+const FLEET_ROOT = resolve(__dirname, '../../../../..');
 const INDEXNOW_CONFIG_PATH = join(
   FLEET_ROOT,
   'site-health/apps/backend/config/indexnow.json',

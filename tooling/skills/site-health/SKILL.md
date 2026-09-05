@@ -1,6 +1,6 @@
 ---
 name: site-health
-description: Route site health, AI indexing, technical SEO, competitive content coverage, performance, visibility trends, and public guest-journey audits to one relevant Fleet subskill.
+description: Route site health, Microsoft Clarity traffic, AI indexing, technical SEO, competitive content coverage, performance, visibility trends, and public guest-journey audits to one relevant Fleet subskill.
 ---
 
 # site-health — fleet website measurement (routing parent)
@@ -15,6 +15,7 @@ one you need, not all of them.
 | SEO content sufficiency: article inventory, competitive intent/page gaps, comparison/alternative/use-case pages, create or publish missing pages | `skills/content-coverage/SKILL.md` |
 | Performance: Core Web Vitals, Lighthouse distributions, "why is X slow" | `psi-swarm/SKILL.md` (standalone product; exposed through the skill symlink) |
 | Outcome trends: SERP classes over time, "did results move", weekly run | `skills/geo-observatory/SKILL.md` |
+| Microsoft Clarity: sessions, browser counts, missing tracking, source integrity, or fleet-wide Clarity testing | `../clarity-fleet-health/SKILL.md` |
 | Canonical-root crawl and source fixes | Run `node scripts/ahrefs-site-audit-health.mjs`, then apply every **error** action in the owning repo. The working path is the local sitemap crawl. Ahrefs Health Scores are optional and currently blocked (Infisical `AHREFS_API_KEY` returns 401). See [canonical-root site audit](../../docs/ahrefs-site-audit.md). Do not deploy. Do not invent ratings. |
 | Public usability: click around, guest journeys, blank/broken pages, navigation, search/detail, downloads, primary product actions | `skills/public-product-smoke/SKILL.md` |
 

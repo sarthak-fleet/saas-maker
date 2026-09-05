@@ -1,0 +1,601 @@
+{
+  "$schema": "fleet.approved-campaign-manifest.v1",
+  "version": 1,
+  "campaign": {
+    "id": "authority-2026-09",
+    "kind": "launch_campaign",
+    "projectId": "saas-maker",
+    "title": "Authority & Distribution — deploy the canonical entity, then three earned placements (six surfaces)",
+    "objective": "Close the citation gap SAR-2 measured (1 of 6 surfaces cited) by first correcting what already exists and is wrong, then earning three placements on sources models were observed citing. Anchored on the SaaS Maker entity hub because every other surface resolves through it.",
+    "createdAt": "2026-09-05",
+    "sourceRevision": "SAR-2 scorecard v3 (2026-09-05) + 2026-07-17 directory probe log recovered from 25c460a0^",
+    "revision": 2,
+    "revisedAt": "2026-09-05",
+    "revisionReason": "SAR-9 landed the canonical identity record, closing catalog-name-reconciliation. A control-query probe then established that zero fleet listings are live on the five confirmed July destinations, which retires all four correction-outreach items rather than unblocking them."
+  },
+  "sources": [
+    {
+      "id": "sar-2-scorecard-v3",
+      "type": "baseline-measurement",
+      "reference": "SAR-2 scorecard v3 §3 — 6-prompt citation pilot, 1/6 cited; three misattributions recorded",
+      "verifiedAt": "2026-09-05"
+    },
+    {
+      "id": "july-directory-probe-log",
+      "type": "historical-submission-log",
+      "reference": "ops/config/directory-submissions/log.jsonl @ 25c460a0^ — 1569 rows, 842 unique product x directory pairs, 80 directories touched 2026-07-17",
+      "verifiedAt": "2026-09-05"
+    },
+    {
+      "id": "live-surface-titles",
+      "type": "http-probe",
+      "reference": "curl title probe of 12 fleet origins this run; docs.sassmaker.com resolves NXDOMAIN, sassmaker.com serves 'SaaS Maker — Fleet products and shared tooling'",
+      "verifiedAt": "2026-09-05"
+    },
+    {
+      "id": "serp-stale-title",
+      "type": "search-index-observation",
+      "reference": "Web search for sassmaker.com returns title 'Foundry — a personal fleet by Sarthak Agrawal'; live title differs",
+      "verifiedAt": "2026-09-05"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-1-correct-the-entity",
+      "label": "1 — Deploy the canonical entity record (gates everything else)",
+      "itemKeys": [
+        "deploy-canonical-entity-hub",
+        "self-declared-name-drift",
+        "hub-reindex-sassmaker"
+      ],
+      "note": "catalog-name-reconciliation was delivered by SAR-9 and is retained in items[] as a completed record. The catalog is correct; the deployed hub is not."
+    },
+    {
+      "id": "step-2-earn-placements",
+      "label": "2 — Earn three placements on observed citation sources",
+      "itemKeys": [
+        "awesome-mlx-posttrainllm",
+        "open-source-alternatives-codevetter",
+        "alternativeto-codevetter"
+      ]
+    },
+    {
+      "id": "step-3-enablement-queue",
+      "label": "3 — Retired (was: correction outreach)",
+      "itemKeys": [],
+      "note": "All four items retired. See retiredItems[]. Zero fleet listings are live on the confirmed July destinations, so there is nothing to correct externally and no outreach identity approval is required."
+    }
+  ],
+  "items": [
+    {
+      "key": "hub-reindex-sassmaker",
+      "kind": "entity-correction",
+      "tier": "flagship",
+      "title": "Force reindex of sassmaker.com to retire the stale 'Foundry' brand name",
+      "content": {
+        "body": "The search index and at least one AI answer describe sassmaker.com as \"Foundry — a personal fleet by Sarthak Agrawal\". The live title has been \"SaaS Maker — Fleet products and shared tooling\" for some time (verified by direct fetch this run). Nothing on the live surface needs to change; the index is stale.\n\nThis is the single highest-leverage correction in the program. sassmaker.com is the entity hub that the other five surfaces link into, so every downstream citation inherits whichever name the index holds. It is also self-inflicted: the 2026-07-17 directory run submitted this surface to ~80 destinations under the name \"Foundry (SaaS Maker)\", so the stale name is being reinforced from third-party listings as well as from the index.\n\nAction: submit sassmaker.com and its top-level routes for reindexing via Google Search Console URL Inspection, and via IndexNow if a key is provisioned. Then re-run the geo-observatory brand probe and confirm the returned title.\n\nNo content edit. No new placement. No outreach.",
+        "fields": {
+          "surface": "SaaS Maker",
+          "canonicalUrl": "https://sassmaker.com/",
+          "liveTitle": "SaaS Maker — Fleet products and shared tooling",
+          "indexedTitle": "Foundry — a personal fleet by Sarthak Agrawal",
+          "verificationProbe": "geo-observatory root query 'sassmaker.com' — expect the live title",
+          "expectedPageType": "own origin, no third-party page created",
+          "followState": "n/a — no link created",
+          "indexability": "already indexable; goal is a refreshed snapshot",
+          "permanence": "permanent",
+          "topicalFit": "exact"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "google-search-console",
+        "url": "https://search.google.com/search-console",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "manual",
+        "action": "Owner submits sassmaker.com for reindexing in Search Console URL Inspection. No credential is available to this agent and none is requested.",
+        "requiresAuth": true,
+        "policyVerifiedAt": "2026-09-05"
+      },
+      "timing": {
+        "publishAt": null
+      }
+    },
+    {
+      "key": "deploy-canonical-entity-hub",
+      "kind": "entity-correction",
+      "tier": "flagship",
+      "title": "Commit and deploy the canonical projection so sassmaker.com stops serving retired names",
+      "content": {
+        "body": "The catalog is fixed; the deployed hub is not. Verified by direct fetch this run:\n\n- `https://sassmaker.com/projects` serves \"Email Manager\" and \"What It Takes to Win\".\n- `https://sassmaker.com/api/ai` serves the same two retired names. This is the endpoint whose only purpose is telling an agent what the product is.\n- `catalog/generated/public.json` carries the correcting change as 53 uncommitted lines in the working tree. It is not committed, so it cannot have deployed.\n\nsassmaker.com is the entity hub the other five surfaces link into, so every downstream citation inherits whichever name it serves. A directory editor or a model resolving our entity today reads a retired name from the most authoritative surface we control.\n\nThis is the highest-ROI action remaining in the program and it requires no third party and no approval outside the fleet. It must land before any placement item, so a reviewer who checks our hub sees the same name the placement asserts.\n\nAction: commit the regenerated projection, deploy, then re-fetch both routes and confirm they serve Kinetic and Look Sideways. Nothing is published to a third party by this item.",
+        "fields": {
+          "staleRoutes": [
+            "https://sassmaker.com/projects",
+            "https://sassmaker.com/api/ai"
+          ],
+          "staleNamesServed": [
+            "Email Manager",
+            "What It Takes to Win"
+          ],
+          "expectedAfter": [
+            "Kinetic",
+            "Look Sideways"
+          ],
+          "uncommittedFile": "saas-maker/catalog/generated/public.json",
+          "verifiedAt": "2026-09-05"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "sassmaker-com",
+        "url": "https://sassmaker.com",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "repository",
+        "action": "Commit the regenerated catalog/generated/public.json and deploy SaaS Maker. Re-fetch /projects and /api/ai to verify. Deploy is an owner action; this agent does not hold deploy credentials and does not request them.",
+        "requiresAuth": true,
+        "policyVerifiedAt": "2026-09-05"
+      },
+      "timing": {
+        "note": "Gates every other item in this manifest. Nothing in step 2 should ship before this."
+      }
+    },
+    {
+      "key": "self-declared-name-drift",
+      "kind": "entity-correction",
+      "tier": "flagship",
+      "title": "Fix products that declare a retired name on their own /llms.txt and title",
+      "content": {
+        "body": "Two fleet products contradict the canonical record on their own surfaces — specifically on the endpoints that exist purely to tell a model what the product is. Verified by direct fetch this run:\n\n- `https://heypace.app` — `<title>Pace — private Mac voice agent that sees your screen</title>` and `/llms.txt` opens `# Pace`. Canonical is **HeyPace**.\n- `https://ai-gateway.sassmaker.com/llms.txt` opens `# AI Gateway`. Canonical is **Free AI**.\n\nHeyPace is the urgent one. `heypage.app` is a live, unrelated third party (\"HeyPage — Your Privacy-First AI Assistant for the Web\") that legitimately owns the colliding query. Asserting `heypace.app` anywhere external while the site itself answers to \"Pace\" only half-fixes the collision — the site has to declare HeyPace first, or we are arguing for a name our own surface does not use.\n\nSAR-9 found the general case: 8 of 32 registry surfaces publish a different name to agents than the canonical record, all while scoring S-tier on `agent-ready` — the audit does not check the name. Re-runnable via `node tooling/scripts/entity-identity-live.mjs`.\n\nTracked in the owning repos, per the standing constraint. Nothing is published to a third party.",
+        "fields": {
+          "surfaces": [
+            {
+              "url": "https://heypace.app",
+              "declares": "Pace",
+              "canonical": "HeyPace",
+              "where": "<title> and /llms.txt"
+            },
+            {
+              "url": "https://ai-gateway.sassmaker.com",
+              "declares": "AI Gateway",
+              "canonical": "Free AI",
+              "where": "/llms.txt"
+            }
+          ],
+          "trackedIn": [
+            "https://github.com/sass-maker/saas-maker/issues/94",
+            "https://github.com/Significant-Hobbies/email-manager/issues/49"
+          ],
+          "reRunCommand": "node tooling/scripts/entity-identity-live.mjs",
+          "verifiedAt": "2026-09-05"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "owning-repos",
+        "url": "https://github.com/sass-maker/saas-maker/issues/94",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "repository",
+        "action": "Update /llms.txt and the page title on each surface to the canonical name. Tracked in the owning repo's GitHub Issues via spec-driven.",
+        "requiresAuth": false,
+        "policyVerifiedAt": "2026-09-05"
+      },
+      "timing": {
+        "note": "Should land with or immediately after deploy-canonical-entity-hub."
+      }
+    },
+    {
+      "key": "awesome-mlx-posttrainllm",
+      "kind": "curated-list-pull-request",
+      "tier": "secondary",
+      "title": "PR adding PostTrainLLM to raullenchai/awesome-mlx",
+      "content": {
+        "body": "PostTrainLLM is an MLX-Swift post-training framework for Apple Silicon, open source at github.com/PostTrainLLM/posttrainllm (verified this run). awesome-mlx is a curated list of MLX projects that surfaces in model answers about MLX tooling, and SAR-2's pilot recorded MLX docs and Apple ML Research — not us — being cited for 'post-train a specialist SLM on Apple Silicon'.\n\nThis is a genuine category match, not a stretch: the list is for MLX projects and PostTrainLLM is one. Proposed entry, in the list's existing one-line format:\n\n- [PostTrainLLM](https://github.com/PostTrainLLM/posttrainllm) — Post-train a stock open model into a routed specialist on a single Mac with MLX-Swift: SFT, DPO and LoRA variants, evaluation, serving and model packaging, with wins and regressions both published.\n\nSubmitted as a normal pull request against the list's contribution format. If the maintainer declines, it is declined — no follow-up pressure, no resubmission under another account.",
+        "fields": {
+          "surface": "PostTrainLLM",
+          "repo": "https://github.com/raullenchai/awesome-mlx",
+          "productRepo": "https://github.com/PostTrainLLM/posttrainllm",
+          "claimBasis": "MLX-Swift, Apple Silicon, open source — verified on posttrainllm.com 2026-09-05",
+          "expectedPageType": "curated list README entry",
+          "liveResultUrl": "pending merge",
+          "uniqueReferringDomain": "github.com — already a referring domain for the fleet, so this adds citation surface, not a new domain",
+          "followState": "nofollow (GitHub README)",
+          "indexability": "indexable",
+          "permanence": "durable while the list is maintained",
+          "topicalFit": "exact"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "awesome-mlx",
+        "url": "https://github.com/raullenchai/awesome-mlx",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "repository",
+        "action": "Fork, add one entry in the list's existing format, open a pull request from the owner's GitHub identity. Requires the owner to confirm which GitHub identity opens it.",
+        "requiresAuth": true,
+        "policyVerifiedAt": "2026-09-05"
+      },
+      "timing": {
+        "publishAt": null
+      }
+    },
+    {
+      "key": "open-source-alternatives-codevetter",
+      "kind": "curated-list-pull-request",
+      "tier": "secondary",
+      "title": "PR adding CodeVetter to piotrkulpinski/open-source-alternatives",
+      "content": {
+        "body": "SAR-2's pilot ran 'AI code review tools that run locally' and CodeVetter was not cited; kodus-ai, CRLLM, Ollama guides and SitePoint were. open-source-alternatives is the curated list that came back for the SaaS Maker category prompt and is a plausible source behind those answers.\n\nCodeVetter qualifies on the list's own terms: open source under ISC, runs entirely locally, local SQLite storage, no repository upload to a vendor server (all verified on codevetter.com this run).\n\nOne caveat the owner should decide on before this goes out. CodeVetter's own headline is \"execution-backed verification and evaluation for coding agents\" — that is adjacent to code review, not identical to it. Listing it as a CodeRabbit-style code-review alternative would overclaim. The honest entry positions it as agent-output verification and lets the list decide where it belongs:\n\n- [CodeVetter](https://codevetter.com) — Execution-backed verification for coding-agent output. Runs entirely locally with SQLite storage and a native macOS viewer; no repository upload. ISC. Apple-silicon macOS only today.\n\nThe platform limitation is stated up front rather than discovered by a reader, because a list entry that oversells gets removed and costs more than it gained.",
+        "fields": {
+          "surface": "CodeVetter",
+          "repo": "https://github.com/piotrkulpinski/open-source-alternatives",
+          "claimBasis": "ISC licence, local-only execution, local SQLite — verified on codevetter.com 2026-09-05",
+          "disclosedLimitation": "Apple-silicon macOS build only; no npm, Homebrew or other-platform installer",
+          "positioningRisk": "product is agent-output verification, not classic code review — do not list as a CodeRabbit alternative",
+          "expectedPageType": "curated list entry",
+          "liveResultUrl": "pending merge",
+          "uniqueReferringDomain": "github.com",
+          "followState": "nofollow (GitHub README)",
+          "indexability": "indexable",
+          "permanence": "durable while the list is maintained",
+          "topicalFit": "adjacent — see positioningRisk"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "open-source-alternatives",
+        "url": "https://github.com/piotrkulpinski/open-source-alternatives",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "repository",
+        "action": "Fork, add one entry, open a pull request from the owner's GitHub identity. Requires the owner to confirm the positioning called out in positioningRisk.",
+        "requiresAuth": true,
+        "policyVerifiedAt": "2026-09-05"
+      },
+      "timing": {
+        "publishAt": null
+      }
+    },
+    {
+      "key": "alternativeto-codevetter",
+      "kind": "directory-profile",
+      "tier": "secondary",
+      "title": "AlternativeTo listing for CodeVetter",
+      "content": {
+        "body": "AlternativeTo is a free, self-serve, moderated software directory whose comparison pages are routinely cited in model answers about tool alternatives. It is the highest-value destination in this campaign that does not need any outreach email.\n\nProposed listing, using only verified facts:\n\nName: CodeVetter\nURL: https://codevetter.com\nTagline: Execution-backed verification and evaluation for coding agents\nDescription: CodeVetter runs coding-agent output against real execution before you accept it. Everything stays on the machine — local SQLite storage, a native macOS viewer, and packaged local CLI and stdio MCP sidecars — so no repository is uploaded to a vendor server.\nLicence: Open Source (ISC)\nPlatforms: macOS (Apple silicon)\n\nBlocked, honestly: no AlternativeTo account exists for the fleet, and the platform requires a new account to be seven days old before its first application submission. The account should be created from an email on the product domain so admin rights over the listing can be claimed later. That is an owner action and a seven-day wait, not something this campaign can execute today.",
+        "fields": {
+          "surface": "CodeVetter",
+          "submitPath": "Account menu → Suggest new application",
+          "accountAgeRequirement": "7 days before first submission",
+          "recommendedAccountEmail": "an address on codevetter.com, so the listing can be claimed",
+          "moderationWindow": "a couple of days to a week",
+          "expectedPageType": "software profile page plus alternative-to comparison entries",
+          "liveResultUrl": "pending",
+          "uniqueReferringDomain": "alternativeto.net — new referring domain",
+          "followState": "unverified — confirm before counting it as a link",
+          "indexability": "indexable",
+          "permanence": "durable, moderated",
+          "topicalFit": "exact"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "alternativeto",
+        "url": "https://alternativeto.net/",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "blocked",
+        "action": "Create an AlternativeTo account on a codevetter.com address, wait out the seven-day age requirement, then submit the application above through a visible browser session.",
+        "requiresAuth": true,
+        "policyVerifiedAt": "2026-09-05",
+        "blockedReason": "signin — no fleet AlternativeTo account exists, and new accounts cannot submit for seven days"
+      },
+      "timing": {
+        "publishAt": null
+      }
+    }
+  ],
+  "exclusions": [
+    {
+      "destinationId": "podchaser",
+      "reason": "High Signal Podcasts is a search and claim-extraction layer over other people's podcasts, not a podcast. Claiming a Podchaser or Rephonic podcast profile would assert ownership of shows we do not own. Excluded on accuracy, not on effort."
+    },
+    {
+      "destinationId": "rephonic",
+      "reason": "Same as Podchaser — the free path is 'claim your podcast', and we do not have one. The correct target for this surface is podcast-search tool comparisons, which needs outreach and is therefore blocked this cycle."
+    },
+    {
+      "destinationId": "awesome-saas-directories",
+      "reason": "It is a curated list of directories, not of products. SaaS Maker is a product directory, so the fit is arguable, but listing our directory among submission targets would misrepresent what it is."
+    },
+    {
+      "destinationId": "onet-online",
+      "reason": "O*NET and CareerOneStop were cited against What It Takes to Win, but both are US government occupational databases with no third-party listing path. There is no honest placement to pursue here."
+    },
+    {
+      "destinationId": "spray-blocked-directories",
+      "reason": "28 destinations from the 2026-07-17 probe carry a recorded CAPTCHA, sign-in or anti-bot wall and are held in accreditation-state.json. Enabling any of them is an owner decision and never a bypass."
+    },
+    {
+      "destinationId": "paid-placements",
+      "reason": "SAR-7 forbids paid links, PBNs, link exchanges and spam outreach. No paid tier of any destination in this manifest is in scope, including AlternativeTo and Product Hunt promoted placement."
+    }
+  ],
+  "measurement": {
+    "attribution": "geo-observatory ledger for brand and category queries, plus the frozen baseline-panel-v1 prompt set once SAR-11 captures it. Verified live listing URLs are the receipt for placement items; a refreshed indexed title is the receipt for the reindex item.",
+    "metrics": [
+      "sassmaker.com indexed title matches the live title",
+      "count of the six surfaces cited in the frozen panel (baseline 1 of 6)",
+      "verified live listing URLs from this campaign",
+      "unique referring domains added, counted only after follow state and indexability are confirmed",
+      "stale July listings corrected or confirmed never published"
+    ],
+    "checkpoints": [
+      "launch+0: record manifest hash and approval reference",
+      "launch+7d: recheck sassmaker.com indexed title; check PR status on both curated lists",
+      "launch+30d: re-run the six-prompt citation pilot against the same prompts and compare to 1 of 6",
+      "SAR-8 monthly: fold results into scorecard sections 1 and 3"
+    ]
+  },
+  "permissions": {
+    "repositoryWrites": [
+      "site-health/apps/backend/config/projects.json",
+      "saas-maker public projection (regenerated in the same change)",
+      "fork of raullenchai/awesome-mlx",
+      "fork of piotrkulpinski/open-source-alternatives"
+    ],
+    "commands": [
+      "node scripts/accreditation/summary.mjs",
+      "node scripts/accreditation/update-state.mjs transition",
+      "node skills/launch-campaign/scripts/channel-inventory.mjs --artifact product",
+      "node scripts/campaign-manifest.mjs preview --manifest <path>"
+    ],
+    "publishCommands": [
+      "gh pr create — against raullenchai/awesome-mlx",
+      "gh pr create — against piotrkulpinski/open-source-alternatives"
+    ]
+  },
+  "canonicalIdentity": {
+    "$comment": "Frozen copy of the SAR-9 canonical record as of 2026-09-05. Any item in this manifest that names a product MUST quote this and never an alias. Source of truth is tooling/config/entity-identity-canonical.json; this copy exists so an approved manifest is self-contained and auditable after the fact.",
+    "source": "SAR-9 / tooling/config/entity-identity-canonical.json",
+    "verifiedAt": "2026-09-05",
+    "products": [
+      {
+        "id": "saas-maker",
+        "name": "SaaS Maker",
+        "canonicalUrl": "https://sassmaker.com",
+        "retiredAliases": [
+          "Foundry"
+        ]
+      },
+      {
+        "id": "email-manager",
+        "name": "Kinetic",
+        "canonicalUrl": "https://mail.significanthobbies.com",
+        "retiredAliases": [
+          "Email Manager"
+        ]
+      },
+      {
+        "id": "pace",
+        "name": "HeyPace",
+        "canonicalUrl": "https://heypace.app",
+        "retiredAliases": [
+          "Pace"
+        ]
+      },
+      {
+        "id": "anime-list",
+        "name": "Anime List",
+        "canonicalUrl": "https://anime.significanthobbies.com",
+        "retiredAliases": [
+          "MAL Explorer",
+          "Shelf"
+        ]
+      },
+      {
+        "id": "free-ai",
+        "name": "Free AI",
+        "canonicalUrl": "https://ai-gateway.sassmaker.com",
+        "retiredAliases": [
+          "AI Gateway"
+        ]
+      },
+      {
+        "id": "what-it-takes-to-win",
+        "name": "Look Sideways",
+        "canonicalUrl": "https://paths.significanthobbies.com",
+        "retiredAliases": [
+          "What It Takes to Win"
+        ]
+      },
+      {
+        "id": "on-record",
+        "name": "High Signal Podcasts",
+        "canonicalUrl": "https://podcasts.highsignal.app",
+        "retiredAliases": [
+          "On the Record"
+        ]
+      }
+    ],
+    "doNotPublish": [
+      {
+        "host": "docs.sassmaker.com",
+        "reason": "NXDOMAIN, present in no internal record, linked from nothing in the tree. Has no canonical record. The correction is deletion, not replacement. Never re-submit.",
+        "verifiedAt": "2026-09-05"
+      }
+    ]
+  },
+  "retiredItems": [
+    {
+      "key": "insidr-correction",
+      "title": "Correction request to Insidr.ai for 22 stale fleet listings",
+      "destinationId": "insidr",
+      "retiredAt": "2026-09-05",
+      "retiredReason": "No listing to correct. The July submissions to this destination are not observably live, so a correction request would assert a record the destination does not hold.",
+      "evidence": [
+        "Queried each confirmed destination's own search for codevetter / sassmaker / posttrainllm: identical hit count per destination across all three unrelated terms (Insidr 15, Paggu 14, TheStartupInc 11).",
+        "Control query 'zzqqxnonsense7788' returns exactly the same counts, proving the hits are the query echoed into the results page rather than listings.",
+        "TechPluto returns 0 hits for every term including the control.",
+        "Conclusion: zero fleet listings are live on the five destinations logged as confirmed in the 2026-07-17 run."
+      ],
+      "supersededBy": "deploy-canonical-entity-hub",
+      "note": "Retired, not blocked. This item previously waited on owner approval of a sending identity and outreach templates; that approval is no longer needed for this work."
+    },
+    {
+      "key": "paggu-correction",
+      "title": "Correction request to Paggu for 23 stale fleet listings",
+      "destinationId": "paggu",
+      "retiredAt": "2026-09-05",
+      "retiredReason": "No listing to correct. The July submissions to this destination are not observably live, so a correction request would assert a record the destination does not hold.",
+      "evidence": [
+        "Queried each confirmed destination's own search for codevetter / sassmaker / posttrainllm: identical hit count per destination across all three unrelated terms (Insidr 15, Paggu 14, TheStartupInc 11).",
+        "Control query 'zzqqxnonsense7788' returns exactly the same counts, proving the hits are the query echoed into the results page rather than listings.",
+        "TechPluto returns 0 hits for every term including the control.",
+        "Conclusion: zero fleet listings are live on the five destinations logged as confirmed in the 2026-07-17 run."
+      ],
+      "supersededBy": "deploy-canonical-entity-hub",
+      "note": "Retired, not blocked. This item previously waited on owner approval of a sending identity and outreach templates; that approval is no longer needed for this work."
+    },
+    {
+      "key": "techpluto-correction",
+      "title": "Correction request to TechPluto for 22 stale fleet listings",
+      "destinationId": "techpluto",
+      "retiredAt": "2026-09-05",
+      "retiredReason": "No listing to correct. The July submissions to this destination are not observably live, so a correction request would assert a record the destination does not hold.",
+      "evidence": [
+        "Queried each confirmed destination's own search for codevetter / sassmaker / posttrainllm: identical hit count per destination across all three unrelated terms (Insidr 15, Paggu 14, TheStartupInc 11).",
+        "Control query 'zzqqxnonsense7788' returns exactly the same counts, proving the hits are the query echoed into the results page rather than listings.",
+        "TechPluto returns 0 hits for every term including the control.",
+        "Conclusion: zero fleet listings are live on the five destinations logged as confirmed in the 2026-07-17 run."
+      ],
+      "supersededBy": "deploy-canonical-entity-hub",
+      "note": "Retired, not blocked. This item previously waited on owner approval of a sending identity and outreach templates; that approval is no longer needed for this work."
+    },
+    {
+      "key": "thestartupinc-correction",
+      "title": "Correction request to TheStartupInc for 46 stale fleet listings across two submission paths",
+      "destinationId": "thestartupinc",
+      "retiredAt": "2026-09-05",
+      "retiredReason": "No listing to correct. The July submissions to this destination are not observably live, so a correction request would assert a record the destination does not hold.",
+      "evidence": [
+        "Queried each confirmed destination's own search for codevetter / sassmaker / posttrainllm: identical hit count per destination across all three unrelated terms (Insidr 15, Paggu 14, TheStartupInc 11).",
+        "Control query 'zzqqxnonsense7788' returns exactly the same counts, proving the hits are the query echoed into the results page rather than listings.",
+        "TechPluto returns 0 hits for every term including the control.",
+        "Conclusion: zero fleet listings are live on the five destinations logged as confirmed in the 2026-07-17 run."
+      ],
+      "supersededBy": "deploy-canonical-entity-hub",
+      "note": "Retired, not blocked. This item previously waited on owner approval of a sending identity and outreach templates; that approval is no longer needed for this work."
+    }
+  ],
+  "staleListingLedger": {
+    "$comment": "Retained as ROI evidence for the 2026-07-17 run, not as a worklist. Per retiredItems[], none of these records is observably live.",
+    "source": "ops/config/directory-submissions/log.jsonl, recovered from 25c460a0^",
+    "landedPairs": 759,
+    "stalePairs": 195,
+    "stalePairsOnConfirmedDestinations": 30,
+    "stalePairsOnUnconfirmedDestinations": 165,
+    "unconfirmedDestinationCount": 28,
+    "affectedProductRecords": [
+      {
+        "julyName": "Foundry (SaaS Maker)",
+        "julyUrl": "https://sassmaker.com",
+        "correction": "name -> SaaS Maker"
+      },
+      {
+        "julyName": "SaaS Maker Docs",
+        "julyUrl": "https://docs.sassmaker.com",
+        "correction": "DELETE - no canonical record, NXDOMAIN"
+      },
+      {
+        "julyName": "Pace",
+        "julyUrl": "https://pace-6xg.pages.dev",
+        "correction": "name -> HeyPace, url -> https://heypace.app"
+      },
+      {
+        "julyName": "Email Manager",
+        "julyUrl": "https://mail.sassmaker.com",
+        "correction": "name -> Kinetic, url -> https://mail.significanthobbies.com"
+      },
+      {
+        "julyName": "MAL Explorer",
+        "julyUrl": "https://anime.significanthobbies.com",
+        "correction": "name -> Anime List"
+      },
+      {
+        "julyName": "AI Gateway",
+        "julyUrl": "https://ai-gateway.sassmaker.com",
+        "correction": "name -> Free AI"
+      }
+    ],
+    "neverSubmitted": {
+      "products": [
+        "what-it-takes-to-win",
+        "on-record"
+      ],
+      "note": "SAR-9 flagged Look Sideways as a seventh rename needing external correction. It does not: neither what-it-takes-to-win nor on-record appears anywhere in the July submission log, so no stale third-party listing exists for either. Internal records only."
+    }
+  },
+  "completedItems": [
+    {
+      "key": "catalog-name-reconciliation",
+      "kind": "entity-correction",
+      "tier": "flagship",
+      "title": "Reconcile the six name disagreements between projects.json, the live surfaces, and the July listings",
+      "content": {
+        "body": "Three independent records disagree about what several products are called. Comparing the 2026-07-17 submission payload, the current site-health catalog, and the live page titles fetched this run:\n\n- mail.sassmaker.com — live product is \"Kinetic\"; the catalog says \"Email Manager\"; July submitted \"Email Manager\". The catalog also now points this id at mail.significanthobbies.com while the sassmaker host still serves it. Three-way disagreement, and the only one where the live product name appears in no internal record at all.\n- docs.sassmaker.com — submitted to ~80 directories in July as \"SaaS Maker Docs\". The host does not resolve (NXDOMAIN, verified this run). Any listing that accepted it now carries a dead link.\n- sassmaker.com — submitted as \"Foundry (SaaS Maker)\". Live name is \"SaaS Maker\". Neither this id nor saas-maker-docs is present in the current catalog.\n- pace — submitted at https://pace-6xg.pages.dev, a Cloudflare preview host, not the canonical heypace.app. Separately, heypage.app is a live unrelated third party (\"HeyPage — Your Privacy-First AI Assistant for the Web\"), which is what SAR-2 saw taking the brand query.\n- anime.significanthobbies.com — submitted as \"MAL Explorer\"; live and catalog both say \"Anime List\".\n- ai-gateway.sassmaker.com — submitted as \"AI Gateway\"; live and catalog both say \"Free AI\".\n\nAction: pick one canonical name and URL per product, write it into site-health projects.json, and regenerate the SaaS Maker public projection in the same change, per the standing constraint. The result is the single source the correction outreach in step 3 quotes from — that outreach cannot be written until this lands.\n\nThis is a catalog edit only. Nothing is published to a third party by this item.",
+        "fields": {
+          "affectedIds": "email-manager, saas-maker-docs, saas-maker-showcase, pace, anime-list, free-ai",
+          "catalogPath": "site-health/apps/backend/config/projects.json",
+          "coupledArtifact": "SaaS Maker checked-in public projection — must regenerate in the same change",
+          "deadHost": "docs.sassmaker.com (NXDOMAIN 2026-09-05)",
+          "expectedPageType": "internal catalog, not published",
+          "followState": "n/a",
+          "indexability": "n/a",
+          "permanence": "permanent",
+          "topicalFit": "exact"
+        },
+        "assets": []
+      },
+      "destination": {
+        "id": "site-health-catalog",
+        "url": "https://github.com/local/site-health",
+        "accountSlug": null,
+        "cost": "free"
+      },
+      "execution": {
+        "mode": "repository",
+        "action": "Edit site-health/apps/backend/config/projects.json and regenerate the SaaS Maker public projection in the same commit. Tracked in the owning repo's GitHub Issues via spec-driven.",
+        "requiresAuth": false,
+        "policyVerifiedAt": "2026-09-05"
+      },
+      "timing": {
+        "publishAt": null
+      },
+      "status": "completed-externally",
+      "completedBy": "SAR-9",
+      "completedAt": "2026-09-05",
+      "completionEvidence": [
+        "site-health/apps/backend/config/projects.json now carries all seven canonical names with retired aliases (read this run)",
+        "SaaS Maker public projection regenerated in the same change (catalog/generated/public.json, 53 lines changed)",
+        "Per-decision rationale and tiebreak rule recorded in tooling/config/entity-identity-canonical.json"
+      ],
+      "residual": "The catalog is correct but NOT deployed, and not committed. Superseded by deploy-canonical-entity-hub, which is now the gating item for everything downstream."
+    }
+  ]
+}

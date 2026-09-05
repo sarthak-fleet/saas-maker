@@ -1,0 +1,7 @@
+{
+  "schema": "fleet.skill-execution-profile.v1",
+  "recommended": { "intelligence": "balanced", "reasoning": "medium" },
+  "minimum": { "intelligence": "economy", "reasoning": "medium" },
+  "degradation": "allow",
+  "rationale": "The deterministic collectors own execution; the agent interprets bounded per-project evidence and preserves privacy and quota boundaries."
+}

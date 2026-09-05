@@ -85,14 +85,23 @@ committed here. See
 
 `clarity-audit.mjs` reads the Microsoft Clarity receipt in
 [`config/clarity-projects.json`](config/clarity-projects.json) — which Clarity
-project belongs to which Fleet product, and which file wires it — and fails on
-one project claimed by two products, the retired fleet-wide shared project, and
-a claim that is not actually present in the file it names. A finding carrying a
+project belongs to which Fleet product and which landing, browser-app, or
+combined surfaces must wire it — and fails on one project claimed by two
+products, the retired fleet-wide shared project, a missing surface, or a claim
+that is not actually present in the file it names. Privacy-sensitive app roots
+can require explicit source masking in the same receipt. A finding carrying a
 dated `violation` record is reported rather than failed, because its fix lives
 in another repository; once that fix lands the record goes stale and the audit
 fails until the receipt is updated. `--strict` fails on every finding. The
 receipt records decisions that have been made, not the private catalog, and
 `--omit-private` keeps non-public repositories out of a committed report.
+It also validates the credential-free desired-state policy in
+[`config/clarity-capabilities.json`](config/clarity-capabilities.json). The
+policy distinguishes automatic features from provider, source, operator, and
+infrastructure work; desired state is never reported as provider verification.
+The separate [`config/clarity-journeys.json`](config/clarity-journeys.json)
+records one live-root-backed Smart Event and funnel candidate per wired product,
+or an explicit rendered-discovery blocker when stable action text was absent.
 
 `footer-source-audit.mjs` reads a caller-owned manifest of relative source
 paths and verifies that each named browser surface loads the project strip

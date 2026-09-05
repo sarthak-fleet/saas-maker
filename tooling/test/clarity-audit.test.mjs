@@ -7,6 +7,9 @@ import {
   ACKNOWLEDGEABLE_CODES,
   auditClarity,
   findRegistryViolations,
+  projectCapabilityCoverage,
+  validateCapabilityPolicy,
+  validateJourneyRegistry,
   validateRegistry,
 } from '../scripts/clarity-audit.mjs';
 
@@ -20,6 +23,12 @@ const now = Date.parse('2026-08-30T00:00:00.000Z');
 const base = JSON.parse(readFileSync(join(fixtures, 'registry.json'), 'utf8'));
 const shipped = JSON.parse(
   readFileSync(join(repositoryRoot, 'config', 'clarity-projects.json'), 'utf8')
+);
+const capabilityPolicy = JSON.parse(
+  readFileSync(join(repositoryRoot, 'config', 'clarity-capabilities.json'), 'utf8')
+);
+const journeys = JSON.parse(
+  readFileSync(join(repositoryRoot, 'config', 'clarity-journeys.json'), 'utf8')
 );
 
 function audit(registry, overrides = {}) {
@@ -46,6 +55,49 @@ test('the shipped registry validates', () => {
   assert.equal(shipped.legacySharedId, 'y39u4kk9oq');
 });
 
+test('the shipped capability policy is complete and remains desired state, not provider proof', () => {
+  const { valid, problems } = validateCapabilityPolicy(capabilityPolicy);
+  assert.deepEqual(problems, []);
+  assert.equal(valid, true);
+  const coverage = projectCapabilityCoverage(shipped, capabilityPolicy);
+  assert.equal(coverage.projects, 56);
+  assert.equal(coverage.wiredProjects, 42);
+  assert.equal(coverage.capabilities.length, 17);
+  assert.equal(coverage.providerVerifiedAssignments, 0);
+  assert.ok(coverage.desiredAssignments > 0);
+  assert.ok(coverage.blockedAssignments > 0);
+});
+
+test('capability policy rejects duplicate ids and unexplained conditional adoption', () => {
+  const duplicate = structuredClone(capabilityPolicy);
+  duplicate.capabilities.push(structuredClone(duplicate.capabilities[0]));
+  assert.match(validateCapabilityPolicy(duplicate).problems.join('\n'), /duplicates capability id recordings/u);
+
+  const unexplained = structuredClone(capabilityPolicy);
+  delete unexplained.capabilities.find((item) => item.id === 'ga4').reason;
+  assert.match(validateCapabilityPolicy(unexplained).problems.join('\n'), /reason must explain/u);
+});
+
+test('the shipped journey registry covers every wired surface with live-root evidence', () => {
+  const { valid, problems } = validateJourneyRegistry(journeys, shipped);
+  assert.deepEqual(problems, []);
+  assert.equal(valid, true);
+  assert.equal(journeys.projects.length, 42);
+  assert.equal(journeys.projects.filter((entry) => entry.state === 'ready').length, 38);
+  assert.equal(journeys.projects.filter((entry) => entry.state === 'discovery-required').length, 4);
+});
+
+test('journey registry rejects invented ready journeys and missing wired products', () => {
+  const invented = structuredClone(journeys);
+  invented.projects.find((entry) => entry.id === 'drank').state = 'ready';
+  delete invented.projects.find((entry) => entry.id === 'drank').reason;
+  assert.match(validateJourneyRegistry(invented, shipped).problems.join('\n'), /event.name/u);
+
+  const missing = structuredClone(journeys);
+  missing.projects = missing.projects.filter((entry) => entry.id !== 'anchor');
+  assert.match(validateJourneyRegistry(missing, shipped).problems.join('\n'), /missing wired project anchor/u);
+});
+
 test('validateRegistry rejects malformed ids, undated debt, and unexplained gaps', () => {
   const badId = structuredClone(base);
   badId.projects[0].clarityId = 'Y6AAAAAAAA';
@@ -61,7 +113,21 @@ test('validateRegistry rejects malformed ids, undated debt, and unexplained gaps
 
   const claimWithoutFile = structuredClone(base);
   claimWithoutFile.projects[0].wiredFiles = [];
+  claimWithoutFile.projects[0].browserSurfaces = [];
   assert.match(validateRegistry(claimWithoutFile).problems.join('\n'), /no wired file/u);
+
+  const missingSurfaceContract = structuredClone(base);
+  delete missingSurfaceContract.projects[0].browserSurfaces;
+  assert.match(validateRegistry(missingSurfaceContract).problems.join('\n'), /browserSurfaces must be an array/u);
+
+  const unsafeSurface = structuredClone(base);
+  unsafeSurface.projects[0].wiredFiles = ['../outside.html'];
+  unsafeSurface.projects[0].browserSurfaces = [{ kind: 'landing', file: '../outside.html' }];
+  assert.match(validateRegistry(unsafeSurface).problems.join('\n'), /safe path relative/u);
+
+  const mismatchedProjection = structuredClone(base);
+  mismatchedProjection.projects[0].wiredFiles = ['alpha/other.html'];
+  assert.match(validateRegistry(mismatchedProjection).problems.join('\n'), /must exactly match/u);
 
   const undated = structuredClone(base);
   undated.projects[0].violation = {
@@ -102,10 +168,36 @@ test('a clean registry over a matching checkout has nothing to report', () => {
   assert.equal(report.registry.noSurface, 1);
 });
 
+test('the shipped receipt declares separate landing and browser-app surfaces where required', () => {
+  for (const id of ['live', 'high-signal', 'email-manager', 'knowledge-base']) {
+    const project = shipped.projects.find((entry) => entry.id === id);
+    assert.deepEqual(project.browserSurfaces.map((surface) => surface.kind).sort(), ['browser-app', 'landing']);
+  }
+  assert.deepEqual(shipped.projects.find((entry) => entry.id === 'pace').browserSurfaces.map((surface) => surface.kind), ['landing']);
+  assert.deepEqual(shipped.projects.find((entry) => entry.id === 'gitstat').browserSurfaces.map((surface) => surface.kind), ['combined']);
+  for (const id of ['email-manager', 'knowledge-base']) {
+    const appSurface = shipped.projects.find((entry) => entry.id === id).browserSurfaces.find((surface) => surface.kind === 'browser-app');
+    assert.equal(appSurface.mask, 'root');
+  }
+});
+
+test('a separately declared browser app cannot pass when only the landing is wired', () => {
+  const split = structuredClone(base);
+  split.projects[0].wiredFiles.push('alpha/app.html');
+  split.projects[0].browserSurfaces.push({ kind: 'browser-app', file: 'alpha/app.html', mask: 'root' });
+
+  const report = audit(split);
+  const alphaFindings = report.findings.filter((entry) => entry.project === 'alpha');
+  assert.equal(alphaFindings.length, 1);
+  assert.equal(alphaFindings[0].code, 'UNWIRED_CLAIM');
+  assert.match(alphaFindings[0].message, /alpha\/app\.html/u);
+});
+
 test('one Clarity ID claimed by two products is a finding against both', () => {
   const shared = structuredClone(base);
   shared.projects[1].clarityId = 'y6aaaaaaaa';
   shared.projects[1].wiredFiles = [];
+  shared.projects[1].browserSurfaces = [];
   shared.projects[1].reason = 'Deliberately left unwired for this fixture so only the sharing is measured.';
 
   const registryOnly = findRegistryViolations(shared);
@@ -127,6 +219,7 @@ test('a dated record on the borrower covers the product it borrowed from', () =>
   const shared = structuredClone(base);
   shared.projects[1].clarityId = 'y6aaaaaaaa';
   shared.projects[1].wiredFiles = [];
+  shared.projects[1].browserSurfaces = [];
   shared.projects[1].reason = 'Deliberately left unwired for this fixture so only the sharing is measured.';
   shared.projects[1].violation = {
     code: 'SHARED_CLARITY_ID',
@@ -152,6 +245,7 @@ test('the retired fleet-wide shared project is a finding wherever it is claimed'
     clarityId: 'y39u4kk9oq',
     tag: 'gamma',
     wiredFiles: ['gamma/app.html'],
+    browserSurfaces: [{ kind: 'combined', file: 'gamma/app.html' }],
   });
 
   const report = audit(legacy);
@@ -168,6 +262,7 @@ test('the retired ID inside a product that claims a different one is caught from
     clarityId: 'y6cccccccc',
     tag: 'gamma',
     wiredFiles: ['gamma/app.html'],
+    browserSurfaces: [{ kind: 'combined', file: 'gamma/app.html' }],
   });
 
   const report = audit(drifted);
@@ -178,6 +273,7 @@ test('a claimed ID that is not in the file it names fails, and a missing file is
   const wrong = structuredClone(base);
   wrong.projects[0].clarityId = 'y6zzzzzzzz';
   wrong.projects[1].wiredFiles = ['beta/src/does-not-exist.tsx'];
+  wrong.projects[1].browserSurfaces = [{ kind: 'combined', file: 'beta/src/does-not-exist.tsx' }];
 
   const report = audit(wrong);
   assert.deepEqual(codesFor(report, 'alpha'), ['UNWIRED_CLAIM']);

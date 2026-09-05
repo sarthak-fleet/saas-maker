@@ -33,6 +33,18 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-09-01 — Added a credential-free Clarity capability desired-state
+  contract covering 17 automatic, provider, source, operator, and
+  infrastructure features. The source audit now validates and reports the
+  policy separately from provider proof: 39 wired surfaces produce 507 desired,
+  117 conditional, and 39 blocked assignments across the 56-project receipt,
+  with zero provider settings falsely marked verified. A live-root scan also
+  produced 36 concrete Smart Event/funnel candidates and three explicit
+  rendered-discovery blockers; both active discovery gaps were resolved from
+  stable rendered-source evidence, so the three remaining blockers are inactive
+  retained identities. Focused Clarity tests and the complete source
+  audit pass with no blocking findings. Refs
+  `sass-maker/site-health#485`.
 - 2026-09-01 — Completed the signed-in Clarity project gap: created dedicated
   projects for Live, High Signal, High Signal Podcasts, IssuePages, and Journal;
   wired their owning public sources; and updated the registry to 56 distinct

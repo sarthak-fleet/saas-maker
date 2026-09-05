@@ -15,6 +15,7 @@ EXPOSED_FLEET_SKILLS=(
   ian-xiaohei-illustrations
   ios-app-growth
   code-cleanup
+  clarity-fleet-health
   local-ports-cleanup
   mobile-task-control
   name-domains

@@ -20,12 +20,12 @@ import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { validateRootBrandContract } from '../../site-health/apps/backend/lib/root-brand-contract.mjs';
+import { validateRootBrandContract } from '../../../site-health/apps/backend/lib/root-brand-contract.mjs';
 import {
   activeObservatoryQueries,
   mergeRootSearchQueriesIntoObservatory,
   validateRootSearchQueryContract,
-} from '../../site-health/apps/backend/lib/root-search-query-contract.mjs';
+} from '../../../site-health/apps/backend/lib/root-search-query-contract.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const FLEET_ROOT = resolve(__dirname, '../../..');

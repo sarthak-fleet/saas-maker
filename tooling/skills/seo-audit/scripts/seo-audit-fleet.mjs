@@ -15,7 +15,8 @@ import { promisify } from 'node:util';
 import { visibilityProjects } from '../../../lib/visibility-projects.mjs';
 
 const execFileAsync = promisify(execFile);
-const fleetRoot = resolve(import.meta.dirname, '../../../..');
+// scripts → seo-audit → skills → tooling → saas-maker → fleet root
+const fleetRoot = resolve(import.meta.dirname, '../../../../..');
 const defaultArtifact = join(
   fleetRoot,
   'site-health/apps/backend/data/seo-audit/latest.json',

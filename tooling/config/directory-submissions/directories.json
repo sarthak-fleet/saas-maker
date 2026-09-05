@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "updated": "2026-07-17",
+  "strategy": "Quality over spam. Prefer free dofollow / curated launch sites. Automate only no-CAPTCHA email forms with Playwright + AgentMail. OAuth and CAPTCHA stay human-kick.",
+  "directories": [
+    {
+      "id": "smol-launch",
+      "name": "Smol Launch",
+      "submitUrl": "https://smollaunch.com/submit",
+      "home": "https://smollaunch.com",
+      "cost": "free",
+      "dofollow": "badge or premium",
+      "automation": "manual",
+      "reason": "Likely auth + curation; high value weekly launch"
+    },
+    {
+      "id": "product-hunt",
+      "name": "Product Hunt",
+      "submitUrl": "https://www.producthunt.com/posts/new",
+      "home": "https://www.producthunt.com",
+      "cost": "free",
+      "dofollow": "top of day",
+      "automation": "manual",
+      "reason": "OAuth + social launch strategy required"
+    },
+    {
+      "id": "launching-next",
+      "name": "Launching Next",
+      "submitUrl": "https://www.launchingnext.com/submit/",
+      "home": "https://www.launchingnext.com",
+      "cost": "free",
+      "dofollow": "yes permanent",
+      "automation": "blocked",
+      "reason": "Bot interstitial / anti-automation page"
+    },
+    {
+      "id": "betalist",
+      "name": "BetaList",
+      "submitUrl": "https://betalist.com/submit",
+      "home": "https://betalist.com",
+      "cost": "free",
+      "dofollow": "unknown",
+      "automation": "manual",
+      "reason": "Pre-launch focus; account + review queue"
+    },
+    {
+      "id": "uneed",
+      "name": "Uneed",
+      "submitUrl": "https://www.uneed.best",
+      "home": "https://www.uneed.best",
+      "cost": "free",
+      "dofollow": "paid featured",
+      "automation": "blocked",
+      "reason": "Turnstile CAPTCHA"
+    },
+    {
+      "id": "alternativeto",
+      "name": "AlternativeTo",
+      "submitUrl": "https://alternativeto.net",
+      "home": "https://alternativeto.net",
+      "cost": "free",
+      "dofollow": "nofollow",
+      "automation": "manual",
+      "reason": "Account + product evidence; comparison placement"
+    },
+    {
+      "id": "indie-hackers",
+      "name": "Indie Hackers Products",
+      "submitUrl": "https://www.indiehackers.com/products",
+      "home": "https://www.indiehackers.com",
+      "cost": "free",
+      "dofollow": "nofollow",
+      "automation": "manual",
+      "reason": "OAuth account + engagement post required"
+    },
+    {
+      "id": "saashub",
+      "name": "SaaSHub",
+      "submitUrl": "https://www.saashub.com/submit",
+      "home": "https://www.saashub.com",
+      "cost": "free",
+      "dofollow": "premium",
+      "automation": "try",
+      "reason": "Probe for free submit form"
+    },
+    {
+      "id": "taaft",
+      "name": "There's An AI For That",
+      "submitUrl": "https://theresanaiforthat.com/submit/",
+      "home": "https://theresanaiforthat.com",
+      "cost": "free",
+      "dofollow": "unknown",
+      "automation": "try",
+      "reason": "AI products only; high traffic"
+    },
+    {
+      "id": "devhunt",
+      "name": "DevHunt",
+      "submitUrl": "https://devhunt.org/submit",
+      "home": "https://devhunt.org",
+      "cost": "free",
+      "dofollow": "yes",
+      "automation": "try",
+      "reason": "Dev tools focus"
+    },
+    {
+      "id": "g2",
+      "name": "G2",
+      "submitUrl": "https://www.g2.com",
+      "home": "https://www.g2.com",
+      "cost": "free listing",
+      "dofollow": "yes",
+      "automation": "manual",
+      "reason": "Vendor portal + review moat"
+    },
+    {
+      "id": "capterra",
+      "name": "Capterra",
+      "submitUrl": "https://www.capterra.com",
+      "home": "https://www.capterra.com",
+      "cost": "free listing",
+      "dofollow": "yes",
+      "automation": "manual",
+      "reason": "Vendor portal"
+    },
+    {
+      "id": "microlaunch",
+      "name": "Microlaunch",
+      "submitUrl": "https://microlaunch.net/submit",
+      "home": "https://microlaunch.net",
+      "cost": "free tier / premium",
+      "dofollow": "unknown",
+      "automation": "manual",
+      "reason": "Redirects to premium pricing; no free form found"
+    },
+    {
+      "id": "insidr",
+      "name": "Insidr.ai",
+      "submitUrl": "https://www.insidr.ai/submit-tools/",
+      "home": "https://www.insidr.ai",
+      "cost": "free",
+      "dofollow": "unknown",
+      "automation": "auto",
+      "reason": "Free Elementor form; no CAPTCHA in 2026-07 probe; bulk submitted"
+    },
+    {
+      "id": "aitoolnet",
+      "name": "Aitoolnet",
+      "submitUrl": "https://www.aitoolnet.com/submit",
+      "home": "https://www.aitoolnet.com",
+      "cost": "free / paid",
+      "dofollow": "unknown",
+      "automation": "blocked",
+      "reason": "Cloudflare after a couple posts"
+    },
+    {
+      "id": "futuretools",
+      "name": "Future Tools",
+      "submitUrl": "https://www.futuretools.io/submit-a-tool",
+      "home": "https://www.futuretools.io",
+      "cost": "free / paid",
+      "dofollow": "unknown",
+      "automation": "blocked",
+      "reason": "CAPTCHA on submit"
+    },
+    {
+      "id": "startup-fast",
+      "name": "Startup Fast",
+      "submitUrl": "https://www.startupfa.st/projects/submit",
+      "home": "https://www.startupfa.st",
+      "cost": "free with badge / paid",
+      "dofollow": "conditional free",
+      "automation": "manual",
+      "reason": "CLI login is browser OAuth callback; free tier requires badge on site"
+    },
+    {
+      "id": "open-launch",
+      "name": "Open Launch",
+      "submitUrl": "https://www.open-launch.com/projects/submit",
+      "home": "https://www.open-launch.com",
+      "cost": "free",
+      "dofollow": "unknown",
+      "automation": "blocked",
+      "reason": "Turnstile + sign-in"
+    },
+    {
+      "id": "peerlist",
+      "name": "Peerlist",
+      "submitUrl": "https://peerlist.io/launch",
+      "home": "https://peerlist.io",
+      "cost": "free",
+      "dofollow": "unknown",
+      "automation": "blocked",
+      "reason": "Cloudflare challenge"
+    },
+    {
+      "id": "toolify",
+      "name": "Toolify",
+      "submitUrl": "https://www.toolify.ai/submit",
+      "home": "https://www.toolify.ai",
+      "cost": "free / paid",
+      "dofollow": "unknown",
+      "automation": "try",
+      "reason": "AI tool directory"
+    },
+    {
+      "id": "futurepedia",
+      "name": "Futurepedia",
+      "submitUrl": "https://www.futurepedia.io/submit-tool",
+      "home": "https://www.futurepedia.io",
+      "cost": "free / paid",
+      "dofollow": "unknown",
+      "automation": "try",
+      "reason": "AI tools"
+    },
+    {
+      "id": "sourceforge",
+      "name": "SourceForge",
+      "submitUrl": "https://sourceforge.net/create",
+      "home": "https://sourceforge.net",
+      "cost": "free",
+      "dofollow": "yes",
+      "automation": "manual",
+      "reason": "Account + project create flow"
+    },
+    {
+      "id": "hacker-news",
+      "name": "Hacker News (Show HN)",
+      "submitUrl": "https://news.ycombinator.com/submit",
+      "home": "https://news.ycombinator.com",
+      "cost": "free",
+      "dofollow": "nofollow",
+      "automation": "manual",
+      "reason": "Account + one quality post per product; do not spam"
+    }
+  ]
+}

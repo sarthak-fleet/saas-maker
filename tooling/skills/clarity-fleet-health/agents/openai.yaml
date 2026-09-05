@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clarity Fleet Health"
+  short_description: "Audit Clarity wiring and aggregate traffic"
+  default_prompt: "Use $clarity-fleet-health to audit Clarity across every Fleet product and report source, cached, and provider-backed health honestly."

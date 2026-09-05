@@ -24,6 +24,15 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
 
 ## Timeline
 
+- **2026-09-01 — Fleet-wide Clarity health skill:** Added the discoverable
+  `clarity-fleet-health` skill with separate credential-free source, cached
+  health, explicit live refresh, and focused MCP investigation modes. Its first
+  safe run accounted for all 56 canonical identities: 56 distinct project IDs,
+  every declared source claim verified, and no blocking source findings. Site
+  Health reported 26 eligible current products not yet measured, six current
+  intentional unwired boundaries, and 24 inactive retained identities. No
+  token lookup, Microsoft request, deployment, or provider mutation ran.
+
 - **2026-09-01 — Fleet rollout decisions and Clarity source closure:** Recorded
   Starboard, High Signal, and Open Historia as the second shared web-landing
   adoption batch; confirmed the no-license UI path uses Preline or another
@@ -233,6 +242,9 @@ Cockpit, CodeVetter, and App Health remain independent repositories.
   surfaces.
 - Public human and JSON indexes for reusable Fleet capabilities, backed by the
   same checked-in catalog validator used by operators and agents.
+- Discoverable Clarity Fleet Health skill for complete source accounting,
+  cached aggregate health, and explicit bounded live refresh through Site
+  Health without copying credentials into shared tooling.
 - Feedback submission for bug, feature, and general feedback.
 - Optional screenshots and page-element anchoring.
 - Private cross-product feedback inbox with type/status filters and status controls.

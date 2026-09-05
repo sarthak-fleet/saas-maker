@@ -44,6 +44,11 @@ fi
 
 fetch() { curl -fsSL --max-time 30 "$1"; }
 
+# bare lowercase hostname from a URL: scheme, path, port and case all dropped
+host_of() {
+  printf '%s' "$1" | sed -E 's#^[a-zA-Z][a-zA-Z0-9+.-]*://##; s#/.*$##; s#^[^@]*@##; s#:[0-9]+$##' | tr 'A-Z' 'a-z'
+}
+
 # extract <meta> content by name or property
 meta_content() {
   local html="$1" attr="$2" val="$3"
@@ -441,6 +446,62 @@ audit_site() {
     rm -f "$tmp_locs"
     if [[ $missing -eq 0 ]]; then
       echo "  sitemap-coverage   PASS   all audited URLs in sitemap"; ((PASS++))
+    fi
+  fi
+
+  # same-host crawler contract
+  #
+  # A site is only crawlable through its own robots.txt and sitemap. When an
+  # origin serves its own HTML but hands that contract to another host, search
+  # engines discover none of its URLs — the pages exist and any authority they
+  # earn accrues to the other host. Every check above still passes, because
+  # each one follows redirects and then grades whatever it lands on. That is
+  # how significanthobbies.com scored a clean sheet while its apex could not
+  # be crawled at all.
+  #
+  # Redirecting a whole origin (apex -> www) is ordinary canonicalisation, not
+  # this defect: there the homepage redirects too, so no content is stranded
+  # behind a missing crawl path. Gate on the origin serving its own homepage.
+  local origin_host home_status
+  origin_host=$(host_of "$origin")
+  home_status=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$origin/")
+
+  if [[ $home_status -lt 200 || $home_status -ge 300 ]]; then
+    echo "  crawler-contract   PASS   origin redirects wholesale ($home_status), not a split contract"; ((PASS++))
+  else
+    local contract_split=0
+
+    # robots.txt must be served by this origin, not fetched from elsewhere
+    local robots_effective robots_host
+    robots_effective=$(curl -sL -o /dev/null -w '%{url_effective}' --max-time 15 "$origin/robots.txt")
+    robots_host=$(host_of "$robots_effective")
+    if [[ -n "$robots_host" && "$robots_host" != "$origin_host" ]]; then
+      echo "  crawler-contract   FAIL   robots.txt redirects to $robots_host; $origin_host serves none of its own"; ((FAIL++))
+      contract_split=1
+    fi
+
+    # the advertised sitemap must live on this origin
+    if [[ -n "$sitemap_url" ]]; then
+      local sitemap_host
+      sitemap_host=$(host_of "$sitemap_url")
+      if [[ -n "$sitemap_host" && "$sitemap_host" != "$origin_host" ]]; then
+        echo "  crawler-contract   FAIL   robots.txt advertises a sitemap on $sitemap_host, a foreign host"; ((FAIL++))
+        contract_split=1
+      fi
+    fi
+
+    # and it must actually list URLs on this origin
+    if [[ -n "${sitemap_locs:-}" ]]; then
+      local own_locs
+      own_locs=$(echo "$sitemap_locs" | grep -icE "^https?://$origin_host(/|$)" || true)
+      if [[ $own_locs -eq 0 ]]; then
+        echo "  crawler-contract   FAIL   sitemap lists 0 URLs on $origin_host; this origin discovers nothing"; ((FAIL++))
+        contract_split=1
+      fi
+    fi
+
+    if [[ $contract_split -eq 0 ]]; then
+      echo "  crawler-contract   PASS   robots.txt and sitemap are served by $origin_host"; ((PASS++))
     fi
   fi
   echo
