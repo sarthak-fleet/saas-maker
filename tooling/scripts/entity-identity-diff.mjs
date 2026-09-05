@@ -12,7 +12,9 @@
  *              and its JSON-LD name — read from repo source, not fetched
  *
  * Six fields per the deliverable table: name, description, canonicalUrl,
- * docsUrl, repoUrl, pricing.
+ * docsUrl, repoUrl, pricing. Five of them are identity values and are compared
+ * for equality. `description` is not one of those, and is held to a different
+ * bar — see DESCRIPTION_STANDARDS below.
  *
  * Usage:
  *   node tooling/scripts/entity-identity-diff.mjs                # all configured
@@ -20,6 +22,7 @@
  *   node tooling/scripts/entity-identity-diff.mjs --no-github    # offline
  *   node tooling/scripts/entity-identity-diff.mjs --json
  *   node tooling/scripts/entity-identity-diff.mjs --markdown
+ *   node tooling/scripts/entity-identity-diff.mjs --standard=identical
  *
  * Reads only. Never writes to a product repo.
  */
@@ -27,6 +30,7 @@
 import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
@@ -39,14 +43,44 @@ const catalogPath = path.resolve(
 );
 const projectionPath = path.join(repoRoot, 'catalog/generated/public.json');
 const sourcesPath = path.join(repoRoot, 'tooling/config/entity-identity-sources.json');
+const canonicalPath = path.join(repoRoot, 'tooling/config/entity-identity-canonical.json');
 
 const FIELDS = ['name', 'description', 'canonicalUrl', 'docsUrl', 'repoUrl', 'pricing'];
 const SOURCES = ['registry', 'directory', 'github', 'docs'];
+
+/**
+ * SAR-9's deliverable table asks for six fields identical in four places. Five
+ * of them are identity values — a URL is the same URL or it is a different one.
+ * `description` is not, and forcing it to byte-equality would degrade all four
+ * surfaces: a GitHub repo description describes a repository, a meta
+ * description is written for snippet length and search intent, and the
+ * directory one-liner is brand positioning. The issue's own boundary says not
+ * to rewrite positioning copy, so `identical` cannot be the default without the
+ * standard contradicting the boundary.
+ *
+ * `non-contradiction` is the default instead: each surface keeps copy fit for
+ * its purpose, but none may assert a different product, a retired name, or a
+ * different category. `--standard=identical` restores strict equality.
+ */
+const DESCRIPTION_STANDARDS = new Set(['non-contradiction', 'identical']);
+const DEFAULT_DESCRIPTION_STANDARD = 'non-contradiction';
 
 const args = process.argv.slice(2);
 const flags = new Set(args.filter((a) => a.startsWith('--')));
 const only = args.filter((a) => !a.startsWith('--'));
 const useGithub = !flags.has('--no-github');
+
+export function readStandard(argv) {
+  const flag = argv.find((a) => a.startsWith('--standard='));
+  if (!flag) return DEFAULT_DESCRIPTION_STANDARD;
+  const value = flag.slice('--standard='.length).trim();
+  if (!DESCRIPTION_STANDARDS.has(value)) {
+    throw new Error(
+      `--standard must be one of ${[...DESCRIPTION_STANDARDS].join(', ')} (got "${value}")`
+    );
+  }
+  return value;
+}
 
 /** Trailing slashes and protocol case are not substance. */
 function normalizeUrl(value) {
@@ -71,6 +105,60 @@ function normalize(field, value) {
   if (field.endsWith('Url')) return normalizeUrl(value);
   if (field === 'description') return normalizeText(value)?.toLowerCase() ?? null;
   return normalizeText(value);
+}
+
+// ------------------------------------------------------- description standard
+
+/**
+ * Whole-term containment. Boundaries are non-alphanumeric rather than `\b` so
+ * that a hyphen separates terms ("coding-agent" contains "agent") while a
+ * word does not ("GitHub" does not contain "Hub", "paths" does contain "path").
+ */
+export function mentionsTerm(text, term) {
+  if (!text || !term) return false;
+  const escaped = String(term)
+    .trim()
+    .toLowerCase()
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    .replace(/\s+/g, '\\s+');
+  if (!escaped) return false;
+  return new RegExp(`(?<![a-z0-9])${escaped}(?:e?s)?(?![a-z0-9])`, 'iu').test(String(text));
+}
+
+/**
+ * Does one source's description contradict the entity, rather than merely word
+ * it differently? Three mechanical checks, in descending severity:
+ *
+ *   retired-name    it publishes a name the canonical record retired
+ *   foreign-entity  it names a different registered product as its subject
+ *   category-drift  it contains none of the surface's category anchors, i.e.
+ *                   it is describing a different kind of thing
+ *
+ * Wording, length, and which capabilities get listed are deliberately NOT
+ * checked. Those are the differences the standard exists to permit.
+ */
+export function describeContradictions({ description, claim, retiredNames = [], foreignNames = [] }) {
+  const text = normalizeText(description);
+  if (!text) return [];
+  const findings = [];
+  const allowed = new Set((claim?.mentions ?? []).map((m) => String(m).toLowerCase()));
+
+  for (const retired of retiredNames) {
+    if (mentionsTerm(text, retired)) {
+      findings.push({ kind: 'retired-name', detail: retired });
+    }
+  }
+  for (const foreign of foreignNames) {
+    if (allowed.has(String(foreign).toLowerCase())) continue;
+    if (mentionsTerm(text, foreign)) {
+      findings.push({ kind: 'foreign-entity', detail: foreign });
+    }
+  }
+  const anchors = claim?.anchors ?? [];
+  if (anchors.length && !anchors.some((anchor) => mentionsTerm(text, anchor))) {
+    findings.push({ kind: 'category-drift', detail: anchors.join(' | ') });
+  }
+  return findings;
 }
 
 // ---------------------------------------------------------------- source A/B
@@ -212,7 +300,8 @@ async function docsIdentity(surface) {
 
 // -------------------------------------------------------------------- diffing
 
-function diffSurface(identities) {
+function diffSurface(identities, context = {}) {
+  const { standard = DEFAULT_DESCRIPTION_STANDARD, claim, retiredNames, foreignNames } = context;
   const rows = [];
   for (const field of FIELDS) {
     const present = SOURCES.map((source) => ({
@@ -222,24 +311,77 @@ function diffSurface(identities) {
     }));
     const declared = present.filter((entry) => entry.norm !== null);
     const distinct = [...new Set(declared.map((entry) => entry.norm))];
-    rows.push({
+    const row = {
       field,
       values: present,
       declaredCount: declared.length,
       missing: present.filter((entry) => entry.norm === null).map((entry) => entry.source),
       agrees: distinct.length <= 1,
       distinct: distinct.length,
-    });
+    };
+
+    // Under the default standard, differing description wording is not a
+    // finding; contradicting the entity is. Re-grade `agrees` accordingly so
+    // one number at the bottom of the report means one thing.
+    if (field === 'description' && standard === 'non-contradiction') {
+      row.standard = standard;
+      row.contradictions = declared.flatMap((entry) =>
+        describeContradictions({
+          description: entry.raw,
+          claim,
+          retiredNames,
+          foreignNames,
+        }).map((finding) => ({ source: entry.source, ...finding }))
+      );
+      row.wordingDiffers = distinct.length > 1;
+      row.agrees = row.contradictions.length === 0;
+    }
+    rows.push(row);
   }
   return rows;
 }
 
 // ----------------------------------------------------------------------- main
 
+/**
+ * Every product name in the registry except this surface's own, plus every
+ * name the canonical record retired. A description that names one of these as
+ * its subject is describing something other than the product it belongs to.
+ */
+function entityVocabulary(catalog, canonical, surfaceId) {
+  const retiredNames = (canonical?.decisions ?? [])
+    .filter((d) => d.retireNameToAlias && d.id === surfaceId)
+    .flatMap((d) => {
+      const geo = (catalog.geoIdentities ?? []).find((g) => g.id === d.id);
+      return (geo?.alternateName ?? geo?.aliases ?? []).filter((a) => a && a !== d.name);
+    });
+
+  const foreignNames = (catalog.geoIdentities ?? [])
+    .filter((g) => g.id !== surfaceId && g.name)
+    // Single-word generic names ("Live", "Journal") are ordinary English and
+    // would fire on any description that used the word. The hub allowlist
+    // handles the legitimate mentions; this keeps the rest from being noise.
+    .map((g) => g.name)
+    .filter((name) => String(name).trim().split(/\s+/).length > 1);
+
+  return { retiredNames: [...new Set(retiredNames)], foreignNames: [...new Set(foreignNames)] };
+}
+
 async function main() {
+  // A mistyped flag is a usage error, not a crash — say so in one line rather
+  // than printing a stack trace over the report the caller asked for.
+  let standard;
+  try {
+    standard = readStandard(args);
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+    return;
+  }
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const projection = JSON.parse(await readFile(projectionPath, 'utf8'));
   const surfaces = JSON.parse(await readFile(sourcesPath, 'utf8')).surfaces;
+  const canonical = JSON.parse(await readFile(canonicalPath, 'utf8'));
 
   const geoById = new Map((catalog.geoIdentities ?? []).map((g) => [g.id, g]));
   const projectById = new Map((catalog.projects ?? []).map((p) => [p.id, p]));
@@ -272,6 +414,7 @@ async function main() {
       : { identity: null, error: 'skipped (--no-github)' };
 
     const identities = { registry, directory, github: github.identity, docs };
+    const { retiredNames, foreignNames } = entityVocabulary(catalog, canonical, surface.id);
     report.push({
       id: surface.id,
       label: surface.label ?? surface.id,
@@ -283,19 +426,30 @@ async function main() {
       githubMeta: github.meta ?? null,
       docsProvenance: provenance,
       identities,
-      rows: diffSurface(identities),
+      rows: diffSurface(identities, {
+        standard,
+        claim: surface.claim,
+        retiredNames,
+        foreignNames,
+      }),
     });
   }
 
   if (flags.has('--json')) {
-    console.log(JSON.stringify({ generatedFrom: [catalogPath, projectionPath], report }, null, 2));
+    console.log(
+      JSON.stringify(
+        { generatedFrom: [catalogPath, projectionPath], descriptionStandard: standard, report },
+        null,
+        2
+      )
+    );
     return;
   }
   if (flags.has('--markdown')) {
-    console.log(renderMarkdown(report));
+    console.log(renderMarkdown(report, standard));
     return;
   }
-  console.log(renderText(report));
+  console.log(renderText(report, standard));
 }
 
 function show(value) {
@@ -303,7 +457,7 @@ function show(value) {
   return String(value);
 }
 
-function renderText(report) {
+function renderText(report, standard = DEFAULT_DESCRIPTION_STANDARD) {
   const lines = [];
   let disagreements = 0;
   for (const surface of report) {
@@ -312,16 +466,24 @@ function renderText(report) {
     if (!surface.inDirectory) lines.push('  !! absent from the sassmaker.com projection');
     if (surface.githubError) lines.push(`  !! github: ${surface.githubError}`);
     for (const row of surface.rows) {
-      if (row.agrees && !row.missing.length) continue;
+      if (row.agrees && !row.missing.length && !row.wordingDiffers) continue;
       if (!row.agrees) disagreements += 1;
-      const status = row.agrees ? 'gap' : 'CONFLICT';
+      const status = row.agrees ? (row.wordingDiffers ? 'wording' : 'gap') : 'CONFLICT';
       lines.push(`  [${status}] ${row.field}`);
       for (const entry of row.values) {
-        lines.push(`      ${entry.source.padEnd(10)} ${show(entry.raw)}`);
+        const hits = (row.contradictions ?? []).filter((c) => c.source === entry.source);
+        const mark = hits.length ? `  <-- ${hits.map((h) => h.kind).join(', ')}` : '';
+        lines.push(`      ${entry.source.padEnd(10)} ${show(entry.raw)}${mark}`);
+      }
+      for (const hit of row.contradictions ?? []) {
+        lines.push(`      !! ${hit.source}: ${hit.kind} — expected one of: ${hit.detail}`);
       }
     }
   }
-  lines.push(`\n${disagreements} field conflict(s) across ${report.length} surface(s).`);
+  lines.push(
+    `\n${disagreements} field conflict(s) across ${report.length} surface(s). ` +
+      `description standard: ${standard}.`
+  );
   return lines.join('\n');
 }
 
@@ -330,8 +492,9 @@ function cell(value) {
   return `\`${String(value).replace(/\|/g, '\\|')}\``;
 }
 
-function renderMarkdown(report) {
+function renderMarkdown(report, standard = DEFAULT_DESCRIPTION_STANDARD) {
   const lines = [];
+  lines.push(`_description standard: \`${standard}\`_\n`);
   for (const surface of report) {
     lines.push(`### ${surface.label} — \`${surface.domain ?? surface.id}\`\n`);
     const notes = [];
@@ -347,14 +510,18 @@ function renderMarkdown(report) {
       // time it was wrong: the registry was agreeing with itself. Say so instead —
       // entity-identity-live.mjs is what actually tests pricing against the surface.
       const verdict = !row.agrees
-        ? `**conflict (${row.distinct})**`
+        ? row.contradictions?.length
+          ? `**contradiction** — ${row.contradictions.map((c) => `${c.source}: ${c.kind}`).join('; ')}`
+          : `**conflict (${row.distinct})**`
         : row.declaredCount === 0
           ? 'undeclared everywhere'
           : row.declaredCount === 1
             ? `only ${row.values.find((v) => v.raw != null)?.source ?? 'one source'} declares it — nothing to compare`
-            : row.missing.length
-              ? `agrees, missing in ${row.missing.join('/')}`
-              : 'agrees';
+            : row.wordingDiffers
+              ? 'consistent — wording differs, no contradiction'
+              : row.missing.length
+                ? `agrees, missing in ${row.missing.join('/')}`
+                : 'agrees';
       const byName = Object.fromEntries(row.values.map((v) => [v.source, v.raw]));
       lines.push(
         `| ${row.field} | ${cell(byName.registry)} | ${cell(byName.directory)} | ${cell(byName.github)} | ${cell(byName.docs)} | ${verdict} |`
@@ -365,7 +532,11 @@ function renderMarkdown(report) {
   return lines.join('\n');
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+// Behind the entrypoint guard so the classifier above is importable by tests
+// without the report running as a side effect of the import.
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

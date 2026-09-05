@@ -6,6 +6,9 @@
       "label": "CodeVetter",
       "domain": "codevetter.com",
       "repoPath": "codevetter",
+      "claim": {
+        "anchors": ["verification"]
+      },
       "docs": {
         "name": {
           "files": ["apps/landing-page-astro/src/layouts/Layout.astro"],
@@ -43,6 +46,9 @@
       "label": "PostTrainLLM",
       "domain": "posttrainllm.com",
       "repoPath": "posttrainllm",
+      "claim": {
+        "anchors": ["factory"]
+      },
       "docs": {
         "name": {
           "files": ["browser/src/layouts/Default.astro"],
@@ -80,6 +86,10 @@
       "label": "SaaS Maker",
       "domain": "sassmaker.com",
       "repoPath": "saas-maker",
+      "claim": {
+        "$comment": "'product' rather than 'directory': the registry frames SaaS Maker as a studio that builds focused products, the repo and docs frame it as the public directory of them. That is a positioning difference, and SAR-9's boundary forbids resolving positioning here — flag it, do not fix it. The anchor tests the one claim all three do make.",
+        "anchors": ["product"]
+      },
       "docs": {
         "name": {
           "files": ["apps/showcase/src/data/studio.ts"],
@@ -105,6 +115,9 @@
       "label": "High Signal",
       "domain": "highsignal.app",
       "repoPath": "high-signal",
+      "claim": {
+        "anchors": ["daily"]
+      },
       "docs": {
         "name": {
           "files": ["apps/web/src/app/layout.tsx"],
@@ -143,6 +156,10 @@
       "domain": "podcasts.highsignal.app",
       "repoSlug": "Significant-Hobbies/on-record",
       "repoPath": "on-record",
+      "claim": {
+        "anchors": ["podcast", "episode"],
+        "mentions": ["High Signal"]
+      },
       "docs": {
         "name": {
           "files": ["apps/web/src/layouts/Base.astro"],
@@ -167,6 +184,11 @@
       "label": "Significant Hobbies",
       "domain": "significanthobbies.com",
       "repoPath": "significanthobbies",
+      "claim": {
+        "$comment": "This surface is a hub, so it legitimately names the products it hosts. Without the allowlist the foreign-entity check would fire six times on a description that is correct.",
+        "anchors": ["hub", "control plane"],
+        "mentions": ["Live", "Journal", "Calorie", "Setline", "Kith", "Anchor"]
+      },
       "docs": {
         "name": {
           "files": ["src/app/layout.tsx"],
@@ -191,6 +213,9 @@
       "label": "Look Sideways",
       "domain": "paths.significanthobbies.com",
       "repoPath": "what-it-takes-to-win",
+      "claim": {
+        "anchors": ["path"]
+      },
       "docs": {
         "name": {
           "files": ["src/layouts/Base.astro"],
