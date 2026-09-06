@@ -4,9 +4,12 @@ import test from 'node:test';
 import {
   auditProjectItems,
   buildIssueSearchArgs,
+  extractIssueRecords,
+  extractSkippedUrls,
   isTerminalStatus,
   normalizeProjectItems,
   parseArgs,
+  parseSkipRepoLabels,
   planQueueSync,
   planStatusReconciliation,
   resolveStatusOption,
@@ -58,14 +61,22 @@ test('parseArgs accepts the status reconciliation flags and defaults them', () =
   assert.equal(defaults.statusField, 'Status');
   assert.equal(defaults.doneValue, 'Done');
   assert.equal(defaults.apply, false);
+  assert.deepEqual(defaults.skipRepoLabels, ['sarthakagrawal927/portfolio:issues']);
 
   const custom = parseArgs([
     '--owner', 'o', '--project', '3', '--author', 'a',
     '--status-field', 'State', '--done-value', 'Shipped', '--apply',
+    '--skip-repo-label', 'org/repo:do-not-queue',
+    '--skip-repo-label', 'org/other:skip',
   ]);
   assert.equal(custom.statusField, 'State');
   assert.equal(custom.doneValue, 'Shipped');
   assert.equal(custom.apply, true);
+  assert.deepEqual(custom.skipRepoLabels, [
+    'sarthakagrawal927/portfolio:issues',
+    'org/repo:do-not-queue',
+    'org/other:skip',
+  ]);
 
   assert.throws(() => parseArgs(['--owner', 'o', '--project', '3', '--author', 'a', '--nope', 'x']),
     /Unknown argument/);
@@ -73,7 +84,7 @@ test('parseArgs accepts the status reconciliation flags and defaults them', () =
 
 test('buildIssueSearchArgs searches one state at a time', () => {
   assert.deepEqual(buildIssueSearchArgs('a', 5, 'closed').join(' '),
-    'search issues --author a --state closed --limit 5 --json url');
+    'search issues --author a --state closed --limit 5 --json url,labels,repository');
   assert.equal(buildIssueSearchArgs('a').includes('open'), true);
   assert.throws(() => buildIssueSearchArgs('a', 5, 'all'), /Unsupported issue state/);
 });
@@ -252,4 +263,140 @@ test('a failed status edit is reported and sets a nonzero exit code', () => {
   assert.equal(result.summary.failed, 1);
   assert.equal(result.exitCode, 1);
   assert.match(lines.join('\n'), /Failed .*issues\/2: denied \[redacted\]/);
+});
+
+const PORTFOLIO_URL = 'https://github.com/sarthakagrawal927/portfolio/issues/28';
+
+test('parseSkipRepoLabels builds a repo-scoped label map and rejects bad entries', () => {
+  const map = parseSkipRepoLabels(['Owner/Repo:Issues', 'org/other:skip']);
+  assert.deepEqual([...map.get('owner/repo')], ['issues']);
+  assert.deepEqual([...map.get('org/other')], ['skip']);
+  assert.equal(map.size, 2);
+
+  assert.throws(() => parseSkipRepoLabels(['no-slash:label']), /Invalid --skip-repo-label/);
+  assert.throws(() => parseSkipRepoLabels(['org/repo:']), /Invalid --skip-repo-label/);
+  assert.throws(() => parseSkipRepoLabels(['just-a-string']), /Invalid --skip-repo-label/);
+});
+
+test('extractIssueRecords reads repo and labels from search rows', () => {
+  const [first, second] = extractIssueRecords([
+    { url: OPEN_URL, repository: { nameWithOwner: 'Owner/Repo' }, labels: [{ name: 'Issues' }] },
+    { url: CLOSED_URL },
+  ]);
+  assert.equal(first.url, OPEN_URL);
+  assert.equal(first.repo, 'owner/repo');
+  assert.deepEqual(first.labels, ['issues']);
+  assert.equal(second.repo, '');
+  assert.deepEqual(second.labels, []);
+});
+
+test('extractSkippedUrls matches repo and label case-insensitively', () => {
+  const records = [
+    { url: OPEN_URL, repo: 'owner/repo', labels: ['issues'] },
+    { url: PORTFOLIO_URL, repo: 'sarthakagrawal927/portfolio', labels: ['issues'] },
+    { url: MISSING_URL, repo: 'sarthakagrawal927/portfolio', labels: ['other'] },
+  ];
+  const skipped = extractSkippedUrls(records, parseSkipRepoLabels(['sarthakagrawal927/portfolio:issues']));
+  assert.deepEqual([...skipped], [PORTFOLIO_URL]);
+  assert.equal(extractSkippedUrls(records, new Map()).size, 0);
+});
+
+test('planQueueSync excludes skipped urls and reports the skipped count', () => {
+  const plan = planQueueSync(
+    [OPEN_URL, PORTFOLIO_URL, MISSING_URL],
+    new Set([OPEN_URL]),
+    new Set([PORTFOLIO_URL]),
+  );
+  assert.deepEqual(plan.discovered, [OPEN_URL, MISSING_URL]);
+  assert.deepEqual(plan.missing, [MISSING_URL]);
+  assert.equal(plan.unchanged, 1);
+  assert.equal(plan.skipped, 1);
+});
+
+test('planStatusReconciliation ignores skipped urls in both directions', () => {
+  const payload = {
+    items: [
+      { id: 'ITEM_done', status: 'Done', content: { url: PORTFOLIO_URL } },
+      { id: 'ITEM_closed', status: 'In Progress', content: { url: CLOSED_URL } },
+    ],
+  };
+  const plan = planStatusReconciliation(payload, {
+    closedUrls: new Set([PORTFOLIO_URL, CLOSED_URL]),
+    openUrls: new Set([PORTFOLIO_URL]),
+    skipUrls: new Set([PORTFOLIO_URL]),
+  });
+  assert.deepEqual(plan.toDone, [{ itemId: 'ITEM_closed', url: CLOSED_URL, status: 'In Progress' }]);
+  assert.deepEqual(plan.reopened, []);
+});
+
+function createSkipRunner() {
+  const calls = [];
+  const run = (command, args) => {
+    calls.push(args.join(' '));
+    const joined = args.join(' ');
+    if (joined.startsWith('api user')) return { status: 0, stdout: 'sarthak' };
+    if (joined.startsWith('project view')) return { status: 0, stdout: '{"id":"PVT_1"}' };
+    if (joined.includes('--state open')) {
+      return {
+        status: 0,
+        stdout: JSON.stringify([
+          { url: OPEN_URL, repository: { nameWithOwner: 'owner/repo' }, labels: [] },
+          {
+            url: PORTFOLIO_URL,
+            repository: { nameWithOwner: 'sarthakagrawal927/portfolio' },
+            labels: [{ name: 'issues' }],
+          },
+        ]),
+      };
+    }
+    if (joined.includes('--state closed')) {
+      return { status: 0, stdout: JSON.stringify([]) };
+    }
+    if (joined.startsWith('project item-list')) {
+      return { status: 0, stdout: JSON.stringify({ items: [] }) };
+    }
+    if (joined.startsWith('project field-list')) return { status: 0, stdout: JSON.stringify(FIELDS) };
+    if (joined.startsWith('project item-add')) return { status: 0, stdout: '{}' };
+    if (joined.startsWith('project item-edit')) return { status: 0, stdout: '{}' };
+    return { status: 1, stdout: '', stderr: `unexpected: ${joined}` };
+  };
+  return { calls, run };
+}
+
+test('apply skips repo-scoped label issues: never adds them and never flags drift', () => {
+  const { calls, run } = createSkipRunner();
+  const lines = [];
+  const result = syncPriorityQueue(
+    { ...OPTIONS, apply: true, skipRepoLabels: ['sarthakagrawal927/portfolio:issues'] },
+    { run, write: (l) => lines.push(l) },
+  );
+
+  assert.equal(result.summary.skipped, 1);
+  assert.equal(result.summary.discovered, 1);
+  assert.equal(result.summary.missing, 1);
+  assert.equal(result.summary.added, 1);
+  assert.equal(result.summary.reopened, 0);
+  assert.equal(result.summary.closedPending, 0);
+  assert.equal(result.exitCode, 0);
+  assert.equal(calls.some((call) => call.includes('portfolio/issues/28')), false);
+  assert.equal(
+    calls.filter((call) => call.startsWith('project item-add')).length,
+    1,
+  );
+  assert.match(lines.join('\n'), /skipped=1/);
+});
+
+test('dry run reports skipped portfolio notes without attempting to add them', () => {
+  const { calls, run } = createSkipRunner();
+  const lines = [];
+  const result = syncPriorityQueue(
+    { ...OPTIONS, apply: false },
+    { run, write: (l) => lines.push(l) },
+  );
+
+  assert.equal(result.summary.mode, 'dry-run');
+  assert.equal(result.summary.skipped, 1);
+  assert.equal(result.summary.missing, 1);
+  assert.equal(result.summary.added, 0);
+  assert.equal(calls.some((call) => call.startsWith('project item-add')), false);
 });
