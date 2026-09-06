@@ -32,6 +32,17 @@ type inside hard architectural proportions, not from switching to a display
 serif. Keep display tracking above `-0.04em`, body copy at or above `1rem`, and
 long prose near 70 characters.
 
+The family is self-hosted, not loaded from Google Fonts. `public/fonts/`
+carries the variable latin cut of the upstream v7 release, narrowed to the
+400-750 weight range the system uses (44KB, SIL OFL, `OFL.txt` alongside it).
+It is declared `font-display: optional` and preloaded, so a cold visit renders
+in a metrics-matched Arial stand-in and never swaps mid-paint — the third-party
+stylesheet used to land after first paint and make the hero heading both the
+LCP and the page's only layout shift. Recut the file with the same weight range
+and recompute the `size-adjust` / `ascent-override` / `descent-override`
+numbers in `src/styles/globals.css` if the family is ever replaced; the
+derivation is written out in the comment next to them.
+
 ## Layout
 
 Compose public product discovery as a wall elevation. Matte-black mullions
