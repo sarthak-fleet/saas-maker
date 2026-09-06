@@ -21,9 +21,9 @@ describe('complete public Fleet directory', () => {
     expect(catalog.schemaVersion).toBe(5);
     expect(catalog.directory).toHaveLength(56);
     expect(new Set(ids).size).toBe(56);
-    expect(counts.current).toBe(32);
-    expect(counts.supporting).toBe(12);
-    expect(counts.past).toBe(12);
+    expect(counts.current).toBe(17);
+    expect(counts.supporting).toBe(3);
+    expect(counts.past).toBe(36);
 
     for (const project of catalog.directory) {
       expect(project.name).toBeTruthy();

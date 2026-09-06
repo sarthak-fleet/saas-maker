@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
+import GitHubIcon from '../../components/GitHubIcon.astro';
 import { DIRECTORY_PROJECTS, type DirectoryProject } from '../../data/directory';
 
 export function getStaticPaths() {
@@ -29,7 +30,7 @@ const publicLinks = [
     ? [{ title: 'Changelog', url: product.changelogUrl, description: 'Product-owned release history' }]
     : []),
   ...(product.roadmapUrl
-    ? [{ title: 'Issues', url: product.roadmapUrl, description: 'Open work in GitHub Issues' }]
+    ? [{ title: 'Issues', url: product.roadmapUrl, description: 'Open work in the issue tracker' }]
     : []),
   ...(product.repositoryUrl
     ? [{ title: 'Source', url: product.repositoryUrl, description: 'Canonical public repository' }]
@@ -179,7 +180,7 @@ const productJsonLd = {
                 {publicLinks.map((link) => (
                   <li>
                     <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      <span>{link.title}</span>
+                      <span>{link.title}{link.title === 'Source' && <GitHubIcon />}</span>
                       <p>{link.description}</p>
                       <strong>Open ↗</strong>
                     </a>
@@ -201,8 +202,8 @@ const productJsonLd = {
               <p class="project-folio">Repository publication</p>
               <h2 id="issues-title">Read the issues.</h2>
               <p>
-                Public issues become a browsable, read-only record here. Open the source issue on
-                GitHub to comment, react, or follow the work.
+                Public issues become a browsable, read-only record here. Open the source issue
+                to comment, react, or follow the work.
               </p>
             </div>
             <div class="project-issues-embed">
@@ -219,7 +220,7 @@ const productJsonLd = {
               ></script>
               <p class="project-issues-fallback">
                 The embedded reader is loading or unavailable.
-                <a href={`${product.repositoryUrl}/issues`}>Read the issues on GitHub.</a>
+                <a href={`${product.repositoryUrl}/issues`}>Read the issues in the source repository.</a>
               </p>
             </div>
           </section>

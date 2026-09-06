@@ -51,6 +51,20 @@ const FORBIDDEN_KEYS =
 const CREDENTIAL_VALUE =
   /(?:bearer\s+[a-z0-9._-]+|(?:api|access|secret)[_-]?key\s*[:=]|-----BEGIN [A-Z ]+PRIVATE KEY-----)/i;
 
+function lifecycleStatus(project) {
+  if (project.lifecycle && typeof project.lifecycle === 'object') {
+    return project.lifecycle.status;
+  }
+  return project.lifecycle;
+}
+
+function lifecycleShareable(project) {
+  if (project.lifecycle && typeof project.lifecycle === 'object') {
+    return project.lifecycle.shareable === true;
+  }
+  return false;
+}
+
 export function buildPublicProducts(catalog) {
   const products = [];
   const pastProjects = [];
@@ -99,8 +113,8 @@ export function buildPublicProducts(catalog) {
     }
 
     if (metadata.listing === 'past') {
-      if (project.lifecycle !== 'past') {
-        throw new Error(`${project.id}: past public listing requires lifecycle past`);
+      if (lifecycleStatus(project) !== 'inactive') {
+        throw new Error(`${project.id}: past public listing requires lifecycle status inactive`);
       }
       if (project.repositoryVisibility !== 'public') {
         throw new Error(`${project.id}: past public listing requires a public repository`);
@@ -142,7 +156,7 @@ export function buildPublicProducts(catalog) {
       platforms: metadata.platforms,
       technologies: metadata.technologies,
       group: directoryGroup(project),
-      lifecycle: project.lifecycle,
+      lifecycle: lifecycleStatus(project),
       deployed: project.portfolio.deployed,
       deploymentProviders: publicDeploymentProviders(
         catalog.infrastructure.projects[project.id]?.deployments ?? []
@@ -206,10 +220,11 @@ export function buildPublicProducts(catalog) {
 }
 
 function directoryGroup(project) {
-  if (project.portfolio.status === 'archived' || project.lifecycle === 'past') return 'past';
+  const status = lifecycleStatus(project);
+  if (status === 'inactive') return 'past';
   if (
     project.status === 'orphan' ||
-    project.lifecycle === 'non-product' ||
+    status === 'non-product' ||
     project.attention === 'ignored' ||
     project.tier === 'out-of-fleet' ||
     project.portfolio.priority === 'P4'

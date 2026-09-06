@@ -1,6 +1,7 @@
 ---
 import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
+import GitHubIcon from '../components/GitHubIcon.astro';
 import {
   DIRECTORY_COUNT,
   DIRECTORY_FORMS,
@@ -214,7 +215,7 @@ const projectProfilePath = (project: DirectoryProject) =>
                         ))}
                         {project.repositoryUrl && (
                           <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
-                            Source <span aria-hidden="true">↗</span>
+                            Source <GitHubIcon /> <span aria-hidden="true">↗</span>
                           </a>
                         )}
                         {project.changelogUrl && (
