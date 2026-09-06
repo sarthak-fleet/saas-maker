@@ -58,13 +58,6 @@ function lifecycleStatus(project) {
   return project.lifecycle;
 }
 
-function lifecycleShareable(project) {
-  if (project.lifecycle && typeof project.lifecycle === 'object') {
-    return project.lifecycle.shareable === true;
-  }
-  return false;
-}
-
 export function buildPublicProducts(catalog) {
   const products = [];
   const pastProjects = [];
