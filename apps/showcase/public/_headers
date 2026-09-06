@@ -36,3 +36,9 @@
 # Astro emits hash-stable bundles under /_astro/.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted webfont. The filename carries the upstream release (v7), so a new
+# cut lands under a new name and this can stay immutable.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *

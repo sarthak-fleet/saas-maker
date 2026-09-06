@@ -65,21 +65,24 @@ const OG_IMAGE = `${SITE_URL}/og-image.svg`;
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
 
-    {/* One type family keeps the directory calm and reduces font payload. */}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/* One type family keeps the directory calm and reduces font payload. It is
+        self-hosted and declared in globals.css, which is inlined into this
+        document, so there is no third-party stylesheet, no extra connection
+        and no swap reflow (issue #92). `font-display: optional` gives the
+        font a short block period and then commits to whichever face won, so
+        the preload is what keeps first paint early — dropping it measured
+        ~400ms worse FCP, because the block period starts late.
+        `fetchpriority="low"` holds it behind the hero image, which is the LCP
+        element on mobile; measured neutral locally, where the origin is free,
+        and it costs nothing to keep the ordering explicit. */}
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
+      rel="preload"
+      href="/fonts/schibsted-grotesk-v7-latin.woff2"
+      as="font"
+      type="font/woff2"
+      fetchpriority="low"
+      crossorigin
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap"
-      />
-    </noscript>
 
     {/* Canonical Person → Studio → WebSite graph from the public studio profile. */}
     <script type="application/ld+json" set:html={JSON.stringify(STUDIO_JSON_LD)} />
