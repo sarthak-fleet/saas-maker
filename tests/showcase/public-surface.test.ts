@@ -33,16 +33,25 @@ describe('SaaS Maker public source boundary', () => {
   });
 
   it('exposes the canonical standalone source without exposing Fleet', async () => {
-    const [links, registrySource, projectsSource, routesSource, navSource, redirects, catalog] =
-      await Promise.all([
-        readShowcase('src/data/links.ts'),
-        readShowcase('src/data/registry.ts'),
-        readShowcase('src/data/projects.ts'),
-        readShowcase('src/data/publicRoutes.ts'),
-        readShowcase('src/components/Nav.astro'),
-        readShowcase('public/_redirects'),
-        readFile(new URL('../../catalog/generated/public.json', import.meta.url), 'utf8'),
-      ]);
+    const [
+      links,
+      registrySource,
+      projectsSource,
+      routesSource,
+      navSource,
+      iconSource,
+      redirects,
+      catalog,
+    ] = await Promise.all([
+      readShowcase('src/data/links.ts'),
+      readShowcase('src/data/registry.ts'),
+      readShowcase('src/data/projects.ts'),
+      readShowcase('src/data/publicRoutes.ts'),
+      readShowcase('src/components/Nav.astro'),
+      readShowcase('src/components/GitHubIcon.astro'),
+      readShowcase('public/_redirects'),
+      readFile(new URL('../../catalog/generated/public.json', import.meta.url), 'utf8'),
+    ]);
 
     const saasMaker = JSON.parse(catalog).products.find(
       (product: { id: string }) => product.id === 'saas-maker'
@@ -61,8 +70,16 @@ describe('SaaS Maker public source boundary', () => {
     expect(routesSource).toMatch(/CORE\.flatMap/);
     expect(routesSource).toMatch(/DIRECTORY_PROJECTS\.filter/);
     expect(routesSource).toMatch(/product\.makerNote/);
-    expect(navSource).toMatch(/GITHUB_ORG_URL/);
-    expect(navSource).toMatch(/>GitHub ↗<\/a>/);
+    expect(navSource).toMatch(/GITHUB_REPO_URL/);
+    expect(navSource).toMatch(/aria-label="GitHub repository"/);
+    expect(navSource).toMatch(/<GitHubIcon/);
+    expect(navSource).not.toMatch(/>GitHub ↗<\/a>/);
+    expect(iconSource).toMatch(/viewBox="0 0 16 16"/);
+    expect(iconSource).toMatch(/width="20"/);
+    expect(iconSource).toMatch(/height="20"/);
+    expect(iconSource).toMatch(/fill="currentColor"/);
+    expect(iconSource).toMatch(/aria-hidden="true"/);
+    expect(iconSource).toMatch(/M8 0C3\.58/);
     expect(navSource).not.toMatch(/\/#package|Public source index/);
     expect(redirects).toMatch(/^\/p\/saas-maker \/ 301$/m);
     expect(redirects).toMatch(/^\/p\/saas-maker\.md \/index\.md 301$/m);
