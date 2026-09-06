@@ -25,6 +25,55 @@ Per public **origin**:
 | Public route markdown | Every **public** sitemap URL has a markdown alternate (`.md` and/or negotiation); audit every small-site route and a deterministic distributed sample for large corpora |
 | SPA honesty | Agent paths never return an HTML SPA shell for missing files |
 | robots + sitemap | Public crawl allowed; `Sitemap:` present; private/auth Disallow |
+| Name agreement | `/llms.txt`, `/api/ai` and JSON-LD all declare the canonical product name |
+| HEAD/GET parity | HEAD returns the same status class as GET on the agent endpoints and a route sample |
+
+### Name agreement
+
+Presence is what gets a surface read; agreement is what makes being read
+resolve to the right product. A surface that publishes two identities scores
+below S no matter how complete its Markdown is.
+
+Canonical name and aliases come from `config/entity-identity-canonical.json`
+(the decision record) layered over `geoIdentities[]` in the Site Health
+catalog (the applied form). The three channels are compared **exactly**, and
+each mismatch is classified:
+
+| Class | Meaning | Effect |
+|---|---|---|
+| `ok` | Channel declares the canonical name | — |
+| `casing` | Same name, different case — usually a repo slug (`posttrainllm`, `DRank`) | Check fails; no S-tier |
+| `slug-leak` | The repo slug where the product has a name (`psi-swarm` for `PSI Swarm`) | Check fails; no S-tier |
+| `retired-alias` | A recorded former name the surface never stopped publishing | Check fails; no S-tier |
+| `unrecorded` | A name that appears in **no** record for this id | Check fails **and floors the tier at C** |
+
+Case is never normalized away: `posttrainllm` and `DRank` differ from canonical
+by case alone and are both slugs leaking onto an agent surface. JSON-LD is read
+from the `WebSite` / `SoftwareApplication` node, never the first `name` in the
+document — that is usually the author's `Person` node and reports false drift
+on every surface that credits one.
+
+`unrecorded` is the only class that is not a record the fleet could correct.
+The surface asserts an identity nothing internal knows about, so an agent that
+reads it resolves to a different product; the rest of the surface being perfect
+does not help, which is why it floors the tier rather than costing one check.
+
+An origin with no canonical record (an ad-hoc URL target) is skipped, not
+failed. `tooling/scripts/entity-identity-live.mjs` shares the same
+classification and additionally probes `<title>` and the pricing declaration.
+
+### HEAD/GET parity
+
+Link checkers, crawlers and agent fetchers commonly send HEAD before GET. A
+GET-only audit scored `sassmaker.com` fully healthy while every interior route
+returned 404 to HEAD (#93). The audit now compares the status **class** of HEAD
+against GET for the four fixed agent endpoints plus a deterministic sample of
+sitemap routes (10), and fails the check on any disagreement.
+
+Each pair differs only in the method — the HEAD carries the same `Accept` as
+the GET it is compared with, so content negotiation is never mistaken for a
+routing defect. Only the sampled routes cost an extra GET; the endpoints reuse
+statuses the audit already collected.
 
 **S+ (agent-native products only):** `skill.md`, `/.well-known/skills/index.json`,
 install scripts, authenticated agent APIs. Karte is the reference.

@@ -43,8 +43,22 @@ node skills/agent-ready/scripts/agent-index-audit.mjs --all --json
 | `sitemap` | `sitemap.xml` or `sitemap-index.xml` |
 | `route_markdown` | Public sitemap routes resolve as Markdown; large corpora use a deterministic 250-route sample |
 | `catalog_integrity` | Every bounded `/api/ai` surface has a same-origin, readable Markdown target listed in the sitemap |
+| `name_agreement` | `/llms.txt`, `/api/ai` and JSON-LD all declare the canonical product name |
+| `head_parity` | HEAD returns the same status class as GET on the agent endpoints and a 10-route sample |
 
 Implementation kit: `lib/agent-surfaces/`.
+
+Presence is not identity: a surface that publishes a different product name to
+agents than the canonical record carries cannot score S-tier, whatever its
+Markdown coverage. Mismatches are classified `casing`, `slug-leak`,
+`retired-alias` or `unrecorded`; an `unrecorded` name — one that appears in no
+record for that id — floors the tier at C. Canonical names come from
+`config/entity-identity-canonical.json` over the Site Health catalog's
+`geoIdentities[]`. Full rules in
+[`docs/agent-indexing-standard.md`](../../docs/agent-indexing-standard.md).
+
+`head_parity` closes the matching blind spot on verbs: a route that answers 200
+to GET and 404 to HEAD is invisible to the crawlers that probe with HEAD first.
 
 The audit reports and the Fleet visibility ledger retain:
 
