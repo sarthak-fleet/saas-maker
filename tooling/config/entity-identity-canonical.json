@@ -121,6 +121,21 @@
       ],
       "rationale": "State was already right; the URL pointed at the homepage rather than at the declaration. The field exists so a model can go read the pricing, so pointing it at the site root is a soft version of not declaring at all.",
       "flaggedBy": "SAR-9 — pricing probe sweep, 2026-09-05"
+    },
+    {
+      "id": "drank",
+      "decidedAt": "2026-09-06",
+      "decidedBy": "SAR-9",
+      "name": "DRank",
+      "retireNameToAlias": true,
+      "canonicalUrl": "https://domains.sassmaker.com",
+      "authority": "deployed public surface",
+      "evidence": [
+        "https://domains.sassmaker.com/llms.txt heading is '# DRank' (probed 2026-09-06)",
+        "https://domains.sassmaker.com/api/ai .name is 'DRank' (probed 2026-09-06)",
+        "sass-maker/drank#14 records the owner decision that the canonical casing is DRank"
+      ],
+      "rationale": "Two agent-facing channels (/llms.txt and /api/ai) already agree on 'DRank'; the catalog said 'Drank'. The owner ruled 'DRank' canonical in sass-maker/drank#14, so the catalog follows the product. The retired 'Drank' is kept as an alias for internal identity resolution; aliases are internal-only and re-assert nothing publicly."
     }
   ],
 
