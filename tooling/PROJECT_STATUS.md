@@ -1,6 +1,6 @@
 # SaaS Maker Tooling — PROJECT STATUS
 
-Last updated: 2026-09-01
+Last updated: 2026-09-06
 
 ## Why / What
 
@@ -33,6 +33,16 @@ owned by individual products.
 
 ## Timeline
 
+- 2026-09-06 — Gave the Clarity Fleet Health skill four explicit modes:
+  `source-audit` (credential-free), `cached-health` (no network),
+  `provider-refresh` (explicit live Data Export sweep), and optional
+  `mcp-investigation`, which is never the fleet pass/fail gate. Routed both
+  Clarity skills from the `site-health` parent skill by intent, and indexed the
+  operator protocol in `docs/clarity-fleet-health.md`. The matching Site Health
+  collector reports every canonical identity as measured, cached, unavailable,
+  unwired, inactive, or failed in one bounded summary. Verified: 195 tooling
+  tests, the tooling validator (52 skills), and a real 56-product source audit
+  with no blocking findings. Refs sass-maker/saas-maker#89.
 - 2026-09-01 — Added a credential-free Clarity capability desired-state
   contract covering 17 automatic, provider, source, operator, and
   infrastructure features. The source audit now validates and reports the

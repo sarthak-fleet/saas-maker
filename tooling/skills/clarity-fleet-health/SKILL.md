@@ -9,30 +9,123 @@ Account for every canonical product without pretending every product should be
 tracked. Local-only, native-only, private, inactive, and deliberately
 analytics-free products can pass with an explicit unwired reason.
 
-## Choose the evidence mode
+## Pick one mode
 
-Run commands from the Fleet root.
+Run commands from the Fleet root. Escalate only as far as the question needs:
+**source-audit** answers wiring questions with no credentials at all,
+**cached-health** answers "what are the numbers" with no network, and
+**provider-refresh** is the only mode that spends provider quota.
 
-### Source integrity
+| Mode | Touches | Use it for |
+| --- | --- | --- |
+| `source-audit` | Files only | ID ownership, duplicate/retired IDs, declared entrypoints, undeclared loaders, capability policy validity |
+| `cached-health` | Local snapshots | Current counts and per-project state without a provider call |
+| `provider-refresh` | Clarity Data Export | An explicitly requested live refresh across every eligible current product |
+| `mcp-investigation` | Clarity MCP, one project | A focused follow-up question after aggregate evidence points somewhere |
 
-For ID ownership, duplicate IDs, retired shared IDs, declared entrypoints, and
-undeclared loaders:
+Never start at `provider-refresh` because the user said "check Clarity". Only an
+explicit refresh, retest-live, or test-every-application request authorizes it.
+
+---
+
+## Mode 1 — `source-audit` (credential-free)
+
+**Inputs:** the sibling Fleet checkouts. No token, no network, no provider.
 
 ```bash
 pnpm --dir saas-maker tooling:clarity
 ```
 
-This is credential-free and read-only. It accounts for all registry entries
-and verifies declared source files in available sibling checkouts. It also
-validates `saas-maker/tooling/config/clarity-capabilities.json`, which separates
-automatic, provider, source, operator, and infrastructure capabilities. A
-desired assignment is policy, not proof that the provider setting is enabled.
+**Checks:** every registry entry is accounted for; every declared entrypoint
+exists in an available sibling checkout; no duplicate or retired shared ID
+survives on a wired surface; and per the browser-surface policy, each identity
+declares its landing, browser-app, combined, or explicit no-browser-surface
+coverage. It also validates
+`saas-maker/tooling/config/clarity-capabilities.json`, which separates
+automatic, provider, source, operator, and infrastructure capabilities.
 
-### Provider capability audit
+**Output:** a per-identity source verdict. A `desired` capability assignment is
+policy — it is not proof that the provider setting is enabled.
+
+**Safety:** read-only. Safe to run unprompted whenever Clarity comes up.
+
+---
+
+## Mode 2 — `cached-health` (no network)
+
+**Inputs:** the last bounded local snapshots in Site Health's store. Resolves no
+token and issues no provider request — that is asserted by test, not convention.
+
+```bash
+pnpm --dir site-health clarity -- status-all
+pnpm --dir site-health clarity:table            # same run as a markdown table
+pnpm --dir site-health clarity -- status <project-id>
+```
+
+**Output:** one bounded JSON summary
+(`site-health.clarity-fleet-collection.v2`, `mode: cached-health`) with one row
+per canonical identity, or the same data as a markdown table. Schema and the
+six classes: [Clarity fleet health](../../docs/clarity-fleet-health.md).
+
+**Safety:** use this first when the user asks for current counts without
+explicitly asking for a live refresh. Say plainly when a number is cached and
+how old it is; a stale snapshot under a weekly cadence means "it isn't Monday",
+not "the refresh failed".
+
+---
+
+## Mode 3 — `provider-refresh` (explicit, spends quota)
+
+**Inputs:** project-scoped private Data Export tokens, resolved by Site Health
+from private environment, Infisical, or the macOS Keychain. Tokens are never
+passed on a command line, never printed, and never persisted by this skill.
+
+```bash
+pnpm --dir site-health clarity -- fetch-all --days 1
+pnpm --dir site-health clarity -- fetch-all --days 3 --format markdown
+pnpm --dir site-health clarity -- fetch <project-id> --days 1
+```
+
+**Behavior:** at most one Data Export request per eligible current project, run
+sequentially. Missing tokens and provider failures do not stop the run: the
+affected project is reported `unavailable` or `failed` and the rest continue.
+Exclusions never reach the adapter.
+
+**Output:** the same bounded summary with `mode: provider-refresh`. Only
+normalized aggregates are stored.
+
+**Safety:** Microsoft permits roughly ten export requests per project per day,
+and the widest window the API serves is three days. Do not retry failures in the
+same run. Prefer one project when one project is the question.
+
+---
+
+## Mode 4 — `mcp-investigation` (optional, never a gate)
+
+**Inputs:** an MCP client that is already configured, and one project's private
+`CLARITY_API_TOKEN` already available in the environment.
+
+The official `@microsoft/clarity-mcp-server` is an MCP stdio server, not a
+human-facing reporting CLI. Register it in the client's MCP configuration with
+the token supplied through the server's environment — never as a command-line
+argument, and never inside a file that gets committed.
+
+**Use it only** for a focused follow-up on one project after aggregate evidence
+already identified it. Ask one bounded question; record one bounded conclusion.
+
+**Safety:** MCP output is exploratory evidence, not the fleet health result. The
+deterministic Data Export adapter in `cached-health` and `provider-refresh` is
+the authority. Do not retain session recordings, heatmaps, URLs, visitor
+identifiers, or raw provider payloads. If the user explicitly requests a
+targeted recording investigation, keep it to the selected project.
+
+---
+
+## Related, but not a mode: provider settings audit
 
 Use the signed-in Clarity workspace when the user asks to enable or verify the
-full feature set. Audit one project before batching and keep these gates
-separate:
+full feature set. That is capability adoption, not health measurement; audit one
+project before batching and keep these gates separate:
 
 1. **Automatic baseline:** recordings, heatmaps, behavioral/frustration
    insights, Copilot, automatic Smart Events, benchmarks, and citations after
@@ -50,70 +143,24 @@ funnel. Prefer one primary conversion event and one truthful multi-step funnel;
 mark a single-action surface not applicable instead of inventing steps. Keep
 provider state `unverified` until the saved setting is reread from Clarity.
 
-### Cached traffic health
-
-For a no-network inventory of the latest Site Health snapshots:
-
-```bash
-pnpm --dir site-health clarity -- status-all
-```
-
-This mode must not resolve tokens or call Microsoft. Use it first when the user
-asks for current counts without explicitly requesting a live refresh.
-
-### Live fleet refresh
-
-When the user explicitly asks to refresh, retest live, or test every
-application, run:
-
-```bash
-pnpm --dir site-health clarity -- fetch-all --days 1
-```
-
-The request authorizes at most one Data Export request per eligible current
-project. The collector runs projects sequentially, continues after missing
-tokens or provider failures, stores only bounded aggregate snapshots, and
-returns one result for every canonical identity. Do not retry failures in the
-same run: Microsoft permits only ten export requests per project per day.
-
-For one product, prefer:
-
-```bash
-pnpm --dir site-health clarity -- status <project-id>
-pnpm --dir site-health clarity -- fetch <project-id> --days 1
-```
-
-## MCP role
-
-The official `@microsoft/clarity-mcp-server` is an MCP stdio server, not a
-normal human-facing reporting CLI. Use it only for a focused follow-up on one
-project when an MCP client and that project's private `CLARITY_API_TOKEN` are
-already available. Never pass the token as a command-line argument. Treat MCP
-answers as exploratory evidence; the deterministic Site Health Data Export
-adapter is the fleet health authority.
-
-Do not retain session recordings, heatmaps, URLs, visitor identifiers, or raw
-provider payloads in a fleet sweep. If the user explicitly requests a targeted
-recording investigation, keep it to the selected project and record only a
-bounded conclusion.
-
 ## Interpret and report
 
-Use these states without collapsing them:
+Every canonical identity lands in exactly one of six reported classes:
 
-- `measured`: the live aggregate request succeeded.
-- `fresh`, `stale`, or `not-measured`: cached Site Health state.
-- `unavailable`: an eligible product lacks a resolvable private token.
-- `failed`: Clarity rejected or could not serve the request.
+- `measured`: a live aggregate request succeeded this run.
+- `cached`: stored aggregate evidence exists and no provider call was made.
+- `unavailable`: eligible, but no resolvable private token and no snapshot.
 - `unwired`: the canonical receipt intentionally records no tracked surface.
 - `inactive`: the identity is retained but excluded from live refresh.
-- `not-cataloged`: receipt/catalog drift that needs repair.
-- `desired`: the capability policy calls for adoption, but provider state is
-  not yet verified.
-- `conditional`: adoption requires real project evidence such as a GA4
-  property, consent flow, or stable internal IPv4 range.
-- `blocked`: adoption needs separately authorized infrastructure or spend.
-- `provider-verified`: the saved Clarity setting was reread after mutation.
+- `failed`: Clarity rejected or could not serve the request — or the receipt has
+  no catalog project, which is drift that needs repair, not a quiet pass.
+
+The collector's detailed state travels alongside the class, so do not collapse
+`fresh`, `stale`, `not-measured`, or `not-cataloged` when they matter. Capability
+states stay separate again: `desired` (policy, provider unverified),
+`conditional` (needs a real GA4 property, consent flow, or stable internal IPv4
+range), `blocked` (needs separately authorized infrastructure or spend), and
+`provider-verified` (the saved setting was reread after mutation).
 
 Report totals first, then failures and unavailable eligible products, then
 intentional exclusions. Call `uniqueBrowsers` unique browser/device identities,
@@ -123,3 +170,5 @@ others.
 
 Use `clarity-fleet-rollout` for creating projects, changing IDs, wiring source,
 or repairing receipt drift. Those mutations require their own authorization.
+This skill never creates a project, generates a token, edits source wiring,
+deploys a product, or installs a schedule.
