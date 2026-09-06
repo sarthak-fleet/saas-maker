@@ -103,6 +103,11 @@ The separate [`config/clarity-journeys.json`](config/clarity-journeys.json)
 records one live-root-backed Smart Event and funnel candidate per wired product,
 or an explicit rendered-discovery blocker when stable action text was absent.
 
+The audit is the credential-free `source-audit` mode of the `clarity-fleet-health`
+skill. Its other modes — cached counts, an explicit live refresh, and optional
+MCP follow-up — are indexed in
+[`docs/clarity-fleet-health.md`](docs/clarity-fleet-health.md).
+
 `footer-source-audit.mjs` reads a caller-owned manifest of relative source
 paths and verifies that each named browser surface loads the project strip
 before Ask AI, carries both loaders, and has no active `data-compose=false`
