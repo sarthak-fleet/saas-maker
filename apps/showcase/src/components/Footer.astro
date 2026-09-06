@@ -1,5 +1,6 @@
 ---
-import { GITHUB_ORG_URL } from '../data/links';
+import GitHubIcon from './GitHubIcon.astro';
+import { GITHUB_REPO_URL } from '../data/links';
 const OWNER_URL = 'https://sarthakagrawal.dev';
 const isChangelog = Astro.url.pathname.startsWith('/changelog');
 ---
@@ -13,7 +14,12 @@ const isChangelog = Astro.url.pathname.startsWith('/changelog');
     <a href="/learnings">Learnings</a>
     <a href="/privacy">Privacy</a>
     <a href="/terms">Terms</a>
-    <a href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a
+      href={GITHUB_REPO_URL}
+      aria-label="GitHub repository"
+      title="GitHub repository"
+      target="_blank"
+      rel="noopener noreferrer"><GitHubIcon /></a>
   </div>
   <p class="footer-tagline">Curious products. Real domains. Work that keeps moving.</p>
 </footer>

@@ -1,8 +1,9 @@
 ---
 import Footer from '../components/Footer.astro';
+import GitHubIcon from '../components/GitHubIcon.astro';
 import Nav from '../components/Nav.astro';
 import { CHANGELOG } from '../data/changelog';
-import { GITHUB_ORG_URL } from '../data/links';
+import { GITHUB_REPO_URL } from '../data/links';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -24,7 +25,12 @@ import Layout from '../layouts/Layout.astro';
             records what actually shipped.
           </p>
           <nav aria-label="Project resources">
-            <a href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            <a
+              href={GITHUB_REPO_URL}
+              aria-label="GitHub repository"
+              title="GitHub repository"
+              target="_blank"
+              rel="noopener noreferrer"><GitHubIcon /></a>
           </nav>
         </aside>
       </header>

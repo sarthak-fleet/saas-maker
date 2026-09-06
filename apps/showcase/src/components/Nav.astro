@@ -1,5 +1,6 @@
 ---
-import { GITHUB_ORG_URL } from '../data/links';
+import GitHubIcon from './GitHubIcon.astro';
+import { GITHUB_REPO_URL } from '../data/links';
 
 const isLearnings = Astro.url.pathname.startsWith('/learnings');
 const isProjects =
@@ -17,6 +18,12 @@ const isTools = Astro.url.pathname.startsWith('/tools');
     <a href="/ideas" aria-current={isIdeas ? 'page' : undefined}>Ideas</a>
     <a href="/tools" aria-current={isTools ? 'page' : undefined}>Tools</a>
     <a href="/learnings" aria-current={isLearnings ? 'page' : undefined}>Learnings</a>
-    <a class="nav-source" href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    <a
+      class="nav-source"
+      href={GITHUB_REPO_URL}
+      aria-label="GitHub repository"
+      title="GitHub repository"
+      target="_blank"
+      rel="noopener noreferrer"><GitHubIcon /></a>
   </div>
 </nav>
